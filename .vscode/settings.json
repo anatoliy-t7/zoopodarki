@@ -1,0 +1,6 @@
+{
+  "i18n-ally.localesPaths": "resources/lang",
+  "i18n-ally.sourceLanguage": "ru",
+  "git.ignoreLimitWarning": true,
+  "xd.globalEditor": false
+}

@@ -1,0 +1,66 @@
+---
+title: "Изменения вашего отзыва ZooPodarki"
+preheader: "Изменения вашего отзыва ZooPodarki"
+bodyClass: bg-gray-50
+---
+
+<extends src="src/layouts/master.html">
+  <block name="template">
+    <table class="w-full font-sans">
+      <tr>
+        <td align="center" class="bg-gray-50 sm:px-16">
+          <table class="w-600 sm:w-full">
+            <tr>
+              <td class="px-48 text-left sm:px-24">
+                <h3 class="py-12 text-base font-bold text-center">
+                  <a
+                    class="text-gray-400 no-underline"
+                    href="@{{ env('APP_URL') }}"
+                    >ZooPodarki</a
+                  >
+                </h3>
+              </td>
+            </tr>
+            <tr>
+              <td class="w-full px-24 text-left sm:px-0">
+                <table class="w-full">
+                  <tr>
+                    <td class="w-full pb-10 sm:w-full sm:inline-block">
+                      <table class="w-full p-24 bg-white rounded-xl">
+                        <tr>
+                          <td colspan="3">
+                            <h2 class="m-0 text-2xl text-center leading-24">
+                              Ваш отзыв был опубликован
+                            </h2>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            <div class="pt-24 my-3 text-sm text-left">
+                              <p>
+                                Ваш отзыв на товар
+                                <a href="@{{$productLink}}" target="_blank"
+                                  >@{{ $productName }}</a
+                                >
+                                был опубликован.
+                              </p>
+
+                              <b>"{!!$review->body!!}"</b>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td class="h-48 sm:h-32"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </block>
+</extends>

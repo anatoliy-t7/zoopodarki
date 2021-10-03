@@ -1,0 +1,216 @@
+/* Start purging... */
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+/* Stop purging. */
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+    :target {
+        scroll-margin-top: 0.8em;
+    }
+}
+
+body {
+    grid-template-rows: auto 1fr auto;
+}
+
+em {
+    font-style: normal !important;
+    font-weight: bolder;
+    @apply text-orange-500;
+}
+
+button svg,
+a svg {
+    cursor: pointer;
+}
+
+p a {
+    @apply text-orange-500 hover:underline;
+}
+
+p {
+    @apply leading-normal;
+}
+
+p:not(:last-child) {
+    @apply mb-1;
+}
+
+button {
+    @apply transition ease-in-out cursor-pointer;
+}
+
+button:active {
+    @apply scale-95;
+}
+
+button:focus {
+    @apply outline-none;
+}
+button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+}
+.btn {
+    @apply flex px-3 py-2 text-center rounded-xl focus:outline-none focus:ring;
+}
+
+.container-checkbox {
+    @apply block relative pl-8 cursor-pointer select-none text-sm;
+}
+
+.container-checkbox input {
+    @apply absolute opacity-0 cursor-pointer top-0 left-0 w-full h-full z-20;
+}
+
+.container-checkbox .checkmark {
+    @apply absolute top-0 left-0 h-5 w-5 z-10 border-2 border-gray-300 rounded;
+}
+
+.container-checkbox:hover input ~ .checkmark {
+    @apply border-yellow-500;
+}
+
+.container-checkbox input:checked ~ .checkmark {
+    @apply bg-yellow-500 border-yellow-500;
+}
+
+.link-hover,
+.link-hover svg {
+    @apply outline-none relative z-10;
+}
+
+.link-hover:after {
+    content: "";
+    @apply absolute z-0 bottom-0 top-0 m-auto opacity-0 rounded-full bg-gray-50;
+    left: -11px;
+    right: -11px;
+    z-index: -1;
+    height: 36px;
+    width: 36px;
+    -webkit-transform: scale(0.3);
+    transform: scale(0.3);
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
+}
+
+.link-hover:hover:after {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    z-index: 1;
+}
+
+.attribute:before {
+    content: "";
+    display: block;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    border-bottom: 1px dotted #d6dbe0;
+}
+
+.splide__arrow {
+    z-index: 0 !important;
+}
+
+.content h4 {
+    @apply text-xl font-semibold pt-2 pb-1;
+}
+
+img[src="/img/placeholder.svg"] {
+    animation: linear 1s tw-placeHolderShimmer infinite;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    -webkit-clip-path: url(#svgPath);
+    clip-path: url(#svgPath);
+
+    // 	Safari render fix
+    transform: translateZ(0);
+}
+
+@keyframes tw-placeHolderShimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.h-half {
+    height: 50vh;
+}
+
+article ul {
+    @apply list-disc list-inside leading-relaxed pl-4;
+}
+article p {
+    @apply leading-relaxed;
+}
+
+/* setup tooltips */
+.tooltip {
+    position: relative;
+    z-index: 35;
+}
+.tooltip:before,
+.tooltip:after {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+}
+.tooltip:after {
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgba(132, 204, 22, 1);
+    border-left: 6px solid transparent;
+    content: "";
+    height: 0;
+    top: 0;
+    left: 20px;
+    width: 0;
+    transform: translate3d(0, -6px, 0);
+    transition: all 0.1s ease-in-out;
+}
+.tooltip:before {
+    border-radius: 6px;
+    color: #fff;
+    content: attr(data-title);
+    font-size: 14px;
+    padding: 6px 10px;
+    top: -26px;
+    white-space: nowrap;
+    transform: scale3d(0.2, 0.2, 1);
+    transition: all 0.2s ease-in-out;
+    @apply bg-green-500 shadow-lg;
+}
+
+.tooltip:hover:before,
+.tooltip:hover:after {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+}
+.tooltip:hover:after {
+    transition: all 0.2s 0.1s ease-in-out;
+}

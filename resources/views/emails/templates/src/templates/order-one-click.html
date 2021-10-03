@@ -1,0 +1,158 @@
+---
+title: "Заказ товара с сайта ZooPodarki"
+preheader: "Заказ товара с сайта ZooPodarki"
+bodyClass: bg-gray-50
+---
+
+<extends src="src/layouts/master.html">
+  <block name="template">
+    <table class="w-full font-sans">
+      <tr>
+        <td align="center" class="bg-gray-50 sm:px-16">
+          <table class="w-600 sm:w-full">
+            <tr>
+              <td class="px-48 text-left sm:px-24">
+                <h3 class="py-12 text-base font-bold text-center">
+                  <a
+                    class="text-gray-400 no-underline"
+                    href="@{{ env('APP_URL') }}"
+                    >ZooPodarki</a
+                  >
+                </h3>
+              </td>
+            </tr>
+            <tr>
+              <td class="w-full px-24 text-left sm:px-0">
+                <table class="w-full">
+                  <tr>
+                    <td class="w-full pb-10 sm:w-full sm:inline-block">
+                      <table class="w-full p-24 bg-white rounded-xl">
+                        <tr>
+                          <td colspan="3">
+                            <h2 class="m-0 text-2xl text-center leading-24">
+                              Заказ товара
+                            </h2>
+                            <p class="py-10 text-base leading-24">
+                              Вам нужно позвонить клиенту
+                              <span class="font-bold"
+                                >@{{ $orderOneClick['name'] }}</span
+                              >
+                              по телефону
+                              <span class="font-bold"
+                                >+7@{{ $orderOneClick['phone'] }}</span
+                              >
+                              для утверждения заказа.
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            <div class="my-3 text-sm text-left">
+                              Email:
+                              <span class="font-bold"
+                                >@{{ $orderOneClick['email'] }}</span
+                              >
+                            </div>
+                            <div class="my-3 text-sm text-left">
+                              Адрес:
+                              <span class="font-bold"
+                                >@{{ $orderOneClick['address'] }}</span
+                              >
+                            </div>
+                            <div class="my-3 text-sm text-left">
+                              Дата:
+                              <span class="font-bold"
+                                >@{{ dataAndTime(now()) }}</span
+                              >
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            <table class="w-full pt-25">
+                              <tr>
+                                <th align="left" class="w-3/6">
+                                  <p>Товар</p>
+                                </th>
+                                <th align="left" class="w-1/6">
+                                  <p>Кол-во</p>
+                                </th>
+                                <th align="right" class="w-1/6 text-right">
+                                  <p>Цена</p>
+                                </th>
+                              </tr>
+
+                              <tr>
+                                <td
+                                  class="w-4/6 pb-10 text-xs b-border leading-18"
+                                >
+                                  <div>@{{$product1c->name}}</div>
+                                  <div class="my-4 text-base font-bold">
+                                    Код1С: @{{$product1c->cod1c}}
+                                  </div>
+                                </td>
+                                <td
+                                  align="left"
+                                  class="w-1/6 pb-10 text-base text-left b-border"
+                                >
+                                  @{{$count}}
+                                </td>
+                                <td
+                                  align="right"
+                                  class="w-1/6 pb-10 text-base text-right b-border"
+                                >
+                                  @{{$product1c->price}}
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td class="w-4/6 pt-10"></td>
+                                <td class="w-1/6 pt-10">
+                                  <p
+                                    align="left"
+                                    class="m-0 text-base font-bold text-left leading-24"
+                                  >
+                                    Всего
+                                  </p>
+                                </td>
+                                <td class="w-1/6 pt-10">
+                                  <p
+                                    align="right"
+                                    class="m-0 text-base font-bold text-right leading-24"
+                                  >
+                                    @{{$total}}
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="px-48 text-left rounded sm:px-24 bg-cool-gray-300">
+                <p class="m-0 text-sm text-cool-gray-500">
+                  Ссылка на товар на сайте:
+                  <a
+                    href="@{{$productUrl}}"
+                    target="_blank"
+                    class="text-blue-500 no-underline hover:text-blue-400"
+                    >Товар</a
+                  >
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="h-48 sm:h-32"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </block>
+</extends>

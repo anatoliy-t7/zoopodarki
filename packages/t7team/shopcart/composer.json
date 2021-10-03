@@ -1,0 +1,44 @@
+{
+    "name": "t7team/shopcart",
+    "description": "Laravel 8 Shopping cart",
+    "keywords": [
+        "laravel",
+        "shopping cart",
+        "cart"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Darryl Fernandez",
+            "email": "engrdarrylfernandez@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0",
+        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0",
+        "illuminate/translation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "mockery/mockery": "^1.4.2",
+        "phpunit/phpunit": "^9.0",
+        "symfony/var-dumper": "5.1.5.*@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "T7team\\Shopcart\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "T7team\\Shopcart\\CartServiceProvider"
+            ],
+            "aliases": {
+                "Cart": "T7team\\Shopcart\\Facades\\CartFacade"
+            }
+        }
+    }
+}
