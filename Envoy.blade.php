@@ -73,7 +73,7 @@ else
 fi
 @endtask
 
-@story('deploy', ['on' => 'prod'])
+@story('deploy')
 git
 composer
 npm_install
@@ -86,13 +86,13 @@ cache
 clean_old_releases
 @endstory
 
-@task('git')
+@task('git', ['on' => 'prod'])
 {{ logMessage('Cloning repository') }}
 
 git clone {{ $repo }} --branch={{ $branchOrTag }} --depth=1 -q {{ $currentReleaseDir }}
 @endtask
 
-@task('composer')
+@task('composer', ['on' => 'prod'])
 {{ logMessage('Running composer') }}
 
 cd {{ $currentReleaseDir }}
@@ -122,7 +122,7 @@ npm run prod --silent --no-progress > /dev/null
 
 @endtask
 
-@task('update_symlinks')
+@task('update_symlinks', ['on' => 'prod'])
 {{ logMessage('Updating symlinks') }}
 
 # Remove the storage directory and replace with persistent data
@@ -148,7 +148,7 @@ ln -nfs {{ $baseDir }}/.env .env;
 ln -nfs {{ $currentReleaseDir }} {{ $currentDir }};
 @endtask
 
-@task('set_permissions')
+@task('set_permissions', ['on' => 'prod'])
 # Set dir permissions
 {{ logMessage('Set permissions') }}
 
@@ -160,13 +160,13 @@ sudo chmod -R ug+rwx current/storage current/bootstrap/cache
 sudo chown -R {{ $user }}:facknetr {{ $currentReleaseDir }}
 @endtask
 
-@task('cache')
+@task('cache', ['on' => 'prod'])
 {{ logMessage('Building cache') }}
 
 php {{ $currentDir }}/artisan optimize
 @endtask
 
-@task('clean_old_releases')
+@task('clean_old_releases', ['on' => 'prod'])
 # Delete all but the 5 most recent releases
 {{ logMessage('Cleaning old releases') }}
 cd {{ $releaseDir }}
@@ -203,7 +203,6 @@ sudo supervisorctl restart all
 {{ logMessage('Reloading php') }}
 sudo systemctl reload php8.0-fpm
 @endtask
-
 
 @finished
 echo "Envoy deployment script finished.\r\n";
