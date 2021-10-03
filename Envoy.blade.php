@@ -12,6 +12,7 @@ echo $e->getMessage();
 
 $user = env('DEPLOY_USER');
 $repo = env('DEPLOY_REPO');
+$server = env('DEPLOY_SERVER');
 
 if (!isset($baseDir)) {
 $baseDir = env('DEPLOY_BASE_DIR');
@@ -26,6 +27,10 @@ $releaseDir = $baseDir . '/releases';
 $currentDir = $baseDir . '/current';
 $release = date('YmdHis');
 $currentReleaseDir = $releaseDir . '/' . $release;
+
+
+$productionPort = 22;
+$productionHost = $user . '@' . $server;
 
 function logMessage($message) {
 return "echo '\033[32m" .$message. "\033[0m';\n";
@@ -106,20 +111,23 @@ composer install --no-interaction --quiet --no-dev --prefer-dist --optimize-auto
 @task('npm_install', ['on' => 'local'])
 {{ logMessage('NPM install') }}
 
-cd {{ $currentReleaseDir }}
-
 npm install --silent --no-progress > /dev/null
+
 @endtask
 
 @task('npm_run_prod', ['on' => 'local'])
 {{ logMessage('NPM run production') }}
 
-cd {{ $currentReleaseDir }}
-
 npm run prod --silent --no-progress > /dev/null
 
 {{ logMessage('Production assets are done') }}
 
+@endtask
+
+@task('assets', ['on' => 'local'])
+scp -P{{ $productionPort }} -qr public/css {{ $productionHost }}:{{ $currentReleaseDir }}/public
+scp -P{{ $productionPort }} -qr public/js {{ $productionHost }}:{{ $currentReleaseDir }}/public
+scp -P{{ $productionPort }} -q public/mix-manifest.json {{ $productionHost }}:{{ $currentReleaseDir }}/public
 @endtask
 
 @task('update_symlinks', ['on' => 'prod'])
