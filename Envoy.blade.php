@@ -118,7 +118,7 @@ npm install --silent --no-progress > /dev/null
 @task('npm_run_prod', ['on' => 'local'])
 {{ logMessage('NPM run production') }}
 
-npm run prod --silent --no-progress > /dev/null
+npm run production --silent --no-progress > /dev/null
 
 {{ logMessage('Production assets are done') }}
 
@@ -135,7 +135,6 @@ scp -P{{ $productionPort }} -q public/mix-manifest.json {{ $productionHost }}:{{
 
 # Remove the storage directory and replace with persistent data
 {{ logMessage('Linking storage directory') }}
-rm -rf {{ $currentReleaseDir }}/storage;
 cd {{ $currentReleaseDir }};
 ln -nfs {{ $baseDir }}/storage {{ $currentReleaseDir }}/storage;
 ln -nfs {{ $baseDir }}/storage/app/public {{ $currentReleaseDir }}/public/storage
