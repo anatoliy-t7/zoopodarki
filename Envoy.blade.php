@@ -102,7 +102,9 @@ git clone {{ $repo }} --branch={{ $branchOrTag }} --depth=1 -q {{ $currentReleas
 
 cd {{ $currentReleaseDir }}
 mkdir -p storage/framework/{session,views,cache}
-chmod -R 775 storage/framework
+chmod -R ug+rwx storage
+chown -R {{ $user }}:facknetr storage
+chmod -R ug+rwx storage/framework
 chown -R {{ $user }}:facknetr storage/framework
 
 composer install --no-interaction --quiet --no-dev --prefer-dist --optimize-autoloader
@@ -120,14 +122,14 @@ npm install --silent --no-progress > /dev/null
 
 npm run production --silent --no-progress > /dev/null
 
-{{ logMessage('Production assets are done') }}
-
 @endtask
 
 @task('assets', ['on' => 'local'])
+{{ logMessage('Production assets started to move to prod server') }}
 scp -P{{ $productionPort }} -qr public/css {{ $productionHost }}:{{ $currentReleaseDir }}/public
 scp -P{{ $productionPort }} -qr public/js {{ $productionHost }}:{{ $currentReleaseDir }}/public
 scp -P{{ $productionPort }} -q public/mix-manifest.json {{ $productionHost }}:{{ $currentReleaseDir }}/public
+{{ logMessage('Production assets moved') }}
 @endtask
 
 @task('update_symlinks', ['on' => 'prod'])

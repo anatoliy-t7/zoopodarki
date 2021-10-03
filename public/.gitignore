@@ -1,5 +1,7 @@
 /storage
 /media
 /content
+/js/*
+/css/*
 /js
 /css
