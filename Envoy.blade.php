@@ -97,7 +97,7 @@ git clone {{ $repo }} --branch={{ $branchOrTag }} --depth=1 -q {{ $currentReleas
 
 cd {{ $currentReleaseDir }}
 
-composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
+sudo composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
 @endtask
 
 @task('npm_install')
