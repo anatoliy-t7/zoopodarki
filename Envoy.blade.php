@@ -32,7 +32,7 @@ return "echo '\033[32m" .$message. "\033[0m';\n";
 }
 @endsetup
 
-@servers(['prod' => env('DEPLOY_USER').'@'.env('DEPLOY_SERVER')])
+@servers(['local' => '127.0.0.1', 'prod' => env('DEPLOY_USER').'@'.env('DEPLOY_SERVER')])
 
 @task('rollback', ['on' => 'prod', 'confirm' => true])
 {{ logMessage('Rolling back...') }}
@@ -100,10 +100,10 @@ mkdir -p storage/framework/{session,views,cache}
 chmod -R 775 storage/framework
 chown -R {{ $user }}:facknetr storage/framework
 
-composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
+composer install --no-interaction --quiet --no-dev --prefer-dist --optimize-autoloader
 @endtask
 
-@task('npm_install')
+@task('npm_install', ['on' => 'local'])
 {{ logMessage('NPM install') }}
 
 cd {{ $currentReleaseDir }}
@@ -111,15 +111,15 @@ cd {{ $currentReleaseDir }}
 npm install --silent --no-progress > /dev/null
 @endtask
 
-@task('npm_run_prod')
-{{ logMessage('NPM run prod') }}
+@task('npm_run_prod', ['on' => 'local'])
+{{ logMessage('NPM run production') }}
 
 cd {{ $currentReleaseDir }}
 
 npm run prod --silent --no-progress > /dev/null
 
-{{ logMessage('Deleting node_modules folder') }}
-rm -rf node_modules
+{{ logMessage('Production assets are done') }}
+
 @endtask
 
 @task('update_symlinks')
