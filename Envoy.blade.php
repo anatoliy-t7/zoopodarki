@@ -63,7 +63,7 @@ cp {{ $release }}/.env.example {{ $baseDir }}/.env
 ln -nfs {{ $baseDir }}/.env {{ $release }}/.env
 {{ logMessage('Environment file set up') }}
 
-sudo chown -R {{ $user }}:www-data {{ $baseDir }}/storage
+sudo chown -R {{ $user }}:facknetr {{ $baseDir }}/storage
 sudo chmod -R ug+rwx {{ $baseDir }}/storage
 
 rm -rf {{ $release }}
@@ -97,7 +97,7 @@ git clone {{ $repo }} --branch={{ $branchOrTag }} --depth=1 -q {{ $currentReleas
 
 cd {{ $currentReleaseDir }}
 
-composer install --no-dev --prefer-dist --optimize-autoloader
+composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
 @endtask
 
 @task('npm_install')
@@ -149,12 +149,12 @@ ln -nfs {{ $currentReleaseDir }} {{ $currentDir }};
 # Set dir permissions
 {{ logMessage('Set permissions') }}
 
-sudo chown -R {{ $user }}:www-data {{ $baseDir }}
+sudo chown -R {{ $user }}:facknetr {{ $baseDir }}
 sudo chmod -R ug+rwx {{ $baseDir }}/storage
 cd {{ $baseDir }}
-sudo chown -R {{ $user }}:www-data current
+sudo chown -R {{ $user }}:facknetr current
 sudo chmod -R ug+rwx current/storage current/bootstrap/cache
-sudo chown -R {{ $user }}:www-data {{ $currentReleaseDir }}
+sudo chown -R {{ $user }}:facknetr {{ $currentReleaseDir }}
 @endtask
 
 @task('cache')
