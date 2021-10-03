@@ -96,9 +96,9 @@ git clone {{ $repo }} --branch={{ $branchOrTag }} --depth=1 -q {{ $currentReleas
 {{ logMessage('Running composer') }}
 
 cd {{ $currentReleaseDir }}
-mkdir -p /storage/framework/{session,views,cache}
-chmod -R 775 /storage/framework
-chown -R {{ $user }}:facknetr /storage/framework
+mkdir -p storage/framework/{session,views,cache}
+chmod -R 775 storage/framework
+chown -R {{ $user }}:facknetr storage/framework
 
 composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
 @endtask
