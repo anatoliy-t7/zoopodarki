@@ -97,7 +97,7 @@ git clone {{ $repo }} --branch={{ $branchOrTag }} --depth=1 -q {{ $currentReleas
 
 cd {{ $currentReleaseDir }}
 
-composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
+composer install --no-dev --prefer-dist --optimize-autoloader
 @endtask
 
 @task('npm_install')
@@ -198,7 +198,7 @@ php {{ $currentDir }}/artisan migrate:status
 sudo supervisorctl restart all
 
 {{ logMessage('Reloading php') }}
-sudo systemctl reload php7.3-fpm
+sudo systemctl reload php8.0-fpm
 @endtask
 
 
