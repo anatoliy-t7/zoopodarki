@@ -63,6 +63,7 @@
         "mockery/mockery": "^1",
         "nunomaduro/collision": "^5",
         "nunomaduro/larastan": "^0.7.6",
+        "nunomaduro/laravel-desktop-notifier": "^2.5",
         "nunomaduro/phpinsights": "^2.0",
         "orangehill/iseed": "^3",
         "phpunit/phpunit": "^9",
