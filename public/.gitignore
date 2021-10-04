@@ -1,8 +1,9 @@
-/storage
-/media
-/content
-/js/*
-/css/*
-/js
-/css
-mix-manifest.json
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!.htaccess
+!index.php
+!robots.txt
+!*.xml
