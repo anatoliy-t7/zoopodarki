@@ -41,9 +41,9 @@ class PageEdit extends Component
     {
         foreach ($this->newFiles as $file) {
             if ($file->getFilename() === $uploadedUrl) {
-                $newFileName = $file->store('/', 'content-attachments');
+                $newFileName = $file->store('/', 'public');
 
-                $url = Storage::disk('content-attachments')->url($newFileName);
+                $url = Storage::disk('public')->url($newFileName);
                 $this->dispatchBrowserEvent($eventName, [
                     'url' => $url,
                     'href' => $url,
@@ -57,7 +57,7 @@ class PageEdit extends Component
     public function removeFileAttachment($url)
     {
         try {
-            Storage::disk('content-attachments')->delete($url);
+            Storage::disk('public')->delete($url);
 
             $this->dispatchBrowserEvent('toaster', ['message' => 'Изображение удалено']);
         } catch (\Throwable $th) {

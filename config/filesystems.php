@@ -26,7 +26,7 @@ return [
     |
      */
 
-    'cloud'   => env('FILESYSTEM_CLOUD', 's3'),
+    'cloud' => env('FILESYSTEM_CLOUD', 's3'),
 
     /*
     |--------------------------------------------------------------------------
@@ -41,50 +41,42 @@ return [
     |
      */
 
-    'disks'   => [
+    'disks' => [
 
-        'local'               => [
+        'local' => [
             'driver' => 'local',
-            'root'   => storage_path('app'),
+            'root' => storage_path('app'),
         ],
 
-        'public'              => [
-            'driver'     => 'local',
-            'root'       => storage_path('app/public'),
-            'url'        => env('APP_URL') . '/storage',
+        'public' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
             'visibility' => 'public',
         ],
 
-        'content-attachments' => [
-            'driver'     => 'local',
-            'root'       => public_path('content'),
-            'url'        => '/content',
+        'media' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/media'),
+            'url' => '/media',
             'visibility' => 'public',
         ],
 
-        'media'               => [
-            'driver'     => 'local',
-            'root'       => public_path('media'),
-            'url'        => '/media',
-            'visibility' => 'public',
-        ],
-
-        'sync'                => [
+        'sync' => [
             'driver' => 'local',
-            'root'   => storage_path('sync'),
+            'root' => storage_path('app/sync'),
         ],
 
-        'excel'               => [
+        'excel' => [
             'driver' => 'local',
-            'root'   => storage_path('excel'),
+            'root' => storage_path('app/excel'),
         ],
 
-        'google'              => [
-            'driver'       => 'google',
-            'clientId'     => env('GOOGLE_DRIVE_CLIENT_ID'),
+        'google' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
             'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
             'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
-            'folderId'     => env('GOOGLE_DRIVE_FOLDER_ID'),
+            'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
         ],
 
     ],
@@ -100,8 +92,8 @@ return [
     |
      */
 
-    'links'   => [
-        public_path('storage') => storage_path('app/public'),
+    'links' => [
+        public_path('media') => storage_path('app/public'),
     ],
 
 ];
