@@ -4,10 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['register' => false]);
 
-const THROTTLEROUTES = 'throttle:1000,60';
-
     // Account
-Route::prefix('account')->middleware([THROTTLEROUTES, 'auth'])->group(function () {
+Route::prefix('account')->middleware(['throttle:1000,60', 'auth'])->group(function () {
     Route::get('/profile', 'App\Http\Controllers\Site\AccountController@profile')->name('account.profile');
 
     Route::get('/orders', 'App\Http\Controllers\Site\AccountController@orders')->name('account.orders');
@@ -18,7 +16,7 @@ Route::prefix('account')->middleware([THROTTLEROUTES, 'auth'])->group(function (
 });
 
     // Admin
-Route::prefix('dashboard')->name('dashboard.')->middleware([THROTTLEROUTES, 'auth', 'permission:dashboard'])->group(function () {
+Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 'auth', 'permission:dashboard'])->group(function () {
     Route::get('/', \App\Http\Livewire\Dashboard\Dashboard::class)->name('dashboard');
 
     Route::middleware(['permission: admin'])->group(function () {
@@ -70,7 +68,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware([THROTTLEROUTES, 'aut
 });
 
     // TODO delete in production 'auth'
-    Route::middleware([THROTTLEROUTES, 'auth'])
+    Route::middleware(['throttle:1000,60', 'auth'])
     ->name('site.')
     ->group(function () {
         Route::get('/', 'App\Http\Controllers\Site\HomeController@index')->name('home');
@@ -108,7 +106,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware([THROTTLEROUTES, 'aut
     // 1С exchange
 Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')->middleware(['throttle:1000,60', 'bot'])->name('exchange');
 
-Route::middleware([THROTTLEROUTES, 'bot'])->group(function () {
+Route::middleware(['throttle:1000,60', 'bot'])->group(function () {
     Route::get('/checkout', \App\Http\Livewire\Site\Checkout::class)->name('checkout');
 
     Route::post('/payment/callback', 'App\Http\Controllers\Site\PaymentController@payCallback')->name('payment.callback');

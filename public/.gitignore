@@ -1,9 +1,8 @@
 # Ignore everything
 *
-
 # But not these files...
 !.gitignore
 !.htaccess
 !index.php
 !robots.txt
-!*.xml
+!/media
