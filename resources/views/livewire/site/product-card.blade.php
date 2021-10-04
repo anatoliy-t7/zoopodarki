@@ -120,7 +120,7 @@
             </div>
           </div>
         @else
-          <img loading="lazy" class="object-contain object-center w-full h-64 lozad" src="/img/placeholder.svg"
+          <img loading="lazy" class="object-contain object-center w-full h-64 lozad" src="/assets/img/placeholder.svg"
             data-src="{{ $product->getFirstMediaUrl('product-images', 'thumb') }}" alt="{{ $product->name }}">
         @endif
       </div>

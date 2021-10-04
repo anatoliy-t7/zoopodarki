@@ -4,7 +4,7 @@
   <div class="flex items-center justify-center w-full min-h-screen px-2 py-4 antialiased divide-x">
     <div class="flex justify-center w-6/12">
       <a href="{{ route('site.home') }}">
-        <img loading="lazy" src="/img/favicon.svg" width="200px" height="200px" alt="">
+        <img loading="lazy" src="/assets/img/favicon.svg" width="200px" height="200px" alt="">
       </a>
     </div>
     <div class="flex justify-center w-6/12">

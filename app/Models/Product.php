@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Traits\Revieweable;
@@ -16,18 +15,23 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
+
     use PowerJoins;
+
     use Revieweable;
+
     use Sluggable;
+
     use SoftDeletes;
+
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
     use \Bkwld\Cloner\Cloneable;
+
     //use Searchable;
 
     protected $table = 'products';
-
     protected $guarded = [];
-
     protected $cloneable_relations = ['attributes', 'reviews', 'unit', 'brand', 'serie'];
 
     public function registerMediaConversions(Media $media = null): void
@@ -53,8 +57,8 @@ class Product extends Model implements HasMedia
     {
         $this
             ->addMediaCollection('product-images')
-            ->useFallbackUrl('/img/no-photo.jpg')
-            ->useFallbackPath(public_path('/img/no-photo.jpg'));
+            ->useFallbackUrl('/assets/img/no-photo.jpg')
+            ->useFallbackPath(public_path('/assets/img/no-photo.jpg'));
     }
 
     public function sluggable(): array

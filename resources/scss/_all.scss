@@ -125,7 +125,7 @@ button:disabled {
     @apply text-xl font-semibold pt-2 pb-1;
 }
 
-img[src="/img/placeholder.svg"] {
+img[src="/assets/img/placeholder.svg"] {
     animation: linear 1s tw-placeHolderShimmer infinite;
     background: #f6f7f8;
     background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);

@@ -355,7 +355,7 @@
             <tr>
               <td class="align-center" width="100%">
                 <a href="{{ route('site.home') }}"><img loading="lazy"
-                    src="{{ route('site.home') }}/img/favicon.svg" height="40" alt="ZooPodarki"></a>
+                    src="{{ route('site.home') }}/assets/img/favicon.svg" height="40" alt="ZooPodarki"></a>
               </td>
             </tr>
           </table>

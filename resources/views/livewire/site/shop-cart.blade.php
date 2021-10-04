@@ -234,7 +234,7 @@
         @if (count($items) === 0 and count($shelterItems) === 0)
           <div class="flex justify-center">
             <div class="pt-10 text-center text-gray-600">
-              <img loading="lazy" class="Корзина пуста" src="/img/hangry-cat.svg" alt="">
+              <img loading="lazy" class="Корзина пуста" src="/assets/img/hangry-cat.svg" alt="">
               <div class="pt-10">Ваша корзина пуста</div>
             </div>
           </div>
