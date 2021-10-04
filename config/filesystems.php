@@ -51,13 +51,14 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
+            'url' => '/assets',
             'visibility' => 'public',
         ],
 
         'media' => [
             'driver' => 'local',
             'root' => storage_path('app/public/media'),
-            // 'url' => '/media',
+            'url' => '/media',
             'visibility' => 'public',
         ],
 
