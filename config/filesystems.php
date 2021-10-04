@@ -51,14 +51,14 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => '/assets',
+            'url' => env('APP_URL', 'localhost') . '/assets',
             'visibility' => 'public',
         ],
 
         'media' => [
             'driver' => 'local',
             'root' => storage_path('app/public/media'),
-            'url' => '/media',
+            'url' => env('APP_URL', 'localhost') . '/assets/media',
             'visibility' => 'public',
         ],
 

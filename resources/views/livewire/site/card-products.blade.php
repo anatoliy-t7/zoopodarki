@@ -5,7 +5,7 @@
     title="{{ $product->name }}">
 
     <img itemprop="image" loading="lazy" class="object-contain object-center w-full h-64 lozad"
-      src="assets/img/placeholder.svg" data-src="/assets{{ $product->getFirstMediaUrl('product-images', 'thumb') }}"
+      src="/img/placeholder.svg" data-src="{{ $product->getFirstMediaUrl('product-images', 'thumb') }}"
       alt="{{ $product->name }}">
 
     <div class="py-2 text-center text-green-600">
