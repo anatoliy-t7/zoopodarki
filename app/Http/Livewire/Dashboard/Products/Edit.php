@@ -285,6 +285,8 @@ class Edit extends Component
             'status' => 'required',
             'readyCategories' => 'required', // TODO test
             'productBrand' => 'required', // TODO test
+            'meta_description' => 'max:150',
+            'meta_description' => 'max:70',
         ]);
 
         DB::transaction(function () {

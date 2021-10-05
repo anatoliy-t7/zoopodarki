@@ -6,6 +6,8 @@ use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\OpenGraph;
 
 class Category extends Component
 {
@@ -114,6 +116,19 @@ class Category extends Component
             ->get(['id', 'name']);
 
         $this->updatedAttFilter($this->attFilter);
+
+        $this->seo();
+    }
+
+    public function seo()
+    {
+        SEOMeta::setTitle($this->metaTitle);
+        SEOMeta::setDescription($this->metaDescription);
+        // SEOMeta::addKeyword(['key1', 'key2', 'key3']);
+        OpenGraph::setTitle($this->metaTitle);
+        OpenGraph::setDescription($this->metaDescription);
+        OpenGraph::addProperty('type', 'website');
+        // OpenGraph::addImage($post->cover->url);
     }
 
     public function getAttributes($items = [])

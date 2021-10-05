@@ -1,15 +1,5 @@
 <div x-cloak x-data="tabs" @tab-reviews.window="tabReviews(event)" class="space-y-6" itemscope
   itemtype="https://schema.org/Product">
-  @if ($product->title)
-    @section('title', $product->meta_title)
-  @else
-    @section('title', $product->name)
-  @endif
-  @if ($product->meta_description)
-    @section('description', $product->meta_description)
-  @endif
-
-
   <div class="px-4 py-6 space-y-2 bg-white lg:px-8 lg:rounded-2xl">
     <div class="flex flex-col justify-between space-y-2 lg:space-y-0 lg:space-x-4 lg:items-center lg:flex-row">
       <h1 class="w-10/12 font-semibold text-left text-md lg:text-xl">

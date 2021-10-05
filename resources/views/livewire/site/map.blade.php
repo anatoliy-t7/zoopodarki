@@ -86,53 +86,51 @@
 
           function setData() {
 
-            fetch('/json/address.json')
-              .then(response => response.json())
-              .then(data => {
+            data = @json($addresses);
 
-                myGeoObjects = data.map(item => {
-                  return new ymaps.GeoObject({
-                    geometry: {
-                      type: "Point",
-                      coordinates: [item.lat, item.lng]
-                    },
-                    properties: {
-                      clusterCaption: item.adr,
-                      balloonContentBody: [
-                        '<div>', '<b>Адрес: </b> ' + item.adr + '</div>',
-                        '<div>', '<b>Телефон: </b> ' + item.tel + '</div>',
-                        '<div>', '<b>Время работы: </b> ' + item.time + '</div>',
-                      ].join('')
-                    }
-                  }, {
-                    iconLayout: 'default#image',
-                    iconImageHref: '/assets/img/favicon.svg',
-                    iconImageSize: [24, 24],
-                    iconImageOffset: [-12, -12]
-                  });
+            myGeoObjects = data.map(item => {
+              return new ymaps.GeoObject({
+                geometry: {
+                  type: "Point",
+                  coordinates: [item.lat, item.lng]
+                },
+                properties: {
+                  clusterCaption: item.adr,
+                  balloonContentBody: [
+                    '<div>', '<b>Адрес: </b> ' + item.adr + '</div>',
+                    '<div>', '<b>Телефон: </b> ' + item.tel + '</div>',
+                    '<div>', '<b>Время работы: </b> ' + item.time + '</div>',
+                  ].join('')
+                }
+              }, {
+                iconLayout: 'default#image',
+                iconImageHref: '/assets/img/favicon.svg',
+                iconImageSize: [24, 24],
+                iconImageOffset: [-12, -12]
+              });
 
-                });
+            });
 
-                clusterer = new ymaps.Clusterer({
-                  preset: 'islands#invertedVioletClusterIcons',
-                  clusterIcons: [{
-                    href: '/assets/img/favicon.svg',
-                    size: [36, 36],
-                    offset: [-18, -18]
-                  }],
-                  clusterDisableClickZoom: false,
-                  clusterBalloonContentLayoutWidth: 400,
-                  clusterBalloonLeftColumnWidth: 160,
-                  clusterHideIconOnBalloonOpen: false,
-                  geoObjectHideIconOnBalloonOpen: false
-                });
-                clusterer.add(myGeoObjects);
-                map.geoObjects.add(clusterer);
-                map.setBounds(clusterer.getBounds(), {
-                  checkZoomRange: true
-                })
+            clusterer = new ymaps.Clusterer({
+              preset: 'islands#invertedVioletClusterIcons',
+              clusterIcons: [{
+                href: '/assets/img/favicon.svg',
+                size: [36, 36],
+                offset: [-18, -18]
+              }],
+              clusterDisableClickZoom: false,
+              clusterBalloonContentLayoutWidth: 400,
+              clusterBalloonLeftColumnWidth: 160,
+              clusterHideIconOnBalloonOpen: false,
+              geoObjectHideIconOnBalloonOpen: false
+            });
+            clusterer.add(myGeoObjects);
+            map.geoObjects.add(clusterer);
+            map.setBounds(clusterer.getBounds(), {
+              checkZoomRange: true
+            })
 
-              })
+
           }
         }
       }))

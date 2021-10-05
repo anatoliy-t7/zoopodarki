@@ -1,6 +1,7 @@
 @include ('dashboard.header')
 
-<div x-cloak x-data="{sidebar: $persist(true), productMenu: $persist(false)}" class="relative flex items-start ">
+<div x-cloak x-data="{sidebar: $persist(true), productMenu: $persist(false), settingMenu: $persist(false)}"
+  class="relative flex items-start ">
   @include ('dashboard.navbar')
   @include ('dashboard.sidebar')
   <article :class="{'sm:pl-56': sidebar, 'sm:pl-0' : !sidebar }"

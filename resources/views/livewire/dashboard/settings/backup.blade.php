@@ -1,5 +1,5 @@
 @section('title')
-Настройки
+  Настройки
 @endsection
 <div>
 

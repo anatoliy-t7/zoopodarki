@@ -11,7 +11,7 @@ class Map extends Component
 
     public function mount()
     {
-        $jsonString = file_get_contents(public_path('/json/address.json'));
+        $jsonString = file_get_contents(public_path('/assets/json/address.json'));
         $this->addresses = json_decode($jsonString, true);
     }
 

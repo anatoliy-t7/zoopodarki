@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Product1C;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\OpenGraph;
 
 class ProductCard extends Component
 {
@@ -23,6 +25,17 @@ class ProductCard extends Component
     {
         $this->getProduct();
         $this->getRelatedProducts();
+        $this->seo();
+    }
+
+    public function seo()
+    {
+        SEOMeta::setTitle($this->product->meta_title);
+        SEOMeta::setDescription($this->product->meta_description);
+        OpenGraph::setTitle($this->product->meta_title);
+        OpenGraph::setDescription($this->product->meta_description);
+        OpenGraph::addProperty('type', 'product');
+        OpenGraph::addImage(config('app.url') . $this->product->getMedia('product-images')[0]->getUrl('medium'));
     }
 
     public function buyOneClick($orderOneClick, $productId, $count)
