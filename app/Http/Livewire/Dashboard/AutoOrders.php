@@ -129,7 +129,7 @@ class AutoOrders extends Component
 
             $this->autoOrder = $autoOrder->id;
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Автозаказ сохранен']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Автозаказ сохранен']);
             $this->closeForm();
         });
     }
@@ -138,7 +138,7 @@ class AutoOrders extends Component
     {
         if (Arr::has($item, 'id')) {
             BrandSerie::findOrFail($item['id'])->delete();
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Серия удалена.']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Серия удалена.']);
         }
 
     }
@@ -148,7 +148,7 @@ class AutoOrders extends Component
         $brand = AutoOrder::find($itemId)->delete();
 
         $this->resetFields();
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Автозаказ удален.']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Автозаказ удален.']);
 
     }
 

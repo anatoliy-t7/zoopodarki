@@ -44,7 +44,7 @@
         <h2 class="mb-4 text-sm font-medium tracking-widest text-gray-300 uppercase title-font">Компания</h2>
         <ul class="space-y-3 text-gray-500 list-none ">
           <li>
-            <a href="{{ route('site.page',[ 'slug' => 'about']) }}" class="hover:text-orange-500">О нас</a>
+            <a href="{{ route('site.page', ['slug' => 'about']) }}" class="hover:text-orange-500">О нас</a>
           </li>
           <li>
             <a href="{{ route('site.shops') }}" class="hover:text-orange-500">
@@ -99,7 +99,7 @@
 
   <div class="text-gray-500 border-t border-gray-200">
     <div class="flex flex-col items-center justify-between max-w-screen-xl px-2 py-5 mx-auto md:flex-row">
-      <div class="text-sm ">&copy; {{ date("Y") }} {{ config('app.name') }}
+      <div class="text-sm ">&copy; {{ date('Y') }} {{ config('app.name') }}
       </div>
       <div class="flex flex-col items-center justify-end text-xs md:space-x-6 md:flex-row">
         <a href="#">Пользовательское соглашение</a>
@@ -111,7 +111,7 @@
 </footer>
 
 @production
-<livewire:error-catcher>
+  <livewire:error-catcher>
   @endproduction
 
   <livewire:scripts>

@@ -55,7 +55,7 @@ class ShopCart extends Component
 
                     $this->dispatchBrowserEvent(
                         'toaster',
-                        ['class' => 'bg-red-500', 'message' => 'Товара больше нет в наличии']
+                        ['type' => 'error', 'text' => 'Товара больше нет в наличии']
                     );
 
                     $this->emit('getProduct');
@@ -119,7 +119,7 @@ class ShopCart extends Component
                         }
                     }
 
-                    $this->dispatchBrowserEvent('toaster', ['message' => 'Товар добавлен в корзину']);
+                    $this->dispatchBrowserEvent('toast', ['text' => 'Товар добавлен в корзину']);
 
                     $this->emit('getProduct');
                 }
@@ -137,7 +137,7 @@ class ShopCart extends Component
                 $product_1c = Product1C::find($itemId);
 
                 if ((int) $product_1c->stock === 0) {
-                    $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Извините, товара больше нет в наличии']);
+                    $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Извините, товара больше нет в наличии']);
 
                     $this->getCart();
                     $this->emitTo('product-card', 'render');
@@ -211,16 +211,17 @@ class ShopCart extends Component
 
     public function generateId()
     {
-        if (request()->cookie('cart_id')) {
-            $this->cartId = request()->cookie('cart_id');
-        } else {
+        if (request()->session()->missing('cart_id')) {
             $this->cartId = 'cart_id' . Str::random(10);
-            setcookie('cart_id', $this->cartId, strtotime('+90 days'), '/');
+            session(['cart_id' => $this->cartId]);
+        } else {
+            $this->cartId = session('cart_id');
         }
+
 
         if (request()->session()->missing('shelter_cart')) {
             $this->shelterCartId = 'shelter_cart' . Str::random(10);
-            request()->session()->put('shelter_cart', $this->shelterCartId);
+            session(['shelter_cart' => $this->shelterCartId]);
         } else {
             $this->shelterCartId = session('shelter_cart');
         }

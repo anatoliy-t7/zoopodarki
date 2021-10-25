@@ -59,9 +59,9 @@ class PageEdit extends Component
         try {
             Storage::disk('public')->delete($url);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Изображение удалено']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Изображение удалено']);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Изображение не удалено']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Изображение не удалено']);
         }
     }
 
@@ -91,7 +91,7 @@ class PageEdit extends Component
 
             $this->pageId = $page->id;
 
-            $this->dispatchBrowserEvent('toaster', ['message' => $page->title . ' сохранена.']);
+            $this->dispatchBrowserEvent('toast', ['message' => $page->title . ' сохранена.']);
         });
     }
 

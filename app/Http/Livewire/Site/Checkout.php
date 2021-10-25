@@ -348,8 +348,8 @@ class Checkout extends Component
             }
         });
 
-        $this->dispatchBrowserEvent('toaster', [
-            'class' => 'bg-red-500', 'message' => 'Ваш заказ не создан, попробуйте еще раз', ]);
+        $this->dispatchBrowserEvent('toast', [
+            'type' => 'error', 'text' => 'Ваш заказ не создан, попробуйте еще раз', ]);
     }
 
     public function payCreate($order)

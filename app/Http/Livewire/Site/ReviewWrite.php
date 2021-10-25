@@ -76,7 +76,7 @@ class ReviewWrite extends Component
             $this->dispatchBrowserEvent('close-writer');
         });
 
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Ваш отзыв отправлен на проверку.']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Ваш отзыв отправлен на проверку.']);
 
         $this->body = null;
         $this->stars = null;

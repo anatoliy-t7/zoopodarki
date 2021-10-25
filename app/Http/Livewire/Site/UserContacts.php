@@ -20,7 +20,7 @@ class UserContacts extends Component
 
         $this->getContacts();
 
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Контакт удален']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Контакт удален']);
     }
 
     public function editContact($contactId)

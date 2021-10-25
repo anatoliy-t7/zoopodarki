@@ -215,8 +215,6 @@
                 </script>
 
               </div>
-
-
               <div class="w-full">
 
                 <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
@@ -250,8 +248,9 @@
 
                   <input type="file" wire:model.defer="photos" multiple
                     class="absolute z-20 block w-full h-full outline-none opacity-0 cursor-pointer">
-                </div>
 
+                </div>
+                @error('photos') <span class="error">{{ $message }}</span> @enderror
               </div>
 
 

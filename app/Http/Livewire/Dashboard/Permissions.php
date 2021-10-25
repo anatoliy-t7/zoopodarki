@@ -35,7 +35,7 @@ class Permissions extends Component
                 ]
             );
 
-            $this->dispatchBrowserEvent('toaster', ['message' => $permission->name . ' сохранены.']);
+            $this->dispatchBrowserEvent('toast', ['message' => $permission->name . ' сохранены.']);
 
             $this->closeForm();
         });
@@ -50,7 +50,7 @@ class Permissions extends Component
 
         $this->resetFields();
 
-        $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Права "' . $permission_name . '" удалены.']);
+        $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Права "' . $permission_name . '" удалены.']);
 
     }
 

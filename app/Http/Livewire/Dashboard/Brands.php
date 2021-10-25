@@ -130,7 +130,7 @@ class Brands extends Component
 
             $this->dispatchBrowserEvent('get-items', $this->itemsName);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => $brand->name . ' сохранен.']);
+            $this->dispatchBrowserEvent('toast', ['message' => $brand->name . ' сохранен.']);
 
             $this->closeForm();
         });
@@ -153,7 +153,7 @@ class Brands extends Component
         if (Arr::has($item, 'id')) {
             BrandSerie::findOrFail($item['id'])->delete();
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Серия удалена.']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Серия удалена.']);
         }
     }
 
@@ -162,7 +162,7 @@ class Brands extends Component
         $brand = Brand::find($itemId);
 
         if ($brand->products()->exists()) {
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'У этого бренда есть товары']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'У этого бренда есть товары']);
         } else {
             $brand_name = $brand->name;
             Storage::delete('brands/' . $brand->logo);
@@ -170,7 +170,7 @@ class Brands extends Component
 
             $this->resetFields();
 
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Бренд "' . $brand_name . '" удален.']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Бренд "' . $brand_name . '" удален.']);
         }
     }
 

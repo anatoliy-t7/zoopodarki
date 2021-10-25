@@ -11,6 +11,7 @@ use Kirschbaum\PowerJoins\PowerJoins;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Image\Manipulations;
 
 class Product extends Model implements HasMedia
 {
@@ -39,6 +40,7 @@ class Product extends Model implements HasMedia
         ini_set('memory_limit', '512M');
 
         $this->addMediaConversion('thumb')
+            ->format(Manipulations::FORMAT_WEBP)
             ->width(350)
             ->height(350)
             ->optimize()
@@ -46,6 +48,7 @@ class Product extends Model implements HasMedia
             ->performOnCollections('product-images');
 
         $this->addMediaConversion('medium')
+            ->format(Manipulations::FORMAT_WEBP)
             ->width(800)
             ->height(800)
             ->optimize()
@@ -57,8 +60,8 @@ class Product extends Model implements HasMedia
     {
         $this
             ->addMediaCollection('product-images')
-            ->useFallbackUrl('/assets/img/no-photo.jpg')
-            ->useFallbackPath(public_path('/assets/img/no-photo.jpg'));
+            ->useFallbackUrl('/assets/img/no-photo.webp')
+            ->useFallbackPath(public_path('/assets/img/no-photo.webp'));
     }
 
     public function sluggable(): array

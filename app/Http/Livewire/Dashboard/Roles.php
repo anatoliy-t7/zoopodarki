@@ -42,7 +42,7 @@ class Roles extends Component
 
             $role->syncPermissions($this->rolePermissions);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => $this->name . ' сохранена.']);
+            $this->dispatchBrowserEvent('toast', ['message' => $this->name . ' сохранена.']);
 
             $this->closeForm();
 
@@ -62,7 +62,7 @@ class Roles extends Component
 
         session()->flash('message', 'Role deleted');
 
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Роль удалена']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Роль удалена']);
 
     }
 

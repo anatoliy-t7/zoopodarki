@@ -160,9 +160,9 @@ class Edit extends Component
         try {
             Storage::disk('public')->delete($url);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Изображение удалено']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Изображение удалено']);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Изображение не удалено']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Изображение не удалено']);
         }
     }
 
@@ -213,7 +213,7 @@ class Edit extends Component
     public function setVariation($id)
     {
         if ($this->checkArrayKey($this->variations, 'id', $id)) {
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Already added']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Already added']);
         } else {
             $this->variation = Product1C::where('id', $id)->get()->toArray();
             $this->variations = array_merge($this->variations, $this->variation);
@@ -236,7 +236,7 @@ class Edit extends Component
             if ($item['id'] == $id) {
                 unset($this->variations[$key]);
 
-                $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Removed']);
+                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Removed']);
             }
         }
     }
@@ -370,7 +370,7 @@ class Edit extends Component
 
             $this->dispatchBrowserEvent('update-query-id', $this->productId);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Товар ' . $functionProduct->name . ' сохраннен.']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Товар ' . $functionProduct->name . ' сохраннен.']);
         });
     }
 
@@ -381,7 +381,7 @@ class Edit extends Component
         $this->product = Product::find($this->product->id);
         $this->media = $this->product->getMedia('product-images');
 
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Фото удалено.']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Фото удалено.']);
     }
 
     public function setName($name)

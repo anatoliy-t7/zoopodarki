@@ -50,7 +50,7 @@ class SearchCom extends Component
             \Log::error('Ошибка поиска');
             \Log::error($th);
 
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Поиск временно не работает, мы уже работаем над этим']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Поиск временно не работает, мы уже работаем над этим']);
         }
     }
 

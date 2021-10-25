@@ -61,7 +61,7 @@ class Units extends Component
                 ]
             );
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Единица измерения ' . $this->editUnit['name'] . ' сохранена.']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Единица измерения ' . $this->editUnit['name'] . ' сохранена.']);
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');
@@ -73,14 +73,14 @@ class Units extends Component
         $unit = ProductUnit::find($unitId);
 
         if ($unit->products()->exists()) {
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'С этой единицей измерения связан товар']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'С этой единицей измерения связан товар']);
         } else {
             $unit_name = $unit->name;
             $unit->delete();
 
             $this->reset(['editUnit']);
 
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Единица измерения "' . $unit_name . '" удалена.']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Единица измерения "' . $unit_name . '" удалена.']);
         }
     }
 

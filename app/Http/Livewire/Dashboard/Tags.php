@@ -144,7 +144,7 @@ class Tags extends Component
                 ]
             );
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Тег "' . $tag->name . '" сохранен.']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Тег "' . $tag->name . '" сохранен.']);
 
             $this->closeForm();
         });
@@ -161,7 +161,7 @@ class Tags extends Component
         $tag_name = $tag->name;
         $tag->delete();
 
-        $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Тег "' . $tag_name . '" удален.']);
+        $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Тег "' . $tag_name . '" удален.']);
     }
 
     public function closeForm()

@@ -35,7 +35,10 @@ class ProductCard extends Component
         OpenGraph::setTitle($this->product->meta_title);
         OpenGraph::setDescription($this->product->meta_description);
         OpenGraph::addProperty('type', 'product');
-        OpenGraph::addImage(config('app.url') . $this->product->getMedia('product-images')[0]->getUrl('medium'));
+
+        if ($this->product->media->count() > 0) {
+            OpenGraph::addImage(config('app.url') . $this->product->getMedia('product-images')[0]->getUrl('medium'));
+        }
     }
 
     public function buyOneClick($orderOneClick, $productId, $count)
@@ -48,7 +51,7 @@ class ProductCard extends Component
 
         $this->dispatchBrowserEvent('close-modal');
 
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Наш оператор перезвонит вам в ближайшее время!']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Наш оператор перезвонит вам в ближайшее время!']);
     }
 
     public function getProduct()

@@ -19,7 +19,7 @@ class UserAddresses extends Component
 
         $this->getAddresses();
 
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Адрес удален']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Адрес удален']);
     }
 
     public function editAddress($addressId)

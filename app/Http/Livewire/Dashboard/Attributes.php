@@ -109,7 +109,7 @@ class Attributes extends Component
             $this->itemsName = AttributeItem::where('attribute_id', $attribute->id)->get(['id', 'name']);
             $this->dispatchBrowserEvent('get-items', $this->itemsName);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Свойство "' . $attribute->name . '" обновлено.']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Свойство "' . $attribute->name . '" обновлено.']);
 
             $this->closeForm();
         });
@@ -123,7 +123,7 @@ class Attributes extends Component
             $this->dispatchBrowserEvent('close-confirm');
 
             if ($attributeItem->products()->exists()) {
-                return $this->dispatchBrowserEvent('toaster', ['message' => 'Вид свойства прикреплен к товару.']);
+                return $this->dispatchBrowserEvent('toast', ['message' => 'Вид свойства прикреплен к товару.']);
             }
 
             $removeItemName = $attributeItem->name;
@@ -131,7 +131,7 @@ class Attributes extends Component
 
             $this->openForm($this->attribute_id);
 
-            return $this->dispatchBrowserEvent('toaster', ['message' => 'Вид свойства ' . $removeItemName . ' удален.']);
+            return $this->dispatchBrowserEvent('toast', ['message' => 'Вид свойства ' . $removeItemName . ' удален.']);
         }
     }
 
@@ -143,7 +143,7 @@ class Attributes extends Component
             if ($attribute->items()->exists()) {
                 foreach ($attribute->items as $item) {
                     if ($item->products()->exists()) {
-                        return $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'У свойства "' . $attribute->name . '" есть товары ({$item->name})']);
+                        return $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'У свойства "' . $attribute->name . '" есть товары ({$item->name})']);
                     } else {
                         $this->removeItem($item);
                     }
@@ -154,7 +154,7 @@ class Attributes extends Component
 
                 $this->resetFields();
 
-                $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Свойство "' . $attribute_name . '" удалено.']);
+                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Свойство "' . $attribute_name . '" удалено.']);
             }
         });
     }

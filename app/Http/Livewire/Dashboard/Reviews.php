@@ -101,7 +101,7 @@ class Reviews extends Component
                 ]);
             }
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Отзыв сохранен с статусом "' . __('constants.review_status.' . $review->status) . '"']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Отзыв сохранен с статусом "' . __('constants.review_status.' . $review->status) . '"']);
 
             $this->closeForm();
 
@@ -118,9 +118,9 @@ class Reviews extends Component
 
             Mail::to($this->reviewEdit->user->email)->send(new ReviewChangedToUser($this->reviewEdit, $productName, $productLink));
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Пользователь оповещен.']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Пользователь оповещен.']);
         } else {
-            $this->dispatchBrowserEvent('toaster', ['message' => 'У пользователя нет почты']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'У пользователя нет почты']);
         }
     }
 
@@ -128,7 +128,7 @@ class Reviews extends Component
     {
         Media::find($photoId)->delete();
 
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Фото удалено.']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Фото удалено.']);
     }
 
     public function remove($itemId)
@@ -139,7 +139,7 @@ class Reviews extends Component
 
         $this->dispatchBrowserEvent('close');
 
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Отзыв удален.']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Отзыв удален.']);
     }
 
     public function closeForm()

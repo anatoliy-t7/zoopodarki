@@ -99,7 +99,7 @@ class Index extends Component
 
         $this->countTrash = Product::onlyTrashed()->count();
 
-        $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Товар удален полностью']);
+        $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Товар удален полностью']);
     }
 
     public function forceDeleteAll()
@@ -122,7 +122,7 @@ class Index extends Component
 
         $this->countTrash = Product::onlyTrashed()->count();
 
-        $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Корзина отчищена']);
+        $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Корзина отчищена']);
     }
 
     public function restoreTrashed($id)
@@ -132,7 +132,7 @@ class Index extends Component
 
             $this->countTrash = Product::onlyTrashed()->count();
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'Товар востановлен']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'Товар востановлен']);
         }
     }
 

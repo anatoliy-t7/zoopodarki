@@ -113,7 +113,7 @@ class Users extends Component
 
             $user->syncRoles($this->userRoles);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => $this->name . ' сохранен.']);
+            $this->dispatchBrowserEvent('toast', ['message' => $this->name . ' сохранен.']);
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');
@@ -126,7 +126,7 @@ class Users extends Component
         $user = User::with('reviews')->find($itemId);
         if ($user->reviews()->exists()) {
 
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'У этого пользователя есть отзывы о товарах']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'У этого пользователя есть отзывы о товарах']);
 
         } else {
 
@@ -135,7 +135,7 @@ class Users extends Component
 
             $this->reset();
 
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Пользователь "' . $user_name . '" удален.']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Пользователь "' . $user_name . '" удален.']);
 
         }
     }

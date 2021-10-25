@@ -46,11 +46,11 @@ class Exchange extends Component
 
             ImportProductsFromExcel::dispatch($filePath);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'File success added to job']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'File success added to job']);
 
         } else {
 
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'No the file in the folder']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'No the file in the folder']);
 
         }
 
@@ -75,11 +75,11 @@ class Exchange extends Component
 
             ProcessImportProduct1C::dispatch($file);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'File import.xml added to Job']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'File import.xml added to Job']);
 
         } else {
 
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'File doesn`t exist']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'File doesn`t exist']);
 
         }
 
@@ -92,11 +92,11 @@ class Exchange extends Component
 
             ProcessOffersProduct1C::dispatch($file);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'File offers.xml added to Job']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'File offers.xml added to Job']);
 
         } else {
 
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'File doesn`t exist']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'File doesn`t exist']);
 
         }
 

@@ -35,7 +35,7 @@ class In extends Component
         $functionOtp = Otp::generate($this->phone);
 
         if ($functionOtp->status === false) {
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Вы превысили лимит СМС, попробуйте через 15 минут']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Вы превысили лимит СМС, попробуйте через 15 минут']);
         } else {
             $this->token = $functionOtp->token;
 
@@ -78,7 +78,7 @@ class In extends Component
         $expires = Otp::expiredAt($this->phone);
 
         if ($expires->status === false) {
-            $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Вышел срок OTP']);
+            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Вышел срок OTP']);
 
             return false;
         }
@@ -87,11 +87,11 @@ class In extends Component
 
         if ($verify->status === false) {
             if ($verify->message == 'OTP does not match') {
-                $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'OTP не соответствует']);
+                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'OTP не соответствует']);
             }
 
             if ($verify->message == 'Reached the maximum allowed attempts') {
-                $this->dispatchBrowserEvent('toaster', ['class' => 'bg-red-500', 'message' => 'Достигнуто максимально допустимое количество попыток, попробуйте через 15 минут', 'timeout' => '2000']);
+                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Достигнуто максимально допустимое количество попыток, попробуйте через 15 минут', 'timeout' => '2000']);
             }
 
             return false;
@@ -115,11 +115,11 @@ class In extends Component
                 ->route('smscru', '+7' . $this->phone)
                 ->notify(new SendOTP($this->token));
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'OTP отправлен']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'OTP отправлен']);
         } catch (\Throwable $th) {
             \Log::error($th);
 
-            $this->dispatchBrowserEvent('toaster', ['message' => 'OTP не отправлен']);
+            $this->dispatchBrowserEvent('toast', ['message' => 'OTP не отправлен']);
         }
     }
 

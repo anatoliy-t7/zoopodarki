@@ -107,7 +107,7 @@ class Orders extends Component
         $funcOrder->delete();
 
         $this->closeForm();
-        $this->dispatchBrowserEvent('toaster', ['message' => 'Заказ "' . $orderNumber . '" удален.']);
+        $this->dispatchBrowserEvent('toast', ['message' => 'Заказ "' . $orderNumber . '" удален.']);
     }
 
     public function render()
