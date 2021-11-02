@@ -1,18 +1,16 @@
 <?php
-
 namespace App\Exports;
 
-use App\Models\Brand;
+use App\Models\Product1C;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
 class Products1CExport implements FromCollection, WithMapping, WithHeadings
 {
-
     public function collection()
     {
-        return Brand::all();
+        return Product1C::where('stock', 0)->get();
     }
 
     public function headings(): array
@@ -20,9 +18,9 @@ class Products1CExport implements FromCollection, WithMapping, WithHeadings
         return [
             'id',
             'Название',
-            // 'Вариации',
-            // 'Каталоги',
-            // 'Категории',
+            'cod1C',
+            'Баркод',
+            'Артикул',
         ];
     }
 
@@ -40,7 +38,9 @@ class Products1CExport implements FromCollection, WithMapping, WithHeadings
         return [
             $product->id,
             $product->name,
-            // $variations,
+            $product->cod1c,
+            $product->barcode,
+            $product->vendorcode,
         ];
     }
 
@@ -79,5 +79,4 @@ class Products1CExport implements FromCollection, WithMapping, WithHeadings
     //         $variations,
     //     ];
     // }
-
 }

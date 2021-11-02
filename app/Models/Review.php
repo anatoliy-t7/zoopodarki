@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Traits\Revieweable;
@@ -13,14 +12,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Review extends Model implements HasMedia
 {
     use InteractsWithMedia;
+
     use Revieweable;
+
     use PowerJoins;
 
     protected $table = 'reviews';
     protected $guarded = [];
-    protected $casts = [
-        'published' => 'boolean',
-    ];
 
     public function registerMediaConversions(Media $media = null): void
     {
@@ -43,5 +41,4 @@ class Review extends Model implements HasMedia
     {
         return $this->belongsTo('App\Models\User', 'user_id')->withDefault(['name' => 'Anonymous']);
     }
-
 }

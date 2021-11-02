@@ -14,7 +14,7 @@ document.addEventListener('alpine:init', () => {
 		},
 		fire(id) {
 			this.visible.push(this.notices.find((notice) => notice.id == id));
-			const timeShown = 2500 * this.visible.length;
+			const timeShown = 3000 * this.visible.length;
 			setTimeout(() => {
 				this.remove(id);
 			}, timeShown);

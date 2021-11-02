@@ -62,7 +62,9 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
 
     Route::get('/orders', \App\Http\Livewire\Dashboard\Orders::class)->name('orders');
 
-    Route::get('/auto-orders', \App\Http\Livewire\Dashboard\AutoOrders::class)->name('autoorders');
+    Route::get('/waitlists', \App\Http\Livewire\Dashboard\Waitlists::class)->name('waitlists');
+
+    // Route::get('/auto-orders', \App\Http\Livewire\Dashboard\AutoOrders::class)->name('autoorders');
 
     Route::get('/excel/product', 'App\Http\Controllers\Dashboard\ExcelController@exportProducts')->name('excel.product');
     Route::get('/excel/product1c', 'App\Http\Controllers\Dashboard\ExcelController@exportProducts1C')->name('excel.product1c');

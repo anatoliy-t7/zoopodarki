@@ -26,4 +26,8 @@ return [
     'payment_status.succeeded' => 'оплачен',
     'payment_status.canceled' => 'оплата отменена',
     'payment_status.refund_succeeded' => 'возрат подтвержден',
+
+    'waitlist_status.pending' => 'Клиент в ожидании товара',
+    'waitlist_status.ordered' => 'Товар заказан',
+    'waitlist_status.notified' => 'Клиент оповещен',
 ];

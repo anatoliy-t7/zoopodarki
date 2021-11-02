@@ -64,7 +64,6 @@
                       <img loading="lazy" class="object-fill w-20 h-full" src="{{ $item->associatedModel['image'] }}"
                         alt="">
                     @endif
-
                   </div>
 
                   <div class="flex items-center w-full md:space-x-3">

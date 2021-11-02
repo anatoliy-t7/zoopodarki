@@ -24,8 +24,8 @@ return [
         1 => 'pending',
         2 => 'waiting_for_capture',
         3 => 'succeeded',
-        3 => 'canceled',
-        4 => 'refund_succeeded',
+        4 => 'canceled',
+        5 => 'refund_succeeded',
     ],
 
     'review_status' => [
@@ -34,6 +34,13 @@ return [
         3 => 'cancelled',
         3 => 'baned',
     ],
+
+    'waitlist_status' => [
+        1 => 'pending',
+        2 => 'ordered',
+        3 => 'notified',
+    ],
+
     'phone' => env('ZOO_PHONE', '+71234567890'),
     'boxberry_token' => env('BOXBERRY_TOKEN', '77cd81a164c86a1f67ccb0ac9e822c1e'),
 

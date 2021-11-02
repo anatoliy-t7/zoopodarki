@@ -2,7 +2,7 @@
   @toast.window="add($event.detail)" style="pointer-events:none">
   <template x-for="notice of notices" :key="notice.id">
     <div x-show="visible.includes(notice)" x-transition.opacity.duration.300ms @click="remove(notice.id)"
-      class="w-full px-4 py-3 text-white rounded-md shadow-lg cursor-pointer"
+      class="w-full px-4 py-3 leading-tight text-white rounded-md shadow-lg cursor-pointer"
       :class="{
 				'bg-green-500': notice.type === 'success',
 				'bg-blue-500': notice.type === 'info',

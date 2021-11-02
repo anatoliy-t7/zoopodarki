@@ -119,7 +119,6 @@
       <div x-cloak x-data="variationsToggle" x-init="$watch('count', value => { validate('count') })"
         @close-modal.window="close()" class="relative flex flex-col w-full h-full lg:flex-row md:w-7/12">
 
-
         <div class="w-full pb-10 space-y-6 lg:w-8/12 lg:pb-0">
           <div itemprop="offers" itemscope itemtype="https://schema.org/Offer"
             class="grid w-full grid-cols-3 gap-4 lg:grid-cols-4">
@@ -128,9 +127,9 @@
               @if ($category !== 'pomogi-priyutu' and $item->promotion_type !== 1)
 
                 <div wire:key="{{ $loop->index }}"
-                  :class="productId === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
+                  :class="item.id === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
                   class="relative flex flex-col items-start justify-between px-3 py-2 space-y-1 border rounded-xl"
-                  x-on:click="productId = {{ $item->id }}">
+                  x-on:click="item.id = {{ $item->id }}, item.stock = {{ $item->stock }}">
 
                   @if ($item->promotion_type === 2)
                     <div class="absolute z-20 -top-3 -left-3">
@@ -155,7 +154,7 @@
                   @endif
 
                   <div wire:key="{{ $loop->index }}" class="absolute w-40 text-xs text-gray-400 -top-6"
-                    x-show="productId === {{ $item->id }}" x-transition>
+                    x-show="item.id === {{ $item->id }}" x-transition>
                     {{ $item->cod1c }}
                   </div>
 
@@ -182,17 +181,10 @@
                       </div>
                     @endif
 
-                    <div>
+                    <div class="">
                       @if ($item->stock === 0)
-                        <div
-                          class="flex items-center justify-center w-full mb-1 space-x-2 text-sm text-gray-400 tooltip"
-                          data-title="Нет в наличии">
-
-                          <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="-8 -14.5 100 100">
-                            <path
-                              d="M78 29v32l-2 2-34 11h-2L8 59l-1-2V22L-3 4l1-3h2l31 14 7-1 7-15 2-2L86 8c2 0 2 1 2 3l-9 18zm-36 4l25-5-28-10-4 1 7 14zm32-2l-31 6v32l31-10V31zM48 2l-6 13 33 10 7-14-34-9zm-9 34L11 24v31l28 13V36zM4 8l7 11 25 12-5-11L4 8z" />
-                          </svg>
+                        <div class="relative w-full text-xs text-red-500">
+                          <div class="absolute w-24 -top-2">Нет в наличии</div>
                         </div>
                       @endif
                     </div>
@@ -200,7 +192,7 @@
                   </div>
 
                   <div class="w-full font-semibold text-right "
-                    :class="productId === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
+                    :class="item.id === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
                     @if ($item->promotion_type === 3)
                       <div class="text-xs text-gray-500 line-through">
                         {{ RUB(discountRevert($item->price, $item->promotion_percent)) }}</div>
@@ -223,9 +215,9 @@
               @else
 
                 <div wire:key="{{ $loop->index }}"
-                  :class="productId === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
+                  :class="item.id === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
                   class="relative flex flex-col items-start justify-between px-3 py-2 space-y-1 border rounded-xl"
-                  x-on:click="productId = {{ $item->id }}">
+                  x-on:click="item.id = {{ $item->id }}, item.stock = {{ $item->stock }}">
 
 
                   @if ($item->promotion_type === 1)
@@ -237,7 +229,7 @@
                   @endif
 
                   <div wire:key="{{ $loop->index }}" class="absolute w-40 text-xs text-gray-400 -top-6"
-                    x-show="productId === {{ $item->id }}" x-transition>
+                    x-show="item.id === {{ $item->id }}" x-transition>
                     {{ $item->cod1c }}
                   </div>
 
@@ -266,15 +258,8 @@
 
                     <div>
                       @if ($item->stock === 0)
-                        <div
-                          class="flex items-center justify-center w-full mb-1 space-x-2 text-sm text-gray-400 tooltip"
-                          data-title="Нет в наличии">
-
-                          <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="-8 -14.5 100 100">
-                            <path
-                              d="M78 29v32l-2 2-34 11h-2L8 59l-1-2V22L-3 4l1-3h2l31 14 7-1 7-15 2-2L86 8c2 0 2 1 2 3l-9 18zm-36 4l25-5-28-10-4 1 7 14zm32-2l-31 6v32l31-10V31zM48 2l-6 13 33 10 7-14-34-9zm-9 34L11 24v31l28 13V36zM4 8l7 11 25 12-5-11L4 8z" />
-                          </svg>
+                        <div class="relative w-full text-xs text-red-500">
+                          <div class="absolute w-24 -top-2">Нет в наличии</div>
                         </div>
                       @endif
                     </div>
@@ -282,7 +267,7 @@
                   </div>
 
                   <div class="w-full font-semibold text-right "
-                    :class="productId === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
+                    :class="item.id === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
                     @if ($item->promotion_type === 1)
                       <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
                       <div>{{ RUB($item->promotion_price) }}</div>
@@ -323,122 +308,138 @@
         </div>
 
         <div class="flex flex-col items-center justify-start w-full space-y-5 lg:items-end lg:w-4/12">
-          @if ($product->variations->whereNotIn('stock', [0])->isEmpty())
-            Заказать
-          @else
-            <div class="flex justify-center w-40 leading-none text-gray-500">
 
-              <button x-on:click="decrement()"
-                class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
-                <x-tabler-minus class="w-6 h-6 stroke-current" />
-              </button>
 
-              <input id="number" type="number" min="1" max="50"
-                class="w-20 h-10 p-3 text-lg font-bold text-center border-t border-b border-gray-200"
-                x-model.debounce.500="count">
 
-              <button x-on:click="count++"
-                class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">
-                <x-tabler-plus class="w-6 h-6 stroke-current" />
-              </button>
+          <div x-show="item.stock > 0" class="flex justify-center w-40 leading-none text-gray-500">
 
-            </div>
-
-            <button x-on:click="addToCart()"
-              class="flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-red-500 cursor-pointer rounded-lg active:scale-95 hover:bg-red-600">
-              <span>В корзину</span>
-              <svg wire:loading.remove class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg"
-                data-name="Layer 1" viewBox="0 0 24 24">
-                <path
-                  d="M14,18a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,14,18Zm-4,0a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,10,18ZM19,6H17.62L15.89,2.55a1,1,0,1,0-1.78.9L15.38,6H8.62L9.89,3.45a1,1,0,0,0-1.78-.9L6.38,6H5a3,3,0,0,0-.92,5.84l.74,7.46a3,3,0,0,0,3,2.7h8.38a3,3,0,0,0,3-2.7l.74-7.46A3,3,0,0,0,19,6ZM17.19,19.1a1,1,0,0,1-1,.9H7.81a1,1,0,0,1-1-.9L6.1,12H17.9ZM19,10H5A1,1,0,0,1,5,8H19a1,1,0,0,1,0,2Z" />
-              </svg>
-              <div wire:loading wire:target="addToCart">
-                <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                  </path>
-                </svg>
-              </div>
+            <button x-on:click="decrement()"
+              class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
+              <x-tabler-minus class="w-6 h-6 stroke-current" />
             </button>
 
-            <span>
-              <div x-cloak x-show="openModal" x-transition.opacity
-                class="fixed top-0 left-0 z-40 flex items-center justify-center w-screen h-screen bg-gray-500 bg-opacity-50"
-                role="dialog" aria-modal="true">
+            <input id="number" type="number" min="1" max="50"
+              class="w-20 h-10 p-3 text-lg font-bold text-center border-t border-b border-gray-200"
+              x-model.debounce.500="count">
 
-                <div x-on:click.outside="close()" @keydown.window.escape="openModal = false"
-                  class="absolute z-50 flex flex-col w-full max-w-sm bg-white divide-y divide-gray-200 shadow-lg rounded-xl">
+            <button x-on:click="count++"
+              class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">
+              <x-tabler-plus class="w-6 h-6 stroke-current" />
+            </button>
 
-                  <div class="py-6 px-7">
-                    <div class="flex items-start justify-between">
-                      <h2 class="text-xl font-bold leading-tight text-gray-700">
-                        Покупка в 1 клик
-                      </h2>
-                      <button class="text-gray-400 hover:text-gray-600" x-on:click="close()">
-                        <x-tabler-x class="w-6 transition duration-150 stroke-current" />
-                      </button>
-                    </div>
+          </div>
 
-                    <div class="pt-2 text-xs text-gray-500">Наш оператор перезвонит вам в ближайшее
-                      время!</div>
+          <button x-show="item.stock > 0" x-transition.opacity x-on:click="addToCart()"
+            class="flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-orange-500 cursor-pointer rounded-lg active:scale-95 hover:bg-orange-600">
+            <span>В корзину</span>
+            <svg wire:loading.remove class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"
+              viewBox="0 0 24 24">
+              <path
+                d="M14,18a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,14,18Zm-4,0a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,10,18ZM19,6H17.62L15.89,2.55a1,1,0,1,0-1.78.9L15.38,6H8.62L9.89,3.45a1,1,0,0,0-1.78-.9L6.38,6H5a3,3,0,0,0-.92,5.84l.74,7.46a3,3,0,0,0,3,2.7h8.38a3,3,0,0,0,3-2.7l.74-7.46A3,3,0,0,0,19,6ZM17.19,19.1a1,1,0,0,1-1,.9H7.81a1,1,0,0,1-1-.9L6.1,12H17.9ZM19,10H5A1,1,0,0,1,5,8H19a1,1,0,0,1,0,2Z" />
+            </svg>
+            <div wire:loading wire:target="addToCart">
+              <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
+            </div>
+          </button>
+
+          <div x-show="item.stock > 0" x-transition.opacity>
+            <div x-cloak x-show="openModal" x-transition.opacity
+              class="fixed top-0 left-0 z-40 flex items-center justify-center w-screen h-screen bg-gray-500 bg-opacity-50"
+              role="dialog" aria-modal="true">
+
+              <div x-on:click.outside="close()" @keydown.window.escape="openModal = false"
+                class="absolute z-50 flex flex-col w-full max-w-sm bg-white divide-y divide-gray-200 shadow-lg rounded-xl">
+
+                <div class="py-6 px-7">
+                  <div class="flex items-start justify-between">
+                    <h2 class="text-xl font-bold leading-tight text-gray-700">
+                      Покупка в 1 клик
+                    </h2>
+                    <button class="text-gray-400 hover:text-gray-600" x-on:click="close()">
+                      <x-tabler-x class="w-6 transition duration-150 stroke-current" />
+                    </button>
                   </div>
 
-                  <div class="pt-4 space-y-4 pb-7 px-7">
+                  <div class="pt-2 text-xs text-gray-500">Наш оператор перезвонит вам в ближайшее
+                    время!</div>
+                </div>
 
-                    <label class="block w-full">
-                      <span class="block pb-1 pl-3 text-sm font-bold text-gray-700 ">Телефон</span>
-                      <div class="relative text-lg">
-                        <div class="absolute z-30 cursor-default top-3 left-3">
-                          <div class="w-6 h-6 mx-auto text-gray-400 fill-current">
-                            +7
-                          </div>
+                <div class="pt-4 space-y-4 pb-7 px-7">
+
+                  <label class="block w-full">
+                    <span class="block pb-1 pl-3 text-sm font-bold text-gray-700 ">Телефон</span>
+                    <div class="relative text-lg">
+                      <div class="absolute z-30 cursor-default top-3 left-3">
+                        <div class="w-6 h-6 mx-auto text-gray-400 fill-current">
+                          +7
                         </div>
-                        <input x-model="orderOneClick.phone" x-bind:oninput="validatePhone()" type="tel" name="phone"
-                          minlength="10" maxlength="10"
-                          class="w-full px-4 py-3 pl-10 font-semibold border border-gray-200 bg-gray-50 rounded-2xl focus:outline-none focus:ring focus:bg-white"
-                          required>
                       </div>
-                    </label>
-
-                    <label class="block w-full">
-                      <span class="block pb-1 pl-3 text-sm font-bold text-gray-700 ">Имя</span>
-                      <input x-model="orderOneClick.name" type="text" name="name" class="field" required>
-                    </label>
-
-                    <label class="block w-full">
-                      <span class="block pb-1 pl-3 text-sm font-bold text-gray-700">Email<span
-                          class="pl-1 text-xs font-normal text-gray-500">(необязательно)</span></span>
-                      <input x-model="orderOneClick.email" type="email" name="email" class="field">
-                    </label>
-
-                    <label class="block w-full">
-                      <span class="block pb-1 pl-3 text-sm font-bold text-gray-700">Адрес<span
-                          class="pl-1 text-xs font-normal text-gray-500">(необязательно)</span></span>
-                      <input x-model="orderOneClick.address" type="text" name="address" class="field">
-                    </label>
-
-                    <div class="flex justify-center">
-                      <button x-on:click="$wire.buyOneClick(orderOneClick, productId, count)"
-                        x-bind:disabled="valid === false"
-                        class="mt-3 text-white bg-orange-500 border-orange-500 btn hover:bg-orange-600">
-                        Купить
-                      </button>
+                      <input x-model="orderOneClick.phone" x-bind:oninput="validatePhone()" type="tel" name="phone"
+                        minlength="10" maxlength="10"
+                        class="w-full px-4 py-3 pl-10 font-semibold border border-gray-200 bg-gray-50 rounded-2xl focus:outline-none focus:ring focus:bg-white"
+                        required>
                     </div>
+                  </label>
 
+                  <label class="block w-full">
+                    <span class="block pb-1 pl-3 text-sm font-bold text-gray-700 ">Имя</span>
+                    <input x-model="orderOneClick.name" type="text" name="name" class="field" required>
+                  </label>
+
+                  <label class="block w-full">
+                    <span class="block pb-1 pl-3 text-sm font-bold text-gray-700">Email<span
+                        class="pl-1 text-xs font-normal text-gray-500">(необязательно)</span></span>
+                    <input x-model="orderOneClick.email" type="email" name="email" class="field">
+                  </label>
+
+                  <label class="block w-full">
+                    <span class="block pb-1 pl-3 text-sm font-bold text-gray-700">Адрес<span
+                        class="pl-1 text-xs font-normal text-gray-500">(необязательно)</span></span>
+                    <input x-model="orderOneClick.address" type="text" name="address" class="field">
+                  </label>
+
+                  <div class="flex justify-center">
+                    <button x-on:click="$wire.buyOneClick(orderOneClick, item.id, count)"
+                      x-bind:disabled="valid === false"
+                      class="mt-3 text-white bg-orange-500 border-orange-500 btn hover:bg-orange-600">
+                      Купить
+                    </button>
                   </div>
 
                 </div>
 
               </div>
 
-              <button x-on:click="open()" class="w-40 px-4 py-1 text-blue-500 hover:underline">
-                Купить в 1 клик
-              </button>
+            </div>
 
-            </span>
-          @endif
+            <button x-on:click="open()" class="w-40 px-4 py-1 text-blue-500 hover:underline">
+              Купить в 1 клик
+            </button>
+
+          </div>
+
+          <button x-show="item.stock == 0" x-transition.opacity x-on:click="preOrder()"
+            class=" relative flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-blue-500 cursor-pointer rounded-lg active:scale-95 hover:bg-blue-600">
+            <span>Заказать</span>
+            <x-tabler-package wire:loading.remove class="w-6 h-6" />
+
+            <div wire:loading wire:target="preOrder" class="absolute top-2 right-2">
+              <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
+            </div>
+          </button>
+
 
         </div>
 
@@ -483,17 +484,13 @@
 
       @if ($product->consist)
         <div x-cloak x-show="tab == 2" x-transition.opacity class="py-6 leading-normal">
-
           {!! $product->consist !!}
-
         </div>
       @endif
 
       @if ($product->applying)
         <div x-cloak x-show="tab == 3" x-transition.opacity class="py-6 leading-normal">
-
           {!! $product->applying !!}
-
         </div>
       @endif
 
@@ -579,15 +576,15 @@
       }
     </script>
     <script>
-      // for propper color syntex
-      pr_id = '{{ $product->variations[0]->id }}';
-      pr_id = parseInt(pr_id);
-
       document.addEventListener('alpine:initializing', () => {
         Alpine.data('variationsToggle', () => ({
           count: 1,
-          productId: pr_id,
-          body: document.body,
+          item: {
+            id: parseInt('{{ $product->variations[0]->id }}'),
+            stock: parseInt('{{ $product->variations[0]->stock }}'),
+            unit_value: '{{ $product->variations[0]->unit_value }}',
+          },
+          test: @json($product->variations[0]),
           openModal: false,
           formatedPhone: null,
           phone: null,
@@ -617,15 +614,22 @@
             }
           },
           addToCart() {
-            window.livewire.emit('addToCart', this.productId, this.count)
+            this.item.stock = this.item.stock - this.count;
+            if (this.item.stock < 0) {
+              this.item.stock = 0
+            }
+            window.livewire.emit('addToCart', this.item.id, this.count)
+          },
+          preOrder() {
+            window.livewire.emit('preOrder', this.item.id)
           },
           open() {
             this.openModal = true
-            this.body.classList.add('overflow-hidden', 'pr-4');
+            document.body.classList.add('overflow-hidden', 'pr-4');
           },
           close() {
             this.openModal = false
-            this.body.classList.remove('overflow-hidden', 'pr-4');
+            document.body.classList.remove('overflow-hidden', 'pr-4');
           },
           validatePhone() {
             if (this.orderOneClick.phone && this.orderOneClick.phone !== null) {

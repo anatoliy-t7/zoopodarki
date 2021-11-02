@@ -1,8 +1,8 @@
 <div x-data="mainMenu">
   <div>
     <button x-on:click="toggle()"
-      class="flex items-center p-3 space-x-2 text-white bg-orange-500 border border-white rounded-xl hover:bg-orange-600 focus:bg-orange-600"
-      :class="{ 'bg-gray-700': open}">
+      class="flex items-center p-3 space-x-2 text-white border border-white rounded-xl hover:bg-gray-600 focus:bg-gray-600"
+      :class="open  ? 'bg-gray-600' : 'bg-gray-500'">
       <x-tabler-layout-2 class="w-5 h-5" />
       <div>Все товары</div>
     </button>
@@ -24,62 +24,61 @@
               </a>
               <meta itemprop="name" content="{{ $catalog->name }}" />
               @if ($catalog->icon !== null)
-                <div
-                  class="">
-              {!! $catalog->icon !!}
+                <div class="">
+                  {!! $catalog->icon !!}
+                </div>
+              @endif
             </div>
-            @endif
-          </div>
           @endforeach
         </div>
       </nav>
       <div class="flex self-stretch w-10/12 p-8 bg-white " :class=" { 'rounded-tl-none' : tab==={{ $catalog->id }} }">
-                  @foreach ($menuCatalogs as $catalog)
+        @foreach ($menuCatalogs as $catalog)
 
-                    <div x-show="tab == {{ $catalog->id }}" class="w-full">
-                      <div class="flex justify-between space-x-6">
-                        <div class="grid w-full grid-flow-col grid-rows-6 max-h-64 gap-x-4 gap-y-1">
-                          @foreach ($catalog->categories as $category)
-                            <div class="">
-                <a href="
+          <div x-show="tab == {{ $catalog->id }}" class="w-full">
+            <div class="flex justify-between space-x-6">
+              <div class="grid w-full grid-flow-col grid-rows-6 max-h-64 gap-x-4 gap-y-1">
+                @foreach ($catalog->categories as $category)
+                  <div class="">
+                    <a href="
                               {{ route('site.category', ['catalog' => $catalog->slug, 'slug' => $category->slug]) }}"
-                              class="block p-2 text-base text-gray-800 hover:text-orange-500">
-                              {{ $category->name }}
-                              </a>
-                            </div>
-                          @endforeach
-                        </div>
+                      class="block p-2 text-base text-gray-800 hover:text-orange-500">
+                      {{ $category->name }}
+                    </a>
+                  </div>
+                @endforeach
+              </div>
 
-                      </div>
-                    </div>
-
-                  @endforeach
-                </div>
             </div>
-        </div>
+          </div>
 
-        <div x-cloak x-show="open" x-transition.opacity.duration.300
-          class="fixed top-0 bottom-0 left-0 right-0 z-0 w-screen h-full mt-32 overflow-hidden bg-gray-900 bg-opacity-50 pointer-events-auto">
-        </div>
-
-        <script>
-          document.addEventListener('alpine:initializing', () => {
-            Alpine.data('mainMenu', () => ({
-              open: false,
-              tab: 1,
-              body: document.body,
-              toggle() {
-                if (this.open === false) {
-                  this.open = true;
-                  this.body.classList.add("overflow-hidden", "pr-4");
-                } else {
-                  this.open = false;
-                  this.body.classList.remove("overflow-hidden", "pr-4")
-                }
-              },
-
-            }))
-          })
-        </script>
-
+        @endforeach
+      </div>
     </div>
+  </div>
+
+  <div x-cloak x-show="open" x-transition.opacity.duration.300
+    class="fixed top-0 bottom-0 left-0 right-0 z-0 w-screen h-full mt-32 overflow-hidden bg-gray-900 bg-opacity-50 pointer-events-auto">
+  </div>
+
+  <script>
+    document.addEventListener('alpine:initializing', () => {
+      Alpine.data('mainMenu', () => ({
+        open: false,
+        tab: 1,
+        body: document.body,
+        toggle() {
+          if (this.open === false) {
+            this.open = true;
+            this.body.classList.add("overflow-hidden", "pr-4");
+          } else {
+            this.open = false;
+            this.body.classList.remove("overflow-hidden", "pr-4")
+          }
+        },
+
+      }))
+    })
+  </script>
+
+</div>

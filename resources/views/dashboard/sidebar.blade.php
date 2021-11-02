@@ -12,7 +12,7 @@
         <div class="flex-grow md:block md:overflow-y-auto ">
           <a class="flex justify-start items-center px-4 py-3 hover:bg-gray-800 hover:text-gray-400 focus:bg-gray-800 focus:outline-none focus:ring {{ request()->is('dashboard') ? 'bg-gray-800' : '' }}"
             href="{{ route('dashboard.dashboard') }}">
-            <x-tabler-dashboard class="w-5 h-5" />
+            <x-tabler-dashboard class="w-6 h-6" />
             <span class="mx-4">Панель</span>
           </a>
 
@@ -20,7 +20,7 @@
             <div x-on:click="productMenu = ! productMenu"
               class="flex items-center justify-between px-4 py-3 bg-transparent cursor-pointer hover:bg-gray-800 hover:text-gray-400 focus:bg-gray-800 focus:outline-none focus:ring">
               <div class="flex items-center space-x-4">
-                <x-tabler-package class="w-5 h-5" />
+                <x-tabler-package class="w-6 h-6" />
                 <span class="mx-4">Товары</span>
               </div>
               <span>
@@ -61,27 +61,25 @@
           @can('create')
             <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/orders*') ? 'bg-gray-800' : '' }}"
               href="{{ route('dashboard.orders') }}">
-              <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"
-                viewBox="0 0 24 24">
-                <path
-                  d="M14,18a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,14,18Zm-4,0a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,10,18ZM19,6H17.62L15.89,2.55a1,1,0,1,0-1.78.9L15.38,6H8.62L9.89,3.45a1,1,0,0,0-1.78-.9L6.38,6H5a3,3,0,0,0-.92,5.84l.74,7.46a3,3,0,0,0,3,2.7h8.38a3,3,0,0,0,3-2.7l.74-7.46A3,3,0,0,0,19,6ZM17.19,19.1a1,1,0,0,1-1,.9H7.81a1,1,0,0,1-1-.9L6.1,12H17.9ZM19,10H5A1,1,0,0,1,5,8H19a1,1,0,0,1,0,2Z" />
-              </svg>
+              <x-tabler-basket class="w-6 h-6" />
               <span class="mx-4">Заказы</span>
+            </a>
+
+            <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/waitlists') ? 'bg-gray-800' : '' }}"
+              href="{{ route('dashboard.waitlists') }}">
+              <x-tabler-notes class="w-6 h-6" />
+              <span class="mx-4">Лист ожидания</span>
             </a>
 
             <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/reviews*') ? 'bg-gray-800' : '' }}"
               href="{{ route('dashboard.reviews') }}">
-              <x-tabler-message class="w-5 h-5 stroke-current" />
+              <x-tabler-message class="w-6 h-6" />
               <span class="mx-4">Отзывы</span>
             </a>
 
             <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/page*') ? 'bg-gray-800' : '' }}"
               href="{{ route('dashboard.pages') }}">
-              <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"
-                viewBox="0 0 24 24">
-                <path
-                  d="M9,10h1a1,1,0,0,0,0-2H9a1,1,0,0,0,0,2Zm0,2a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2ZM20,8.94a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.32.32,0,0,0-.09,0A.88.88,0,0,0,13.05,2H7A3,3,0,0,0,4,5V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V9S20,9,20,8.94ZM14,5.41,16.59,8H15a1,1,0,0,1-1-1ZM18,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V5A1,1,0,0,1,7,4h5V7a3,3,0,0,0,3,3h3Zm-3-3H9a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2Z" />
-              </svg>
+              <x-tabler-template class="w-6 h-6" />
               <span class="mx-4">Страницы</span>
 
             </a>
@@ -90,11 +88,7 @@
               <div x-on:click="settingMenu = ! settingMenu"
                 class="flex items-center justify-between px-4 py-3 bg-transparent cursor-pointer hover:bg-gray-800 hover:text-gray-400 focus:bg-gray-800 focus:outline-none focus:ring">
                 <div class="flex items-center space-x-4">
-                  <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"
-                    viewBox="0 0 24 24">
-                    <path
-                      d="M19.9,12.66a1,1,0,0,1,0-1.32L21.18,9.9a1,1,0,0,0,.12-1.17l-2-3.46a1,1,0,0,0-1.07-.48l-1.88.38a1,1,0,0,1-1.15-.66l-.61-1.83A1,1,0,0,0,13.64,2h-4a1,1,0,0,0-1,.68L8.08,4.51a1,1,0,0,1-1.15.66L5,4.79A1,1,0,0,0,4,5.27L2,8.73A1,1,0,0,0,2.1,9.9l1.27,1.44a1,1,0,0,1,0,1.32L2.1,14.1A1,1,0,0,0,2,15.27l2,3.46a1,1,0,0,0,1.07.48l1.88-.38a1,1,0,0,1,1.15.66l.61,1.83a1,1,0,0,0,1,.68h4a1,1,0,0,0,.95-.68l.61-1.83a1,1,0,0,1,1.15-.66l1.88.38a1,1,0,0,0,1.07-.48l2-3.46a1,1,0,0,0-.12-1.17ZM18.41,14l.8.9-1.28,2.22-1.18-.24a3,3,0,0,0-3.45,2L12.92,20H10.36L10,18.86a3,3,0,0,0-3.45-2l-1.18.24L4.07,14.89l.8-.9a3,3,0,0,0,0-4l-.8-.9L5.35,6.89l1.18.24a3,3,0,0,0,3.45-2L10.36,4h2.56l.38,1.14a3,3,0,0,0,3.45,2l1.18-.24,1.28,2.22-.8.9A3,3,0,0,0,18.41,14ZM11.64,8a4,4,0,1,0,4,4A4,4,0,0,0,11.64,8Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,11.64,14Z" />
-                  </svg>
+                  <x-tabler-settings class="w-6 h-6" />
                   <span class="mx-4">Настройки</span>
                 </div>
                 <span>
@@ -121,10 +115,7 @@
 
             <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/excel') ? 'bg-gray-800' : '' }}"
               href="{{ route('dashboard.excel') }}">
-              <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  d="M21,2H3A1,1,0,0,0,2,3V21a1,1,0,0,0,1,1H21a1,1,0,0,0,1-1V3A1,1,0,0,0,21,2ZM8,20H4V16H8Zm0-6H4V10H8ZM8,8H4V4H8Zm6,12H10V16h4Zm0-6H10V10h4Zm0-6H10V4h4Zm6,12H16V16h4Zm0-6H16V10h4Zm0-6H16V4h4Z" />
-              </svg>
+              <x-tabler-table class="w-6 h-6" />
               <span class="mx-4">Import & Export</span>
             </a>
           </div>
@@ -135,34 +126,25 @@
           <div class="flex-growmd:block md:overflow-y-auto">
             <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/users') ? 'bg-gray-800' : '' }}"
               href="{{ route('dashboard.users') }}">
-              <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z" />
-              </svg>
+              <x-tabler-users class="w-6 h-6" />
               <span class="mx-4">Users</span>
             </a>
 
             <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/roles') ? 'bg-gray-800' : '' }}"
               href="{{ route('dashboard.roles') }}">
-              <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  d="M14.81,12.28a3.73,3.73,0,0,0,1-2.5,3.78,3.78,0,0,0-7.56,0,3.73,3.73,0,0,0,1,2.5A5.94,5.94,0,0,0,6,16.89a1,1,0,0,0,2,.22,4,4,0,0,1,7.94,0A1,1,0,0,0,17,18h.11a1,1,0,0,0,.88-1.1A5.94,5.94,0,0,0,14.81,12.28ZM12,11.56a1.78,1.78,0,1,1,1.78-1.78A1.78,1.78,0,0,1,12,11.56ZM19,2H5A3,3,0,0,0,2,5V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V5A3,3,0,0,0,19,2Zm1,17a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V5A1,1,0,0,1,5,4H19a1,1,0,0,1,1,1Z" />
-              </svg>
+              <x-tabler-lock-access class="w-6 h-6" />
               <span class="mx-4">Roles</span>
             </a>
 
             <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/permissions') ? 'bg-gray-800' : '' }}"
               href="{{ route('dashboard.permissions') }}">
-              <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  d="M12,13a1.49,1.49,0,0,0-1,2.61V17a1,1,0,0,0,2,0V15.61A1.49,1.49,0,0,0,12,13Zm5-4V7A5,5,0,0,0,7,7V9a3,3,0,0,0-3,3v7a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V12A3,3,0,0,0,17,9ZM9,7a3,3,0,0,1,6,0V9H9Zm9,12a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1H17a1,1,0,0,1,1,1Z" />
-              </svg>
+              <x-tabler-lock class="w-6 h-6" />
               <span class="mx-4">Permissions</span>
             </a>
 
             <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/logs') ? 'bg-gray-800' : '' }}"
               href="{{ route('dashboard.logs') }}">
-              <x-tabler-tornado class="w-5 h-5 fill-current" />
+              <x-tabler-tornado class="w-6 h-6" />
               <span class="mx-4">Logs</span>
             </a>
           </div>
