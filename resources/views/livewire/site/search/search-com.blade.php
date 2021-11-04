@@ -29,35 +29,36 @@
   </div>
   <div x-show="openResult">
     @if ($result)
-    <div wire:loading.remove
-      class="absolute top-0 left-0 right-0 z-40 w-full max-w-2xl max-h-screen p-2 mx-auto mt-12 overflow-x-hidden overflow-y-auto text-gray-800 bg-white shadow-2xl md:p-6 rounded-2xl">
-      <div class="divide-y">
-        @forelse ($result['hits'] as $item)
-        <div>
-          @if (array_key_exists('category', $item)) <a
-            href="{{ route('site.product', [ $item['catalog'], $item['category'], $item['slug']]) }}"
-            class="flex items-center justify-start px-4 py-2 space-x-2 text-sm hover:bg-gray-50">
-            @endif
+      <div wire:loading.remove
+        class="absolute top-0 left-0 right-0 z-40 w-full max-w-2xl max-h-screen p-2 mx-auto mt-12 overflow-x-hidden overflow-y-auto text-gray-800 bg-white shadow-2xl md:p-6 rounded-2xl">
+        <div class="divide-y">
+          @forelse ($result['hits'] as $item)
+            <div>
+              @if (array_key_exists('category', $item)) <a
+                  href="{{ route('site.product', [$item['catalog'], $item['category'], $item['slug']]) }}"
+                  class="flex items-center justify-start px-4 py-2 space-x-2 text-sm hover:bg-gray-50">
+              @endif
 
-            @if (array_key_exists('image', $item))
-            <img loading="lazy" class="object-contain object-center w-10 h-10" src="{{ $item['image'] }}" alt="Image">
-            @endif
+              @if (array_key_exists('image', $item))
+                <img loading="lazy" class="object-contain object-center w-10 h-10" src="{{ $item['image'] }}"
+                  alt="Image">
+              @endif
 
-            <div>{!! $item['_formatted']['name'] !!}</div>
-            @if (array_key_exists('category', $item))
-          </a>
-          @endif
-        </div>
-        @empty
-        <div>По этому запросу ничего не найдено</div>
-        @endforelse
-        <div class="pt-6 text-center">
-          <a href="#" class="text-xs text-white bg-orange-400 btn">
-            Посмотреть остальные результаты
-          </a>
+              <div>{!! $item['_formatted']['name'] !!}</div>
+              @if (array_key_exists('category', $item))
+                </a>
+              @endif
+            </div>
+          @empty
+            <div>По этому запросу ничего не найдено</div>
+          @endforelse
+          <div class="pt-6 text-center">
+            <a href="{{ route('site.search', ['q' => $this->search]) }}" class="text-xs text-white bg-orange-400 btn">
+              Посмотреть остальные результаты
+            </a>
+          </div>
         </div>
       </div>
-    </div>
     @endif
   </div>
 </div>

@@ -4,7 +4,7 @@ use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
-if (! function_exists('discount')) {
+if (!function_exists('discount')) {
     function discount($price, $procent)
     {
         $discount = $price - ceil($price * $procent / 100);
@@ -12,7 +12,8 @@ if (! function_exists('discount')) {
         return ceil($discount);
     }
 }
-if (! function_exists('discountRevert')) {
+
+if (!function_exists('discountRevert')) {
     function discountRevert($discount, $procent)
     {
         $price = $discount + ceil($discount * $procent / 100);
@@ -21,45 +22,45 @@ if (! function_exists('discountRevert')) {
     }
 }
 
-if (! function_exists('RUB')) {
+if (!function_exists('RUB')) {
     function RUB($number)
     {
         if ($number !== null) {
-            return number_format($number, 0, '', ' ').' ₽';
+            return number_format($number, 0, '', ' ') . ' ₽';
         }
 
         return $number;
     }
 }
 
-if (! function_exists('simpleDate')) {
+if (!function_exists('simpleDate')) {
     function simpleDate($datetime)
     {
         return Carbon::parse($datetime)->format('d.m.Y');
     }
 }
 
-if (! function_exists('dataYmd')) {
+if (!function_exists('dataYmd')) {
     function dataYmd($datetime)
     {
         return Carbon::parse($datetime)->format('Y.m.d');
     }
 }
 
-if (! function_exists('dataAndTime')) {
+if (!function_exists('dataAndTime')) {
     function dataAndTime($datetime)
     {
         return Carbon::parse($datetime)->toDayDateTimeString();
     }
 }
 
-if (! function_exists('getNextOrderNumber')) {
+if (!function_exists('getNextOrderNumber')) {
     function getNextOrderNumber()
     {
         // Get the last created order
         $lastOrder = Order::latest()->first();
 
-        if (! $lastOrder) {
+        if (!$lastOrder) {
             // We get here if there is no order at all
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
@@ -74,12 +75,12 @@ if (! function_exists('getNextOrderNumber')) {
         // the %05d part makes sure that there are always 6 numbers in the string.
         // so it adds the missing zero's when needed.
 
-        return 'W'.sprintf('%06d', intval($number) + 1);
+        return 'W' . sprintf('%06d', intval($number) + 1);
     }
 }
 
 // Convert grams to human readable units
-if (! function_exists('kg')) {
+if (!function_exists('kg')) {
     function kg($value)
     {
         if ($value !== 0 and $value !== 'на развес') {
@@ -87,14 +88,15 @@ if (! function_exists('kg')) {
 
             if (Str::of($value)->before('.') == '0') {
                 $value = Str::of($value)->after('.');
+
                 if (Str::of($value)->startsWith('0')) {
                     $value = Str::replaceFirst('0', '', $value);
-                    $value = $value.'0 гр';
+                    $value = $value . '0 гр';
                 } else {
                     if (strlen((string) $value) == 2) {
-                        $value = $value.'0 гр';
+                        $value = $value . '0 гр';
                     } elseif (strlen((string) $value) == 1) {
-                        $value = $value.'00 гр';
+                        $value = $value . '00 гр';
                     } else {
                         $value .= ' гр';
                     }
@@ -108,15 +110,15 @@ if (! function_exists('kg')) {
     }
 }
 
-if (! function_exists('tagP')) {
+if (!function_exists('tagP')) {
     function tagP($comment)
     {
-        return '<p>'.implode('</p><p>', array_filter(explode("\n", $comment))).'</p>';
+        return '<p>' . implode('</p><p>', array_filter(explode("\n", $comment))) . '</p>';
     }
 }
 
 // Англо-русская замена
-if (! function_exists('switcher_ru')) {
+if (!function_exists('switcher_ru')) {
     function switcher_ru($value)
     {
         $converter = [
@@ -140,7 +142,7 @@ if (! function_exists('switcher_ru')) {
 }
 
 // Русско-английская замена
-if (! function_exists('switcher_en')) {
+if (!function_exists('switcher_en')) {
     function switcher_en($value)
     {
         $converter = [

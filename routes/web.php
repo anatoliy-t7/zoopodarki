@@ -86,6 +86,8 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
 
         Route::get('/pet/{slug}', \App\Http\Livewire\Site\CatalogPage::class)->name('catalog');
 
+        Route::get('/search', \App\Http\Livewire\Site\Search\SearchPage::class)->name('search');
+
         // Tabs routes of product page
         Route::get('/pet/{catalog}/{category}/{slug}', 'App\Http\Controllers\Site\ProductController@show')->name('product');
 

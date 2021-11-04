@@ -38,7 +38,7 @@
           </div>
 
           <div class="w-5/12">
-            <livewire:site.search-com>
+            <livewire:site.search.search-com>
           </div>
 
 

@@ -54,6 +54,7 @@
 
         <div>
           @if ($items)
+            // TODO add link to product
             <div class="text-sm divide-y divide-gray-100">
               @foreach ($items as $key => $item)
                 <div
