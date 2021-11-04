@@ -61,7 +61,7 @@ class Units extends Component
                 ]
             );
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Единица измерения ' . $this->editUnit['name'] . ' сохранена.']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Единица измерения ' . $this->editUnit['name'] . ' сохранена.']);
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');

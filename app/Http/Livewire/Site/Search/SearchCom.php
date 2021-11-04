@@ -22,9 +22,16 @@ class SearchCom extends Component
     public function render()
     {
         if ($this->search) {
-            $resultArray = $this->searchThis($this->search, true);
-            $this->result = $resultArray['result'];
-            $this->search = $resultArray['search'];
+            try {
+                $resultArray = $this->searchThis($this->search, true);
+                $this->result = $resultArray['result'];
+                $this->search = $resultArray['search'];
+            } catch (\Throwable $th) {
+                \Log::error('Ошибка поиска');
+                \Log::error($th);
+
+                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Поиск временно не работает, мы уже работаем над этим']);
+            }
         }
 
         return view('livewire.site.search.search-com');

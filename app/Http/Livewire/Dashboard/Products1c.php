@@ -81,7 +81,7 @@ class Products1c extends Component
         try {
             $this->initPromotion($this->product1c);
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Акция создана']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Акция создана']);
         } catch (\Throwable $th) {
             \Log::error($th);
             $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'В процессе создания акции произошла ошибка']);
@@ -96,7 +96,7 @@ class Products1c extends Component
         $this->stopPromotion($this->product1c['id']);
         $this->closeForm();
         $this->dispatchBrowserEvent('close');
-        $this->dispatchBrowserEvent('toast', ['message' => 'Акция прекращена']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Акция прекращена']);
     }
 
     public function closeForm()

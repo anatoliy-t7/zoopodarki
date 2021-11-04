@@ -77,7 +77,7 @@ class Home extends Component
             ['options' => $homePageBlockTwo]
         );
 
-        $this->dispatchBrowserEvent('toast', ['message' => 'Сохраннено']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Сохраннено']);
 
     }
 

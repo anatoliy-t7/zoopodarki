@@ -144,7 +144,7 @@ class Tags extends Component
                 ]
             );
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Тег "' . $tag->name . '" сохранен.']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Тег "' . $tag->name . '" сохранен.']);
 
             $this->closeForm();
         });

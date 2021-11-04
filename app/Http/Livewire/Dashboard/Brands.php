@@ -130,7 +130,7 @@ class Brands extends Component
 
             $this->dispatchBrowserEvent('get-items', $this->itemsName);
 
-            $this->dispatchBrowserEvent('toast', ['message' => $brand->name . ' сохранен.']);
+            $this->dispatchBrowserEvent('toast', ['text' => $brand->name . ' сохранен.']);
 
             $this->closeForm();
         });
@@ -153,7 +153,7 @@ class Brands extends Component
         if (Arr::has($item, 'id')) {
             BrandSerie::findOrFail($item['id'])->delete();
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Серия удалена.']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Серия удалена.']);
         }
     }
 

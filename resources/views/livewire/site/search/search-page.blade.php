@@ -12,7 +12,6 @@
     </div>
   </div>
 
-
   <div class="flex w-full">
     <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
 

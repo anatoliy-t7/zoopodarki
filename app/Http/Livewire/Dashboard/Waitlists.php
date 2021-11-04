@@ -74,27 +74,12 @@ class Waitlists extends Component
             );
 
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Заказ сохранен с статусом "' . __('constants.review_status.' . $waitlist->status) . '"']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Заказ сохранен с статусом "' . __('constants.review_status.' . $waitlist->status) . '"']);
 
             $this->closeForm();
 
             $this->dispatchBrowserEvent('close');
         });
-    }
-
-    public function sandEmail()
-    {
-        // if ($this->waitlistEdit->user->email) {
-        //     $productName = $this->waitlistEdit->revieweable->name;
-
-        //     $productLink = env('APP_URL') . '/pet/' . $this->waitlistEdit->revieweable->categories[0]->catalog->slug . '/' . $this->waitlistEdit->revieweable->categories[0]->slug . '/' . $this->waitlistEdit->revieweable->slug;
-
-        //     Mail::to($this->waitlistEdit->user->email)->send(new ReviewChangedToUser($this->waitlistEdit, $productName, $productLink));
-
-        //     $this->dispatchBrowserEvent('toast', ['message' => 'Пользователь оповещен.']);
-        // } else {
-        //     $this->dispatchBrowserEvent('toast', ['message' => 'У пользователя нет почты']);
-        // }
     }
 
     public function remove($itemId)
@@ -105,7 +90,7 @@ class Waitlists extends Component
 
         $this->dispatchBrowserEvent('close');
 
-        $this->dispatchBrowserEvent('toast', ['message' => 'Заказ удален.']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Заказ удален.']);
     }
 
     public function closeForm()
@@ -122,6 +107,8 @@ class Waitlists extends Component
                 $query->whereLike(['phome', 'email'], $this->search);
             })
             ->with('product1c')
+            ->with('product1c.product')
+            ->with('product1c.product.unit')
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->itemsPerPage);
 

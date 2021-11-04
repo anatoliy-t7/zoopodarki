@@ -115,11 +115,11 @@ class In extends Component
                 ->route('smscru', '+7' . $this->phone)
                 ->notify(new SendOTP($this->token));
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'OTP отправлен']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'OTP отправлен']);
         } catch (\Throwable $th) {
             \Log::error($th);
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'OTP не отправлен']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'OTP не отправлен']);
         }
     }
 

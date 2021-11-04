@@ -116,7 +116,7 @@ class Catalogs extends Component
                 }
             });
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Категория "' . $this->editCategory['name'] . '" сохранена']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Категория "' . $this->editCategory['name'] . '" сохранена']);
         }
 
         $this->editCategory = [];
@@ -162,7 +162,7 @@ class Catalogs extends Component
             // Clean the cache after saving
             Cache::forget('categories-menu');
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Каталог "' . $this->editCatalog->name . '" сохранен.']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Каталог "' . $this->editCatalog->name . '" сохранен.']);
 
             $this->resetValidation();
             $this->closeForm();
@@ -180,10 +180,10 @@ class Catalogs extends Component
                 $this->categories = Category::where('catalog_id', $this->editCatalog['id'])->get();
 
                 $this->closeFormCategory();
-                $this->dispatchBrowserEvent('toast', ['message' => 'Категория удалена.']);
+                $this->dispatchBrowserEvent('toast', ['text' => 'Категория удалена.']);
             }
         } else {
-            $this->dispatchBrowserEvent('toast', ['message' => 'Категория не удалена.', 'type' => 'error']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Категория не удалена.', 'type' => 'error']);
         }
     }
 
@@ -205,7 +205,7 @@ class Catalogs extends Component
 
                     $this->resetFields();
 
-                    $this->dispatchBrowserEvent('toast', ['message' => 'Каталог "' . $catalog_name . '" удален.']);
+                    $this->dispatchBrowserEvent('toast', ['text' => 'Каталог "' . $catalog_name . '" удален.']);
                 }
             } else {
                 $catalog_name = $catalog->name;
@@ -213,7 +213,7 @@ class Catalogs extends Component
 
                 $this->resetFields();
 
-                $this->dispatchBrowserEvent('toast', ['message' => 'Каталог "' . $catalog_name . '" удален.']);
+                $this->dispatchBrowserEvent('toast', ['text' => 'Каталог "' . $catalog_name . '" удален.']);
             }
         });
     }

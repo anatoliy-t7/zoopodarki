@@ -1,5 +1,5 @@
 @section('title')
-Dashboard
+  Dashboard
 @endsection
 <div class="flex justify-between min-h-full space-x-6">
   <div
@@ -24,24 +24,45 @@ Dashboard
     </div>
 
   </div>
-  <div class="w-full h-full md:w-2/12">
+  <div class="w-full h-full space-y-4 md:w-60">
 
-    @if ($pendingReviews->count() > 0)
-    <a href="{{ route('dashboard.reviews') }}"
-      class="relative inline-flex items-center w-full px-5 py-3 space-x-5 bg-white cursor-pointer rounded-xl hover:shadow-md">
-      <span class="absolute flex w-3 h-3 -top-1 -right-1">
-        <span class="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 animate-ping"></span>
-        <span class="relative inline-flex w-3 h-3 bg-orange-500 rounded-full"></span>
-      </span>
-      <div class="text-2xl font-semibold text-orange-600">
-        {{ $pendingReviews->count() }}
-      </div>
-      <div>
-        <h4>Отзывы</h4>
-        <div class="text-xs leading-snug text-gray-400">ожидающие проверки</div>
-      </div>
-    </a>
-    @endif
+    <div>
+      @if ($pendingReviews->count() > 0)
+        <a href="{{ route('dashboard.reviews', ['filteredBy' => 'pending']) }}"
+          class="relative inline-flex items-center w-full px-5 py-3 space-x-5 bg-white cursor-pointer rounded-xl hover:shadow-md">
+          <span class="absolute flex w-3 h-3 -top-1 -right-1">
+            <span class="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 animate-ping"></span>
+            <span class="relative inline-flex w-3 h-3 bg-orange-500 rounded-full"></span>
+          </span>
+          <div class="text-2xl font-semibold text-orange-500">
+            {{ $pendingReviews->count() }}
+          </div>
+          <div>
+            <h4>Отзывы</h4>
+            <div class="text-xs leading-snug text-gray-400">ожидающие проверки</div>
+          </div>
+        </a>
+      @endif
+    </div>
+
+    <div>
+      @if ($pendingWaitlist->count() > 0)
+        <a href="{{ route('dashboard.waitlists', ['filteredBy' => 'pending']) }}"
+          class="relative inline-flex items-center w-full px-5 py-3 space-x-5 bg-white cursor-pointer rounded-xl hover:shadow-md">
+          <span class="absolute flex w-3 h-3 -top-1 -right-1">
+            <span class="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 animate-ping"></span>
+            <span class="relative inline-flex w-3 h-3 bg-orange-500 rounded-full"></span>
+          </span>
+          <div class="text-2xl font-semibold text-orange-500">
+            {{ $pendingWaitlist->count() }}
+          </div>
+          <div>
+            <h4>Товары</h4>
+            <div class="text-xs leading-snug text-gray-400">которые ждут люди</div>
+          </div>
+        </a>
+      @endif
+    </div>
 
   </div>
 

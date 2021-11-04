@@ -1,92 +1,91 @@
-@import "_all";
+@import '_all';
 
-@import "~trix/dist/trix.css";
+@import '~trix/dist/trix.css';
 
 .h-table {
-    height: calc(100vh - 15.5rem);
+	height: calc(100vh - 15.5rem);
 }
 
-input:not([type="checkbox"]):not([type="radio"]):not([type="search"]):not([type="hidden"]):not([type="file"]),
+input:not([type='checkbox']):not([type='radio']):not([type='search']):not([type='hidden']):not([type='file']),
 textarea {
-    @apply w-full px-4 py-2 border-2 border-pink-50 hover:border-pink-200 bg-white rounded-xl focus:outline-none focus:ring focus:border-transparent;
+	@apply w-full px-4 py-2 border-2 border-pink-50 hover:border-pink-200 bg-white rounded-xl focus:outline-none focus:ring focus:border-transparent;
 }
 
 select {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
-    @apply appearance-none px-4 py-2 border-2 border-pink-50 hover:border-pink-200 bg-white rounded-xl focus:outline-none focus:ring focus:bg-white  focus:border-transparent;
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+	background-position: right 0.5rem center;
+	background-repeat: no-repeat;
+	background-size: 1.5em 1.5em;
+	@apply appearance-none pl-4 pr-10 py-2 border-2 border-pink-50 hover:border-pink-200 bg-white rounded-xl focus:outline-none focus:ring focus:bg-white  focus:border-transparent;
 }
 
 .flip-horizontal-bottom {
-    -webkit-animation: tw-flip-horizontal-bottom 0.4s
-        cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
-    animation: tw-flip-horizontal-bottom 0.4s
-        cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+	-webkit-animation: tw-flip-horizontal-bottom 0.4s
+		cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+	animation: tw-flip-horizontal-bottom 0.4s
+		cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
 }
 
 @-webkit-keyframes tw-flip-horizontal-bottom {
-    0% {
-        -webkit-transform: rotateX(-180deg);
-        transform: rotateX(-180deg);
-    }
+	0% {
+		-webkit-transform: rotateX(-180deg);
+		transform: rotateX(-180deg);
+	}
 
-    100% {
-        -webkit-transform: rotateX(0);
-        transform: rotateX(0);
-    }
+	100% {
+		-webkit-transform: rotateX(0);
+		transform: rotateX(0);
+	}
 }
 
 @keyframes tw-flip-horizontal-bottom {
-    0% {
-        -webkit-transform: rotateX(-180deg);
-        transform: rotateX(-180deg);
-    }
+	0% {
+		-webkit-transform: rotateX(-180deg);
+		transform: rotateX(-180deg);
+	}
 
-    100% {
-        -webkit-transform: rotateX(0);
-        transform: rotateX(0);
-    }
+	100% {
+		-webkit-transform: rotateX(0);
+		transform: rotateX(0);
+	}
 }
 
 .tagify__dropdown {
-    min-width: 200px;
+	min-width: 200px;
 }
 
 .tagify__tag > div {
-    background: #e5e5e5;
+	background: #e5e5e5;
 }
 
 .tagify__tag:hover > div {
-    background: #d3e2e2;
+	background: #d3e2e2;
 }
 
 h4 {
-    font-weight: 600;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-    padding-bottom: 0.25rem;
-    padding-top: 0.5rem;
+	font-weight: 600;
+	font-size: 1.25rem;
+	line-height: 1.75rem;
+	padding-bottom: 0.25rem;
+	padding-top: 0.5rem;
 }
 
 trix-editor [data-trix-mutable]:not(.attachment__caption-editor) {
-    width: 100%;
+	width: 100%;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-    @apply rounded-lg bg-gray-50;
+	@apply rounded-lg bg-gray-50;
 }
 
 .scrollbar::-webkit-scrollbar {
-    @apply w-1.5 bg-gray-50;
+	@apply w-1.5 bg-gray-50;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-    @apply rounded-lg bg-pink-100;
+	@apply rounded-lg bg-pink-100;
 }
 
 .scrollbar:hover::-webkit-scrollbar-thumb {
-    @apply bg-pink-300;
+	@apply bg-pink-300;
 }

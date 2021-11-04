@@ -1,23 +1,30 @@
 <div
   class="relative flex flex-col justify-between h-full border border-gray-100 lg:border-white hover:border-green-300 rounded-2xl">
 
-  <a itemprop="url" href="{{ route('site.product', [$catalog, $category, $product->slug]) }}" class="p-2"
-    title="{{ $product->name }}">
+  <div class="p-2">
+    <a itemprop="url" href="{{ route('site.product', [$catalog, $category, $product->slug]) }}" class="block "
+      title="{{ $product->name }}">
+      <img itemprop="image" loading="lazy" class="object-contain object-center w-full h-64 lozad "
+        src="/assets/img/placeholder.svg" data-src="{{ $product->getFirstMediaUrl('product-images', 'thumb') }}"
+        alt="{{ $product->name }}">
+    </a>
 
-    <img itemprop="image" loading="lazy" class="object-contain object-center w-full h-64 lozad"
-      src="/assets/img/placeholder.svg" data-src="{{ $product->getFirstMediaUrl('product-images', 'thumb') }}"
-      alt="{{ $product->name }}">
-
-    <div class="py-2 text-center text-green-600">
-      @if ($product->brand)
-        {{ $product->brand->name }}
-      @endif
-    </div>
+    @if ($product->brand)
+      <div class="py-2 text-center text-green-600">
+        <a itemprop="url" href="{{ route('site.product', [$catalog, $category, $product->slug]) }}"
+          title="{{ $product->brand->name }}">
+          {{ $product->brand->name }}
+        </a>
+      </div>
+    @endif
 
     <div itemprop="name" class="text-sm text-center text-gray-800">
-      {{ $product->name }}
+      <a itemprop="url" href="{{ route('site.product', [$catalog, $category, $product->slug]) }}"
+        title="{{ $product->name }}">
+        {{ $product->name }}
+      </a>
     </div>
-  </a>
+  </div>
 
   <div class="flex-col items-center justify-between w-full" itemprop="offers" itemscope
     itemtype="https://schema.org/Offer">

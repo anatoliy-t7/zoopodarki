@@ -51,7 +51,7 @@ class ProductCard extends Component
 
         $this->dispatchBrowserEvent('close-modal');
 
-        $this->dispatchBrowserEvent('toast', ['message' => 'Наш оператор перезвонит вам в ближайшее время!']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Наш оператор перезвонит вам в ближайшее время!']);
     }
 
     public function getProduct()

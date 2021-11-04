@@ -160,7 +160,7 @@ class Edit extends Component
         try {
             Storage::disk('public')->delete($url);
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Изображение удалено']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Изображение удалено']);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Изображение не удалено']);
         }
@@ -370,7 +370,7 @@ class Edit extends Component
 
             $this->dispatchBrowserEvent('update-query-id', $this->productId);
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Товар ' . $functionProduct->name . ' сохраннен.']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Товар ' . $functionProduct->name . ' сохраннен.']);
         });
     }
 
@@ -381,7 +381,7 @@ class Edit extends Component
         $this->product = Product::find($this->product->id);
         $this->media = $this->product->getMedia('product-images');
 
-        $this->dispatchBrowserEvent('toast', ['message' => 'Фото удалено.']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Фото удалено.']);
     }
 
     public function setName($name)

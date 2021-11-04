@@ -27,9 +27,9 @@
 
           <div class="flex items-center justify-start space-x-12">
             <div class="flex items-center justify-between p-2">
-              <a href="/" class="text-lg leading-normal font-semibol focus:outline-none focus:ring">
-                <img src="/assets/img/logo.png" alt="{{ config('app.name') }}" title="{{ config('app.name') }}"
-                  class="h-8">
+              <a href="/" class="text-lg leading-normal font-semibol focus:outline-none">
+                <img src="/assets/img/logo.png" alt="Логотип {{ config('app.name') }}"
+                  title="{{ config('app.name') }}" class="h-8">
               </a>
             </div>
 

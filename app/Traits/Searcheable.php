@@ -37,27 +37,20 @@ trait Searcheable
 
     public function searchInstant($q)
     {
-        try {
-            return Product::search($q, function (SearchIndexes $meilisearch, $query, $options) {
-                $options['attributesToHighlight'] = ['name'];
+        return Product::search($q, function (SearchIndexes $meilisearch, $query, $options) {
+            $options['attributesToHighlight'] = ['name'];
 
-                return $meilisearch->search($query, $options);
-            })
+            return $meilisearch->search($query, $options);
+        })
                 ->take(10)
                 ->raw();
-        } catch (\Throwable $th) {
-            \Log::error('Ошибка поиска');
-            \Log::error($th);
-
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Поиск временно не работает, мы уже работаем над этим']);
-        }
     }
 
     public function searchThis($q, $instant = false)
     {
         if (!$instant) {
             $result = $this->searchForPage($q);
-
+            // TODO if search server not runing
             if ($result->total() == 0) {
                 $q = switcher_ru($q);
 
@@ -67,10 +60,6 @@ trait Searcheable
             if ($result->total() == 0) {
                 $q = switcher_en($q);
                 $result = $this->searchForPage($q);
-            }
-
-            if ($result->total() == 0) {
-                $result = [];
             }
         } else {
             $result = $this->searchInstant($q);

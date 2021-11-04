@@ -54,7 +54,6 @@
 
         <div>
           @if ($items)
-            // TODO add link to product
             <div class="text-sm divide-y divide-gray-100">
               @foreach ($items as $key => $item)
                 <div
@@ -62,8 +61,11 @@
 
                   <div class="w-24 p-2">
                     @if ($item->associatedModel['image'])
-                      <img loading="lazy" class="object-fill w-20 h-full" src="{{ $item->associatedModel['image'] }}"
-                        alt="">
+                      <a
+                        href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}">
+                        <img loading="lazy" class="object-fill w-20 h-full"
+                          src="{{ $item->associatedModel['image'] }}" alt="{{ $item->name }}">
+                      </a>
                     @endif
                   </div>
 
@@ -72,20 +74,19 @@
                     <div class="flex flex-col items-start justify-between w-full py-2">
 
                       <div class="w-full">
-                        <div class="text-xs">
+                        <a href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}"
+                          class="text-xs">
                           {{ $item->name }}
-                        </div>
+                        </a>
                       </div>
 
                       <div class="flex items-center justify-between w-full space-x-2 ">
 
                         <div class="flex items-center justify-start py-2 text-xs text-gray-500">
-
                           @if ($item->attributes->has('unit'))
                             <x-units :unit="$item->attributes['unit']" :value="$item->associatedModel['unit_value']">
                             </x-units>
                           @endif
-
                         </div>
 
                         <div class="flex items-center justify-end">

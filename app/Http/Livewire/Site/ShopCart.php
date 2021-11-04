@@ -67,7 +67,7 @@ class ShopCart extends Component
     {
         DB::transaction(
             function () use ($itemId, $quantity) {
-                $product_1c = Product1C::with('product', 'product.categories')->find($itemId);
+                $product_1c = Product1C::with('product', 'product.categories', 'product.categories.catalog')->find($itemId);
 
                 if ($product_1c->stock < $quantity) {
                     $quantity = $product_1c->stock;
@@ -93,6 +93,9 @@ class ShopCart extends Component
                         'promotion_type' => $product_1c->promotion_type,
                         'promotion_percent' => $product_1c->promotion_percent,
                         'vendorcode' => $product_1c->vendorcode,
+                        'catalog_slug' => $product_1c->product->categories[0]->catalog->slug,
+                        'category_slug' => $product_1c->product->categories[0]->slug,
+                        'product_slug' => $product_1c->product->slug,
                     ];
 
                     $cartDiscountByHoliday = $this->checkDiscountByHoliday($product_1c);

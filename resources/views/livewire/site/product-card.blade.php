@@ -1,6 +1,7 @@
 <div x-cloak x-data="tabs" @tab-reviews.window="tabReviews(event)" class="space-y-6" itemscope
   itemtype="https://schema.org/Product">
-  <div class="px-4 py-6 space-y-2 bg-white lg:px-8 lg:rounded-2xl">
+
+  <div class="px-4 py-8 space-y-2 bg-white lg:px-8 lg:rounded-2xl">
     <div class="flex flex-col justify-between space-y-2 lg:space-y-0 lg:space-x-4 lg:items-center lg:flex-row">
       <h1 class="w-10/12 font-semibold text-left text-md lg:text-xl">
         <span class="pr-1" x-show="tab == 2" x-transition>
@@ -77,9 +78,9 @@
         @if ($product->media()->count())
           <div class="flex flex-col pb-12 lg:flex-row lg:pb-0">
             <div id="thumbSlider"
-              class="items-center justify-center hidden w-full overflow-hidden lg:flex lg:w-2/12 lg:max-h-72 splide">
+              class="items-center justify-center hidden w-full overflow-hidden lg:flex lg:w-2/12 lg:max-h-96 splide">
               <div class="splide__track">
-                <ul class="splide__list">
+                <ul class="space-y-3 splide__list lg:max-h-60">
 
                   @foreach ($product->getMedia('product-images') as $thumb)
                     <li wire:key="{{ $loop->index }}" class="py-1 overflow-hidden splide__slide">
@@ -447,22 +448,22 @@
     </div>
   </div>
 
-  <div class="px-4 bg-white lg:px-6 lg:rounded-2xl">
+  <div class="px-4 pt-2 bg-white lg:px-8 lg:rounded-2xl">
     <div class="flex items-center justify-between space-x-6">
       <nav class="flex items-center justify-start">
         <h2 x-on:click="tabDescription" data-route="description" :class="{ 'text-blue-500 border-blue-500': tab == 1 }"
-          class="block px-2 py-4 font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+          class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
           Описание
         </h2>
         @if ($product->consist)
           <h2 x-on:click="tabСonsist" data-route="consist" :class="{ 'text-blue-500 border-blue-500': tab == 2 }"
-            class="block px-2 py-4 font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+            class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
             Состав
           </h2>
         @endif
         @if ($product->applying)
           <h2 x-on:click="tabApplying" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 3 }"
-            class="block px-2 py-4 font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+            class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
             Применение
           </h2>
         @endif
@@ -473,7 +474,7 @@
     </div>
 
     <div class="w-full pb-6 content">
-      <div x-cloak x-show="tab == 1" x-transition.opacity class="py-6 leading-normal" itemprop="description">
+      <div x-cloak x-show="tab == 1" x-transition.opacity class="pt-4 leading-normal" itemprop="description">
         @if ($product->description)
           {!! $product->description !!}
         @else
@@ -482,13 +483,13 @@
       </div>
 
       @if ($product->consist)
-        <div x-cloak x-show="tab == 2" x-transition.opacity class="py-6 leading-normal">
+        <div x-cloak x-show="tab == 2" x-transition.opacity class="pt-4 leading-normal">
           {!! $product->consist !!}
         </div>
       @endif
 
       @if ($product->applying)
-        <div x-cloak x-show="tab == 3" x-transition.opacity class="py-6 leading-normal">
+        <div x-cloak x-show="tab == 3" x-transition.opacity class="pt-4 leading-normal">
           {!! $product->applying !!}
         </div>
       @endif
@@ -496,32 +497,28 @@
     </div>
   </div>
 
-  <div x-cloak id="reviews" class="p-6 bg-white rounded-2xl">
-
+  <div x-cloak id="reviews" class="px-8 py-6 bg-white rounded-2xl">
     @if ($tab === 2 || $tab === 3)
       <noindex>
     @endif
     <div class="flex flex-col">
       <div class="flex items-center justify-start space-x-2 font-semibold">
-        <span>Отзывы</span>
-
-        <div class="text-gray-500">
+        <h4 class="text-xl">Отзывы</h4>
+        <span class="text-gray-500">
           ({{ $product->reviews_count }})
-        </div>
-
+        </span>
       </div>
 
       <livewire:site.reviews-com :model="$product" :key="'review-'.$product->id">
+
     </div>
     @if ($tab === 2 || $tab === 3)
       </noindex>
     @endif
-
-
   </div>
 
-  <div wire:ignore class="p-4 bg-white lg:p-6 rounded-2xl">
-    <div class="pb-4 font-semibold">Рекомендуем также</div>
+  <div wire:ignore class="px-8 py-6 bg-white rounded-2xl">
+    <div class="pb-4 text-xl font-semibold">Рекомендуем также</div>
     <div class="flex flex-col items-center justify-between space-y-4 lg:space-y-0 lg:space-x-8 lg:flex-row">
       @forelse ($related as $item)
         <div class="w-full lg:w-2/12">

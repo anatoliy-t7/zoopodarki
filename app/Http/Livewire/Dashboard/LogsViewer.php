@@ -82,13 +82,13 @@ class LogsViewer extends Component
     public function getDate()
     {
         if (count($this->availableDates) == 0) {
-            $this->dispatchBrowserEvent('toast', ['message' => 'No log file found']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'No log file found']);
 
             return  false;
         }
 
         if (!in_array($this->date, $this->availableDates)) {
-            $this->dispatchBrowserEvent('toast', ['message' => 'No log file found with selected date']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'No log file found with selected date']);
 
             return  false;
         }
@@ -145,7 +145,7 @@ class LogsViewer extends Component
     public function delete()
     {
         if (!$this->filename) {
-            return  $this->dispatchBrowserEvent('toast', ['message' => 'File not found']);
+            return  $this->dispatchBrowserEvent('toast', ['text' => 'File not found']);
         }
 
         $file = 'logs/' . $this->filename;
@@ -154,13 +154,13 @@ class LogsViewer extends Component
             if (File::exists(storage_path($file))) {
                 file_put_contents(storage_path($file), '');
             }
-            $this->dispatchBrowserEvent('toast', ['message' => 'Log cleared.']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Log cleared.']);
         } elseif (File::exists(storage_path($file))) {
             File::delete(storage_path($file));
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Log deleted.']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Log deleted.']);
         } else {
-            $this->dispatchBrowserEvent('toast', ['message' => 'File not found']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'File not found']);
         }
 
         $this->availableDates = $this->getLogFileDates();

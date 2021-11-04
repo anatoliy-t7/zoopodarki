@@ -27,7 +27,7 @@ class AddToFavorite extends Component
 
         $this->model->favorites()->save($favorite);
 
-        $this->dispatchBrowserEvent('toast', ['message' => 'Товар добавлен в избранное']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Товар добавлен в избранное']);
 
         $this->emitSelf('check');
     }
@@ -36,7 +36,7 @@ class AddToFavorite extends Component
     {
         $this->model->favorites()->delete($item_id);
 
-        $this->dispatchBrowserEvent('toast', ['message' => 'Товар убран из избранных']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Товар убран из избранных']);
 
         $this->emitSelf('check');
     }

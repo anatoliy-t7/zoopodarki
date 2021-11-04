@@ -1,14 +1,14 @@
 @section('title')
-  Waitlist
+  Лист ожидания товара
 @endsection
 <div>
-  // TODO UI
+
   <div x-data="handler" @get-items.window="getItems(event)" @new.window="openForm(event)"
     @close.window="closeForm(event)" class="space-y-2">
 
     <div class="flex items-center justify-between w-full pb-2 space-x-6">
 
-      <h3 class="text-2xl">Waitlist</h3>
+      <h3 class="text-2xl">Лист ожидания</h3>
 
     </div>
 
@@ -36,7 +36,8 @@
           <x-dashboard.table.head sortable wire:click="sortBy('id')"
             :direction="$sortField === 'id' ? $sortDirection : null">Id
           </x-dashboard.table.head>
-          <x-dashboard.table.head>Телефон</x-dashboard.table.head>
+          <x-dashboard.table.head sortable wire:click="sortBy('id')"
+            :direction="$sortField === 'phone' ? $sortDirection : null">Телефон</x-dashboard.table.head>
           <x-dashboard.table.head>Товар</x-dashboard.table.head>
           <x-dashboard.table.head>Статус</x-dashboard.table.head>
           <x-dashboard.table.head></x-dashboard.table.head>
@@ -105,41 +106,50 @@
 
           <div class="block space-y-4">
 
-            <div class="flex justify-start w-full space-x-4">
-              <div class="w-1/12 font-bold">Телефон</div>
-              <div class="w-11/12">{{ $waitlistEdit->phone }}</div>
+            <div class="flex items-center justify-start w-full space-x-4">
+              <div class="w-2/12 font-bold">Телефон</div>
+              <div class="w-10/12">{{ $waitlistEdit->phone }}</div>
             </div>
 
-            <div class="flex justify-start w-full space-x-4">
-              <div class="w-1/12 font-bold">Товар</div>
-              <div class="w-11/12 max-w-full">{{ $waitlistEdit->product1c->name }}</div>
+            <div class="flex items-center justify-start w-full space-x-4">
+              <div class="w-2/12 font-bold">Товар</div>
+              <div class="w-10/12 max-w-full">{{ $waitlistEdit->product1c->product->name }}</div>
             </div>
 
-            <div class="flex justify-between space-x-4">
-              @can('edit')
-                <label class="flex items-center justify-end space-x-4">
-                  <span class="text-gray-700">Статус</span>
-                  <div class="relative">
-                    <select wire:model="status" name="status" class="field">
-                      @foreach ($statuses as $statusForwaitlist)
-                        <option value="{{ $statusForwaitlist }}">
-                          {{ __('constants.waitlist_status.' . $statusForwaitlist) }}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                  @error('status') <span class="text-xs text-red-500">Поле обязательно для
-                    заполнения</span> @enderror
-                </label>
-              @endcan
-              <div class="flex justify-between space-x-4">
-                <x-dashboard.confirm :confirmId="$waitlistEdit->id" wire:click="remove({{ $waitlistEdit->id }})" />
-                <button wire:click="sandEmail" class="text-gray-900 bg-gray-100 btn hover:bg-gray-200">
-                  Оповестить
-                </button>
-                <button wire:click="save" class="text-white bg-green-500 btn hover:bg-green-600">
-                  Сохранить
-                </button>
+            <div class="flex items-center justify-start w-full space-x-4">
+              <div class="w-2/12 font-bold">Единицы измерения
               </div>
+              <div class="w-10/12 max-w-full">{{ $waitlistEdit->product1c->product->unit->name }}.
+                {{ $waitlistEdit->product1c->unit_value }}</div>
+            </div>
+
+            <div class="flex items-center justify-start w-full space-x-4">
+              <div class="w-2/12 font-bold">Остаток</div>
+              <div class="w-10/12 max-w-full">{{ $waitlistEdit->product1c->stock }}</div>
+            </div>
+
+
+            <label class="flex items-center justify-start w-full space-x-4">
+              <div class="w-2/12 font-bold">Статус</div>
+              <div class="w-10/12 max-w-full">
+                <select wire:model="status" name="status" class="field">
+                  @foreach ($statuses as $statusForwaitlist)
+                    <option value="{{ $statusForwaitlist }}">
+                      {{ __('constants.waitlist_status.' . $statusForwaitlist) }}</option>
+                  @endforeach
+                </select>
+              </div>
+              @error('status') <span class="text-xs text-red-500">Поле обязательно для
+                заполнения</span> @enderror
+            </label>
+
+
+            <div class="flex justify-between pt-6 space-x-4">
+              <x-dashboard.confirm :confirmId="$waitlistEdit->id" wire:click="remove({{ $waitlistEdit->id }})" />
+
+              <button wire:click="save" class="text-white bg-green-500 btn hover:bg-green-600">
+                Сохранить
+              </button>
             </div>
 
           </div>

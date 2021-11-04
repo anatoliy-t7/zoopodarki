@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Livewire\Site;
 
 use App\Models\Product;
@@ -13,11 +12,8 @@ class ReviewWrite extends Component
     use WithFileUploads;
 
     public $body;
-
     public $stars;
-
     public $modelId;
-
     public $photos = [];
 
     public function attributes()
@@ -61,7 +57,7 @@ class ReviewWrite extends Component
             foreach ($this->photos as $photo) {
                 $path = $photo->store('photos');
 
-                $img = \Image::make(storage_path('app/public/').$path);
+                $img = \Image::make(storage_path('app/public/') . $path);
 
                 $img->resize(800, 800, function ($constraint) {
                     $constraint->aspectRatio();
@@ -70,13 +66,13 @@ class ReviewWrite extends Component
 
                 $img->save();
 
-                $review->addMedia(storage_path('app/public/').$path)->toMediaCollection('product-customers-photos');
+                $review->addMedia(storage_path('app/public/') . $path)->toMediaCollection('product-customers-photos');
             }
 
             $this->dispatchBrowserEvent('close-writer');
         });
 
-        $this->dispatchBrowserEvent('toast', ['message' => 'Ваш отзыв отправлен на проверку.']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Ваш отзыв отправлен на проверку.']);
 
         $this->body = null;
         $this->stars = null;

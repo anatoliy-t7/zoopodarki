@@ -10,7 +10,7 @@ class Backup extends Component
     {
         UpdateProduct::dispatch();
 
-        $this->dispatchBrowserEvent('toast', ['message' => 'Job UpdateProduct added']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Job UpdateProduct added']);
     }
 
     public function backupDb()
@@ -19,7 +19,7 @@ class Backup extends Component
             \Artisan::call('backup:run --only-db');
             \Artisan::call('backup:clean');
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Backup is done']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Backup is done']);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Backup is not done']);
 
@@ -31,7 +31,7 @@ class Backup extends Component
     {
         \Artisan::call('queue:work');
 
-        $this->dispatchBrowserEvent('toast', ['message' => 'Queue is running']);
+        $this->dispatchBrowserEvent('toast', ['text' => 'Queue is running']);
     }
 
     public function generateSitemap()
@@ -43,7 +43,7 @@ class Backup extends Component
             \Artisan::call('optimize');
             \Artisan::call('sitemap:generate');
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Sitemap is generated']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Sitemap is generated']);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Sitemap isn`t generated']);
 

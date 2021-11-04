@@ -113,7 +113,7 @@ class Users extends Component
 
             $user->syncRoles($this->userRoles);
 
-            $this->dispatchBrowserEvent('toast', ['message' => $this->name . ' сохранен.']);
+            $this->dispatchBrowserEvent('toast', ['text' => $this->name . ' сохранен.']);
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');

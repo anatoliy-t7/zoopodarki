@@ -132,7 +132,7 @@ class Index extends Component
 
             $this->countTrash = Product::onlyTrashed()->count();
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Товар востановлен']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Товар востановлен']);
         }
     }
 

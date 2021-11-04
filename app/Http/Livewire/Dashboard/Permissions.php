@@ -35,7 +35,7 @@ class Permissions extends Component
                 ]
             );
 
-            $this->dispatchBrowserEvent('toast', ['message' => $permission->name . ' сохранены.']);
+            $this->dispatchBrowserEvent('toast', ['text' => $permission->name . ' сохранены.']);
 
             $this->closeForm();
         });

@@ -46,7 +46,7 @@ class Exchange extends Component
 
             ImportProductsFromExcel::dispatch($filePath);
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'File success added to job']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'File success added to job']);
 
         } else {
 
@@ -75,7 +75,7 @@ class Exchange extends Component
 
             ProcessImportProduct1C::dispatch($file);
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'File import.xml added to Job']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'File import.xml added to Job']);
 
         } else {
 
@@ -92,7 +92,7 @@ class Exchange extends Component
 
             ProcessOffersProduct1C::dispatch($file);
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'File offers.xml added to Job']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'File offers.xml added to Job']);
 
         } else {
 

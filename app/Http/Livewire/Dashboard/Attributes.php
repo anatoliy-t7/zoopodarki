@@ -109,7 +109,7 @@ class Attributes extends Component
             $this->itemsName = AttributeItem::where('attribute_id', $attribute->id)->get(['id', 'name']);
             $this->dispatchBrowserEvent('get-items', $this->itemsName);
 
-            $this->dispatchBrowserEvent('toast', ['message' => 'Свойство "' . $attribute->name . '" обновлено.']);
+            $this->dispatchBrowserEvent('toast', ['text' => 'Свойство "' . $attribute->name . '" обновлено.']);
 
             $this->closeForm();
         });
@@ -123,7 +123,7 @@ class Attributes extends Component
             $this->dispatchBrowserEvent('close-confirm');
 
             if ($attributeItem->products()->exists()) {
-                return $this->dispatchBrowserEvent('toast', ['message' => 'Вид свойства прикреплен к товару.']);
+                return $this->dispatchBrowserEvent('toast', ['text' => 'Вид свойства прикреплен к товару.']);
             }
 
             $removeItemName = $attributeItem->name;
@@ -131,7 +131,7 @@ class Attributes extends Component
 
             $this->openForm($this->attribute_id);
 
-            return $this->dispatchBrowserEvent('toast', ['message' => 'Вид свойства ' . $removeItemName . ' удален.']);
+            return $this->dispatchBrowserEvent('toast', ['text' => 'Вид свойства ' . $removeItemName . ' удален.']);
         }
     }
 

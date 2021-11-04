@@ -1,9 +1,9 @@
 <div x-data="mainMenu">
   <div>
     <button x-on:click="toggle()"
-      class="flex items-center p-3 space-x-2 text-white border border-white rounded-xl hover:bg-gray-600 focus:bg-gray-600"
-      :class="open  ? 'bg-gray-600' : 'bg-gray-500'">
-      <x-tabler-layout-2 class="w-5 h-5" />
+      class="flex items-center px-3 py-2 space-x-2 font-semibold border-2 border-blue-500 rounded-xl hover:bg-blue-500 hover:text-white focus:bg-blue-500"
+      :class="open  ? 'bg-blue-500 text-white' : 'bg-transparent text-blue-500'">
+      <x-tabler-layout-2 class="w-5 h-5 fill-current" />
       <div>Все товары</div>
     </button>
   </div>
