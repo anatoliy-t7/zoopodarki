@@ -284,7 +284,7 @@ class Edit extends Component
             'name' => 'required',
             'status' => 'required',
             'readyCategories' => 'required', // TODO test
-            'productBrand' => 'required', // TODO test
+            //'productBrand' => 'required', // TODO test
             'meta_description' => 'max:150',
             'meta_description' => 'max:70',
         ]);

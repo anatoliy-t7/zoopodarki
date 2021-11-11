@@ -305,6 +305,9 @@
                           </template>
                         </div>
                       </div>
+                      @error('readyCategories')
+                        <span class="text-xs text-red-500">{{ $message }}</span>
+                      @enderror
                     </div>
 
                     <div class="flex justify-between w-full pt-2 space-x-4">
@@ -343,10 +346,14 @@
                   <div class="w-6/12">
                     <div class="flex items-center justify-start space-x-2">
                       <span class="font-bold">Бренд</span>
+                      @error('productBrand')
+                        <span class="text-xs text-red-500">{{ $message }}</span>
+                      @enderror
                     </div>
                     <div wire:ignore class="pt-1">
                       <input name='brands' class="field">
                     </div>
+
                   </div>
                   <div class="w-6/12">
                     <div x-show="brand_series_field" x-transition.opacity>
