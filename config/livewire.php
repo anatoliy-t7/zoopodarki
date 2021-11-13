@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Class Namespace
@@ -15,7 +14,7 @@ return [
     |
      */
 
-    'class_namespace'       => 'App\\Http\\Livewire',
+    'class_namespace' => 'App\\Http\\Livewire',
 
     /*
     |--------------------------------------------------------------------------
@@ -27,7 +26,7 @@ return [
     |
      */
 
-    'view_path'             => resource_path('views/livewire'),
+    'view_path' => resource_path('views/livewire'),
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +41,7 @@ return [
     |
      */
 
-    'asset_url'             => null,
+    'asset_url' => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +54,7 @@ return [
     |
      */
 
-    'middleware_group'      => 'web',
+    'middleware_group' => 'web',
 
     /*
     |--------------------------------------------------------------------------
@@ -70,14 +69,18 @@ return [
      */
 
     'temporary_file_upload' => [
-        'disk'            => 'public', // Example: 'local', 's3'              Default: 'default'
-        'rules'           => 'file|mimes:jpeg,png,jpg,gif,xlsx|max:1024', // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
+        'disk' => 'public', // Example: 'local', 's3'              Default: 'default'
+        'rules' => 'file|mimes:jpeg,png,jpg,gif,xlsx|max:12288', // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
         //'rules' => ['required', 'file'],
-        'preview_mimes'   => [ // Supported file types for temporary pre-signed file URLs.
-            'png', 'gif', 'jpg', 'jpeg',
+        'preview_mimes' => [
+            // Supported file types for temporary pre-signed file URLs.
+            'png',
+            'gif',
+            'jpg',
+            'jpeg',
         ],
-        'directory'       => null, // Example: 'tmp'                      Default  'livewire-tmp'
-        'middleware'      => 'image-sanitize', // Example: 'throttle:5,1'             Default: 'throttle:60,1'
+        'directory' => null, // Example: 'tmp'                      Default  'livewire-tmp'
+        'middleware' => 'image-sanitize', // Example: 'throttle:5,1'             Default: 'throttle:60,1'
         'max_upload_time' => 3, // Max duration (in minutes) before an upload gets invalidated.
     ],
 
@@ -95,6 +98,5 @@ return [
     |
      */
 
-    'manifest_path'         => null,
-
+    'manifest_path' => null,
 ];

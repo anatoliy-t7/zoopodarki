@@ -10,12 +10,12 @@
 
         <a href="{{ route('dashboard.excel.product') }}" class="text-white bg-green-500 btn hover:bg-green-600">
 
-          Get all attributes with catalogs
+          Get some products
 
         </a>
 
         <a href="{{ route('dashboard.excel.product1c') }}" class="text-white bg-green-500 btn hover:bg-green-600">
-          Get all products with variations
+          Get some products 1C
         </a>
 
       </div>
@@ -44,7 +44,7 @@
             <select wire:model="catalogId" name="catalog" id="catalog" class="w-64">
               <option selected value="">Выберите каталог</option>
               @foreach ($catalogs as $catalog)
-              <option value="{{ $catalog->id }}">{{ $catalog->name }}</option>
+                <option value="{{ $catalog->id }}">{{ $catalog->name }}</option>
               @endforeach
             </select>
           </div>

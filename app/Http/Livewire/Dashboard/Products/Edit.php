@@ -61,7 +61,14 @@ class Edit extends Component
         'taken',
         'emptyStock',
     ];
-    protected $listeners = ['getAttributes', 'save', 'setName', 'removeVariation', 'getBrandSeries', 'getCatalogs'];
+    protected $listeners = [
+        'getAttributes',
+        'save',
+        'setName',
+        'removeVariation',
+        'getBrandSeries',
+        'getCatalogs',
+    ];
 
     public function attributes()
     {
@@ -79,7 +86,7 @@ class Edit extends Component
             ],
             [
                 'photos.max' => 'Вы можете загрузить максимум :max фотографий',
-            ],
+            ]
         );
     }
 
@@ -89,7 +96,11 @@ class Edit extends Component
 
         $this->productId = request()->query('id', $this->productId);
 
-        if ($functionProduct = Product::where('id', $this->productId)->with('media')->first()) {
+        if (
+            $functionProduct = Product::where('id', $this->productId)
+                ->with('media')
+                ->first()
+        ) {
             $this->product = $functionProduct;
             $this->name = $functionProduct->name;
             $this->meta_title = $functionProduct->meta_title;
@@ -104,7 +115,10 @@ class Edit extends Component
                 $this->productBrand[] = $functionProduct->brand->toArray();
 
                 if ($functionProduct->serie) {
-                    $serie = $functionProduct->serie()->pluck('id')->flatten();
+                    $serie = $functionProduct
+                        ->serie()
+                        ->pluck('id')
+                        ->flatten();
                     $this->productSerie = $serie[0];
                 }
             }
@@ -114,7 +128,9 @@ class Edit extends Component
             $this->readyCategories = $functionProduct->categories->toArray();
 
             foreach ($functionProduct->categories as $key => $item) {
-                $functionName = Catalog::where('id', $item->catalog_id)->get('name')->toArray();
+                $functionName = Catalog::where('id', $item->catalog_id)
+                    ->get('name')
+                    ->toArray();
                 $catalogName = Arr::flatten($functionName);
                 $this->readyCategories[$key]['catalogName'] = $catalogName[0];
             }
@@ -122,7 +138,9 @@ class Edit extends Component
             $this->att_selected = $functionProduct->attributes->toArray();
 
             foreach ($functionProduct->attributes as $key => $item) {
-                $functionName = Attribute::where('id', $item->attribute_id)->get('name')->toArray();
+                $functionName = Attribute::where('id', $item->attribute_id)
+                    ->get('name')
+                    ->toArray();
                 $attName = Arr::flatten($functionName);
                 $this->att_selected[$key]['attName'] = $attName[0];
             }
@@ -160,9 +178,14 @@ class Edit extends Component
         try {
             Storage::disk('public')->delete($url);
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Изображение удалено']);
+            $this->dispatchBrowserEvent('toast', [
+                'text' => 'Изображение удалено',
+            ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Изображение не удалено']);
+            $this->dispatchBrowserEvent('toast', [
+                'type' => 'error',
+                'text' => 'Изображение не удалено',
+            ]);
         }
     }
 
@@ -180,13 +203,18 @@ class Edit extends Component
         $this->dispatchBrowserEvent('set-ready-items', $this->att_selected);
 
         if ($this->productSerie) {
-            $this->dispatchBrowserEvent('set-product-serie', $this->productSerie);
+            $this->dispatchBrowserEvent(
+                'set-product-serie',
+                $this->productSerie
+            );
         }
     }
 
     public function getCatalogs()
     {
-        $this->catalogs = Catalog::with('categories')->orderBy('name', 'ASC')->get();
+        $this->catalogs = Catalog::with('categories')
+            ->orderBy('name', 'ASC')
+            ->get();
         $this->dispatchBrowserEvent('set-catalogs', $this->catalogs);
     }
 
@@ -198,14 +226,18 @@ class Edit extends Component
 
     public function getAttributes()
     {
-        $this->attributes = Attribute::with('items')->orderBy('name', 'ASC')->get();
+        $this->attributes = Attribute::with('items')
+            ->orderBy('name', 'ASC')
+            ->get();
         $this->dispatchBrowserEvent('set-attributes', $this->attributes);
     }
 
     public function getBrandSeries($brand)
     {
         if ($brand && $brand[0]) {
-            $this->series = BrandSerie::where('brand_id', $brand[0]['id'])->orderBy('name', 'ASC')->get();
+            $this->series = BrandSerie::where('brand_id', $brand[0]['id'])
+                ->orderBy('name', 'ASC')
+                ->get();
             $this->dispatchBrowserEvent('set-series', $this->series);
         }
     }
@@ -213,10 +245,18 @@ class Edit extends Component
     public function setVariation($id)
     {
         if ($this->checkArrayKey($this->variations, 'id', $id)) {
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Already added']);
+            $this->dispatchBrowserEvent('toast', [
+                'type' => 'error',
+                'text' => 'Already added',
+            ]);
         } else {
-            $this->variation = Product1C::where('id', $id)->get()->toArray();
-            $this->variations = array_merge($this->variations, $this->variation);
+            $this->variation = Product1C::where('id', $id)
+                ->get()
+                ->toArray();
+            $this->variations = array_merge(
+                $this->variations,
+                $this->variation
+            );
         }
 
         $this->setName($this->variation[0]['name']);
@@ -236,7 +276,10 @@ class Edit extends Component
             if ($item['id'] == $id) {
                 unset($this->variations[$key]);
 
-                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Removed']);
+                $this->dispatchBrowserEvent('toast', [
+                    'type' => 'error',
+                    'text' => 'Removed',
+                ]);
             }
         }
     }
@@ -251,15 +294,22 @@ class Edit extends Component
             }
 
             foreach ($array as $subarray) {
-                $results = array_merge($results, $this->checkArrayKey($subarray, $key, $value));
+                $results = array_merge(
+                    $results,
+                    $this->checkArrayKey($subarray, $key, $value)
+                );
             }
         }
 
         return $results;
     }
 
-    public function save($att_selected, $readyCategories, $productBrand, $productSerie)
-    {
+    public function save(
+        $att_selected,
+        $readyCategories,
+        $productBrand,
+        $productSerie
+    ) {
         if (!$this->unitId) {
             $this->unitId = null;
         }
@@ -286,7 +336,7 @@ class Edit extends Component
             'readyCategories' => 'required', // TODO test
             //'productBrand' => 'required', // TODO test
             'meta_description' => 'max:150',
-            'meta_description' => 'max:70',
+            'meta_title' => 'max:70',
         ]);
 
         DB::transaction(function () {
@@ -310,11 +360,17 @@ class Edit extends Component
             $functionProduct->unit()->associate($unit);
 
             if ($this->productBrand) {
-                $functionProduct->brand()->associate($this->productBrand[0]['id'])->save();
+                $functionProduct
+                    ->brand()
+                    ->associate($this->productBrand[0]['id'])
+                    ->save();
             }
 
             if (!$this->productSerie == null) {
-                $functionProduct->serie()->associate($this->productSerie)->save();
+                $functionProduct
+                    ->serie()
+                    ->associate($this->productSerie)
+                    ->save();
             } else {
                 $functionProduct->update([
                     'brand_serie_id' => null,
@@ -360,17 +416,23 @@ class Edit extends Component
 
                     $img->save();
 
-                    $this->product->addMedia(storage_path('app/public/') . $path)->toMediaCollection('product-images');
+                    $this->product
+                        ->addMedia(storage_path('app/public/') . $path)
+                        ->toMediaCollection('product-images');
                 }
 
                 $this->photos = [];
-                $this->product = Product::where('id', $this->productId)->with('media')->first();
+                $this->product = Product::where('id', $this->productId)
+                    ->with('media')
+                    ->first();
                 $this->media = $this->product->getMedia('product-images');
             }
 
             $this->dispatchBrowserEvent('update-query-id', $this->productId);
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Товар ' . $functionProduct->name . ' сохраннен.']);
+            $this->dispatchBrowserEvent('toast', [
+                'text' => 'Товар ' . $functionProduct->name . ' сохраннен.',
+            ]);
         });
     }
 

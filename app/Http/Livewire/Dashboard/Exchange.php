@@ -14,7 +14,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class Exchange extends Component
 {
-
     use WithFileUploads;
 
     public $totalSize;
@@ -28,61 +27,58 @@ class Exchange extends Component
 
     public function mount()
     {
-        $this->catalogs = Catalog::orderBy('sort')
-            ->get();
-
+        $this->catalogs = Catalog::orderBy('sort')->get();
     }
 
     public function importProducts()
     {
-
         $fileName = $this->excel->getClientOriginalName();
 
         $this->excel->storeAs('', $fileName, 'excel');
 
         if (Storage::disk('excel')->exists($fileName)) {
-
-            $filePath = storage_path('excel') . '/' . $fileName;
+            $filePath = storage_path('/app/excel') . '/' . $fileName;
 
             ImportProductsFromExcel::dispatch($filePath);
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'File success added to job']);
-
+            $this->dispatchBrowserEvent('toast', [
+                'text' => 'File success added to job',
+            ]);
         } else {
-
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'No the file in the folder']);
-
+            $this->dispatchBrowserEvent('toast', [
+                'type' => 'error',
+                'text' => 'No the file in the folder',
+            ]);
         }
-
     }
 
     public function exportCatalogs()
     {
-
-        $this->catalog = $this->catalogs->where('id', $this->catalogId)->first();
+        $this->catalog = $this->catalogs
+            ->where('id', $this->catalogId)
+            ->first();
 
         $export = new CatalogsExport($this->catalogId);
 
         return Excel::download($export, $this->catalog->name . '.xlsx');
-
     }
 
     public function importProducts1Cimport()
     {
         if (is_file(storage_path('sync') . '/import.xml')) {
-
             $file = storage_path('sync') . '/import.xml';
 
             ProcessImportProduct1C::dispatch($file);
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'File import.xml added to Job']);
-
+            $this->dispatchBrowserEvent('toast', [
+                'text' => 'File import.xml added to Job',
+            ]);
         } else {
-
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'File doesn`t exist']);
-
+            $this->dispatchBrowserEvent('toast', [
+                'type' => 'error',
+                'text' => 'File doesn`t exist',
+            ]);
         }
-
     }
 
     public function importProducts1Coffers()
@@ -92,14 +88,15 @@ class Exchange extends Component
 
             ProcessOffersProduct1C::dispatch($file);
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'File offers.xml added to Job']);
-
+            $this->dispatchBrowserEvent('toast', [
+                'text' => 'File offers.xml added to Job',
+            ]);
         } else {
-
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'File doesn`t exist']);
-
+            $this->dispatchBrowserEvent('toast', [
+                'type' => 'error',
+                'text' => 'File doesn`t exist',
+            ]);
         }
-
     }
 
     public function render()

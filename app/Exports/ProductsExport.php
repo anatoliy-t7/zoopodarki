@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Attribute;
-use App\Models\Product1C;
+use App\Models\Product;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -11,44 +11,29 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class ProductsExport implements FromCollection, WithMapping, WithHeadings, WithEvents
+class ProductsExport implements
+    FromCollection,
+    WithMapping,
+    WithHeadings,
+    WithEvents
 {
     public $attrs;
 
     public function headings(): array
     {
-        return [
-            'category id',
-            'catalog name',
-            'product id',
-            'product name',
-        ];
+        return ['product id', 'product description'];
     }
 
     public function collection()
     {
-        return Product1C::with('product', 'product.categories', 'product.categories.catalog')
-        ->whereHas('product.categories', fn ($q) => $q->whereIn('category_id', [57]))
-        ->get();
+        return Product::all();
     }
 
-    public function map($product1c): array
+    public function map($product): array
     {
         // $this->attrs = $this->filters($category);
 
-        $catalogsName = [];
-
-        foreach ($product1c->product->categories as $key => $category) {
-            $name = $category->catalog->id;
-            array_push($catalogsName, $name);
-        }
-
-        $row = [
-            $product1c->product->categories[0]->id,
-            $catalogsName,
-            $product1c->id,
-            $product1c->name,
-        ];
+        $row = [$product->id, $product->description];
 
         // if ($this->attrs !== false) {
         //     foreach ($this->attrs as $attr) {
@@ -150,7 +135,11 @@ class ProductsExport implements FromCollection, WithMapping, WithHeadings, WithE
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $cellRange = 'A1:C1';
-                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(13);
+                $event->sheet
+                    ->getDelegate()
+                    ->getStyle($cellRange)
+                    ->getFont()
+                    ->setSize(13);
             },
         ];
     }

@@ -8,7 +8,7 @@
   @set-consist.window="setConsistContent(event)" @update-categories.window="updateCategoriesFromServer(event)"
   @update-brands.window="updateBrandsFromServer(event)" @save-it.window="saveIt(event)"
   @update-query-id.window="updateQueryId(event)" wire:init="sendDataToFrontend" class="relative">
-
+  <x-loader wire:dirty />
   <div class="flex justify-between w-full space-x-6">
 
     <div class="flex items-center justify-between pb-2 space-x-4">
@@ -57,7 +57,12 @@
 
     </div>
 
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between space-x-4">
+
+      <a href="{{ route('dashboard.products.index') }}"
+        class="bg-white border border-transparent rounded-lg btn hover:border-gray-500">
+        Отмена
+      </a>
 
       @can('delete')
         @if ($productId)
@@ -75,7 +80,7 @@
 
   </div>
 
-  <x-loader wire:dirty />
+
 
   <div class="mt-2">
     <div class="flex-col w-full space-y-6">
@@ -341,7 +346,7 @@
 
                 </div>
 
-                <div class="flex items-center justify-between space-x-6">
+                <div class="items-center justify-between block space-x-6 lg:flex">
 
                   <div class="w-6/12">
                     <div class="flex items-center justify-start space-x-2">
@@ -540,10 +545,10 @@
                 <div>
                   @forelse ($variations as $key => $item)
                     <div wire:key="{{ $loop->index }}"
-                      class="flex items-center justify-between p-2 border-b hover:bg-gray-200">
+                      class="flex items-center justify-between p-2 border-b hover:bg-pink-100">
                       <a class="text-sm" target="_blank"
                         href="{{ route('dashboard.products1c', ['search' => $item['name']]) }}">
-                        {{ $item['name'] }} <span class="text-gray-500">({{ $item['cod1c'] }})</span>
+                        {{ $item['name'] }}
                       </a>
 
                       <div class="flex items-center justify-between space-x-4">
@@ -580,27 +585,7 @@
     </div>
 
 
-    <div class="flex justify-between w-full mt-8 space-x-4">
-      <div class="flex items-center justify-between space-x-4">
-
-        <a href="{{ route('dashboard.products.index') }}"
-          class="px-3 py-2 font-bold text-gray-600 bg-gray-100 border border-gray-500 rounded-lg hover:text-gray-800 hover:bg-gray-300">
-          Отмена
-        </a>
-
-        @can('create')
-          <a href="{{ route('dashboard.product.edit', ['id' => null]) }}" title="Создать новый товар"
-            class="p-2 text-white bg-green-500 border border-b rounded-lg cursor-pointer hover:bg-green-700">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="16"></line>
-              <line x1="8" y1="12" x2="16" y2="12"></line>
-            </svg>
-          </a>
-        @endcan
-
-      </div>
+    <div class="flex justify-end w-full mt-8 space-x-4">
       <div class="flex items-center justify-between space-x-4">
 
         @can('edit')

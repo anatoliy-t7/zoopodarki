@@ -16,7 +16,7 @@
       <div class="flex items-center justify-start space-x-2 text-sm">
         @foreach ($types as $key => $type)
           <button
-            class="px-2 py-1 rounded-xl text-white focus:outline-none focus:ring-4 focus:ring-blue-400 cursor-pointer hover:ring-2 hover:ring-blue-400 {{ $type['class'] }}"
+            class="px-2 py-1 rounded-xl text-white focus:outline-none focus:ring-4 focus:ring-blue-400 cursor-pointer hover:ring-2 hover:ring-blue-400 {{ Arr::has($type, 'class') ? $type['class'] : '' }}"
             wire:click="$set('selectedType', '{{ $type['name'] }}')">
             {{ $type['name'] }}</button>
         @endforeach
@@ -119,7 +119,7 @@
           </div>
 
 
-                      @endif
+        @endif
     </x-dashboard.modal>
   </div>
 
