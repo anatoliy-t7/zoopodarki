@@ -64,10 +64,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
 
     Route::get('/waitlists', \App\Http\Livewire\Dashboard\Waitlists::class)->name('waitlists');
 
-    Route::get('/excel/product', 'App\Http\Controllers\Dashboard\ExcelController@exportProducts')->name('excel.product');
-    Route::get('/excel/product1c', 'App\Http\Controllers\Dashboard\ExcelController@exportProducts1C')->name('excel.product1c');
-
-    Route::get('/excel', \App\Http\Livewire\Dashboard\Exchange::class)->name('excel');
+    Route::get('/excel', \App\Http\Livewire\Dashboard\Excel::class)->name('excel');
 });
 
     // TODO delete in production 'auth'
