@@ -60,17 +60,3 @@ mix.disableSuccessNotifications();
 if (mix.inProduction()) {
 	mix.version();
 }
-
-// config eslint
-mix.webpackConfig({
-	module: {
-		rules: [
-			{
-				enforce: 'pre',
-				exclude: ['/node_modules/', '/vendor/'],
-				loader: 'eslint-loader',
-				test: /\.(js|blade.php)?$/,
-			},
-		],
-	},
-});

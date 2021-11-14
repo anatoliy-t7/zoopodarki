@@ -6,9 +6,11 @@ use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class ReviewWrite extends Component
 {
+    use WireToast;
     use WithFileUploads;
 
     public $body;
@@ -72,7 +74,9 @@ class ReviewWrite extends Component
             $this->dispatchBrowserEvent('close-writer');
         });
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Ваш отзыв отправлен на проверку.']);
+        toast()
+            ->success('Ваш отзыв отправлен на проверку')
+            ->push();
 
         $this->body = null;
         $this->stars = null;

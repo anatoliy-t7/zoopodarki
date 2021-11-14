@@ -3,15 +3,18 @@ namespace App\Http\Livewire\Site;
 
 use App\Mail\OrderOneClick;
 use App\Models\Category;
-use App\Models\Product;
 use App\Models\Product1C;
+use App\Models\Product;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
-use Artesaos\SEOTools\Facades\SEOMeta;
-use Artesaos\SEOTools\Facades\OpenGraph;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class ProductCard extends Component
 {
+    use WireToast;
+
     public $product;
     public $productAttributes;
     public $slug;
@@ -51,7 +54,10 @@ class ProductCard extends Component
 
         $this->dispatchBrowserEvent('close-modal');
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Наш оператор перезвонит вам в ближайшее время!']);
+        toast()
+            ->success('Наш оператор перезвонит вам в ближайшее время')
+            ->push();
+
     }
 
     public function getProduct()

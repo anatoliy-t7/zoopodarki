@@ -9,9 +9,11 @@ use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Tags extends Component
 {
+    use WireToast;
     use WithPagination;
 
     public $search;
@@ -144,7 +146,9 @@ class Tags extends Component
                 ]
             );
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Тег "' . $tag->name . '" сохранен.']);
+            toast()
+                ->success('Тег "' . $tag->name . '" сохранен.')
+                ->push();
 
             $this->closeForm();
         });
@@ -161,7 +165,10 @@ class Tags extends Component
         $tag_name = $tag->name;
         $tag->delete();
 
-        $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Тег "' . $tag_name . '" удален.']);
+        toast()
+            ->success('Тег "' . $tag_name . '" удален.')
+            ->push();
+
     }
 
     public function closeForm()

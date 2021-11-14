@@ -53,6 +53,7 @@
 		"staudenmeir/eloquent-has-many-deep": "^1",
 		"t7team/shopcart": "*",
 		"t7team/smscru": "*",
+		"usernotnull/tall-toasts": "^1.2",
 		"vlucas/phpdotenv": "^5.3",
 		"yoomoney/yookassa-sdk-php": "^2.1"
 	},

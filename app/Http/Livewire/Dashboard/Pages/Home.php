@@ -5,9 +5,11 @@ namespace App\Http\Livewire\Dashboard\Pages;
 use App\Models\Brand;
 use App\Models\Setting;
 use Livewire\Component;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Home extends Component
 {
+    use WireToast;
 
     public $homePageBrands = [];
     public $brands;
@@ -77,7 +79,9 @@ class Home extends Component
             ['options' => $homePageBlockTwo]
         );
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Сохраннено']);
+        toast()
+            ->success('Сохраннено')
+            ->push();
 
     }
 

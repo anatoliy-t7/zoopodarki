@@ -3,12 +3,15 @@ namespace App\Http\Livewire\Site;
 
 use App\Models\Contact;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
-use Illuminate\Support\Arr;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class UserContacts extends Component
 {
+    use WireToast;
+
     public $contact;
     public $contactId;
     public $newContact = [];
@@ -20,7 +23,10 @@ class UserContacts extends Component
 
         $this->getContacts();
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Контакт удален']);
+        toast()
+            ->success('Контакт удален')
+            ->push();
+
     }
 
     public function editContact($contactId)

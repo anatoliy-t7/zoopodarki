@@ -7,20 +7,19 @@
 		"production": "mix --production"
 	},
 	"devDependencies": {
-		"autoprefixer": "^10.4.0",
+		"autoprefixer": "^10",
 		"browser-sync": "^2.27.7",
 		"browser-sync-webpack-plugin": "^2.3.0",
 		"cross-env": "^7.0",
 		"laravel-mix": "^6",
-		"postcss": "^8.3.11",
-		"postcss-import": "^14.0.2",
+		"postcss": "^8",
+		"postcss-import": "^14",
 		"postcss-loader": "^6.2.0",
 		"prop-types": "^15.7.2",
 		"resolve-url-loader": "^4.0.0",
 		"sass": "^1.43.4",
 		"sass-loader": "^12.3.0",
-		"tailwindcss": "^2.2.19",
-		"eslint-loader": "^4.0.2"
+		"tailwindcss": "^2"
 	},
 	"dependencies": {
 		"@alpinejs/persist": "^3.4.2",

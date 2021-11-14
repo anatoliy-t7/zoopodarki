@@ -1,10 +1,10 @@
 @production
-<livewire:error-catcher>
+  <livewire:error-catcher>
   @endproduction
 
   <livewire:scripts>
 
-    <x-toaster />
+    <livewire:toasts />
 
     @stack('footer')
 

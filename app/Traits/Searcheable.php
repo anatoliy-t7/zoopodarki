@@ -3,35 +3,41 @@ namespace App\Traits;
 
 use App\Models\Product;
 use MeiliSearch\Endpoints\Indexes as SearchIndexes;
+use Usernotnull\Toast\Concerns\WireToast;
 
 trait Searcheable
 {
+    use WireToast;
+
     public function searchForPage($q)
     {
         try {
             return $result = Product::search($q)
-              ->query(function ($query) {
-                  $query
-                      ->isStatusActive()
-                      ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
-                      ->has('categories')
-                      ->with('media')
-                      ->with('categories')
-                      ->with('categories.catalog')
-                      ->with('brand')
-                      ->with('unit')
-                      ->with('attributes')
-                      ->with('variations')
-                  ;
-              })
-              // TODO orderBy не работает
-              ->orderBy($this->sortSelectedType, $this->sortBy)
-              ->paginate(32);
-        } catch (\Throwable $th) {
+                ->query(function ($query) {
+                    $query
+                        ->isStatusActive()
+                        ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
+                        ->has('categories')
+                        ->with('media')
+                        ->with('categories')
+                        ->with('categories.catalog')
+                        ->with('brand')
+                        ->with('unit')
+                        ->with('attributes')
+                        ->with('variations')
+                    ;
+                })
+            // TODO orderBy не работает
+                ->orderBy($this->sortSelectedType, $this->sortBy)
+                ->paginate(32);
+        } catch (\Throwable$th) {
             \Log::error('Ошибка поиска');
             \Log::error($th);
 
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Поиск временно не работает, мы уже работаем над этим']);
+            toast()
+                ->warning('Поиск временно не работает, мы уже работаем над этим')
+                ->push();
+
         }
     }
 
@@ -42,8 +48,8 @@ trait Searcheable
 
             return $meilisearch->search($query, $options);
         })
-                ->take(10)
-                ->raw();
+            ->take(10)
+            ->raw();
     }
 
     public function searchThis($q, $instant = false)
@@ -81,7 +87,7 @@ trait Searcheable
 
         return [
             'result' => $result,
-            'search' => $q
+            'search' => $q,
         ];
     }
 }

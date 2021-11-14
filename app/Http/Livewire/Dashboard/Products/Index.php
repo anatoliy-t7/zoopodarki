@@ -5,10 +5,12 @@ use App\Models\Catalog;
 use App\Models\Product;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Index extends Component
 {
     use WithPagination;
+    use WireToast;
 
     public $search;
     public $sortField = 'id';
@@ -99,7 +101,10 @@ class Index extends Component
 
         $this->countTrash = Product::onlyTrashed()->count();
 
-        $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Товар удален полностью']);
+        toast()
+            ->warning('Товар удален полностью')
+            ->push();
+
     }
 
     public function forceDeleteAll()
@@ -122,7 +127,10 @@ class Index extends Component
 
         $this->countTrash = Product::onlyTrashed()->count();
 
-        $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Корзина отчищена']);
+        toast()
+            ->info('Корзина отчищена')
+            ->push();
+
     }
 
     public function restoreTrashed($id)
@@ -132,7 +140,10 @@ class Index extends Component
 
             $this->countTrash = Product::onlyTrashed()->count();
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Товар востановлен']);
+            toast()
+                ->success('Товар востановлен')
+                ->push();
+
         }
     }
 

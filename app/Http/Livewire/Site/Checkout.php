@@ -4,18 +4,20 @@ namespace App\Http\Livewire\Site;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product1C;
-use App\Traits\Discounts;
 use App\Traits\Delivery;
+use App\Traits\Discounts;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Usernotnull\Toast\Concerns\WireToast;
 use YooKassa\Client;
 
 class Checkout extends Component
 {
     use Discounts;
+    use WireToast;
 
     use Delivery;
 
@@ -142,8 +144,6 @@ class Checkout extends Component
                 $this->userHasDiscountOnReview = false;
             }
         }
-
-
 
         $shelterCart = app('shelter')->session($this->shelterCartId);
         $shelterCartCounter = $shelterCart->getTotalQuantity();
@@ -348,8 +348,10 @@ class Checkout extends Component
             }
         });
 
-        $this->dispatchBrowserEvent('toast', [
-            'type' => 'error', 'text' => 'Ваш заказ не создан, попробуйте еще раз', ]);
+        toast()
+            ->warning('Ваш заказ не создан, попробуйте еще раз')
+            ->push();
+
     }
 
     public function payCreate($order)

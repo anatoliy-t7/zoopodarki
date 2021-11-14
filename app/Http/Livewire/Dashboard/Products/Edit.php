@@ -6,8 +6,8 @@ use App\Models\Brand;
 use App\Models\BrandSerie;
 use App\Models\Catalog;
 use App\Models\Category;
-use App\Models\Product;
 use App\Models\Product1C;
+use App\Models\Product;
 use App\Models\ProductUnit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -16,11 +16,12 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Edit extends Component
 {
     use WithPagination;
-
+    use WireToast;
     use WithFileUploads;
 
     public $productId;
@@ -98,8 +99,8 @@ class Edit extends Component
 
         if (
             $functionProduct = Product::where('id', $this->productId)
-                ->with('media')
-                ->first()
+            ->with('media')
+            ->first()
         ) {
             $this->product = $functionProduct;
             $this->name = $functionProduct->name;
@@ -178,14 +179,16 @@ class Edit extends Component
         try {
             Storage::disk('public')->delete($url);
 
-            $this->dispatchBrowserEvent('toast', [
-                'text' => 'Изображение удалено',
-            ]);
-        } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('toast', [
-                'type' => 'error',
-                'text' => 'Изображение не удалено',
-            ]);
+            toast()
+                ->info('Изображение удалено')
+                ->push();
+
+        } catch (\Throwable$th) {
+
+            toast()
+                ->warning('Изображение не удалено')
+                ->push();
+
         }
     }
 
@@ -245,10 +248,11 @@ class Edit extends Component
     public function setVariation($id)
     {
         if ($this->checkArrayKey($this->variations, 'id', $id)) {
-            $this->dispatchBrowserEvent('toast', [
-                'type' => 'error',
-                'text' => 'Already added',
-            ]);
+
+            toast()
+                ->warning('Already added')
+                ->push();
+
         } else {
             $this->variation = Product1C::where('id', $id)
                 ->get()
@@ -276,10 +280,10 @@ class Edit extends Component
             if ($item['id'] == $id) {
                 unset($this->variations[$key]);
 
-                $this->dispatchBrowserEvent('toast', [
-                    'type' => 'error',
-                    'text' => 'Removed',
-                ]);
+                toast()
+                    ->warning('Removed')
+                    ->push();
+
             }
         }
     }
@@ -430,9 +434,10 @@ class Edit extends Component
 
             $this->dispatchBrowserEvent('update-query-id', $this->productId);
 
-            $this->dispatchBrowserEvent('toast', [
-                'text' => 'Товар ' . $functionProduct->name . ' сохраннен.',
-            ]);
+            toast()
+                ->success('Товар ' . $functionProduct->name . ' сохраннен')
+                ->push();
+
         });
     }
 
@@ -443,7 +448,10 @@ class Edit extends Component
         $this->product = Product::find($this->product->id);
         $this->media = $this->product->getMedia('product-images');
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Фото удалено.']);
+        toast()
+            ->success('Фото удалено')
+            ->push();
+
     }
 
     public function setName($name)

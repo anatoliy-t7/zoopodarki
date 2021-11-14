@@ -4,9 +4,11 @@ namespace App\Http\Livewire\Site;
 
 use App\Models\Favorite;
 use Livewire\Component;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class AddToFavorite extends Component
 {
+    use WireToast;
 
     public $model;
     public $mode = true;
@@ -27,7 +29,9 @@ class AddToFavorite extends Component
 
         $this->model->favorites()->save($favorite);
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Товар добавлен в избранное']);
+        toast()
+            ->success('Товар добавлен в избранное')
+            ->push();
 
         $this->emitSelf('check');
     }
@@ -36,7 +40,9 @@ class AddToFavorite extends Component
     {
         $this->model->favorites()->delete($item_id);
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Товар убран из избранных']);
+        toast()
+            ->success('Товар убран из избранных')
+            ->push();
 
         $this->emitSelf('check');
     }

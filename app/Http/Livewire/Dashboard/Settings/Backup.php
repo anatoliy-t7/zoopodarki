@@ -3,16 +3,20 @@ namespace App\Http\Livewire\Dashboard\Settings;
 
 use App\Jobs\UpdateProduct;
 use Livewire\Component;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Backup extends Component
 {
+    use WireToast;
+
     public function UpdateProduct()
     {
         UpdateProduct::dispatch();
 
-        $this->dispatchBrowserEvent('toast', [
-            'text' => 'Job UpdateProduct added',
-        ]);
+        toast()
+            ->info('Job UpdateProduct added')
+            ->push();
+
     }
 
     public function backupDb()
@@ -22,12 +26,15 @@ class Backup extends Component
             \Artisan::call('backup:run --only-db');
             \Artisan::call('backup:clean');
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Backup is done']);
-        } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('toast', [
-                'type' => 'error',
-                'text' => 'Backup is not done',
-            ]);
+            toast()
+                ->success('Backup is done')
+                ->push();
+
+        } catch (\Throwable$th) {
+
+            toast()
+                ->warning('Backup is not done')
+                ->push();
 
             \Log::error($th);
         }
@@ -37,7 +44,10 @@ class Backup extends Component
     {
         \Artisan::call('queue:work');
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Queue is running']);
+        toast()
+            ->success('Queue is running')
+            ->push();
+
     }
 
     public function generateSitemap()
@@ -49,14 +59,14 @@ class Backup extends Component
             \Artisan::call('optimize');
             \Artisan::call('sitemap:generate');
 
-            $this->dispatchBrowserEvent('toast', [
-                'text' => 'Sitemap is generated',
-            ]);
-        } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('toast', [
-                'type' => 'error',
-                'text' => 'Sitemap isn`t generated',
-            ]);
+            toast()
+                ->info('Sitemap is generated')
+                ->push();
+
+        } catch (\Throwable$th) {
+            toast()
+                ->warning('Sitemap isn`t generated')
+                ->push();
 
             \Log::error($th);
         }

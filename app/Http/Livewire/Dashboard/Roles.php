@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Roles extends Component
 {
+
+    use WireToast;
 
     public $roleId;
     public $name;
@@ -42,7 +45,9 @@ class Roles extends Component
 
             $role->syncPermissions($this->rolePermissions);
 
-            $this->dispatchBrowserEvent('toast', ['text' => $this->name . ' сохранена.']);
+            toast()
+                ->success($this->name . ' сохранена')
+                ->push();
 
             $this->closeForm();
 
@@ -62,7 +67,9 @@ class Roles extends Component
 
         session()->flash('message', 'Role deleted');
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Роль удалена']);
+        toast()
+            ->success('Роль удалена')
+            ->push();
 
     }
 

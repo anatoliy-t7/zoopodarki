@@ -5,9 +5,12 @@ namespace App\Http\Livewire\Dashboard;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Permissions extends Component
 {
+    use WireToast;
+
     public $name;
     public $permissionId;
 
@@ -15,8 +18,8 @@ class Permissions extends Component
 
     public function openForm($permissionId)
     {
-        $permission         = Permission::where('id', $permissionId)->firstOrFail();
-        $this->name         = $permission->name;
+        $permission = Permission::where('id', $permissionId)->firstOrFail();
+        $this->name = $permission->name;
         $this->permissionId = $permission->id;
     }
 
@@ -35,7 +38,9 @@ class Permissions extends Component
                 ]
             );
 
-            $this->dispatchBrowserEvent('toast', ['text' => $permission->name . ' сохранены.']);
+            toast()
+                ->success($permission->name . ' сохранены.')
+                ->push();
 
             $this->closeForm();
         });
@@ -50,7 +55,9 @@ class Permissions extends Component
 
         $this->resetFields();
 
-        $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Права "' . $permission_name . '" удалены.']);
+        toast()
+            ->success('Права "' . $permission_name . '" удалены.')
+            ->push();
 
     }
 

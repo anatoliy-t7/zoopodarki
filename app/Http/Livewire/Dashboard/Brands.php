@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Brands extends Component
 {
     use WithFileUploads;
+    use WireToast;
 
     use WithPagination;
 
@@ -130,7 +132,9 @@ class Brands extends Component
 
             $this->dispatchBrowserEvent('get-items', $this->itemsName);
 
-            $this->dispatchBrowserEvent('toast', ['text' => $brand->name . ' сохранен.']);
+            toast()
+                ->success($brand->name . ' сохранен.')
+                ->push();
 
             $this->closeForm();
         });
@@ -153,7 +157,10 @@ class Brands extends Component
         if (Arr::has($item, 'id')) {
             BrandSerie::findOrFail($item['id'])->delete();
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Серия удалена.']);
+            toast()
+                ->success('Серия удалена.')
+                ->push();
+
         }
     }
 
@@ -162,7 +169,11 @@ class Brands extends Component
         $brand = Brand::find($itemId);
 
         if ($brand->products()->exists()) {
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'У этого бренда есть товары']);
+
+            toast()
+                ->warning('У этого бренда есть товары')
+                ->push();
+
         } else {
             $brand_name = $brand->name;
             Storage::delete('brands/' . $brand->logo);
@@ -170,7 +181,10 @@ class Brands extends Component
 
             $this->resetFields();
 
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Бренд "' . $brand_name . '" удален.']);
+            toast()
+                ->success('Бренд "' . $brand_name . '" удален')
+                ->push();
+
         }
     }
 

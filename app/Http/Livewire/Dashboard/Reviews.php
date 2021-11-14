@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Reviews extends Component
 {
     use WithPagination;
+    use WireToast;
 
     public $search;
     public $sortField = 'id';
@@ -101,7 +103,9 @@ class Reviews extends Component
                 ]);
             }
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Отзыв сохранен с статусом "' . __('constants.review_status.' . $review->status) . '"']);
+            toast()
+                ->success('Отзыв сохранен с статусом "' . __('constants.review_status.' . $review->status) . '"')
+                ->push();
 
             $this->closeForm();
 
@@ -118,17 +122,23 @@ class Reviews extends Component
 
             Mail::to($this->reviewEdit->user->email)->send(new ReviewChangedToUser($this->reviewEdit, $productName, $productLink));
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Пользователь оповещен.']);
+            toast()
+                ->success('Пользователь оповещен')
+                ->push();
         } else {
-            $this->dispatchBrowserEvent('toast', ['text' => 'У пользователя нет почты']);
+            toast()
+                ->warning('У пользователя нет почты')
+                ->push();
         }
     }
 
     public function deletePhoto($photoId)
     {
         Media::find($photoId)->delete();
+        toast()
+            ->success('Фото удалено')
+            ->push();
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Фото удалено.']);
     }
 
     public function remove($itemId)
@@ -139,7 +149,10 @@ class Reviews extends Component
 
         $this->dispatchBrowserEvent('close');
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Отзыв удален.']);
+        toast()
+            ->success('Отзыв удален')
+            ->push();
+
     }
 
     public function closeForm()

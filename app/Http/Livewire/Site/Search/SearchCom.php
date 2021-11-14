@@ -1,14 +1,14 @@
 <?php
 namespace App\Http\Livewire\Site\Search;
 
-use App\Models\Product;
-use Livewire\Component;
 use App\Traits\Searcheable;
-use MeiliSearch\Endpoints\Indexes as SearchIndexes;
+use Livewire\Component;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class SearchCom extends Component
 {
     use Searcheable;
+    use WireToast;
 
     public $search;
     public $result = [];
@@ -26,11 +26,14 @@ class SearchCom extends Component
                 $resultArray = $this->searchThis($this->search, true);
                 $this->result = $resultArray['result'];
                 $this->search = $resultArray['search'];
-            } catch (\Throwable $th) {
+            } catch (\Throwable$th) {
                 \Log::error('Ошибка поиска');
                 \Log::error($th);
 
-                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Поиск временно не работает, мы уже работаем над этим']);
+                toast()
+                    ->warning('Поиск временно не работает, мы уже работаем над этим')
+                    ->push();
+
             }
         }
 

@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class PageEdit extends Component
 {
+    use WireToast;
     use WithFileUploads;
 
     public $pageId = null;
@@ -59,9 +61,14 @@ class PageEdit extends Component
         try {
             Storage::disk('public')->delete($url);
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Изображение удалено']);
-        } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Изображение не удалено']);
+            toast()
+                ->success('Изображение удалено')
+                ->push();
+
+        } catch (\Throwable$th) {
+            toast()
+                ->warning('Изображение не удалено')
+                ->push();
         }
     }
 
@@ -90,8 +97,10 @@ class PageEdit extends Component
             );
 
             $this->pageId = $page->id;
+            toast()
+                ->success($page->title . ' сохранена.')
+                ->push();
 
-            $this->dispatchBrowserEvent('toast', ['text' => $page->title . ' сохранена.']);
         });
     }
 

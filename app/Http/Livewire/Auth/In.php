@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Seshac\Otp\Otp;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class In extends Component
 {
+    use WireToast;
+
     public $phone;
     public $enteredOtp;
     public $email;
@@ -35,7 +38,10 @@ class In extends Component
         $functionOtp = Otp::generate($this->phone);
 
         if ($functionOtp->status === false) {
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Вы превысили лимит СМС, попробуйте через 15 минут']);
+            toast()
+                ->danger('Вы превысили лимит СМС, попробуйте через 15 минут')
+                ->push();
+
         } else {
             $this->token = $functionOtp->token;
 
@@ -78,7 +84,9 @@ class In extends Component
         $expires = Otp::expiredAt($this->phone);
 
         if ($expires->status === false) {
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Вышел срок OTP']);
+            toast()
+                ->info('Вышел срок OTP')
+                ->push();
 
             return false;
         }
@@ -87,11 +95,19 @@ class In extends Component
 
         if ($verify->status === false) {
             if ($verify->message == 'OTP does not match') {
-                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'OTP не соответствует']);
+
+                toast()
+                    ->info('OTP не соответствует')
+                    ->push();
+
             }
 
             if ($verify->message == 'Reached the maximum allowed attempts') {
-                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Достигнуто максимально допустимое количество попыток, попробуйте через 15 минут', 'timeout' => '2000']);
+
+                toast()
+                    ->info('Достигнуто максимально допустимое количество попыток, попробуйте через 15 минут')
+                    ->push();
+
             }
 
             return false;
@@ -115,11 +131,16 @@ class In extends Component
                 ->route('smscru', '+7' . $this->phone)
                 ->notify(new SendOTP($this->token));
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'OTP отправлен']);
-        } catch (\Throwable $th) {
+            toast()
+                ->success('OTP отправлен')
+                ->push();
+
+        } catch (\Throwable$th) {
             \Log::error($th);
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'OTP не отправлен']);
+            toast()
+                ->warning('OTP не отправлен')
+                ->push();
         }
     }
 

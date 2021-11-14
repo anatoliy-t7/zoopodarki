@@ -1,17 +1,16 @@
 <?php
 namespace App\Http\Livewire\Dashboard;
 
-use App\Mail\ReviewChangedToUser;
 use App\Models\Waitlist;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Waitlists extends Component
 {
     use WithPagination;
+    use WireToast;
 
     public $search;
     public $sortField = 'id';
@@ -73,8 +72,9 @@ class Waitlists extends Component
                 ]
             );
 
-
-            $this->dispatchBrowserEvent('toast', ['text' => 'Заказ сохранен с статусом "' . __('constants.review_status.' . $waitlist->status) . '"']);
+            toast()
+                ->success('Заказ сохранен с статусом "' . __('constants.review_status.' . $waitlist->status) . '"')
+                ->push();
 
             $this->closeForm();
 
@@ -90,7 +90,10 @@ class Waitlists extends Component
 
         $this->dispatchBrowserEvent('close');
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Заказ удален.']);
+        toast()
+            ->success('Заказ удален')
+            ->push();
+
     }
 
     public function closeForm()

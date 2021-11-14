@@ -7,10 +7,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Attributes extends Component
 {
     use WithPagination;
+    use WireToast;
 
     public $search;
     public $sortField = 'id';
@@ -109,7 +111,9 @@ class Attributes extends Component
             $this->itemsName = AttributeItem::where('attribute_id', $attribute->id)->get(['id', 'name']);
             $this->dispatchBrowserEvent('get-items', $this->itemsName);
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Свойство "' . $attribute->name . '" обновлено.']);
+            toast()
+                ->success('Свойство "' . $attribute->name . '" обновлено.')
+                ->push();
 
             $this->closeForm();
         });
@@ -123,7 +127,9 @@ class Attributes extends Component
             $this->dispatchBrowserEvent('close-confirm');
 
             if ($attributeItem->products()->exists()) {
-                return $this->dispatchBrowserEvent('toast', ['text' => 'Вид свойства прикреплен к товару.']);
+                return toast()
+                    ->success('Вид свойства прикреплен к товару.')
+                    ->push();
             }
 
             $removeItemName = $attributeItem->name;
@@ -131,7 +137,9 @@ class Attributes extends Component
 
             $this->openForm($this->attribute_id);
 
-            return $this->dispatchBrowserEvent('toast', ['text' => 'Вид свойства ' . $removeItemName . ' удален.']);
+            return toast()
+                ->success('Вид свойства ' . $removeItemName . ' удален.')
+                ->push();
         }
     }
 
@@ -143,7 +151,10 @@ class Attributes extends Component
             if ($attribute->items()->exists()) {
                 foreach ($attribute->items as $item) {
                     if ($item->products()->exists()) {
-                        return $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'У свойства "' . $attribute->name . '" есть товары ({$item->name})']);
+                        return toast()
+                            ->warning('У свойства "' . $attribute->name . '" есть товары ({$item->name})')
+                            ->push();
+
                     } else {
                         $this->removeItem($item);
                     }
@@ -154,7 +165,9 @@ class Attributes extends Component
 
                 $this->resetFields();
 
-                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Свойство "' . $attribute_name . '" удалено.']);
+                toast()
+                    ->success('Свойство "' . $attribute_name . '" удалено')
+                    ->push();
             }
         });
     }
@@ -176,7 +189,7 @@ class Attributes extends Component
     public function render()
     {
         $attributes = Attribute::when($this->search, function ($query) {
-            $query->whereLike(['name', 'id', 'items.name'], $this->search);
+            $query->whereLike(['name', 'id', 'items.name'], trim($this->search));
         })
             ->with('items')
             ->orderBy($this->sortField, $this->sortDirection)

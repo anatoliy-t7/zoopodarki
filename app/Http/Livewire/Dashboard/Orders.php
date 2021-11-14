@@ -4,9 +4,11 @@ namespace App\Http\Livewire\Dashboard;
 use App\Models\Order;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Orders extends Component
 {
+    use WireToast;
     use WithPagination;
 
     public $search;
@@ -107,7 +109,9 @@ class Orders extends Component
         $funcOrder->delete();
 
         $this->closeForm();
-        $this->dispatchBrowserEvent('toast', ['text' => 'Заказ "' . $orderNumber . '" удален.']);
+        toast()
+            ->success('Заказ "' . $orderNumber . '" удален.')
+            ->push();
     }
 
     public function render()

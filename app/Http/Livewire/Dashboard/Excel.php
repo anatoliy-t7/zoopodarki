@@ -1,37 +1,28 @@
 <?php
 namespace App\Http\Livewire\Dashboard;
 
-use App\Exports\CatalogsExport;
+//use App\Jobs\ImportProductsFromExcel;
 use App\Jobs\ProcessImportProduct1C;
 use App\Jobs\ProcessOffersProduct1C;
-use Rap2hpoutre\FastExcel\FastExcel;
-use App\Models\Catalog;
-use App\Models\Product;
+use App\Traits\ExportImport;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Excel extends Component
 {
+    use WireToast;
     use WithFileUploads;
+    use ExportImport;
 
-    public $totalSize;
-    public $readBytes;
-    public $count = 0;
-    public $catalogs;
-    public $catalogId;
-    private $catalog;
     public $excel;
 
-    public function mount()
+    public function getFile()
     {
-        $this->catalogs = Catalog::orderBy('sort')->get();
-    }
 
-    public function importProducts()
-    {
         $this->validate([
-            'excel' => 'file|mimes:xlsx'
+            'excel' => 'file|mimes:xlsx',
         ]);
 
         $fileName = $this->excel->getClientOriginalName();
@@ -40,59 +31,25 @@ class Excel extends Component
 
         if (Storage::disk('excel')->exists($fileName)) {
             $filePath = storage_path('app/excel') . '/' . $fileName;
-            $collection = $this->importFromFile($filePath);
 
-            //$file = $this->exportToFile($collection);
+            $this->importFromFile($filePath);
 
-            $this->dispatchBrowserEvent('toast', [
-                'text' => 'Done',
-            ]);
+            // ini_set('max_execution_time', 500);
 
-            return response()->download($file);
+            // $this->importData($collection);
+            //ImportProductsFromExcel::dispatch($filePath);
+
+            return toast()
+                ->warning('Done')
+                ->push();
+
         } else {
-            $this->dispatchBrowserEvent('toast', [
-                'type' => 'error',
-                'text' => 'No the file in the folder',
-            ]);
+
+            toast()
+                ->warning('No the file in the folder')
+                ->push();
+
         }
-    }
-
-    public function importFromFile($filePath)
-    {
-        $collection = collect();
-
-        (new FastExcel)->import($filePath, function ($line) use ($collection) {
-            return $collection->push([
-                'id' => $line['id'],
-            ]);
-        });
-
-        return $collection->toArray();
-    }
-
-    public function exportToFile($collection)
-    {
-        $products = Product::whereNotIn('id', $collection)
-            ->whereHas('variations', function ($query) {
-                $query->hasStock();
-            })
-            ->select('id', 'name')
-            ->get();
-        $path = storage_path('app/excel');
-        $filePath = (new FastExcel($products))->export($path . '/export.xlsx');
-
-        return $filePath;
-    }
-
-    public function exportCatalogs()
-    {
-        $this->catalog = $this->catalogs
-            ->where('id', $this->catalogId)
-            ->first();
-
-        $export = new CatalogsExport($this->catalogId);
-
-        return Excel::download($export, $this->catalog->name . '.xlsx');
     }
 
     public function importProducts1Cimport()
@@ -102,14 +59,14 @@ class Excel extends Component
 
             ProcessImportProduct1C::dispatch($file);
 
-            $this->dispatchBrowserEvent('toast', [
-                'text' => 'File import.xml added to Job',
-            ]);
+            toast()
+                ->success('File import.xml added to Job')
+                ->push();
+
         } else {
-            $this->dispatchBrowserEvent('toast', [
-                'type' => 'error',
-                'text' => 'File doesn`t exist',
-            ]);
+            toast()
+                ->warning('File doesn`t exist')
+                ->push();
         }
     }
 
@@ -120,20 +77,22 @@ class Excel extends Component
 
             ProcessOffersProduct1C::dispatch($file);
 
-            $this->dispatchBrowserEvent('toast', [
-                'text' => 'File offers.xml added to Job',
-            ]);
+            toast()
+                ->success('File offers.xml added to Job')
+                ->push();
+
         } else {
-            $this->dispatchBrowserEvent('toast', [
-                'type' => 'error',
-                'text' => 'File doesn`t exist',
-            ]);
+
+            toast()
+                ->warning('File doesn`t exist')
+                ->push();
+
         }
     }
 
     public function render()
     {
-        return view('livewire.dashboard.exchange')
+        return view('livewire.dashboard.excel')
             ->extends('dashboard.app')
             ->section('content');
     }

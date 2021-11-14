@@ -5,10 +5,12 @@ use App\Models\ProductUnit;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Units extends Component
 {
     use WithPagination;
+    use WireToast;
 
     public $search;
     public $sortField = 'id';
@@ -61,7 +63,9 @@ class Units extends Component
                 ]
             );
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Единица измерения ' . $this->editUnit['name'] . ' сохранена.']);
+            toast()
+                ->success('Единица измерения "' . $this->editUnit['name'] . '" сохранена.')
+                ->push();
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');
@@ -73,14 +77,21 @@ class Units extends Component
         $unit = ProductUnit::find($unitId);
 
         if ($unit->products()->exists()) {
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'С этой единицей измерения связан товар']);
+
+            toast()
+                ->warning('С этой единицей измерения связан товар')
+                ->push();
+
         } else {
             $unit_name = $unit->name;
             $unit->delete();
 
             $this->reset(['editUnit']);
 
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Единица измерения "' . $unit_name . '" удалена.']);
+            toast()
+                ->warning('Единица измерения "' . $unit_name . '" удалена.')
+                ->push();
+
         }
     }
 

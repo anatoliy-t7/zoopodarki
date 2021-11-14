@@ -5,11 +5,12 @@ use App\Models\Product1C;
 use App\Traits\Promotions;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Products1c extends Component
 {
     use WithPagination;
-
+    use WireToast;
     use Promotions;
 
     public $search;
@@ -81,10 +82,16 @@ class Products1c extends Component
         try {
             $this->initPromotion($this->product1c);
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Акция создана']);
-        } catch (\Throwable $th) {
+            toast()
+                ->success('Акция создана')
+                ->push();
+
+        } catch (\Throwable$th) {
             \Log::error($th);
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'В процессе создания акции произошла ошибка']);
+
+            toast()
+                ->warning('В процессе создания акции произошла ошибка')
+                ->push();
         }
 
         $this->closeForm();
@@ -96,7 +103,10 @@ class Products1c extends Component
         $this->stopPromotion($this->product1c['id']);
         $this->closeForm();
         $this->dispatchBrowserEvent('close');
-        $this->dispatchBrowserEvent('toast', ['text' => 'Акция прекращена']);
+        toast()
+            ->success('Акция прекращена')
+            ->push();
+
     }
 
     public function closeForm()
@@ -120,9 +130,9 @@ class Products1c extends Component
             'products1c' => Product1C::when($this->search, function ($query) {
                 $query->whereLike(['name', 'id', 'barcode', 'cod1c'], $this->search);
             })
-            ->when($this->onlyPromotions, function ($query) {
-                $query->where('promotion_type', '!=', 0);
-            })
+                ->when($this->onlyPromotions, function ($query) {
+                    $query->where('promotion_type', '!=', 0);
+                })
                 ->with('product')
                 ->orderBy($this->sortField, $this->sortDirection)
                 ->paginate($this->itemsPerPage),

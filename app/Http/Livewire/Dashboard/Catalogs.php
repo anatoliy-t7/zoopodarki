@@ -116,7 +116,10 @@ class Catalogs extends Component
                 }
             });
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Категория "' . $this->editCategory['name'] . '" сохранена']);
+            toast()
+                ->success('Категория "' . $this->editCategory['name'] . '" сохранена')
+                ->push();
+
         }
 
         $this->editCategory = [];
@@ -162,7 +165,9 @@ class Catalogs extends Component
             // Clean the cache after saving
             Cache::forget('categories-menu');
 
-            $this->dispatchBrowserEvent('toast', ['text' => 'Каталог "' . $this->editCatalog->name . '" сохранен.']);
+            toast()
+                ->success('Каталог "' . $this->editCatalog->name . '" сохранен.')
+                ->push();
 
             $this->resetValidation();
             $this->closeForm();
@@ -173,17 +178,28 @@ class Catalogs extends Component
     {
         if ($category = Category::find($id)) {
             if ($category->products()->exists()) {
-                $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'У категории "' . $category->name . '" есть товары']);
+
+                toast()
+                    ->warning('У категории "' . $category->name . '" есть товары')
+                    ->push();
+
             } else {
                 $category->delete();
 
                 $this->categories = Category::where('catalog_id', $this->editCatalog['id'])->get();
 
                 $this->closeFormCategory();
-                $this->dispatchBrowserEvent('toast', ['text' => 'Категория удалена.']);
+
+                toast()
+                    ->success('Категория удалена.')
+                    ->push();
+
             }
         } else {
-            $this->dispatchBrowserEvent('toast', ['text' => 'Категория не удалена.', 'type' => 'error']);
+            toast()
+                ->warning('Категория не удалена.')
+                ->push();
+
         }
     }
 
@@ -195,7 +211,10 @@ class Catalogs extends Component
             if ($catalog->categories()->exists()) {
                 foreach ($catalog->categories as $item) {
                     if ($item->products()->exists()) {
-                        return $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'У категории "' . $item->name . '" есть товары']);
+                        return toast()
+                            ->warning('У категории "' . $item->name . '" есть товары')
+                            ->push();
+
                     } else {
                         $this->removeItem($item);
                     }
@@ -205,7 +224,10 @@ class Catalogs extends Component
 
                     $this->resetFields();
 
-                    $this->dispatchBrowserEvent('toast', ['text' => 'Каталог "' . $catalog_name . '" удален.']);
+                    toast()
+                        ->success('Каталог "' . $catalog_name . '" удален.')
+                        ->push();
+
                 }
             } else {
                 $catalog_name = $catalog->name;
@@ -213,7 +235,10 @@ class Catalogs extends Component
 
                 $this->resetFields();
 
-                $this->dispatchBrowserEvent('toast', ['text' => 'Каталог "' . $catalog_name . '" удален.']);
+                toast()
+                    ->success('Каталог "' . $catalog_name . '" удален.')
+                    ->push();
+
             }
         });
     }

@@ -9,29 +9,31 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Users extends Component
 {
+    use WireToast;
     use RegistersUsers;
     use WithPagination;
 
     public $search;
-    public $sortField     = 'id';
+    public $sortField = 'id';
     public $sortDirection = 'asc';
-    public $itemsPerPage  = 30;
+    public $itemsPerPage = 30;
 
     public $userId;
     public $name;
     public $email;
     public $phone;
     public $password;
-    public $company   = 0;
-    public $discount  = 0;
+    public $company = 0;
+    public $discount = 0;
     public $userRoles = [];
 
     protected $queryString = [
         'search' => ['except' => ''],
-        'page'   => ['except' => 1],
+        'page' => ['except' => 1],
         'sortField',
         'sortDirection',
         'itemsPerPage',
@@ -63,20 +65,20 @@ class Users extends Component
 
     public function openForm($userId)
     {
-        $user            = User::where('id', $userId)->firstOrFail();
-        $this->userId    = $user->id;
-        $this->name      = $user->name;
-        $this->email     = $user->email;
-        $this->phone     = $user->phone;
-        $this->company   = $user->company;
-        $this->discount  = $user->discount;
+        $user = User::where('id', $userId)->firstOrFail();
+        $this->userId = $user->id;
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->phone = $user->phone;
+        $this->company = $user->company;
+        $this->discount = $user->discount;
         $this->userRoles = collect($user->roles)->pluck('name');
     }
 
     public function save()
     {
         $this->validate([
-            'name'    => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'company' => 'boolean',
         ]);
 
@@ -95,10 +97,10 @@ class Users extends Component
             $user = User::updateOrCreate(
                 ['id' => $this->userId],
                 [
-                    'name'     => trim($this->name),
-                    'email'    => $this->email,
-                    'phone'    => $this->phone,
-                    'company'  => $this->company,
+                    'name' => trim($this->name),
+                    'email' => $this->email,
+                    'phone' => $this->phone,
+                    'company' => $this->company,
                     'discount' => $this->discount,
                 ]
             );
@@ -113,7 +115,9 @@ class Users extends Component
 
             $user->syncRoles($this->userRoles);
 
-            $this->dispatchBrowserEvent('toast', ['text' => $this->name . ' сохранен.']);
+            toast()
+                ->success($this->name . ' сохранен')
+                ->push();
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');
@@ -126,7 +130,9 @@ class Users extends Component
         $user = User::with('reviews')->find($itemId);
         if ($user->reviews()->exists()) {
 
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'У этого пользователя есть отзывы о товарах']);
+            toast()
+                ->warning('У этого пользователя есть отзывы о товарах')
+                ->push();
 
         } else {
 
@@ -135,8 +141,9 @@ class Users extends Component
 
             $this->reset();
 
-            $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Пользователь "' . $user_name . '" удален.']);
-
+            toast()
+                ->success('Пользователь "' . $user_name . '" удален.')
+                ->push();
         }
     }
 

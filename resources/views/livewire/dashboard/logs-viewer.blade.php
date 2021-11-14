@@ -16,7 +16,7 @@
       <div class="flex items-center justify-start space-x-2 text-sm">
         @foreach ($types as $key => $type)
           <button
-            class="px-2 py-1 rounded-xl text-white focus:outline-none focus:ring-4 focus:ring-blue-400 cursor-pointer hover:ring-2 hover:ring-blue-400 {{ Arr::has($type, 'class') ? $type['class'] : '' }}"
+            class="px-2 py-1 rounded-xl text-white focus:outline-none focus:ring-4 focus:ring-blue-400 cursor-pointer hover:ring-2 hover:ring-blue-400 {{ Arr::has($type, 'class') ? $type['class'] : 'bg-gray-400' }}"
             wire:click="$set('selectedType', '{{ $type['name'] }}')">
             {{ $type['name'] }}</button>
         @endforeach
@@ -27,8 +27,8 @@
       </div>
 
       <div>
-        <label for="filteredByCategory"></label>
-        <select wire:model="date" name="filteredByCategory" id="filteredByCategory" class="w-40">
+        <label for="filteredBydate"></label>
+        <select wire:model="date" name="filteredBydate" id="filteredBydate" class="w-40">
           @foreach ($availableDates as $availableDate)
             <option wire:ignore value="{{ $availableDate }}" {{ $availableDate === $date ? 'selected' : '' }}>
               {{ $availableDate }}</option>
@@ -36,7 +36,7 @@
         </select>
       </div>
 
-      <button class="text-sm btn" wire:click="delete">
+      <button class="text-sm border border-transparent btn hover:border-gray-500" wire:click="delete">
         Delete day ({{ $this->filename }})
       </button>
     @endif
@@ -121,6 +121,13 @@
 
         @endif
     </x-dashboard.modal>
+  </div>
+
+  <div class="flex items-center px-4">
+    <div class="w-8/12">
+      {{ $logs->links() }}
+    </div>
+
   </div>
 
   <script>

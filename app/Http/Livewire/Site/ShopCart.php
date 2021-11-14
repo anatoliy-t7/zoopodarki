@@ -2,16 +2,18 @@
 namespace App\Http\Livewire\Site;
 
 use App\Models\Product1C;
-use App\Traits\Discounts;
 use App\Models\Waitlist;
+use App\Traits\Discounts;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class ShopCart extends Component
 {
     use Discounts;
+    use WireToast;
 
     public $cartId; // индификатор корзины
     public $shelterCartId;
@@ -26,7 +28,7 @@ class ShopCart extends Component
         'addToCart',
         'increment',
         'decrement',
-        'preOrder'
+        'preOrder',
     ];
 
     public function mount()
@@ -49,7 +51,10 @@ class ShopCart extends Component
         if (!auth()->user()) {
             $this->dispatchBrowserEvent('auth');
 
-            return $this->dispatchBrowserEvent('toast', ['text' => 'Вам необходимо авторизоваться что бы заказать товар']);
+            return toast()
+                ->success('Вам необходимо авторизоваться что бы заказать товар')
+                ->push();
+
         }
 
         Waitlist::create([
@@ -60,7 +65,10 @@ class ShopCart extends Component
             'product1c_id' => $itemId,
         ]);
 
-        return $this->dispatchBrowserEvent('toast', ['text' => 'Ваш заказ принят, мы сообщим вам когда товар поступит в продажу']);
+        return toast()
+            ->success('Ваш заказ принят, мы сообщим вам когда товар поступит в продажу')
+            ->push();
+
     }
 
     public function addToCart(int $itemId, int $quantity)
@@ -145,7 +153,9 @@ class ShopCart extends Component
                         }
                     }
 
-                    $this->dispatchBrowserEvent('toast', ['text' => 'Товар добавлен в корзину']);
+                    toast()
+                        ->success('Товар добавлен в корзину')
+                        ->push();
 
                     $this->emit('getProduct');
                 }
@@ -156,14 +166,16 @@ class ShopCart extends Component
         $this->getCart();
     }
 
-    public function increment($itemId) : void
+    public function increment($itemId): void
     {
         DB::transaction(
             function () use ($itemId) {
                 $product_1c = Product1C::find($itemId);
 
                 if ((int) $product_1c->stock === 0) {
-                    $this->dispatchBrowserEvent('toast', ['type' => 'error', 'text' => 'Извините, товара больше нет в наличии']);
+                    toast()
+                        ->info('Извините, товара больше нет в наличии')
+                        ->push();
 
                     $this->getCart();
                     $this->emitTo('product-card', 'render');
@@ -191,7 +203,7 @@ class ShopCart extends Component
         );
     }
 
-    public function decrement($itemId) : void
+    public function decrement($itemId): void
     {
         $product_1c = Product1C::find($itemId);
 
@@ -215,7 +227,7 @@ class ShopCart extends Component
         $this->reloadCartCheckout();
     }
 
-    public function delete($itemId) : void
+    public function delete($itemId): void
     {
         if ($itemId) {
             $product_1c = Product1C::find($itemId);
@@ -235,7 +247,7 @@ class ShopCart extends Component
         }
     }
 
-    public function generateId() : void
+    public function generateId(): void
     {
         if (request()->session()->missing('cart_id')) {
             $this->cartId = 'cart_id' . Str::random(10);
@@ -243,7 +255,6 @@ class ShopCart extends Component
         } else {
             $this->cartId = session('cart_id');
         }
-
 
         if (request()->session()->missing('shelter_cart')) {
             $this->shelterCartId = 'shelter_cart' . Str::random(10);
@@ -253,7 +264,7 @@ class ShopCart extends Component
         }
     }
 
-    public function updateCart() : void
+    public function updateCart(): void
     {
         $cart = \Cart::session($this->cartId);
 
@@ -274,7 +285,7 @@ class ShopCart extends Component
         }
     }
 
-    public function getCart() : void
+    public function getCart(): void
     {
         $cart = \Cart::session($this->cartId);
 
@@ -294,7 +305,7 @@ class ShopCart extends Component
         $this->getTotalWeight($functionItems, $functionShelterItems);
     }
 
-    public function getTotalWeight($items, $shelterItems) : void
+    public function getTotalWeight($items, $shelterItems): void
     {
         $this->totalWeight = collect();
 
@@ -315,7 +326,7 @@ class ShopCart extends Component
         $this->totalWeight = $this->totalWeight->sum();
     }
 
-    public function reloadCartCheckout() : void
+    public function reloadCartCheckout(): void
     {
         if ($this->currentUrl === 'checkout') {
             $this->emit('getCartCheckout');

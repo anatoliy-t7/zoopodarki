@@ -1,12 +1,15 @@
 <?php
 namespace App\Http\Livewire\Dashboard;
 
+use App\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Livewire\Component;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class LogsViewer extends Component
 {
-    public $logs;
+    use WireToast;
+
     public $availableDates;
     public $date = null;
     public $filename = '';
@@ -64,7 +67,6 @@ class LogsViewer extends Component
         $files = array_reverse($files);
         $dates = [];
 
-
         if (!$files) {
             return [];
         }
@@ -82,18 +84,65 @@ class LogsViewer extends Component
     public function getDate()
     {
         if (count($this->availableDates) == 0) {
-            $this->dispatchBrowserEvent('toast', ['text' => 'No log file found']);
 
-            return  false;
+            toast()
+                ->warning('No log file found')
+                ->push();
+
+            return false;
         }
 
         if (!in_array($this->date, $this->availableDates)) {
-            $this->dispatchBrowserEvent('toast', ['text' => 'No log file found with selected date']);
 
-            return  false;
+            toast()
+                ->warning('No log file found with selected date')
+                ->push();
+
+            return false;
         }
 
         $this->filename = 'laravel-' . $this->date . '.log';
+    }
+
+    public function openForm($id)
+    {
+        $funcLogs = $this->getLogs();
+        $this->selectedLog = $funcLogs->firstWhere('id', $id);
+    }
+
+    public function closeForm()
+    {
+        $this->reset('selectedLog');
+        $this->dispatchBrowserEvent('close');
+    }
+
+    public function delete()
+    {
+        if (!$this->filename) {
+            return toast()
+                ->warning('Log file not found')
+                ->push();
+        }
+
+        $file = 'logs/' . $this->filename;
+
+        if ($this->date === str_replace('.', '-', dataYmd(today()))) {
+            if (File::exists(storage_path($file))) {
+                file_put_contents(storage_path($file), '');
+            }
+
+            toast()->success('Log cleared')->push();
+
+        } elseif (File::exists(storage_path($file))) {
+            File::delete(storage_path($file));
+
+            toast()->success('Log deleted')->push();
+        } else {
+            toast()->warning('File not found')->push();
+        }
+
+        $this->availableDates = $this->getLogFileDates();
+        $this->date = str_replace('.', '-', dataYmd(today()));
     }
 
     public function getLogs()
@@ -122,7 +171,7 @@ class LogsViewer extends Component
                     'timestamp' => $match['date'],
                     'env' => $match['env'],
                     'type' => $match['type'],
-                    'message' => trim($match['message'])
+                    'message' => trim($match['message']),
                 ])
             );
         }
@@ -130,53 +179,19 @@ class LogsViewer extends Component
         return $funcLogs;
     }
 
-    public function openForm($id)
-    {
-        $funcLogs = $this->getLogs();
-        $this->selectedLog = $funcLogs->firstWhere('id', $id);
-    }
-
-    public function closeForm()
-    {
-        $this->reset('selectedLog');
-        $this->dispatchBrowserEvent('close');
-    }
-
-    public function delete()
-    {
-        if (!$this->filename) {
-            return  $this->dispatchBrowserEvent('toast', ['text' => 'File not found']);
-        }
-
-        $file = 'logs/' . $this->filename;
-
-        if ($this->date === str_replace('.', '-', dataYmd(today()))) {
-            if (File::exists(storage_path($file))) {
-                file_put_contents(storage_path($file), '');
-            }
-            $this->dispatchBrowserEvent('toast', ['text' => 'Log cleared.']);
-        } elseif (File::exists(storage_path($file))) {
-            File::delete(storage_path($file));
-
-            $this->dispatchBrowserEvent('toast', ['text' => 'Log deleted.']);
-        } else {
-            $this->dispatchBrowserEvent('toast', ['text' => 'File not found']);
-        }
-
-        $this->availableDates = $this->getLogFileDates();
-        $this->date = str_replace('.', '-', dataYmd(today()));
-    }
-
     public function render()
     {
-        $this->logs = $this->getLogs();
+        $logs = $this->getLogs();
 
         if ($this->selectedType) {
-            $this->logs = $this->logs->where('type', $this->selectedType);
+            $logs = $logs->where('type', $this->selectedType);
         }
 
-        return view('livewire.dashboard.logs-viewer')
-        ->extends('dashboard.app')
-        ->section('content');
+        $logs = (new Collection($logs))->paginate(30);
+
+        return view('livewire.dashboard.logs-viewer', [
+            'logs' => $logs])
+            ->extends('dashboard.app')
+            ->section('content');
     }
 }

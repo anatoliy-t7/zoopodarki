@@ -5,9 +5,12 @@ use App\Models\Address;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class UserAddresses extends Component
 {
+    use WireToast;
+
     public $address;
     public $addressId;
     public $addresses;
@@ -19,7 +22,10 @@ class UserAddresses extends Component
 
         $this->getAddresses();
 
-        $this->dispatchBrowserEvent('toast', ['text' => 'Адрес удален']);
+        toast()
+            ->success('Адрес удален')
+            ->push();
+
     }
 
     public function editAddress($addressId)

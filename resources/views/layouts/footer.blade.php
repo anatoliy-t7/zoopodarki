@@ -117,7 +117,7 @@
   <livewire:scripts>
 
     @stack('footer')
-    <x-toaster />
+    <livewire:toasts />
 
     <script src="{{ mix('js/app.js') }}"></script>
 
