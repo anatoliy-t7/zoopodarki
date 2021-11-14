@@ -2,6 +2,9 @@
 
 <div class="space-y-6">
 
+  <div>
+    DB: {{ env('DB_DATABASE') }}
+  </div>
 
   <div class="space-y-2">
     <div class="block">Export</div>
