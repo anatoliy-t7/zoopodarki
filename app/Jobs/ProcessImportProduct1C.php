@@ -27,21 +27,7 @@ class ProcessImportProduct1C implements ShouldQueue
     protected $consist = null;
     protected $barcode = null;
     protected $vendorcode = null;
-    const DESCRIPTION = 'Описание';
 
-    const VENDORCODE = 'Артикул';
-
-    const BARCODE = 'Штрихкод';
-
-    const REQUISITES = 'ЗначенияРеквизитов';
-
-    const REQUISITE = 'ЗначениеРеквизита';
-
-    const VALUE = 'Значение';
-
-    const PROPERTIES = 'ЗначенияСвойств';
-
-    const PROPERTIE = 'ЗначенияСвойства';
 
     /**
      * Create a new job instance.
@@ -73,9 +59,9 @@ class ProcessImportProduct1C implements ShouldQueue
             unset($product1c);
         }
 
-        Log::debug('deleted: ' . $this->count);
-        Log::debug('forDelete: ' . $this->forDelete);
-        unlink($this->file);
+        Log::debug('Product deleted: ' . $this->count);
+        Log::debug('Product1C deleted: ' . $this->forDelete);
+       // unlink($this->file);
     }
 
     public function getProducts($product1c)
@@ -85,10 +71,9 @@ class ProcessImportProduct1C implements ShouldQueue
         \DB::transaction(function () use ($product1c) {
             if (Product1C::where('uuid', $product1c['Ид'])->first() && Arr::has($product1c, '@attributes')) {
                 if ($product1c['@attributes']['Статус'] === 'Удален') {
-                    $this->forDelete++;
-
                     $oldProduct = Product1C::where('uuid', $product1c['Ид'])
                         ->with('product')
+                        ->with('product.variations')
                         ->with('product.categories')
                         ->with('product.attributes')
                         ->with('product.unit')
@@ -105,12 +90,15 @@ class ProcessImportProduct1C implements ShouldQueue
 
                         $oldProduct->product->variations()->update(['product_id' => null]);
 
-                        $oldProduct->product->forceDelete();
+                        if ($oldProduct->product->variations()->count() === 1) {
+                            $oldProduct->product->forceDelete();
+                        }
 
                         $this->count++;
                     }
 
                     $oldProduct->delete();
+                    $this->forDelete++;
                 }
             } elseif (Product1C::where('uuid', $product1c['Ид'])->first()) {
                 $this->updateProduct($product1c);
@@ -122,40 +110,51 @@ class ProcessImportProduct1C implements ShouldQueue
 
     public function updateProduct($product1c)
     {
-        $oldProduct = Product1C::where('uuid', $product1c['Ид'])->with('media', 'product')->first();
+        $oldProduct = Product1C::where('uuid', $product1c['Ид'])->with('product')->first();
 
-        if (Arr::exists($product1c, DESCRIPTION) && !empty($product1c[DESCRIPTION]) && $oldProduct->product->consist === null) {
-            $oldProduct->product->consist = $product1c[DESCRIPTION];
+        if (Arr::exists($product1c, 'Описание')
+            && !empty($product1c['Описание'])
+            && $oldProduct->product()->exists()
+            && $oldProduct->product->consist === null) {
+            $oldProduct->product->consist = $product1c['Описание'];
             $oldProduct->push();
         }
 
-        if (Arr::exists($product1c, VENDORCODE) && !empty($product1c[VENDORCODE]) && $product1c[VENDORCODE] !== $oldProduct->vendorcode) {
-            $oldProduct->vendorcode = $product1c[VENDORCODE];
+        if (Arr::exists($product1c, 'Артикул')
+            && !empty($product1c['Артикул'])
+            && $product1c['Артикул'] !== $oldProduct->vendorcode) {
+            $oldProduct->vendorcode = $product1c['Артикул'];
             $oldProduct->save();
         }
 
-        if (Arr::exists($product1c, BARCODE) && !empty($product1c[BARCODE]) && $product1c[BARCODE] !== $oldProduct->barcode) {
-            $oldProduct->barcode = $product1c[BARCODE];
+        if (Arr::exists($product1c, 'Штрихкод')
+            && !empty($product1c['Штрихкод'])
+            && $product1c['Штрихкод'] !== $oldProduct->barcode) {
+            $oldProduct->barcode = $product1c['Штрихкод'];
             $oldProduct->save();
         }
 
-
-        if (Arr::exists($product1c, REQUISITES) && Arr::has($product1c[REQUISITES][REQUISITE], 'ВесНоменклатуры')) {
-            $oldProduct->weight = $product1c[REQUISITES][REQUISITE][VALUE];
+        if (Arr::exists($product1c, 'ЗначенияРеквизитов')
+            && Arr::has($product1c['ЗначенияРеквизитов']['ЗначениеРеквизита'], 'ВесНоменклатуры')) {
+            $oldProduct->weight = $product1c['ЗначенияРеквизитов']['ЗначениеРеквизита']['Значение'];
             $oldProduct->save();
         }
 
         //Update description
-        if (Arr::exists($product1c, PROPERTIES)) {
-            if (Arr::has($product1c[PROPERTIES][PROPERTIE], 'Ид')) {
-                if ($product1c[PROPERTIES][PROPERTIE]['Ид'] === 'f5c10840-6500-11ea-bd2a-bc5ff404141d' && $oldProduct->product->description === null) {
-                    $oldProduct->product->description = $product1c[PROPERTIES][PROPERTIE][VALUE];
+        if (Arr::exists($product1c, 'ЗначенияСвойств')) {
+            if (Arr::has($product1c['ЗначенияСвойств']['ЗначенияСвойства'], 'Ид')) {
+                if ($product1c['ЗначенияСвойств']['ЗначенияСвойства']['Ид'] === 'f5c10840-6500-11ea-bd2a-bc5ff404141d'
+                    && $oldProduct->product()->exists()
+                    && $oldProduct->product->description === null) {
+                    $oldProduct->product->description = $product1c['ЗначенияСвойств']['ЗначенияСвойства']['Значение'];
                     $oldProduct->push();
                 }
             } else {
-                foreach ($product1c[PROPERTIES][PROPERTIE] as $item) {
-                    if ($item['Ид'] === 'f5c10840-6500-11ea-bd2a-bc5ff404141d' && $oldProduct->product->description === null) {
-                        $oldProduct->product->description = $item[VALUE];
+                foreach ($product1c['ЗначенияСвойств']['ЗначенияСвойства'] as $item) {
+                    if ($item['Ид'] === 'f5c10840-6500-11ea-bd2a-bc5ff404141d'
+                        && $oldProduct->product()->exists()
+                        && $oldProduct->product->description === null) {
+                        $oldProduct->product->description = $item['Значение'];
                         $oldProduct->push();
                     }
                 }
@@ -167,12 +166,12 @@ class ProcessImportProduct1C implements ShouldQueue
 
     public function createProduct($product1c)
     {
-        if (Arr::exists($product1c, BARCODE) && !empty($product1c[BARCODE])) {
-            $this->barcode = $product1c[BARCODE];
+        if (Arr::exists($product1c, 'Штрихкод') && !empty($product1c['Штрихкод'])) {
+            $this->barcode = $product1c['Штрихкод'];
         }
 
-        if (Arr::exists($product1c, VENDORCODE) && !empty($product1c[VENDORCODE])) {
-            $this->vendorcode = $product1c[VENDORCODE];
+        if (Arr::exists($product1c, 'Артикул') && !empty($product1c['Артикул'])) {
+            $this->vendorcode = $product1c['Артикул'];
         }
 
         $newProduct = Product1C::create([
@@ -185,24 +184,23 @@ class ProcessImportProduct1C implements ShouldQueue
         $this->barcode = null;
         $this->vendorcode = null;
 
-
-        if (Arr::exists($product1c, REQUISITES) && Arr::has($product1c[REQUISITES][REQUISITE], 'ВесНоменклатуры')) {
-            $newProduct->weight = $product1c[REQUISITES][REQUISITE][VALUE];
+        if (Arr::exists($product1c, 'ЗначенияРеквизитов')
+            && Arr::has($product1c['ЗначенияРеквизитов']['ЗначениеРеквизита'], 'ВесНоменклатуры')) {
+            $newProduct->weight = $product1c['ЗначенияРеквизитов']['ЗначениеРеквизита']['Значение'];
             $newProduct->save();
         }
 
-        if (Arr::exists($product1c, PROPERTIES)) {
-
+        if (Arr::exists($product1c, 'ЗначенияСвойств')) {
             //get commission
-            if (Arr::has($product1c[PROPERTIES][PROPERTIE], 'Ид')) {
-                if ($product1c[PROPERTIES][PROPERTIE]['Ид'] === 'd65bfebe-e413-11e9-978e-bc5ff404141d') {
-                    $newProduct->commission = str_replace(',', '.', $product1c[PROPERTIES][PROPERTIE][VALUE]);
+            if (Arr::has($product1c['ЗначенияСвойств']['ЗначенияСвойства'], 'Ид')) {
+                if ($product1c['ЗначенияСвойств']['ЗначенияСвойства']['Ид'] === 'd65bfebe-e413-11e9-978e-bc5ff404141d') {
+                    $newProduct->commission = str_replace(',', '.', $product1c['ЗначенияСвойств']['ЗначенияСвойства']['Значение']);
                     $newProduct->save();
                 }
             } else {
-                foreach ($product1c[PROPERTIES][PROPERTIE] as $item) {
+                foreach ($product1c['ЗначенияСвойств']['ЗначенияСвойства'] as $item) {
                     if ($item['Ид'] === 'd65bfebe-e413-11e9-978e-bc5ff404141d') {
-                        $newProduct->commission = str_replace(',', '.', $item[VALUE]);
+                        $newProduct->commission = str_replace(',', '.', $item['Значение']);
                         $newProduct->save();
                     }
                 }

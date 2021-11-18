@@ -24,7 +24,7 @@
   <div class="flex w-full">
     <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
       <div class="w-full lg:w-3/12">
-        <div class="relative p-4 pb-5 bg-white lg:rounded-2xl">
+        <div class="relative p-4 pb-6 bg-white lg:rounded-2xl">
           <!--googleoff: all-->
           <!--noindex-->
           <div wire:loading
@@ -32,7 +32,7 @@
           </div>
           @if (Agent::isMobile())
             <div x-cloak x-data="{ filter: false}">
-              <button x-on:click="filter = true" class="absolute right-6 top-6">
+              <button x-on:click="filter = true" class="absolute right-4 top-2">
                 <x-tabler-adjustments class="w-6 h-6 text-gray-500 stroke-current" />
               </button>
 

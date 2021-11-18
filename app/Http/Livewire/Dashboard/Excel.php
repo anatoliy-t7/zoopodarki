@@ -7,8 +7,10 @@ use App\Jobs\ProcessOffersProduct1C;
 use App\Traits\ExportImport;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use App\Models\Brand;
 use Livewire\WithFileUploads;
 use Usernotnull\Toast\Concerns\WireToast;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class Excel extends Component
 {
@@ -42,27 +44,23 @@ class Excel extends Component
             return toast()
                 ->warning('Done')
                 ->push();
-
         } else {
-
             toast()
                 ->warning('No the file in the folder')
                 ->push();
-
         }
     }
 
     public function importProducts1Cimport()
     {
-        if (is_file(storage_path('sync') . '/import.xml')) {
-            $file = storage_path('sync') . '/import.xml';
+        if (is_file(storage_path('app/sync') . '/import.xml')) {
+            $file = storage_path('app/sync') . '/import.xml';
 
             ProcessImportProduct1C::dispatch($file);
 
             toast()
                 ->success('File import.xml added to Job')
                 ->push();
-
         } else {
             toast()
                 ->warning('File doesn`t exist')
@@ -72,22 +70,31 @@ class Excel extends Component
 
     public function importProducts1Coffers()
     {
-        if (is_file(storage_path('sync') . '/offers.xml')) {
-            $file = storage_path('sync') . '/offers.xml';
+        if (is_file(storage_path('app/sync') . '/offers.xml')) {
+            $file = storage_path('app/sync') . '/offers.xml';
 
             ProcessOffersProduct1C::dispatch($file);
 
             toast()
                 ->success('File offers.xml added to Job')
                 ->push();
-
         } else {
-
             toast()
                 ->warning('File doesn`t exist')
                 ->push();
-
         }
+    }
+
+    public function exportProduct1c()
+    {
+
+        $filePath = $this->exportToFile();
+
+        toast()
+            ->warning('Done')
+            ->push();
+
+        return response()->download($filePath);
     }
 
     public function render()

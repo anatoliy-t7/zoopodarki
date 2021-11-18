@@ -96,7 +96,9 @@ class Reviews extends Component
                 ]);
             }
 
-            if ($review->status === 'published' && count($review->user->orders) !== 0 && $review->user->review_date === null) {
+            if ($review->status === 'published'
+                && count($review->user->orders) !== 0
+                && $review->user->review_date === null) {
                 $review->user()->update([
                     'review_date' => now(),
                     'review' => 'on',
@@ -120,7 +122,8 @@ class Reviews extends Component
 
             $productLink = env('APP_URL') . '/pet/' . $this->reviewEdit->revieweable->categories[0]->catalog->slug . '/' . $this->reviewEdit->revieweable->categories[0]->slug . '/' . $this->reviewEdit->revieweable->slug;
 
-            Mail::to($this->reviewEdit->user->email)->send(new ReviewChangedToUser($this->reviewEdit, $productName, $productLink));
+            Mail::to($this->reviewEdit->user->email)
+                ->send(new ReviewChangedToUser($this->reviewEdit, $productName, $productLink));
 
             toast()
                 ->success('Пользователь оповещен')
@@ -138,7 +141,6 @@ class Reviews extends Component
         toast()
             ->success('Фото удалено')
             ->push();
-
     }
 
     public function remove($itemId)
@@ -152,7 +154,6 @@ class Reviews extends Component
         toast()
             ->success('Отзыв удален')
             ->push();
-
     }
 
     public function closeForm()

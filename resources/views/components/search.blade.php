@@ -11,35 +11,35 @@
   </div>
 
   <div x-cloak class="fixed z-50 top-6 left-4 right-4" x-show="search" x-transition.opacity>
-    <livewire:site.search-com>
+    <livewire:site.search.search-com>
   </div>
 
   <script>
     document.addEventListener('alpine:initializing', () => {
-        Alpine.data('toggleSearch', () => ({
-          body: document.body,	
-            search: false,
-            openSearch() { 
-              this.search = true
-              this.body.classList.add('overflow-hidden')
-            },
+      Alpine.data('toggleSearch', () => ({
+        body: document.body,
+        search: false,
+        openSearch() {
+          this.search = true
+          this.body.classList.add('overflow-hidden')
+        },
 
-            closeSearch() { 
-              this.search = false
-              window.livewire.emit('resetSearch')
-              this.body.classList.remove('overflow-hidden');
-            },     
-        }))
+        closeSearch() {
+          this.search = false
+          window.livewire.emit('resetSearch')
+          this.body.classList.remove('overflow-hidden');
+        },
+      }))
     })
   </script>
   <script>
-    document.addEventListener("keydown", function (e) {
-            if (e.keyCode == 27) {
-                e.preventDefault();
-                var event = new CustomEvent('close');
-                window.dispatchEvent(event);
-            }
-        }, false);
+    document.addEventListener("keydown", function(e) {
+      if (e.keyCode == 27) {
+        e.preventDefault();
+        var event = new CustomEvent('close');
+        window.dispatchEvent(event);
+      }
+    }, false);
   </script>
 
 </div>

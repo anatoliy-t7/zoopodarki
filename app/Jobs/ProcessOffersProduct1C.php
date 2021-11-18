@@ -50,7 +50,7 @@ class ProcessOffersProduct1C implements ShouldQueue
             unset($offer);
         }
 
-        unlink($this->file);
+        //unlink($this->file);
     }
 
     public function getProducts($offer)
@@ -70,7 +70,6 @@ class ProcessOffersProduct1C implements ShouldQueue
                 $product->save();
             }
             unset($offer, $product);
-
         }
     }
 

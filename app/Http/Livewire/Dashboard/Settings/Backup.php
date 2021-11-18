@@ -9,29 +9,25 @@ class Backup extends Component
 {
     use WireToast;
 
-    public function UpdateProduct()
+    public function updateProduct()
     {
         UpdateProduct::dispatch();
 
         toast()
             ->info('Job UpdateProduct added')
             ->push();
-
     }
 
     public function backupDb()
     {
         try {
-            set_time_limit();
             \Artisan::call('backup:run --only-db');
             \Artisan::call('backup:clean');
 
             toast()
                 ->success('Backup is done')
                 ->push();
-
         } catch (\Throwable$th) {
-
             toast()
                 ->warning('Backup is not done')
                 ->push();
@@ -47,7 +43,6 @@ class Backup extends Component
         toast()
             ->success('Queue is running')
             ->push();
-
     }
 
     public function generateSitemap()
@@ -62,7 +57,6 @@ class Backup extends Component
             toast()
                 ->info('Sitemap is generated')
                 ->push();
-
         } catch (\Throwable$th) {
             toast()
                 ->warning('Sitemap isn`t generated')

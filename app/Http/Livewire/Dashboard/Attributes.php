@@ -119,7 +119,7 @@ class Attributes extends Component
         });
     }
 
-    public function removeItem($item, $index)
+    public function removeItem($item)
     {
         if (Arr::has($item, 'id')) {
             $attributeItem = AttributeItem::where('id', $item['id'])->first();

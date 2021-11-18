@@ -4,6 +4,7 @@ namespace App\Traits;
 use App\Models\Attribute;
 use App\Models\AttributeItem;
 use App\Models\Brand;
+use App\Models\Product1C;
 use App\Models\Product;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -43,7 +44,6 @@ trait ExportImport
                 unset($product);
                 unset($row);
                 unset($categories);
-
             }
         }
     }
@@ -55,9 +55,7 @@ trait ExportImport
         $product->attributes()->detach();
 
         foreach ($attrsId as $itemId) {
-
             if (data_get($row, $itemId) !== "") {
-
                 $attr = Attribute::where('id', $itemId)
                     ->with('items')
                     ->first();
@@ -65,20 +63,16 @@ trait ExportImport
                 $attributeItems = explode(',', $row[$itemId]);
 
                 foreach ($attributeItems as $value) {
-
                     $value = trim($value);
 
                     if ($attr->items()->where('name', $value)->first()) {
-
                         $attribute_item = $attr->items()->where('name', $value)->first();
 
                         if (!$product->attributes()
                             ->where('attribute_item.attribute_id', $attr->id)
                             ->where('attribute_item.id', $attribute_item->id)
                             ->first()) {
-
                             $product->attributes()->attach($attribute_item->id);
-
                         }
                     } else {
                         $attribute_item = AttributeItem::create([
@@ -89,15 +83,12 @@ trait ExportImport
                         $product->attributes()->attach($attribute_item->id);
 
                         unset($attribute_item);
-
                     }
                 }
                 unset($attr);
-
             }
         }
         unset($attrsId);
-
     }
 
     public function setSpecialAttrs(Product $product, $row)
@@ -110,19 +101,13 @@ trait ExportImport
             ->first();
 
         foreach ($attrs as $key => $attr) {
-
             if ($attr === $row[$attr]) {
-
                 if ($ingredients->items()->where('name', $attr)->first()) {
-
                     $attribute_item = $ingredients->items()->where('name', $attr)->first();
 
                     if (!$product->attributes()->where('attribute_item.id', $attribute_item->id)->first()) {
-
                         $product->attributes()->attach($attribute_item->id);
-
                     }
-
                 } else {
                     $attribute_item = AttributeItem::create([
                         'name' => $attr,
@@ -146,16 +131,40 @@ trait ExportImport
         }
     }
 
-    public function exportToFile($collection)
+    public function exportToFile()
     {
-        $products = Product::whereNotIn('id', $collection)
-            ->whereHas('variations', function ($query) {
-                $query->hasStock();
-            })
-            ->select('id', 'name')
-            ->get();
+        $collection = collect();
+
+        $products = Product::whereHas('attributes', function ($query) {
+                    $query->whereIn('attribute_item.id', [1,2,3,4,5,6,7,8,60,1809,1810]);
+        })
+        ->with('categories', 'attributes')
+        ->get();
+
+        foreach ($products as $key => $product) {
+            $arrayAttrs = [];
+            foreach ($product->attributes as $key => $attr) {
+                array_push($arrayAttrs, $attr->name);
+            }
+
+            $arrayCategories = [];
+            foreach ($product->attributes as $key => $attr) {
+                array_push($arrayAttrs, $attr->name);
+            }
+
+            $collection->push([
+                'id' => $product->id,
+                'name' => $product->name,
+                'attributes' => implode(",", $arrayAttrs),
+            ]);
+
+            $arrayAttrs = [];
+            $arrayCategories = [];
+        }
+
+
         $path = storage_path('app/excel');
-        $filePath = (new FastExcel($products))->export($path . '/export.xlsx');
+        $filePath = (new FastExcel($collection))->export($path . '/export.xlsx');
 
         return $filePath;
     }
@@ -165,7 +174,6 @@ trait ExportImport
 
         foreach ($collection->toArray() as $key => $row) {
             if (Product::where('id', $row['id'])->first()) {
-
                 $product = Product::where('id', $row['id'])->first();
 
                 $product->name = $row['name'];
@@ -177,6 +185,5 @@ trait ExportImport
             }
             unset($row);
         }
-
     }
 }

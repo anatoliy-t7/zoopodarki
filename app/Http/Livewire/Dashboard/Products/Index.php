@@ -104,7 +104,6 @@ class Index extends Component
         toast()
             ->warning('Товар удален полностью')
             ->push();
-
     }
 
     public function forceDeleteAll()
@@ -130,7 +129,6 @@ class Index extends Component
         toast()
             ->info('Корзина отчищена')
             ->push();
-
     }
 
     public function restoreTrashed($id)
@@ -143,7 +141,6 @@ class Index extends Component
             toast()
                 ->success('Товар востановлен')
                 ->push();
-
         }
     }
 

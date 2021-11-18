@@ -97,11 +97,8 @@ class Edit extends Component
 
         $this->productId = request()->query('id', $this->productId);
 
-        if (
-            $functionProduct = Product::where('id', $this->productId)
-            ->with('media')
-            ->first()
-        ) {
+        if (Product::where('id', $this->productId)->with('media')->first()) {
+            $functionProduct = Product::where('id', $this->productId)->with('media')->first();
             $this->product = $functionProduct;
             $this->name = $functionProduct->name;
             $this->meta_title = $functionProduct->meta_title;
@@ -182,13 +179,10 @@ class Edit extends Component
             toast()
                 ->info('Изображение удалено')
                 ->push();
-
         } catch (\Throwable$th) {
-
             toast()
                 ->warning('Изображение не удалено')
                 ->push();
-
         }
     }
 
@@ -248,11 +242,9 @@ class Edit extends Component
     public function setVariation($id)
     {
         if ($this->checkArrayKey($this->variations, 'id', $id)) {
-
             toast()
                 ->warning('Already added')
                 ->push();
-
         } else {
             $this->variation = Product1C::where('id', $id)
                 ->get()
@@ -283,7 +275,6 @@ class Edit extends Component
                 toast()
                     ->warning('Removed')
                     ->push();
-
             }
         }
     }
@@ -337,7 +328,7 @@ class Edit extends Component
         $this->validate([
             'name' => 'required',
             'status' => 'required',
-            'readyCategories' => 'required', // TODO test
+            //'readyCategories' => 'required', // TODO test
             //'productBrand' => 'required', // TODO test
             'meta_description' => 'max:150',
             'meta_title' => 'max:70',
@@ -437,7 +428,6 @@ class Edit extends Component
             toast()
                 ->success('Товар ' . $functionProduct->name . ' сохраннен')
                 ->push();
-
         });
     }
 
@@ -451,7 +441,6 @@ class Edit extends Component
         toast()
             ->success('Фото удалено')
             ->push();
-
     }
 
     public function setName($name)
