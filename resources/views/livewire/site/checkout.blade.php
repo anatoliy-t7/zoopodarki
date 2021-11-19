@@ -115,12 +115,14 @@
                   <div>
                     {{ $address['address'] }}
                   </div>
-                  @if ($address['extra'])
+                  @if (Arr::has($address, 'extra'))
                     <div class="text-xs text-gray-400">
-                      , {{ $address['extra'] }}
+                      {{ $address['extra'] }}
                     </div>
                   @endif
-
+                  @if ($this->deliveryCost === false)
+                    <span class="text-xs text-red-500">Пожалуйста укажите адрес в пределах КАД</span>
+                  @endif
                 </div>
               @else
                 <div class="w-9/12 pl-4">
@@ -277,12 +279,9 @@
               <div class="w-full md:w-3/12">
                 <label class="block pb-2 text-lg font-bold text-gray-700">Время доставки</label>
                 <select wire:model="deliveryTime" name="deliveryTime" class="h-14 field">
-                  <option value="10:00 - 16:00">10:00 - 16:00</option>
-                  <option value="10:00 - 18:00">10:00 - 18:00</option>
-                  <option value="12:00 - 16:00">12:00 - 16:00</option>
-                  <option value="12:00 - 18:00">12:00 - 18:00</option>
-                  <option value="16:00 - 20:00">16:00 - 20:00</option>
-                  <option value="18:00 - 20:00">18:00 - 20:00</option>
+                  <option value="10:00 - 17:00">10:00 - 17:00</option>
+                  <option value="17:00 - 23:00">17:00 - 23:00</option>
+                  <option value="10:00 - 23:00">10:00 - 23:00</option>
                 </select>
               </div>
 
@@ -484,10 +483,12 @@
           <span>{{ RUB($subTotal) }}</span>
         </div>
         @if ($orderType == 0)
+
           <div class="flex justify-between">
             <span>Доставка</span>
             <span>{{ RUB($deliveryCost) }}</span>
           </div>
+
         @else
           <div class="flex justify-between">
             <span>Самовывоз</span>

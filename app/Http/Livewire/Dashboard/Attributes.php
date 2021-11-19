@@ -21,7 +21,7 @@ class Attributes extends Component
     public $name;
     public $range = false;
     public $attribute_id = null;
-    public $itemsName = [];
+    public $items = [];
     public $fildName = '';
     protected $queryString = [
         'search' => ['except' => ''],
@@ -34,7 +34,11 @@ class Attributes extends Component
 
     public function updatedFildName($value)
     {
-        redirect()->route('dashboard.products.index', ['filteredByAttribute' => true, 'search' => $this->fildName, 'attrId' => $this->attribute_id]);
+        redirect()->route('dashboard.products.index', [
+                'filteredByAttribute' => true,
+                'search' => $this->fildName,
+                'attrId' => $this->attribute_id
+                ]);
     }
 
     public function updatingSearch()
@@ -57,7 +61,7 @@ class Attributes extends Component
         $this->reset([
             'name',
             'attribute_id',
-            'itemsName',
+            'items',
         ]);
     }
 
@@ -65,24 +69,25 @@ class Attributes extends Component
     {
         $oneAttribute = Attribute::where('id', $attId)->with('items')->first();
 
-        $this->itemsName = $oneAttribute->items()->get(['id', 'name'])->toArray();
+        $this->items = $oneAttribute->items()->get(['id', 'name'])->toArray();
 
-        $this->dispatchBrowserEvent('get-items', $this->itemsName);
+        // dd($this->items);
+
+        $this->dispatchBrowserEvent('get-items', $this->items);
 
         $this->attribute_id = $attId;
         $this->name = $oneAttribute->name;
         $this->range = $oneAttribute->range;
     }
 
-    public function saveIt($itemsName)
+    public function saveIt($items)
     {
-        $this->itemsName = $itemsName;
 
         $this->validate([
             'name' => 'required|unique:attributes,name,' . $this->attribute_id,
         ]);
 
-        DB::transaction(function () {
+        DB::transaction(function () use ($items) {
             $attribute = Attribute::updateOrCreate(
                 ['id' => $this->attribute_id],
                 [
@@ -91,25 +96,21 @@ class Attributes extends Component
                 ]
             );
 
-            foreach ($this->itemsName as $item) {
-                if ($item['name']) {
-                    if (Arr::has($item, 'id') && AttributeItem::where('id', $item['id'])->exists()) {
-                        $attribute_item = AttributeItem::find($item['id']);
-                        $attribute_item->update([
-                            'name' => trim($item['name']),
-                        ]);
-                    } else {
-                        AttributeItem::create([
-                            'name' => trim($item['name']),
-                            'attribute_id' => $attribute->id,
-                        ]);
-                    }
+            foreach ($items as $item) {
+                if (Arr::has($item, 'id') && $item['id'] !== "") {
+                    AttributeItem::updateOrCreate(
+                        ['id' => $item['id']],
+                        [
+                        'name' => trim($item['name']),
+                        'attribute_id' => $attribute->id,
+                        ]
+                    );
                 }
             }
 
             $this->attribute_id = $attribute->id;
-            $this->itemsName = AttributeItem::where('attribute_id', $attribute->id)->get(['id', 'name']);
-            $this->dispatchBrowserEvent('get-items', $this->itemsName);
+            $this->items = AttributeItem::where('attribute_id', $attribute->id)->get(['id', 'name']);
+            $this->dispatchBrowserEvent('get-items', $this->items);
 
             toast()
                 ->success('Свойство "' . $attribute->name . '" обновлено.')
@@ -119,17 +120,20 @@ class Attributes extends Component
         });
     }
 
-    public function removeItem($item)
+    public function removeItem($itemId)
     {
-        if (Arr::has($item, 'id')) {
-            $attributeItem = AttributeItem::where('id', $item['id'])->first();
+
+        if ($itemId) {
+            $attributeItem = AttributeItem::where('id', $itemId)
+            ->with('products')
+            ->first();
 
             $this->dispatchBrowserEvent('close-confirm');
 
             if ($attributeItem->products()->exists()) {
                 return toast()
-                    ->success('Вид свойства прикреплен к товару.')
-                    ->push();
+                ->success('Вид свойства прикреплен к товару.')
+                ->push();
             }
 
             $removeItemName = $attributeItem->name;
@@ -138,23 +142,22 @@ class Attributes extends Component
             $this->openForm($this->attribute_id);
 
             return toast()
-                ->success('Вид свойства ' . $removeItemName . ' удален.')
-                ->push();
+            ->success('Вид свойства ' . $removeItemName . ' удален.')
+            ->push();
         }
     }
 
-    public function remove($item_id)
+    public function remove($attributeId)
     {
-        $attribute = Attribute::find($item_id);
+        $attribute = Attribute::find($attributeId);
 
         DB::transaction(function () use ($attribute) {
             if ($attribute->items()->exists()) {
                 foreach ($attribute->items as $item) {
                     if ($item->products()->exists()) {
                         return toast()
-                            ->warning('У свойства "' . $attribute->name . '" есть товары ({$item->name})')
-                            ->push();
-
+                        ->warning('У свойства "' . $attribute->name . '" есть товары ({$item->name})')
+                        ->push();
                     } else {
                         $this->removeItem($item);
                     }
@@ -166,8 +169,8 @@ class Attributes extends Component
                 $this->resetFields();
 
                 toast()
-                    ->success('Свойство "' . $attribute_name . '" удалено')
-                    ->push();
+                ->success('Свойство "' . $attribute_name . '" удалено')
+                ->push();
             }
         });
     }
@@ -175,14 +178,14 @@ class Attributes extends Component
     public function closeForm()
     {
         $this->resetFields();
-        $this->dispatchBrowserEvent('get-items', $this->itemsName);
+        $this->dispatchBrowserEvent('get-items', $this->items);
         $this->dispatchBrowserEvent('close');
     }
 
     public function resetFields()
     {
         $this->name = null;
-        $this->itemsName = [];
+        $this->items = [];
         $this->attribute_id = null;
     }
 
@@ -191,14 +194,14 @@ class Attributes extends Component
         $attributes = Attribute::when($this->search, function ($query) {
             $query->whereLike(['name', 'id', 'items.name'], trim($this->search));
         })
-            ->with('items')
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->itemsPerPage);
+        ->with('items')
+        ->orderBy($this->sortField, $this->sortDirection)
+        ->paginate($this->itemsPerPage);
 
         return view('livewire.dashboard.attributes', [
-            'attributes' => $attributes,
+        'attributes' => $attributes,
         ])
-            ->extends('dashboard.app')
-            ->section('content');
+        ->extends('dashboard.app')
+        ->section('content');
     }
 }

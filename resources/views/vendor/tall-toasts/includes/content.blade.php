@@ -1,5 +1,5 @@
 <div
-  class="z-50 px-4 py-3 overflow-hidden bg-white border-r-8 rounded-md shadow cursor-pointer pointer-events-auto select-none hover:shadow-lg dark:bg-gray-900 dark:hover:bg-gray-800"
+  class="z-50 px-4 py-3 overflow-hidden border-r-8 rounded-md shadow cursor-pointer pointer-events-auto select-none bg-gray-50 hover:shadow-lg dark:bg-gray-900 dark:hover:bg-gray-800"
   x-bind:class="{
                     'border-blue-500': toast.type === 'info',
                     'border-green-500': toast.type === 'success',

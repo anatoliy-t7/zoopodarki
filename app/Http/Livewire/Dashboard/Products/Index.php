@@ -25,6 +25,7 @@ class Index extends Component
     public $attrId;
     public $productsWithoutImage = false;
     public $available = false;
+    public $noCategories = false;
     public $catalogs;
     protected $queryString = [
         'search' => ['except' => ''],
@@ -200,12 +201,18 @@ class Index extends Component
                     $query->where('category_id', $this->filteredByCategory);
                 });
             })
+            ->when($this->noCategories, function ($query) {
+                $query->doesntHave('categories')
+                ->whereHas('variations', function ($query) {
+                    $query->hasStock();
+                });
+            })
             ->when($this->variationMoreOne, function ($query) {
                 $query->has('variations', '>=', 2);
             })
             ->when($this->available, function ($query) {
                 $query->whereHas('variations', function ($query) {
-                    $query->where('stock', '>', 0);
+                     $query->hasStock();
                 });
             })
             ->when($this->productsWithoutDescription, function ($query) {

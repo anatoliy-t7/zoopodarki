@@ -3,7 +3,7 @@ namespace App\Traits;
 
 use App\Models\Attribute;
 use App\Models\AttributeItem;
-use App\Models\Brand;
+use App\Models\BrandSerie;
 use App\Models\Product1C;
 use App\Models\Product;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -23,8 +23,8 @@ trait ExportImport
         foreach ($collection->toArray() as $key => $row) {
             if (Product::where('id', $row['id'])->first()) {
                 $product = Product::where('id', $row['id'])
-                    ->with('attributes', 'attributes.attribute', 'categories', 'brand')
-                    ->first();
+                ->with('attributes', 'attributes.attribute', 'categories', 'brand')
+                ->first();
 
                 $categories = explode(',', $row['categories']);
 
@@ -57,8 +57,8 @@ trait ExportImport
         foreach ($attrsId as $itemId) {
             if (data_get($row, $itemId) !== "") {
                 $attr = Attribute::where('id', $itemId)
-                    ->with('items')
-                    ->first();
+                ->with('items')
+                ->first();
 
                 $attributeItems = explode(',', $row[$itemId]);
 
@@ -69,15 +69,15 @@ trait ExportImport
                         $attribute_item = $attr->items()->where('name', $value)->first();
 
                         if (!$product->attributes()
-                            ->where('attribute_item.attribute_id', $attr->id)
-                            ->where('attribute_item.id', $attribute_item->id)
-                            ->first()) {
+                        ->where('attribute_item.attribute_id', $attr->id)
+                        ->where('attribute_item.id', $attribute_item->id)
+                        ->first()) {
                             $product->attributes()->attach($attribute_item->id);
                         }
                     } else {
                         $attribute_item = AttributeItem::create([
-                            'name' => $value,
-                            'attribute_id' => $attr->id,
+                        'name' => $value,
+                        'attribute_id' => $attr->id,
                         ]);
 
                         $product->attributes()->attach($attribute_item->id);
@@ -97,8 +97,8 @@ trait ExportImport
         $attrs = ['морепродукты', 'птица', 'рыба', 'без курицы', 'без птицы', 'молочные продукты', 'крупы', 'потрошки', 'без риса'];
 
         $ingredients = Attribute::where('id', 26) // Ингредиенты
-            ->with('items')
-            ->first();
+        ->with('items')
+        ->first();
 
         foreach ($attrs as $key => $attr) {
             if ($attr === $row[$attr]) {
@@ -110,8 +110,8 @@ trait ExportImport
                     }
                 } else {
                     $attribute_item = AttributeItem::create([
-                        'name' => $attr,
-                        'attribute_id' => 26,
+                    'name' => $attr,
+                    'attribute_id' => 26,
                     ]);
 
                     $product->attributes()->attach($attribute_item->id);
@@ -135,30 +135,34 @@ trait ExportImport
     {
         $collection = collect();
 
-        $products = Product::whereHas('attributes', function ($query) {
-                    $query->whereIn('attribute_item.id', [1,2,3,4,5,6,7,8,60,1809,1810]);
+
+
+        $products = Product::has('categories')
+        ->whereHas('variations', function ($query) {
+                    $query->where('stock', 0);
         })
-        ->with('categories', 'attributes')
+        ->with('attributes', 'categories')
         ->get();
 
         foreach ($products as $key => $product) {
-            $arrayAttrs = [];
-            foreach ($product->attributes as $key => $attr) {
-                array_push($arrayAttrs, $attr->name);
+            $arrayCategories = [];
+            foreach ($product->categories as $key => $cat) {
+                array_push($arrayCategories, $cat->name);
             }
 
-            $arrayCategories = [];
-            foreach ($product->attributes as $key => $attr) {
-                array_push($arrayAttrs, $attr->name);
+            $arrayAttributes = [];
+            foreach ($product->attributes as $key => $cat) {
+                array_push($arrayAttributes, $cat->name);
             }
 
             $collection->push([
                 'id' => $product->id,
                 'name' => $product->name,
-                'attributes' => implode(",", $arrayAttrs),
+                'categories' => implode(", ", $arrayCategories),
+                'attributes' => implode(", ", $arrayAttributes),
             ]);
 
-            $arrayAttrs = [];
+            $arrayAttributes = [];
             $arrayCategories = [];
         }
 

@@ -75,8 +75,10 @@ class Catalogs extends Component
     public function openCategory($id)
     {
         if ($id !== null) {
-            $this->editCategory = Category::find($id)->toArray();
+          return $this->editCategory = Category::find($id)->toArray();
         }
+
+        $this->reset('editCategory');
     }
 
     public function saveCategory()

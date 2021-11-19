@@ -7,6 +7,7 @@ use App\Models\Product1C;
 use App\Traits\Delivery;
 use App\Traits\Discounts;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +28,8 @@ class Checkout extends Component
     public $items;
     public $shelterItems;
     public $subTotal;
-    public $deliveryCost = 500; // TODO высчитать доставку
-    public $deliveryCostToShelter = 500; // TODO высчитать доставку
+    public $deliveryCost = 0;
+    public $deliveryCostToShelter = 0; // TODO высчитать доставку
     public $totalAmount;
     public $totalWeight = 200;
     public $userId;
@@ -39,7 +40,7 @@ class Checkout extends Component
     public $dates;
     public $orderComment = '';
     public $needChange = null;
-    public $deliveryTime = '10:00 - 16:00';
+    public $deliveryTime = '10:00 - 17:00';
     public $orderType = 0; // 0 delivery, 1 pickup
     public $orderPaymentType = 0; // 0 online, 1 cash
     public $pickupStore = null;
@@ -47,22 +48,26 @@ class Checkout extends Component
     public $storeGuid;
     public $firstOrder = 0;
     public $userHasDiscountOnReview = false;
-    protected $listeners = ['setPickupStore', 'getContactFromComponent', 'getAddressFromComponent', 'getCartCheckout'];
+    protected $listeners = [
+        'setPickupStore',
+        'getContactFromComponent',
+        'getAddressFromComponent',
+        'getCartCheckout'
+    ];
 
     public function mount()
     {
-        if (request()->cookie('cart_id')) {
-            $this->cartId = request()->cookie('cart_id');
+
+        if (request()->session()->missing('cart_id')) {
+             redirect()->route('site.home');
+        } else {
+            $this->cartId = session('cart_id');
             $this->shelterCartId = session('shelter_cart');
 
-            \Cart::session($this->cartId);
-
-            if (\Cart::isEmpty()) {
+            if (\Cart::session($this->cartId)->isEmpty()) {
                 redirect('/');
             } else {
                 $this->getCartCheckout();
-
-                $this->calcTotalAmount();
 
                 $this->generateDatesForDelivery();
 
@@ -71,18 +76,24 @@ class Checkout extends Component
 
                     $this->getContacts();
                     $this->getAddresses();
-                    $this->updatedOrderType();
                 }
             }
-        } else {
-            redirect('/');
         }
     }
 
     public function updatedOrderType()
     {
         if ($this->orderType === 0 && !empty($this->address)) {
-            $this->getDeliveryCosts($this->totalWeight, $this->address['zip']);
+            //$this->getDeliveryCostsByBoxberry($this->totalWeight, $this->address['zip']);
+            if (Arr::has($this->address, 'lat')) {
+                $this->deliveryCost = $this->getDeliveryCostsByStore(
+                    $this->subTotal,
+                    $this->address['lat'],
+                    $this->address['lng']
+                );
+
+                // TODO $this->deliveryCostToShelter ?
+            }
         }
     }
 
@@ -109,13 +120,12 @@ class Checkout extends Component
     public function getAddressFromComponent($address)
     {
         $this->address = $address;
+        $this->render();
     }
 
     public function hydrate()
     {
         $this->getCartCheckout();
-
-        $this->calcTotalAmount();
     }
 
     public function calcTotalAmount()
@@ -165,6 +175,12 @@ class Checkout extends Component
         } else {
             $this->firstOrder = 0;
         }
+
+        if (auth()->user()) {
+            $this->updatedOrderType();
+        }
+
+        $this->calcTotalAmount();
     }
 
     public function setPickupStore($store, $storeId, $storeGuid)
@@ -214,19 +230,23 @@ class Checkout extends Component
             return $this->dispatchBrowserEvent('auth');
         }
 
+        if ($this->deliveryCost === false) {
+            return toast()->warning('Дорогой покупатель, в настоящее время мы доставляем только в пределах КАД, но совсем скоро начнем доставку и за его пределами!')->push();
+        }
+
         $this->validate([
-            'contact' => 'required',
+        'contact' => 'required',
         ]);
 
         if (0 == $this->orderType) {
             $this->validate([
-                'date' => 'required',
-                'deliveryTime' => 'required',
-                'address' => 'required',
+            'date' => 'required',
+            'deliveryTime' => 'required',
+            'address' => 'required',
             ]);
         } else {
             $this->validate([
-                'pickupStore' => 'required',
+            'pickupStore' => 'required',
             ]);
 
             $this->address = 'Магазин из которого заберут: ' . $this->pickupStore;
@@ -247,7 +267,8 @@ class Checkout extends Component
             $orderNumber = getNextOrderNumber();
 
             if (0 !== $this->firstOrder) {
-                $this->orderComment = 'Скидка за первый заказ -' . $this->firstOrder . ' рублей | ' . $this->orderComment;
+                $this->orderComment = 'Скидка за первый заказ -'
+                . $this->firstOrder . ' рублей | ' . $this->orderComment;
             }
 
             if (auth()->user()->review === 'on') {
@@ -259,23 +280,23 @@ class Checkout extends Component
             }
 
             $order = Order::create([
-                'order_number' => $orderNumber,
-                'user_id' => $this->userId,
-                'amount' => $this->totalAmount,
-                'quantity' => $this->counter,
-                'weight' => $this->totalWeight,
-                'status' => $status,
-                'payment_status' => 'pending',
-                'payment_method' => $this->orderPaymentType,
-                'need_change' => $this->needChange,
-                'order_type' => $this->orderType,
-                'pickup_store' => $this->storeGuid,
-                'date' => Carbon::parse($this->date),
-                'delivery_time' => $this->deliveryTime,
-                'delivery_cost' => $this->deliveryCost,
-                'contact' => $this->contact,
-                'address' => $this->address,
-                'order_comment' => $this->orderComment . ' | ',
+            'order_number' => $orderNumber,
+            'user_id' => $this->userId,
+            'amount' => $this->totalAmount,
+            'quantity' => $this->counter,
+            'weight' => $this->totalWeight,
+            'status' => $status,
+            'payment_status' => 'pending',
+            'payment_method' => $this->orderPaymentType,
+            'need_change' => $this->needChange,
+            'order_type' => $this->orderType,
+            'pickup_store' => $this->storeGuid,
+            'date' => Carbon::parse($this->date),
+            'delivery_time' => $this->deliveryTime,
+            'delivery_cost' => $this->deliveryCost,
+            'contact' => $this->contact,
+            'address' => $this->address,
+            'order_comment' => $this->orderComment . ' | ',
             ]);
 
             foreach ($this->items as $item) {
@@ -294,17 +315,17 @@ class Checkout extends Component
                 }
 
                 OrderItem::create([
-                    'name' => $item->name,
-                    'uuid' => $product1c->uuid,
-                    'barcode' => $product1c->barcode,
-                    'vendorcode' => $product1c->vendorcode,
-                    'quantity' => $item->quantity,
-                    'price' => $item->price,
-                    'amount' => $item->getPriceSumWithConditions(),
-                    'order_id' => $order->id,
-                    'product_id' => $item->id,
-                    'discount_comment' => $discountComment,
-                    'discount' => round($item->getPriceSum() - $item->getPriceSumWithConditions()),
+                'name' => $item->name,
+                'uuid' => $product1c->uuid,
+                'barcode' => $product1c->barcode,
+                'vendorcode' => $product1c->vendorcode,
+                'quantity' => $item->quantity,
+                'price' => $item->price,
+                'amount' => $item->getPriceSumWithConditions(),
+                'order_id' => $order->id,
+                'product_id' => $item->id,
+                'discount_comment' => $discountComment,
+                'discount' => round($item->getPriceSum() - $item->getPriceSumWithConditions()),
                 ]);
             }
 
@@ -315,17 +336,17 @@ class Checkout extends Component
                     $discountComment = 'Уценка "Помоги приюту"';
 
                     OrderItem::create([
-                        'name' => $shelterItem->name,
-                        'uuid' => $product1c->uuid,
-                        'barcode' => $product1c->barcode,
-                        'vendorcode' => $product1c->vendorcode,
-                        'quantity' => $shelterItem->quantity,
-                        'price' => $shelterItem->price,
-                        'amount' => $shelterItem->getPriceSumWithConditions(),
-                        'order_id' => $order->id,
-                        'product_id' => $shelterItem->id,
-                        'discount_comment' => $discountComment,
-                        'discount' => round($shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions()),
+                    'name' => $shelterItem->name,
+                    'uuid' => $product1c->uuid,
+                    'barcode' => $product1c->barcode,
+                    'vendorcode' => $product1c->vendorcode,
+                    'quantity' => $shelterItem->quantity,
+                    'price' => $shelterItem->price,
+                    'amount' => $shelterItem->getPriceSumWithConditions(),
+                    'order_id' => $order->id,
+                    'product_id' => $shelterItem->id,
+                    'discount_comment' => $discountComment,
+                    'discount' => round($shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions()),
                     ]);
                 }
             }
@@ -349,9 +370,8 @@ class Checkout extends Component
         });
 
         toast()
-            ->warning('Ваш заказ не создан, попробуйте еще раз')
-            ->push();
-
+        ->warning('Ваш заказ не создан, попробуйте еще раз')
+        ->push();
     }
 
     public function payCreate($order)
@@ -363,20 +383,20 @@ class Checkout extends Component
         $client->setAuth($clientId, $clientSecret);
 
         $payment = $client->createPayment([
-            'amount' => [
-                'value' => $order->amount,
-                'currency' => 'RUB',
-            ],
-            'description' => 'Заказ ' . $order->order_number,
-            'confirmation' => [
-                'type' => 'redirect',
-                'locale' => 'ru_RU',
-                'return_url' => route('site.payment.status'),
-            ],
-            'capture' => true,
-            'metadata' => [
-                'order_id' => $order->id,
-            ],
+        'amount' => [
+            'value' => $order->amount,
+            'currency' => 'RUB',
+        ],
+        'description' => 'Заказ ' . $order->order_number,
+        'confirmation' => [
+            'type' => 'redirect',
+            'locale' => 'ru_RU',
+            'return_url' => route('site.payment.status'),
+        ],
+        'capture' => true,
+        'metadata' => [
+            'order_id' => $order->id,
+        ],
         ], uniqid('', true));
 
         return redirect()->to($payment->getConfirmation()->getConfirmationUrl());
@@ -409,7 +429,7 @@ class Checkout extends Component
     public function render()
     {
         return view('livewire.site.checkout')
-            ->extends('layouts.app')
-            ->section('content');
+        ->extends('layouts.app')
+        ->section('content');
     }
 }

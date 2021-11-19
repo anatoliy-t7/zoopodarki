@@ -91,26 +91,19 @@
 
                 <div class="block space-y-4">
 
-                  <div class="w-full space-y-1">
-                    <span class="block font-bold text-gray-700">Индекс</span>
-                    <input wire:model.defer="newAddress.zip" name="address" class="field" type="text"
-                      autocomplete="street-address">
-                    @error('newAddress.zip')
-                      <span class="text-xs text-red-600">
-                        {{ $message }}
-                      </span>
-                    @enderror
-                  </div>
-
-                  <div class="w-full space-y-1">
+                  <div class="w-full space-y-2">
                     <span class="block font-bold text-gray-700">Адрес</span>
                     <input wire:model.defer="newAddress.address" name="address" class="field" type="text"
                       autocomplete="street-address" placeholder="Улица, дом, квартира">
+
+
                     @error('newAddress.address')
                       <span class="text-xs text-red-600">
                         {{ $message }}
                       </span>
                     @enderror
+
+
                   </div>
 
                 </div>

@@ -160,7 +160,6 @@ class Brands extends Component
             toast()
                 ->success('Серия удалена.')
                 ->push();
-
         }
     }
 
@@ -169,11 +168,9 @@ class Brands extends Component
         $brand = Brand::find($itemId);
 
         if ($brand->products()->exists()) {
-
             toast()
                 ->warning('У этого бренда есть товары')
                 ->push();
-
         } else {
             $brand_name = $brand->name;
             Storage::delete('brands/' . $brand->logo);
@@ -184,7 +181,6 @@ class Brands extends Component
             toast()
                 ->success('Бренд "' . $brand_name . '" удален')
                 ->push();
-
         }
     }
 
@@ -197,7 +193,7 @@ class Brands extends Component
 
     public function resetFields()
     {
-        $this->reset();
+        $this->reset('brandId', 'name', 'nameRus', 'title', 'description', 'logo', 'logoName', 'itemsName');
     }
 
     public function render()

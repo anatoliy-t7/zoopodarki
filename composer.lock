@@ -2185,16 +2185,16 @@
         },
         {
             "name": "kirschbaum-development/eloquent-power-joins",
-            "version": "2.5.0",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kirschbaum-development/eloquent-power-joins.git",
-                "reference": "042a17abd5348303ac53ca72f689909b963b3e03"
+                "reference": "91544558a8e3a824bf45c24c12a1c1efb036c933"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kirschbaum-development/eloquent-power-joins/zipball/042a17abd5348303ac53ca72f689909b963b3e03",
-                "reference": "042a17abd5348303ac53ca72f689909b963b3e03",
+                "url": "https://api.github.com/repos/kirschbaum-development/eloquent-power-joins/zipball/91544558a8e3a824bf45c24c12a1c1efb036c933",
+                "reference": "91544558a8e3a824bf45c24c12a1c1efb036c933",
                 "shasum": ""
             },
             "require": {
@@ -2241,9 +2241,9 @@
             ],
             "support": {
                 "issues": "https://github.com/kirschbaum-development/eloquent-power-joins/issues",
-                "source": "https://github.com/kirschbaum-development/eloquent-power-joins/tree/2.5.0"
+                "source": "https://github.com/kirschbaum-development/eloquent-power-joins/tree/2.5.1"
             },
-            "time": "2021-10-24T23:00:53+00:00"
+            "time": "2021-11-18T17:09:00+00:00"
         },
         {
             "name": "laravel-at/laravel-image-sanitize",
@@ -2371,16 +2371,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.72.0",
+            "version": "v8.73.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "5168f8589195a5f48b9c41ad2eec77a6c15f14f3"
+                "reference": "f60e5ceccac453864edbf001b665450886cda8fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/5168f8589195a5f48b9c41ad2eec77a6c15f14f3",
-                "reference": "5168f8589195a5f48b9c41ad2eec77a6c15f14f3",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f60e5ceccac453864edbf001b665450886cda8fc",
+                "reference": "f60e5ceccac453864edbf001b665450886cda8fc",
                 "shasum": ""
             },
             "require": {
@@ -2539,7 +2539,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-11-17T15:15:08+00:00"
+            "time": "2021-11-19T14:10:17+00:00"
         },
         {
             "name": "laravel/scout",
@@ -9541,16 +9541,16 @@
         },
         {
             "name": "usernotnull/tall-toasts",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/usernotnull/tall-toasts.git",
-                "reference": "2fb80f69f07260dcc46e720ffd72f0d8f249450b"
+                "reference": "b0a5613abc2258d014e2bac03948f37935ba7b55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/usernotnull/tall-toasts/zipball/2fb80f69f07260dcc46e720ffd72f0d8f249450b",
-                "reference": "2fb80f69f07260dcc46e720ffd72f0d8f249450b",
+                "url": "https://api.github.com/repos/usernotnull/tall-toasts/zipball/b0a5613abc2258d014e2bac03948f37935ba7b55",
+                "reference": "b0a5613abc2258d014e2bac03948f37935ba7b55",
                 "shasum": ""
             },
             "require": {
@@ -9560,11 +9560,11 @@
                 "spatie/laravel-package-tools": "^1.9"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^v3.2",
+                "friendsofphp/php-cs-fixer": "^v3.3",
                 "nunomaduro/collision": "^5.10",
                 "nunomaduro/larastan": "^0.7.15",
-                "orchestra/testbench": "^v6.22",
-                "pestphp/pest": "^v1.20",
+                "orchestra/testbench": "^v6.23",
+                "pestphp/pest": "^v1.21",
                 "pestphp/pest-plugin-laravel": "^v1.1",
                 "pestphp/pest-plugin-parallel": "^0.3.1",
                 "phpmd/phpmd": "^2.10",
@@ -9619,7 +9619,7 @@
             ],
             "support": {
                 "issues": "https://github.com/usernotnull/tall-toasts/issues",
-                "source": "https://github.com/usernotnull/tall-toasts/tree/v1.2.0"
+                "source": "https://github.com/usernotnull/tall-toasts/tree/v1.2.1"
             },
             "funding": [
                 {
@@ -9627,7 +9627,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-09T12:27:42+00:00"
+            "time": "2021-11-19T06:33:15+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -10608,23 +10608,24 @@
         },
         {
             "name": "composer/spdx-licenses",
-            "version": "1.5.5",
+            "version": "1.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/spdx-licenses.git",
-                "reference": "de30328a7af8680efdc03e396aad24befd513200"
+                "reference": "a30d487169d799745ca7280bc90fdfa693536901"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/de30328a7af8680efdc03e396aad24befd513200",
-                "reference": "de30328a7af8680efdc03e396aad24befd513200",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/a30d487169d799745ca7280bc90fdfa693536901",
+                "reference": "a30d487169d799745ca7280bc90fdfa693536901",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.3.2 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || 6.5 - 7"
+                "phpstan/phpstan": "^0.12.55",
+                "symfony/phpunit-bridge": "^4.2 || ^5"
             },
             "type": "library",
             "extra": {
@@ -10667,7 +10668,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/spdx-licenses/issues",
-                "source": "https://github.com/composer/spdx-licenses/tree/1.5.5"
+                "source": "https://github.com/composer/spdx-licenses/tree/1.5.6"
             },
             "funding": [
                 {
@@ -10683,7 +10684,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-03T16:04:16+00:00"
+            "time": "2021-11-18T10:14:14+00:00"
         },
         {
             "name": "composer/xdebug-handler",

@@ -54,7 +54,6 @@ class ShopCart extends Component
             return toast()
                 ->success('Вам необходимо авторизоваться что бы заказать товар')
                 ->push();
-
         }
 
         Waitlist::create([
@@ -68,7 +67,6 @@ class ShopCart extends Component
         return toast()
             ->success('Ваш заказ принят, мы сообщим вам когда товар поступит в продажу')
             ->push();
-
     }
 
     public function addToCart(int $itemId, int $quantity)

@@ -101,14 +101,11 @@
               </div>
               <div x-cloak x-show="settingMenu" x-transition.in.duration.300ms.out.duration.300ms class="text-sm ">
 
-                @can('admin')
+                <a class="flex items-center px-4 py-2 pl-6  hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/settings/main') ? 'bg-gray-800' : '' }}"
+                  href="{{ route('dashboard.settings.main') }}">Основные</a>
 
-                  <a class="flex items-center px-4 py-2 pl-6  hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/settings/main') ? 'bg-gray-800' : '' }}"
-                    href="{{ route('dashboard.settings.main') }}">Основные</a>
-
-                  <a class="flex items-center px-4 py-2 pl-6 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/settings/backup') ? 'bg-gray-800' : '' }}"
-                    href="{{ route('dashboard.settings.backup') }}">BackUp DB</a>
-                @endcan
+                <a class="flex items-center px-4 py-2 pl-6 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/settings/backup') ? 'bg-gray-800' : '' }}"
+                  href="{{ route('dashboard.settings.backup') }}">BackUp DB</a>
 
               </div>
             </div>
@@ -144,7 +141,7 @@
 
             <a class="flex items-center px-4 py-3 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-400 focus:outline-none focus:ring {{ request()->is('dashboard/logs') ? 'bg-gray-800' : '' }}"
               href="{{ route('dashboard.logs') }}">
-              <x-tabler-tornado class="w-6 h-6" />
+              <x-tabler-bug class="w-6 h-6" />
               <span class="mx-4">Logs</span>
             </a>
           </div>
@@ -154,18 +151,12 @@
 
     </div>
     <div>
-      <a title="Выйти" href="{{ route('logout') }}" class="block px-4 py-3" onclick="event.preventDefault();
-            document.getElementById('logout-form').submit();">
-        <svg class="text-gray-400 fill-current w-7 h-7" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round"
-          xmlns="http://www.w3.org/2000/svg" aria-label="door-leave" viewBox="0 0 32 32" title="door-leave">
-          <g>
-            <path
-              d="M27.708,15.293c0.39,0.39 0.39,1.024 0,1.414l-4,4c-0.391,0.391 -1.024,0.391 -1.415,0c-0.39,-0.39 -0.39,-1.024 0,-1.414l2.293,-2.293l-11.586,0c-0.552,0 -1,-0.448 -1,-1c0,-0.552 0.448,-1 1,-1l11.586,0l-2.293,-2.293c-0.39,-0.39 -0.39,-1.024 0,-1.414c0.391,-0.391 1.024,-0.391 1.415,0l4,4Z">
-            </path>
-            <path
-              d="M11.999,8c0.001,0 0.001,0 0.002,0c1.699,-0.001 2.859,0.045 3.77,0.25c0.005,0.001 0.01,0.002 0.015,0.003c0.789,0.173 1.103,0.409 1.291,0.638c0,0 0,0.001 0,0.001c0.231,0.282 0.498,0.834 0.679,2.043c0,0.001 0,0.002 0.001,0.003c0.007,0.048 0.014,0.097 0.021,0.147c0.072,0.516 0.501,0.915 1.022,0.915c0.584,0 1.049,-0.501 0.973,-1.08c-0.566,-4.332 -2.405,-4.92 -7.773,-4.92c-7,0 -8,1 -8,10c0,9 1,10 8,10c5.368,0 7.207,-0.588 7.773,-4.92c0.076,-0.579 -0.389,-1.08 -0.973,-1.08c-0.521,0 -0.95,0.399 -1.022,0.915c-0.007,0.05 -0.014,0.099 -0.021,0.147c-0.001,0.001 -0.001,0.002 -0.001,0.003c-0.181,1.209 -0.448,1.762 -0.679,2.044l0,0c-0.188,0.229 -0.502,0.465 -1.291,0.638c-0.005,0.001 -0.01,0.002 -0.015,0.003c-0.911,0.204 -2.071,0.25 -3.77,0.25c-0.001,0 -0.001,0 -0.002,0c-1.699,0 -2.859,-0.046 -3.77,-0.25c-0.005,-0.001 -0.01,-0.002 -0.015,-0.003c-0.789,-0.173 -1.103,-0.409 -1.291,-0.638l0,0c-0.231,-0.282 -0.498,-0.835 -0.679,-2.043c0,-0.001 0,-0.003 -0.001,-0.005c-0.189,-1.247 -0.243,-2.848 -0.243,-5.061c0,0 0,0 0,0c0,-2.213 0.054,-3.814 0.243,-5.061c0.001,-0.002 0.001,-0.004 0.001,-0.005c0.181,-1.208 0.448,-1.76 0.679,-2.042c0,0 0,-0.001 0,-0.001c0.188,-0.229 0.502,-0.465 1.291,-0.638c0.005,-0.001 0.01,-0.002 0.015,-0.003c0.911,-0.205 2.071,-0.251 3.77,-0.25Z">
-            </path>
-          </g>
+      <a title="Выйти" href="{{ route('logout') }}" class="block px-4 py-3 group"
+        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <path class="text-gray-600 stroke-current group-hover:text-orange-500 focus:text-orange-500"
+            stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M8.9 7.56c.31-3.6 2.16-5.07 6.21-5.07h.13c4.47 0 6.26 1.79 6.26 6.26v6.52c0 4.47-1.79 6.26-6.26 6.26h-.13c-4.02 0-5.87-1.45-6.2-4.99M15 12H3.62m2.23-3.35L2.5 12l3.35 3.35" />
         </svg>
       </a>
       <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">

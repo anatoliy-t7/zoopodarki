@@ -1,8 +1,8 @@
 <div x-data="toggleSearch" @close.window="closeSearch(event)" class="relative">
-  <button class="p-1" :class="search ? 'text-blue-600' : ''" @click="openSearch()">
-    <svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path
-        d="M21.71,20.29,18,16.61A9,9,0,1,0,16.61,18l3.68,3.68a1,1,0,0,0,1.42,0A1,1,0,0,0,21.71,20.29ZM11,18a7,7,0,1,1,7-7A7,7,0,0,1,11,18Z" />
+  <button class="p-1" :class="search ? 'text-blue-600' : 'text-gray-600'" @click="openSearch()">
+    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <path class="text-gray-600 stroke-current group-hover:text-orange-500 focus:text-orange-500" stroke-linecap="round"
+        stroke-linejoin="round" stroke-width="1.5" d="M11.5 21a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19zM22 22l-2-2" />
     </svg>
   </button>
 

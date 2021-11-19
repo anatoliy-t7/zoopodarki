@@ -161,10 +161,9 @@
 
                   <x-units :unit="$product->unit" :value="$item->unit_value" :wire:key="$product->id" />
 
-                  <div class="w-full">
-                    <link itemprop="availability" href="http://schema.org/InStock">
+                  <div class="relative z-10 w-full">
+                    <link itemprop="availability" href="http://schema.org/InStock" />
                     @if ($item->stock <= 5 && $item->stock > 0)
-
                       <div class="flex items-center justify-center w-full mb-1 space-x-2 text-sm tooltip"
                         data-title="Осталось на складе {{ $item->stock }}">
                         <div>{{ $item->stock }}</div>

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Site;
 use App\Models\Address;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
 
@@ -14,7 +15,10 @@ class UserAddresses extends Component
     public $address;
     public $addressId;
     public $addresses;
-    public $newAddress;
+    public $newAddress = [
+        'address' => '',
+        'extra' => ''
+    ];
 
     public function removeAddress($addressId)
     {
@@ -25,7 +29,6 @@ class UserAddresses extends Component
         toast()
             ->success('Адрес удален')
             ->push();
-
     }
 
     public function editAddress($addressId)
@@ -40,23 +43,23 @@ class UserAddresses extends Component
     public function addNewAddress()
     {
         $this->validate([
-            'newAddress.zip' => 'required',
             'newAddress.address' => 'required',
         ]);
+
 
         DB::transaction(function () {
             if ($this->addressId) {
                 $this->address = Address::find($this->addressId);
 
                 $this->address->update([
-                    'zip' => $this->newAddress['zip'],
+                 //   'zip' => $this->newAddress['zip'],
                     'address' => $this->newAddress['address'],
                     'extra' => $this->newAddress['extra'],
                     'user_id' => auth()->user()->id,
                 ]);
             } else {
                 $this->address = Address::create([
-                    'zip' => $this->newAddress['zip'],
+                  //  'zip' => $this->newAddress['zip'],
                     'address' => $this->newAddress['address'],
                     'user_id' => auth()->user()->id,
                 ]);
@@ -67,6 +70,20 @@ class UserAddresses extends Component
 
                 $this->address->save();
             }
+
+            $addressData = $this->getCustomerLocation($this->address['address']);
+
+            if ($addressData === false) {
+                $this->address->zip = null;
+                $this->address->lat = null;
+                $this->address->lng = null;
+            } else {
+                $this->address->zip = $addressData['zip'];
+                $this->address->lat = $addressData['lat'];
+                $this->address->lng = $addressData['lng'];
+            }
+
+            $this->address->save();
 
             User::where('id', auth()->user()->id)->update([
                 'pref_address' => $this->address->id,
@@ -102,6 +119,37 @@ class UserAddresses extends Component
         $this->getAddresses();
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('close-form');
+    }
+
+    public function getCustomerLocation(String $address = '')
+    {
+
+        $defaultCity = '%2C+Санкт-Петербург%2C+Россия';
+
+        $response = Http::retry(3, 100)->get(
+            'https://geocode.search.hereapi.com/v1/geocode?q='
+            . $address
+            . $defaultCity
+            . '&apiKey='.config('constants.here_com_token')
+        );
+
+        if ($response->successful()) {
+           // dd($response->json());
+            return [
+                'zip' => $response->json()['items'][0]['address']['postalCode'],
+                'lat' => $response->json()['items'][0]['position']['lat'],
+                'lng' => $response->json()['items'][0]['position']['lng'],
+            ];
+        } elseif ($response->failed()) {
+            \Log::error('getCustomerLocation the status code is >= 400');
+            return false;
+        } elseif ($response->clientError()) {
+            \Log::error('getCustomerLocation the response has a 400 level status code');
+            return false;
+        } elseif ($response->serverError()) {
+            \Log::error('getCustomerLocation the response has a 500 level status code');
+            return false;
+        }
     }
 
     public function render()

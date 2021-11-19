@@ -1,102 +1,102 @@
-@import "_all";
-@import "~@splidejs/splide/dist/css/splide.min.css";
+@import '_all';
+@import '~@splidejs/splide/dist/css/splide.min.css';
 
 .field {
-    @apply w-full px-4 py-3 font-semibold border border-gray-200 bg-gray-50 rounded-2xl focus:outline-none focus:ring focus:bg-white;
+	@apply w-full px-4 py-3 font-semibold border border-gray-200 bg-gray-50 rounded-2xl focus:outline-none focus:ring focus:bg-white;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-    @apply rounded-lg bg-gray-50;
+	@apply rounded-lg bg-gray-50;
 }
 
 .scrollbar::-webkit-scrollbar {
-    @apply w-1.5 bg-gray-50;
+	@apply w-1.5 bg-gray-50;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-    @apply rounded-lg bg-yellow-200;
+	@apply rounded-lg bg-yellow-200;
 }
 
 .scrollbar:hover::-webkit-scrollbar-thumb {
-    @apply bg-yellow-400;
+	@apply bg-yellow-400;
 }
 
 .splide__arrow {
-    background: white;
+	background: white;
 }
 .splide--nav > .splide__track > .splide__list > .splide__slide.is-active {
-    @apply border-gray-200 border;
+	@apply border-gray-200 border;
 }
 
 .slider-in-catalog .splide__arrow--prev {
-    @apply -left-6 md:-left-8;
+	@apply -left-6 md:-left-8;
 }
 
 .slider-in-catalog .splide__arrow--next {
-    @apply -right-6 md:-right-8;
+	@apply -right-6 md:-right-8;
 }
 
 textarea {
-    resize: none;
-    min-height: 70px;
+	resize: none;
+	min-height: 70px;
 }
 
-input[type="range"]::-webkit-slider-thumb {
-    @apply w-5 h-5 appearance-none pointer-events-auto;
+input[type='range']::-webkit-slider-thumb {
+	@apply w-5 h-5 appearance-none pointer-events-auto;
 }
 
 .navbar {
-    transition: all 0.4s;
-    @apply py-3 fixed top-0 left-0 mt-10;
-    box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 21px 0px;
+	transition: all 0.4s;
+	@apply py-3 fixed top-0 left-0 mt-10;
+	box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 21px 0px;
 }
 
 .mobmenu {
-    transition: all 0.4s;
-    @apply py-2 fixed top-0 left-0 h-14;
+	transition: all 0.4s;
+	@apply py-2 fixed top-0 left-0 h-14;
 }
 
 .scroll-down .navbar,
 .scroll-down .mobmenu {
-    transform: translate3d(0, -100%, 0);
-    transition: all 0.4s;
-    @apply mt-0;
+	transform: translate3d(0, -100%, 0);
+	transition: all 0.4s;
+	@apply mt-0;
 }
 
 .scroll-up .navbar {
-    @apply py-2 mt-0 h-16;
-    transform: none;
-    box-shadow: 0 0.125rem 0.25rem rgba(31, 17, 17, 0.075);
+	@apply py-2 mt-0 h-16;
+	transform: none;
+	box-shadow: 0 0.125rem 0.25rem rgba(31, 17, 17, 0.075);
 }
 
 .scroll-up .mobmenu {
-    @apply py-2 mt-0;
-    transform: none;
+	@apply py-2 mt-0;
+	transform: none;
 }
 
 .w-cart {
-    width: 100%;
-    max-width: 600px;
+	width: 100%;
+	max-width: 600px;
 }
 
 #map {
-    min-width: 680px;
+	min-width: 680px;
 }
 
 .block-map {
-    height: 70vh;
+	height: 70vh;
 }
 
 @media (max-width: 768px) {
-    .w-cart {
-        width: 100%;
-        max-width: 100%;
-    }
-    #map {
-        min-width: 100vw;
-    }
-    .block-map {
-        height: 50vh;
-        overflow-y: auto;
-    }
+	.w-cart {
+		width: 100vw;
+		max-width: 100vw;
+	}
+	#map {
+		min-width: 100vw;
+	}
+	.block-map {
+		height: 50vh;
+		overflow-y: auto;
+	}
 }

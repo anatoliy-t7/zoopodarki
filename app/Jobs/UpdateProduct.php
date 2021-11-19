@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Models\AttributeItem;
 
 class UpdateProduct implements ShouldQueue
 {
@@ -22,7 +23,6 @@ class UpdateProduct implements ShouldQueue
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -38,28 +38,33 @@ class UpdateProduct implements ShouldQueue
             $this->update($product);
         }
 
+        $attributes = AttributeItem::where('name', '')->get();
+
+        foreach ($attributes as $key => $attr) {
+            $attr->delete();
+            $this->count = $this->count + 1;
+        }
+
         logger($this->count);
     }
 
     public function update($product)
     {
 
-        $this->count = $this->count + 1;
-
-        $prodAttrs       = collect();
-        $prodAttrsUnique = [];
+        $prodAttrs = [];
+        // $prodAttrsUnique = [];
 
         foreach ($product->attributes as $attr) {
+            if ($attr->name === "") {
+                 array_push($prodAttrs, $attr->id);
 
-            $prodAttrs->push($attr->id);
-
+            }
         }
 
-        $prodAttrsUnique = $prodAttrs->unique()->values()->all();
+        // $prodAttrsUnique = $prodAttrs->unique()->values()->all();
 
-        $product->attributes()->detach();
-        $product->attributes()->attach($prodAttrsUnique);
+        $product->attributes()->detach($prodAttrs);
+
 
     }
-
 }

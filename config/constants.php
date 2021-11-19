@@ -42,7 +42,9 @@ return [
     ],
 
     'phone' => env('ZOO_PHONE', '+71234567890'),
-    'boxberry_token' => env('BOXBERRY_TOKEN', '77cd81a164c86a1f67ccb0ac9e822c1e'),
-
+    'boxberry_token' => env('BOXBERRY_TOKEN', '1111'),
+    'here_com_token' => env('HERE_COM_TOKEN', '1111'),
+    'lat_departure' => env('LAT_DEPARTURE', '59.91954757368843'),
+    'lng_departure' => env('LNG_DEPARTURE', '30.467041076550657'),
 
 ];

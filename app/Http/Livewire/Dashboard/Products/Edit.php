@@ -330,8 +330,8 @@ class Edit extends Component
             'status' => 'required',
             //'readyCategories' => 'required', // TODO test
             //'productBrand' => 'required', // TODO test
-            'meta_description' => 'max:150',
-            'meta_title' => 'max:70',
+            //'meta_description' => 'max:150',
+            //'meta_title' => 'max:70',
         ]);
 
         DB::transaction(function () {
@@ -426,7 +426,7 @@ class Edit extends Component
             $this->dispatchBrowserEvent('update-query-id', $this->productId);
 
             toast()
-                ->success('Товар ' . $functionProduct->name . ' сохраннен')
+                ->success('Товар ' . $functionProduct->name . ' сохранен')
                 ->push();
         });
     }
