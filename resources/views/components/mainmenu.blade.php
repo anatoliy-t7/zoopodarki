@@ -1,10 +1,14 @@
-<div x-data="mainMenu">
+<div x-data="{ open: false, tab: 1 }"
+  x-effect="document.body.classList.toggle('overflow-hidden', open), document.body.classList.toggle('pr-4', open)">
   <div>
-    <button x-on:click="toggle()"
-      class="flex items-center px-3 py-2 space-x-2 font-semibold border-2 border-blue-500 rounded-xl hover:bg-blue-500 hover:text-white focus:bg-blue-500"
-      :class="open  ? 'bg-blue-500 text-white' : 'bg-transparent text-blue-500'">
-      <x-tabler-layout-2 class="w-5 h-5 fill-current" />
-      <div>Все товары</div>
+    <button x-on:click="open = !open"
+      class="flex items-center px-3 py-2 space-x-2 text-white bg-orange-500 border-2 border-orange-500 rounded-xl focus:outline-none hover:bg-orange-600 focus:bg-orange-600"
+      :class="open  ? 'bg-orange-600' : ' '">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path class="text-white stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M4.41 16.75C4.17 19.64 6.35 22 9.25 22h4.79c3.26 0 5.5-2.63 4.96-5.85-.57-3.38-3.83-6.15-7.26-6.15-3.72 0-7.02 3.04-7.33 6.75zm6.06-9.25a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm6.83 1.2a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3.7 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-17.03-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+      </svg>
+      <div class="font-semibold">Каталог</div>
     </button>
   </div>
 
@@ -40,8 +44,7 @@
               <div class="grid w-full grid-flow-col grid-rows-6 max-h-64 gap-x-4 gap-y-1">
                 @foreach ($catalog->categories as $category)
                   <div class="">
-                    <a href="
-                              {{ route('site.category', ['catalog' => $catalog->slug, 'slug' => $category->slug]) }}"
+                    <a href="{{ route('site.category', ['catalog' => $catalog->slug, 'slug' => $category->slug]) }}"
                       class="block p-2 text-base text-gray-800 hover:text-orange-500">
                       {{ $category->name }}
                     </a>
@@ -58,7 +61,7 @@
   </div>
 
   <div x-cloak x-show="open" x-transition.opacity.duration.300
-    class="fixed top-0 bottom-0 left-0 right-0 z-0 w-screen h-full mt-32 overflow-hidden bg-gray-900 bg-opacity-50 pointer-events-auto">
+    class="fixed top-0 bottom-0 left-0 right-0 z-0 w-screen h-full overflow-hidden bg-gray-900 bg-opacity-50 pointer-events-auto mt-28">
   </div>
 
   <script>

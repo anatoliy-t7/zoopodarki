@@ -44,7 +44,7 @@
             @enderror
           </div>
 
-          <div class="___class_+?14___">
+          <div>
             <button x-bind:disabled="valid === false" x-on:click="createOtp(), $nextTick(() => {
               setTimeout(() => {
                   document.getElementById('otp').focus();
@@ -114,7 +114,7 @@
             @enderror
           </div>
 
-          <div class="___class_+?35___">
+          <div>
             <button type="button" x-on:click="checkUser()"
               class="flex items-center justify-center w-full py-4 font-bold text-white bg-green-500 border-green-500 rounded-2xl md:text-left hover:bg-green-600 hover:border-green-600">
               <span>Отправить</span>

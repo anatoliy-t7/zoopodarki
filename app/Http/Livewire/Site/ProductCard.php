@@ -57,7 +57,6 @@ class ProductCard extends Component
         toast()
             ->success('Наш оператор перезвонит вам в ближайшее время')
             ->push();
-
     }
 
     public function getProduct()
@@ -96,7 +95,7 @@ class ProductCard extends Component
             ->whereHas('categories', function ($query) {
                 $query->where('category_id', $this->category->id);
             })
-            ->whereNotIn('name', [$this->product->name])
+            ->whereNotIn('id', [$this->product->id])
             ->has('media')
             ->with('brand')
             ->with('unit')

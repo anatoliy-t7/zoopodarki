@@ -22,14 +22,15 @@
         </div>
       </header>
 
-      <header id="navbar" class="z-30 w-full px-3 text-gray-700 bg-white navbar">
+      <header id="navbar" class="z-30 w-screen px-3 text-gray-700 bg-white navbar">
         <div class="flex items-center justify-between max-w-screen-xl mx-auto">
 
           <div class="flex items-center justify-start space-x-12">
             <div class="flex items-center justify-between p-2">
-              <a href="/" class="text-lg leading-normal font-semibol focus:outline-none">
-                <img src="/assets/img/logo.png" alt="Логотип {{ config('app.name') }}"
-                  title="{{ config('app.name') }}" class="h-8">
+              <a href="/" class="flex items-center text-lg leading-normal font-semibol focus:outline-none"
+                title="Логотип {{ config('app.name') }}">
+
+                <span><span class="font-bold">Zoo</span>подарки</span>
               </a>
             </div>
 

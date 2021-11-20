@@ -17,17 +17,17 @@
 
       @if ($productId)
         <div class="px-3 py-2 text-gray-500 bg-white rounded-2xl">
-          {{-- @if ($product->categories()->exists() and $product->categories[0]->catalog)
-        <a target="_blank" class="flex items-center space-x-2 group"
-          href="{{ route('site.product', [$product->categories[0]->catalog->slug, $product->categories[0]->slug, $product->slug]) }}">
-        @endif --}}
+          @if ($product->categories->isNotEmpty())
+            <a target="_blank" class="flex items-center space-x-2 group"
+              href="{{ route('site.product', [$product->categories[0]->catalog->slug, $product->categories[0]->slug, $product->slug]) }}">
+          @endif
 
           ID <span class="pl-2 font-bold">{{ $productId }}</span>
 
-          {{-- @if ($product->categories->exists() and $product->categories[0]->catalog)
-          <x-tabler-external-link class="w-5 h-5 text-gray-500 stroke-current group-hover:text-blue-500" />
-        </a>
-        @endif --}}
+          @if ($product->categories->isNotEmpty())
+            <x-tabler-external-link class="w-5 h-5 text-gray-500 stroke-current group-hover:text-blue-500" />
+            </a>
+          @endif
 
         </div>
 

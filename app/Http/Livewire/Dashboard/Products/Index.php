@@ -88,11 +88,11 @@ class Index extends Component
     {
         $product = Product::onlyTrashed()->where('id', $id)->with(['categories', 'attributes'])->first();
 
-        if ($product->categories && $product->categories()->exists()) {
+        if ($product->categories && $product->categories->isNotEmpty()) {
             $product->categories()->detach();
         }
 
-        if ($product->attributes && $product->attributes()->exists()) {
+        if ($product->attributes && $product->attributes->isNotEmpty()) {
             $product->attributes()->detach();
         }
 
@@ -112,11 +112,11 @@ class Index extends Component
         $products = Product::onlyTrashed()->get();
 
         foreach ($products as $product) {
-            if ($product->categories()->exists()) {
+            if ($product->categories->isNotEmpty()) {
                 $product->categories()->detach();
             }
 
-            if ($product->attributes()->exists()) {
+            if ($product->attributes->isNotEmpty()) {
                 $product->attributes()->detach();
             }
 

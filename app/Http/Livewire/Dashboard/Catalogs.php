@@ -75,7 +75,7 @@ class Catalogs extends Component
     public function openCategory($id)
     {
         if ($id !== null) {
-          return $this->editCategory = Category::find($id)->toArray();
+            return $this->editCategory = Category::find($id)->toArray();
         }
 
         $this->reset('editCategory');
@@ -121,7 +121,6 @@ class Catalogs extends Component
             toast()
                 ->success('Категория "' . $this->editCategory['name'] . '" сохранена')
                 ->push();
-
         }
 
         $this->editCategory = [];
@@ -179,12 +178,10 @@ class Catalogs extends Component
     public function removeItem($id)
     {
         if ($category = Category::find($id)) {
-            if ($category->products()->exists()) {
-
+            if ($category->products->isNotEmpty()) {
                 toast()
                     ->warning('У категории "' . $category->name . '" есть товары')
                     ->push();
-
             } else {
                 $category->delete();
 
@@ -195,13 +192,11 @@ class Catalogs extends Component
                 toast()
                     ->success('Категория удалена.')
                     ->push();
-
             }
         } else {
             toast()
                 ->warning('Категория не удалена.')
                 ->push();
-
         }
     }
 
@@ -212,11 +207,10 @@ class Catalogs extends Component
         DB::transaction(function () use ($catalog) {
             if ($catalog->categories()->exists()) {
                 foreach ($catalog->categories as $item) {
-                    if ($item->products()->exists()) {
+                    if ($item->products->isNotEmpty()) {
                         return toast()
                             ->warning('У категории "' . $item->name . '" есть товары')
                             ->push();
-
                     } else {
                         $this->removeItem($item);
                     }
@@ -229,7 +223,6 @@ class Catalogs extends Component
                     toast()
                         ->success('Каталог "' . $catalog_name . '" удален.')
                         ->push();
-
                 }
             } else {
                 $catalog_name = $catalog->name;
@@ -240,7 +233,6 @@ class Catalogs extends Component
                 toast()
                     ->success('Каталог "' . $catalog_name . '" удален.')
                     ->push();
-
             }
         });
     }

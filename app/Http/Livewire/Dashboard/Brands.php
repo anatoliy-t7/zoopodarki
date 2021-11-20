@@ -167,7 +167,7 @@ class Brands extends Component
     {
         $brand = Brand::find($itemId);
 
-        if ($brand->products()->exists()) {
+        if ($brand->products->isNotEmpty()) {
             toast()
                 ->warning('У этого бренда есть товары')
                 ->push();

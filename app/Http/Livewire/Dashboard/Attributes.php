@@ -130,7 +130,7 @@ class Attributes extends Component
 
             $this->dispatchBrowserEvent('close-confirm');
 
-            if ($attributeItem->products()->exists()) {
+            if ($attributeItem->products->isNotEmpty()) {
                 return toast()
                 ->success('Вид свойства прикреплен к товару.')
                 ->push();
@@ -152,9 +152,9 @@ class Attributes extends Component
         $attribute = Attribute::find($attributeId);
 
         DB::transaction(function () use ($attribute) {
-            if ($attribute->items()->exists()) {
+            if ($attribute->items->isNotEmpty()) {
                 foreach ($attribute->items as $item) {
-                    if ($item->products()->exists()) {
+                    if ($item->products->isNotEmpty()) {
                         return toast()
                         ->warning('У свойства "' . $attribute->name . '" есть товары ({$item->name})')
                         ->push();

@@ -26,7 +26,6 @@ class CatalogPage extends Component
                 }]
             )
             ->get();
-
     }
 
     public function render()

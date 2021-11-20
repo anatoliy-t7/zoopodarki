@@ -120,7 +120,7 @@ class Checkout extends Component
     public function getAddressFromComponent($address)
     {
         $this->address = $address;
-        $this->render();
+        $this->render(); // TODO not working
     }
 
     public function hydrate()

@@ -98,7 +98,7 @@ class Edit extends Component
         $this->productId = request()->query('id', $this->productId);
 
         if (Product::where('id', $this->productId)->with('media')->first()) {
-            $functionProduct = Product::where('id', $this->productId)->with('media')->first();
+            $functionProduct = Product::where('id', $this->productId)->with('media', 'categories')->first();
             $this->product = $functionProduct;
             $this->name = $functionProduct->name;
             $this->meta_title = $functionProduct->meta_title;

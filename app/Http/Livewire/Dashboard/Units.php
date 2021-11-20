@@ -76,12 +76,10 @@ class Units extends Component
     {
         $unit = ProductUnit::find($unitId);
 
-        if ($unit->products()->exists()) {
-
+        if ($unit->products->isNotEmpty()) {
             toast()
                 ->warning('С этой единицей измерения связан товар')
                 ->push();
-
         } else {
             $unit_name = $unit->name;
             $unit->delete();
@@ -91,7 +89,6 @@ class Units extends Component
             toast()
                 ->warning('Единица измерения "' . $unit_name . '" удалена.')
                 ->push();
-
         }
     }
 

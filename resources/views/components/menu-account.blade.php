@@ -67,15 +67,10 @@
 
               <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path class="text-gray-600 stroke-current group-hover:text-orange-500 focus:text-orange-500"
-                  stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"
-                  d="M10.11 11.15H7.46c-.63 0-1.14.51-1.14 1.14v5.12h3.79v-6.26 0Z" />
-                <path class="text-gray-600 stroke-current group-hover:text-orange-500 focus:text-orange-500"
-                  stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"
-                  d="M12.761 6.6h-1.52c-.63 0-1.14.51-1.14 1.14v9.66h3.79V7.74c0-.63-.5-1.14-1.13-1.14zm3.787 6.25h-2.65v4.55h3.79v-3.41c-.01-.63-.52-1.14-1.14-1.14z" />
-                <path class="text-gray-600 stroke-current group-hover:text-orange-500 focus:text-orange-500"
                   stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                  d="M9 22h6c5 0 7-2 7-7V9c0-5-2-7-7-7H9C4 2 2 4 2 9v6c0 5 2 7 7 7Z" />
+                  d="M6.44 2h11.11C21.11 2 22 2.89 22 6.44v6.33c0 3.56-.89 4.44-4.44 4.44H6.44C2.89 17.22 2 16.33 2 12.78V6.44C2 2.89 2.89 2 6.44 2zM12 17.22V22M2 13h20M7.5 22h9" />
               </svg>
+
               <span>Панель</span>
             </a>
           @endcan

@@ -99,15 +99,15 @@
             </div>
 
             <div class="space-y-6 ">
-              @forelse ($attrs as $attribute)
+              @forelse ($attrs as $attr)
                 <div>
-                  @if ($attribute->items->count() !== 0 and $attribute->id !== 46)
+                  @if ($attr->items->count() !== 0 and $attr->id !== 46)
 
-                    <div x-data="searchAttribute{{ $attribute->id }}" class="space-y-3">
-                      <div class="font-bold">{{ $attribute->name }}</div>
+                    <div x-data="searchAttribute{{ $attr->id }}" class="space-y-3">
+                      <div class="font-bold">{{ $attr->name }}</div>
 
                       <div>
-                        @if ($attribute->items->count() >= 10)
+                        @if ($attr->items->count() >= 10)
 
                           <input x-ref="searchField" x-model="search"
                             x-on:keydown.window.prevent.slash="$refs.searchField.focus()" placeholder="Поиск"
@@ -118,21 +118,20 @@
 
                       <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
 
-                        <template x-for="(item, index) in filteredAttribute" :key="item.id" hidden>
+                        <template x-for="(item, index) in filteredAttribute" :key="index" hidden>
                           <div class="container-checkbox">
                             <span class="text-xs" x-text="item.name"></span>
-                            <input :value="item.id" type="checkbox" x-model.number.debounce.700="attributeFilter"
-                              x-on:click="moveUp(index, $event.target.checked)">
+                            <input :value="item.id" type="checkbox" x-model.number.debounce.700="attributeFilter">
                             <span class="checkmark"></span>
                           </div>
                         </template>
 
                         <script>
                           document.addEventListener('alpine:init', () => {
-                            Alpine.data('searchAttribute{{ $attribute->id }}', () => ({
+                            Alpine.data('searchAttribute{{ $attr->id }}', () => ({
                               search: "",
                               attributeFilter: @entangle('attFilter'),
-                              attributerData: @json($attribute->items),
+                              attributerData: @json($attr->items),
                               get filteredAttribute() {
                                 if (this.search === "") {
                                   return this.attributerData;
@@ -143,12 +142,6 @@
                                     .includes(this.search.toLowerCase());
                                 });
                               },
-                              moveUp(from, checked) {
-                                if (checked) {
-                                  var f = this.attributerData.splice(from, 1)[0];
-                                  this.attributerData.splice(0, 0, f);
-                                }
-                              }
                             }))
                           });
                         </script>

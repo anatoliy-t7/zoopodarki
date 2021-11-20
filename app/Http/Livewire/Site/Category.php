@@ -3,11 +3,11 @@ namespace App\Http\Livewire\Site;
 
 use App\Models\AttributeItem;
 use App\Models\Product;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Artesaos\SEOTools\Facades\SEOMeta;
-use Artesaos\SEOTools\Facades\OpenGraph;
 
 class Category extends Component
 {
@@ -150,11 +150,12 @@ class Category extends Component
             );
         }
 
-        $this->attrs = $attrs->where('range', 0);
+        $this->attrs = $attrs->where('range', 0)->all();
     }
 
     public function updatedAttFilter($ids = [])
     {
+
         $attFilters = AttributeItem::whereIn('id', $ids)
             ->get();
 
@@ -221,6 +222,7 @@ class Category extends Component
     {
         $products = Product::isStatusActive()
             ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
+            ->has('media')
             ->whereHas('categories', fn ($q) => $q->where('category_id', $this->category->id))
             ->whereHas('variations', function ($query) {
                 $query->whereBetween('price', [$this->minPrice, $this->maxPrice])->hasStock();
@@ -242,7 +244,10 @@ class Category extends Component
                     $query1->where(function ($subQuery) {
                         if ($this->attributesRanges > 0) {
                             foreach ($this->attributesRanges as $key => $range) {
-                                return $subQuery->where('attribute_item.attribute_id', $this->attributesRanges[$key]['id'])
+                                return $subQuery->where(
+                                    'attribute_item.attribute_id',
+                                    $this->attributesRanges[$key]['id']
+                                )
                                     ->whereBetween('name', [
                                         $this->attributesRanges[$key]['min'],
                                         $this->attributesRanges[$key]['max'],
@@ -260,17 +265,20 @@ class Category extends Component
             ->orderBy($this->sortSelectedType, $this->sortBy)
             ->paginate(32);
 
-        if ($this->attFilter) {
-            $this->getAttributes($products->pluck('attributes')->flatten()->pluck('id')->unique()->values()->toArray());
-        } else {
-            $this->getAttributes();
-        }
-
         $this->resetPage();
 
         $this->emit('lozad', '');
 
         $this->productsCount = $products->count();
+
+
+
+        // TODO пропадают фильтры
+        if ($this->attFilter) {
+            $this->getAttributes($products->pluck('attributes')->flatten()->pluck('id')->unique()->values()->toArray());
+        } else {
+            $this->getAttributes();
+        }
 
         return view('livewire.site.category', [
             'products' => $products,

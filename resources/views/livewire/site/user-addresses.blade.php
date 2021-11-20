@@ -2,7 +2,7 @@
   <x-modal>
     <x-slot name="button">
       <div x-on:click="open()"
-        class="flex items-center justify-center w-full px-4 py-3 space-x-1 bg-gray-100 border border-gray-100 cursor-pointer hover:border-gray-300 h-14 rounded-xl">
+        class="flex items-center justify-center w-full px-4 py-3 space-x-1 bg-gray-100 border border-gray-300 cursor-pointer hover:border-gray-400 h-14 rounded-xl">
         <div>Мои адреса</div>
         <x-tabler-chevron-right class="w-6 h-6 text-gray-400 stroke-current" />
       </div>
@@ -10,8 +10,8 @@
 
     <x-slot name="content">
 
-      <x-loader />
-      <div wire:loading.remove>
+
+      <div>
 
         <h4 class="text-xl font-bold text-center ">Адреса</h4>
 
@@ -92,10 +92,57 @@
                 <div class="block space-y-4">
 
                   <div class="w-full space-y-2">
-                    <span class="block font-bold text-gray-700">Адрес</span>
-                    <input wire:model.defer="newAddress.address" name="address" class="field" type="text"
-                      autocomplete="street-address" placeholder="Улица, дом, квартира">
+                    <span class="block font-bold text-gray-700">Улица *</span>
 
+                    <div class="relative">
+
+                      <div class="relative">
+                        <input type="text"
+                          class="relative w-full py-3 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm field"
+                          placeholder="проспект Большевиков" wire:model.debounce.1000ms="query"
+                          wire:keydown.escape="hideDropdown" wire:keydown.tab="hideDropdown"
+                          wire:keydown.Arrow-Up="decrementHighlight" wire:keydown.Arrow-Down="incrementHighlight"
+                          wire:keydown.enter.prevent="selectAddress" autocomplete="street-address" />
+
+                        <input type="hidden" name="address" id="address" wire:model="newAddress.address">
+
+                        @if ($newAddress['address'])
+                          <a class="absolute text-gray-500 cursor-pointer top-3 right-2" wire:click="reset">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" fill="none" viewBox="0 0 24 24"
+                              stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </a>
+                        @endif
+                        <div wire:loading wire:target="query" class="absolute right-0 z-40 top-3">
+                          <svg class="w-5 h-5 mr-3 -ml-1 text-orange-400 animate-spin"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                              stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                          </svg>
+                        </div>
+                      </div>
+
+                      @if (!empty($query) && $newAddress['address'] == '' && $showDropdown)
+                        <div class="absolute z-10 w-full mt-1 shadow-xl bg-gray-50">
+                          @if (!empty($sugestionAddresses))
+                            <div class="h-48 overflow-y-auto divide-y">
+                              @foreach ($sugestionAddresses as $i => $adr)
+                                <a wire:click="selectAddress({{ $i }})"
+                                  class="block py-2 px-3 text-sm cursor-pointer hover:bg-blue-50 {{ $highlightIndex === $i ? 'bg-blue-50' : '' }}">{{ $adr }}</a>
+                              @endforeach
+                            </div>
+                          @else
+                            <span class="block px-2 py-1 text-sm">Адреса не найдены</span>
+                          @endif
+                        </div>
+                      @endif
+
+                    </div>
 
                     @error('newAddress.address')
                       <span class="text-xs text-red-600">
@@ -104,6 +151,28 @@
                     @enderror
 
 
+                  </div>
+
+                  <div class="w-full space-y-2">
+                    <label class="block pb-1 font-bold text-gray-700">Здание *</label>
+                    <input wire:model.defer="newAddress.building" name="building" class="field" type="text"
+                      placeholder="7" />
+                    @error('newAddress.building')
+                      <span class="text-xs text-red-600">
+                        {{ $message }}
+                      </span>
+                    @enderror
+                  </div>
+
+                  <div class="w-full space-y-2">
+                    <label class="block pb-1 font-bold text-gray-700">Квартира</label>
+                    <input wire:model.defer="newAddress.apartment" name="apartment" class="field" type="text"
+                      placeholder="43" />
+                    @error('newAddress.apartment')
+                      <span class="text-xs text-red-600">
+                        {{ $message }}
+                      </span>
+                    @enderror
                   </div>
 
                 </div>
@@ -131,9 +200,9 @@
 
                 <div class="flex items-center justify-center">
                   <button wire:click="addNewAddress()"
-                    class="font-bold text-white bg-green-500 btn hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="font-bold text-white uppercase bg-green-500 btn hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     wire:loading.attr="disabled">
-                    <div wire:loading wire:target="addNewAddress">
+                    <span wire:loading wire:target="addNewAddress">
                       <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
@@ -142,8 +211,8 @@
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                         </path>
                       </svg>
-                    </div>
-                    <div>сохранить</div>
+                    </span>
+                    <span class="px-1 py-2">сохранить</span>
                   </button>
                 </div>
 

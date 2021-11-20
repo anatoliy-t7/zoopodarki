@@ -8,7 +8,7 @@
   <meta name="format-detection" content="phone=no">
   <meta name="theme-color" content="#FB923C">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link rel="icon" href="{{ asset('assets/img/favicon.svg') }}" type="image/svg+xml">
+  <link rel="icon" href="{{ asset('assets/img/fav.svg') }}" type="image/svg+xml">
   <meta name="currency" content="ruble">
   {!! SEOMeta::generate() !!}
   {!! OpenGraph::generate() !!}

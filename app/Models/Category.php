@@ -47,7 +47,7 @@ class Category extends Model
         $attributesId = Str::replace('.', ',', $this->attributes['attributes']);
         $ids = explode(',', $attributesId);
 
-        if (! empty($filtredItems)) {
+        if (!empty($filtredItems)) {
             $items = $this->productsAttributes()
                 ->get()
                 ->unique()
@@ -64,7 +64,8 @@ class Category extends Model
             ->withWhereHas('items', fn ($query) => $query->whereIn('id', $items))
             ->whereHas('items.products', fn ($q) => $q->isStatusActive())
             ->whereHas('items.products.variations', fn ($q) => $q->hasStock())
-            ->orderBy('name', 'asc')->get();
+            ->orderBy('name', 'asc')
+            ->get();
     }
 
     public function products()

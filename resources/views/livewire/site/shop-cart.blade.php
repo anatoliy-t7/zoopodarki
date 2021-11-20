@@ -29,7 +29,7 @@
   </button>
 
   <div x-cloak @click="close" x-show="openCart" x-transition.opacity
-    class="fixed top-0 bottom-0 left-0 right-0 z-40 w-screen h-screen overflow-hidden bg-gray-900 bg-opacity-50 pointer-events-auto">
+    class="fixed top-0 bottom-0 left-0 right-0 z-40 w-screen h-screen overflow-hidden bg-gray-900 bg-opacity-50 cursor-pointer pointer-events-auto">
   </div>
 
   <div x-cloak x-transition :class="openCart ? 'translate-x-0' : 'translate-x-full'"
@@ -37,15 +37,15 @@
 
     <div class="flex flex-col justify-between h-screen ">
 
-      <div class="flex items-center justify-between w-full p-4 bg-white border-b border-gray-100 ">
+      <div class="flex items-center justify-between w-full px-6 pt-6 bg-white ">
         <div class="flex justify-between space-x-2">
-          <svg class="text-gray-600 w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <path class="text-gray-600 stroke-current " stroke-linecap="round" stroke-linejoin="round"
+          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path class="text-gray-500 stroke-current " stroke-linecap="round" stroke-linejoin="round"
               stroke-miterlimit="10" stroke-width="1.5"
               d="M8.5 14.25c0 1.92 1.58 3.5 3.5 3.5s3.5-1.58 3.5-3.5M8.81 2 5.19 5.63m10-3.63 3.62 3.63" />
-            <path class="text-gray-600 stroke-current " stroke-width="1.5"
+            <path class="text-gray-500 stroke-current " stroke-width="1.5"
               d="M2 7.85c0-1.85.99-2 2.22-2h15.56c1.23 0 2.22.15 2.22 2 0 2.15-.99 2-2.22 2H4.22C2.99 9.85 2 10 2 7.85Z" />
-            <path class="text-gray-600 stroke-current " stroke-linecap="round" stroke-width="1.5"
+            <path class="text-gray-500 stroke-current " stroke-linecap="round" stroke-width="1.5"
               d="m3.5 10 1.41 8.64C5.23 20.58 6 22 8.86 22h6.03c3.11 0 3.57-1.36 3.93-3.24L20.5 10" />
           </svg>
           <span class="pt-1 pl-2">Корзина</span>
@@ -99,19 +99,19 @@
                           <div class="flex justify-center p-2 leading-none">
                             @if ($item->quantity == 1)
                               <button wire:click="delete({{ $item->id }})"
-                                class="px-1 text-gray-400 bg-gray-200 border border-gray-200 hover:bg-gray-300">
-                                <x-tabler-trash />
+                                class="px-1 text-gray-400 bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
+                                <x-tabler-trash class="w-5 h-5" />
                               </button>
                             @else
                               <button wire:click="decrement({{ $item->id }})"
-                                class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 hover:bg-gray-300 {{ $item->quantity == 1 ? 'text-gray-400 cursor-not-allowed' : ' ' }} "
+                                class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 rounded-l-lg border border-gray-200 hover:bg-gray-300 {{ $item->quantity == 1 ? 'text-gray-400 cursor-not-allowed' : ' ' }} "
                                 {{ $item->quantity == 1 ? 'disabled' : ' ' }}>-</button>
                             @endif
                             <span class="w-8 h-8 p-2 px-3 border-t border-b border-gray-200">
                               {{ $item->quantity }}
                             </span>
                             <button wire:click="increment({{ $item->id }})"
-                              class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 hover:bg-gray-300">+</button>
+                              class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">+</button>
                           </div>
 
                           <div class="flex justify-end p-2">
@@ -205,7 +205,7 @@
                             @if ($shelterItem->quantity == 1)
                               <button wire:click="delete({{ $shelterItem->id }})"
                                 class="px-1 text-gray-400 bg-gray-200 border border-gray-200 hover:bg-gray-300">
-                                <x-tabler-trash />
+                                <x-tabler-trash class="w-6 h-6" />
                               </button>
                             @else
                               <button wire:click="decrement({{ $shelterItem->id }})"
@@ -252,34 +252,40 @@
       @if ($items)
         <div class="w-full bg-white h-80 md:h-auto">
 
-          <div class="flex items-center justify-between px-5 py-3 space-x-2 bg-gray-50">
+          <div class="px-6 py-3 space-y-2 bg-gray-50">
 
-            <div class="flex items-center justify-center space-x-2 text-sm">
-              <span>Всего:</span>
-              <span class="text-base font-bold">{{ RUB($subTotal) }}</span>
+            <div class="flex items-center justify-between space-x-2 ">
 
-              @if (!Cart::session($cartId)->getConditions()->isEmpty())
-                <div class="text-xs text-gray-400">(Со скидкой)</div>
-              @endif
-            </div>
+              <div class="flex items-center justify-center space-x-2 text-sm ">
+                <span>Всего:</span>
+                <span class="text-base font-bold">{{ RUB($subTotal) }}</span>
 
-            @if ($totalWeight > 0)
-              <div class="flex items-center justify-center space-x-2 text-sm">
-                <div>Вес:</div>
-                <div class="text-base font-bold">{{ kg($totalWeight) }}</div>
+                @if (!Cart::session($cartId)->getConditions()->isEmpty())
+                  <div class="text-xs text-gray-400">(Со скидкой)</div>
+                @endif
               </div>
-            @endif
 
-            <div class="flex items-center justify-center space-x-2 text-sm">
-              <span>Кол-во:</span>
-              <span class="text-base font-bold">{{ $counter }} шт</span>
+              @if ($totalWeight > 0)
+                <div class="flex items-center justify-center space-x-2 text-sm">
+                  <div>Вес:</div>
+                  <div class="text-base font-bold">{{ kg($totalWeight) }}</div>
+                </div>
+              @endif
+
+              <div class="flex items-center justify-center space-x-2 text-sm">
+                <span>Кол-во:</span>
+                <span class="text-base font-bold">{{ $counter }} шт</span>
+              </div>
+
             </div>
+
+            <div class="text-xs">Доставка и доп. скидки рассчитываются при оформлении заказа.</div>
 
           </div>
 
-          <div class="px-5 py-6">
+          <div class="px-6 py-4">
             <a href="{{ route('checkout') }}"
-              class="px-4 py-3 font-semibold leading-snug text-center text-white bg-orange-500 rounded-lg hover:bg-orange-600">
+              class="block w-full px-4 py-3 font-bold leading-snug text-center text-white uppercase bg-orange-500 rounded-lg hover:bg-orange-600">
               Оформить заказ
             </a>
           </div>

@@ -12,13 +12,85 @@ class UserAddresses extends Component
 {
     use WireToast;
 
+    public $query = '';
+    public array $sugestionAddresses = [];
+    public int $highlightIndex = 0;
+    public bool $showDropdown = true;
+
+
     public $address;
     public $addressId;
     public $addresses;
     public $newAddress = [
         'address' => '',
-        'extra' => ''
+        'building' => '',
+        'apartment' => '',
+        'extra' => '',
     ];
+
+    public function reset(...$properties)
+    {
+        $this->sugestionAddresses = [];
+        $this->highlightIndex = 0;
+        $this->query = '';
+        $this->newAddress['address'] = '';
+        $this->showDropdown = true;
+    }
+
+    public function hideDropdown()
+    {
+        $this->showDropdown = false;
+    }
+
+    public function incrementHighlight()
+    {
+        if ($this->highlightIndex === count($this->sugestionAddresses) - 1) {
+            $this->highlightIndex = 0;
+            return;
+        }
+
+        $this->highlightIndex++;
+    }
+
+    public function decrementHighlight()
+    {
+        if ($this->highlightIndex === 0) {
+            $this->highlightIndex = count($this->sugestionAddresses) - 1;
+            return;
+        }
+
+        $this->highlightIndex--;
+    }
+
+    public function selectAddress($id = null)
+    {
+        $id = $id ?: $this->highlightIndex;
+
+        if ($this->sugestionAddresses) {
+            $this->showDropdown = true;
+            $this->query = $this->sugestionAddresses[$id];
+            $this->newAddress['address'] = $this->sugestionAddresses[$id];
+        }
+    }
+
+    public function updatedQuery()
+    {
+        $defaultCity = 'Санкт-Петербург+';
+        $response = Http::get(
+            'https://autocomplete.search.hereapi.com/v1/autocomplete?q='
+            . $defaultCity
+            . $this->query
+            . '&at=59.934261%2C30.334933'
+            . '&limit=20'
+            . '&lang=ru-RU'
+            . '&in=countryCode%3ARUS'
+            . '&apiKey='.config('constants.here_com_token')
+        );
+
+        if ($response->successful()) {
+            $this->sugestionAddresses = $response->collect()->flatten(1)->pluck('address.street')->toArray();
+        }
+    }
 
     public function removeAddress($addressId)
     {
@@ -34,7 +106,7 @@ class UserAddresses extends Component
     public function editAddress($addressId)
     {
         $this->newAddress = Address::find($addressId)->toArray();
-
+        $this->query = $this->newAddress['address'];
         $this->addressId = $this->newAddress['id'];
 
         $this->dispatchBrowserEvent('edit-address');
@@ -43,7 +115,8 @@ class UserAddresses extends Component
     public function addNewAddress()
     {
         $this->validate([
-            'newAddress.address' => 'required',
+            'newAddress.address' => 'required|string|max:255',
+            'newAddress.building' => 'required|string|max:255',
         ]);
 
 
@@ -52,26 +125,25 @@ class UserAddresses extends Component
                 $this->address = Address::find($this->addressId);
 
                 $this->address->update([
-                 //   'zip' => $this->newAddress['zip'],
                     'address' => $this->newAddress['address'],
+                    'building' => $this->newAddress['building'],
+                    'apartment' => $this->newAddress['apartment'],
                     'extra' => $this->newAddress['extra'],
                     'user_id' => auth()->user()->id,
                 ]);
             } else {
                 $this->address = Address::create([
-                  //  'zip' => $this->newAddress['zip'],
                     'address' => $this->newAddress['address'],
+                    'building' => $this->newAddress['building'],
+                    'apartment' => $this->newAddress['apartment'],
+                    'extra' => $this->newAddress['extra'],
                     'user_id' => auth()->user()->id,
                 ]);
-
-                if (array_key_exists('extra', $this->newAddress)) {
-                    $this->address->extra = $this->newAddress['extra'];
-                }
 
                 $this->address->save();
             }
 
-            $addressData = $this->getCustomerLocation($this->address['address']);
+            $addressData = $this->getCustomerLocation($this->address['address']. $this->address['building']);
 
             if ($addressData === false) {
                 $this->address->zip = null;
@@ -93,19 +165,18 @@ class UserAddresses extends Component
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('close-form');
             $this->getAddresses();
+            $this->render();
         });
     }
 
     public function getAddresses()
     {
-        if (auth()->user()) {
             $user = auth()->user();
             $user->load('addresses');
 
-            if ($user->pref_address !== 0) {
-                $this->address = $user->addresses->where('id', $user->pref_address)->first()->toArray();
-                $this->addresses = $user->addresses;
-            }
+        if ($user->pref_address !== 0) {
+            $this->address = $user->addresses->where('id', $user->pref_address)->first()->toArray();
+            $this->addresses = $user->addresses;
 
             $this->emitUp('getAddressFromComponent', $this->address);
         }
@@ -134,7 +205,6 @@ class UserAddresses extends Component
         );
 
         if ($response->successful()) {
-           // dd($response->json());
             return [
                 'zip' => $response->json()['items'][0]['address']['postalCode'],
                 'lat' => $response->json()['items'][0]['position']['lat'],

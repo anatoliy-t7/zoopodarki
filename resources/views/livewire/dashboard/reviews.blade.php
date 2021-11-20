@@ -139,7 +139,7 @@
             </div>
 
 
-            @if ($reviewEdit->media()->exists())
+            @if ($reviewEdit->media->isNotEmpty())
               <div class="py-4">
                 <div class="pb-2 font-bold">Фотографии клиента:</div>
                 <div id="lightbox" class="flex items-center justify-start space-x-2">

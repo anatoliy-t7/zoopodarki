@@ -17,7 +17,7 @@
       </h1>
       <div class="flex items-center justify-between space-x-6">
         <div>
-          @if ($product->brand()->exists())
+          @if ($product->brand()->isNotEmpty())
             <a href="{{ route('site.brand', $product->brand->slug) }}">
               @if ($product->brand->logo)
                 <img loading="lazy" class="w-auto h-10" src="/brands/{{ $product->brand->logo }}"
@@ -184,7 +184,7 @@
                     <div class="">
                       @if ($item->stock === 0)
                         <div class="relative w-full text-xs text-red-500">
-                          <div class="absolute w-24 -top-2">Нет в наличии</div>
+                          <div class="w-24 ">Нет в наличии</div>
                         </div>
                       @endif
                     </div>
@@ -196,14 +196,14 @@
                     @if ($item->promotion_type === 3)
                       <div class="text-xs text-gray-500 line-through">
                         {{ RUB(discountRevert($item->price, $item->promotion_percent)) }}</div>
-                      <div class="___class_+?57___">{{ RUB($item->price) }}</div>
+                      <div>{{ RUB($item->price) }}</div>
                       <span itemprop="price" content="{{ $item->price }}"></span>
                     @elseif ($item->promotion_type === 4)
                       <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
-                      <div class="___class_+?59___">{{ RUB(discount($item->price, $item->promotion_percent)) }}</div>
+                      <div>{{ RUB(discount($item->price, $item->promotion_percent)) }}</div>
                       <span itemprop="price" content="{{ discount($item->price, $item->promotion_percent) }}"></span>
                     @else
-                      <span class="___class_+?60___">{{ RUB($item->price) }}</span>
+                      <span>{{ RUB($item->price) }}</span>
                       <span itemprop="price" content="{{ $item->price }}"></span>
                     @endif
                     <span itemprop="priceCurrency" content="RUB"></span>
@@ -592,9 +592,12 @@
           validate() {
             if (this.count >= 50) {
               this.count = 50;
-              var callToaster = new CustomEvent('toaster', {
+              var callToaster = new CustomEvent('toast', {
                 detail: {
-                  message: 'Если выхотите купить оптом свяжитесь с нами по телефону'.config(
+
+                  // TODO променять и проверить
+
+                  message: 'Если вы хотите купить оптом, свяжитесь с нами по телефону'.config(
                     'constants.phone'),
                   timeout: '7000',
                 }
@@ -642,7 +645,7 @@
       })
     </script>
 
-    @if ($product->media()->exists())
+    @if ($product->media->isNotEmpty())
       <script src="{{ mix('js/splide.min.js') }}"></script>
       <script>
         document.addEventListener('DOMContentLoaded', function() {

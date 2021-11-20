@@ -107,8 +107,8 @@ class ShopCart extends Component
                     $cartDiscountByHoliday = $this->checkDiscountByHoliday($product_1c);
 
                     $cartDiscountByCard = false;
-                    // Дис. карта действует сразу, но сама себя не учитывает
 
+                    // Дис. карта действует сразу, но сама себя не учитывает
                     if ($cartDiscountByHoliday === false && $product_1c->vendorcode !== 'DISCOUNT_CARD') {
                         $cartDiscountByCard = $this->getDiscountByCard($this->userHasDiscount);
                     }

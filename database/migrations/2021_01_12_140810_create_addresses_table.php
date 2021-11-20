@@ -18,6 +18,8 @@ class CreateAddressesTable extends Migration
 
             $table->string('zip')->nullable();
             $table->string('address');
+            $table->string('building');
+            $table->string('apartment')->nullable();
             $table->text('extra')->nullable();
 
             $table->double('lat')->nullable();

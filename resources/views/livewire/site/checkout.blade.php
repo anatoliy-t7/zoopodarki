@@ -113,7 +113,11 @@
               @if (!empty($address))
                 <div class="flex-col items-start justify-start w-full px-4 py-3 space-y-1 md:w-9/12 h-14">
                   <div>
-                    {{ $address['address'] }}
+                    {{ $address['address'] }} {{ $address['building'] }}
+
+                    @if (Arr::has($address, 'apartment'))
+                      , кв. {{ $address['apartment'] }}
+                    @endif
                   </div>
                   @if (Arr::has($address, 'extra'))
                     <div class="text-xs text-gray-400">
@@ -216,6 +220,7 @@
               <div x-data="{date: @entangle('date')}" class="w-full md:w-9/12">
 
                 <label class="block pb-2 text-lg font-bold text-gray-700">Дата доставки</label>
+                // TODO
                 <div wire:ignore id="date" class="flex items-center justify-center w-full overflow-hidden splide">
                   <div class="flex items-center text-blue-500 splide__arrows">
                     <button class="splide__arrow splide__arrow--prev">
@@ -225,7 +230,9 @@
                     </button>
                     <button class="splide__arrow splide__arrow--next">
                       <div class="p-1 text-2xl border rounded-full hover:bg-gray-100">
-                        <x-tabler-chevron-right />
+                        <x-tabler-chevron-right class="text-gray-500 bg-transparent stroke-current" />
+
+
                       </div>
                     </button>
                   </div>
@@ -356,33 +363,33 @@
 
     </div>
 
-    <div class="block w-full space-y-6 md:w-4/12">
+    <div class="block w-full space-y-2 md:w-4/12">
 
-      <div class="p-6 space-y-3 text-sm bg-white rounded-2xl">
-        <div wire:ignore class="text-base text-gray-500">Ваш заказ</div>
+      <div class="p-6 space-y-4 text-sm ">
+        <div class="text-lg font-bold">Ваш заказ</div>
         @if ($items)
-          <div class="w-full">
+          <div class="flex flex-col justify-between w-full ">
             @foreach ($items as $item)
-              <div class="flex items-center justify-between space-y-2 border-b border-gray-200">
+              <div class="flex items-center justify-between py-2 space-x-2 border-b border-gray-200">
 
-                <div class="p-2">
+                <div class="p-2 bg-white">
                   <img loading="lazy" class="object-cover object-center w-12"
                     src="{{ $item->associatedModel['image'] }}" alt="">
                 </div>
 
                 <div class="w-full">
-                  <div class="___class_+?96___">
+                  <div>
                     {{ $item->name }}
                   </div>
 
-                  <div class="flex justify-between py-2 text-xs text-gray-500">
-                    <div class="flex justify-start ">
-                      <span class="___class_+?99___">
+                  <div class="flex justify-between pt-2 ">
+                    <div class="flex justify-start text-xs text-gray-500">
+                      <span>
                         {{ $item->quantity }} шт
                       </span>
                     </div>
 
-                    <div class="flex justify-end w-40">
+                    <div class="flex justify-end w-40 ">
                       @if ($item->associatedModel['promotion_type'] === 0)
                         <div class="flex items-center justify-end ">
                           <div class="font-bold">
@@ -429,76 +436,79 @@
         @if ($shelterItems)
           <div class="px-6 -mx-6 bg-gray-100">
             <div class="py-2 font-semibold">"Помоги приюту"</div>
-            @foreach ($shelterItems as $shelterItem)
-              <div class="flex items-center justify-between space-y-2 border-b border-gray-200">
 
-                <div class="p-2">
-                  <img loading="lazy" class="object-cover object-center w-12"
-                    src="{{ $shelterItem->associatedModel['image'] }}" alt="">
-                </div>
+            <div class="flex flex-col justify-between w-full ">
+              @foreach ($shelterItems as $shelterItem)
+                <div class="flex items-center justify-between py-2 space-x-2 border-b border-gray-200">
 
-                <div class="w-full">
-                  <div class="___class_+?118___">
-                    {{ $shelterItem->name }}
+                  <div class="p-2">
+                    <img loading="lazy" class="object-cover object-center w-12"
+                      src="{{ $shelterItem->associatedModel['image'] }}" alt="">
                   </div>
 
-                  <div class="flex justify-between py-2 text-xs text-gray-500">
-                    <div class="flex justify-start ">
-                      <span class="___class_+?121___">
-                        {{ $shelterItem->quantity }} шт
-                      </span>
+                  <div class="w-full">
+                    <div>
+                      {{ $shelterItem->name }}
                     </div>
 
-                    <div class="flex items-center justify-end space-x-2">
-                      <div class="text-xs line-through">
-                        {{ RUB($shelterItem->getPriceSum()) }}
+                    <div class="flex justify-between py-2 ">
+                      <div class="flex justify-start text-xs text-gray-500">
+                        <span>
+                          {{ $shelterItem->quantity }} шт
+                        </span>
                       </div>
-                      <div class="font-bold text-orange-500">
-                        {{ RUB($shelterItem->getPriceSumWithConditions()) }}</div>
-                    </div>
 
+                      <div class="flex items-center justify-end space-x-2 font-bold">
+                        <div class="text-xs line-through">
+                          {{ RUB($shelterItem->getPriceSum()) }}
+                        </div>
+                        <div class="font-bold text-orange-500">
+                          {{ RUB($shelterItem->getPriceSumWithConditions()) }}</div>
+                      </div>
+
+                    </div>
                   </div>
                 </div>
-              </div>
-            @endforeach
+              @endforeach
+            </div>
           </div>
         @endif
 
         @if ($firstOrder !== 0)
           <div class="flex justify-between">
             <span>Скидка за первый заказ</span>
-            <span>-{{ RUB($firstOrder) }}</span>
+            <span class="font-bold"> -{{ RUB($firstOrder) }}</span>
           </div>
         @endif
 
         @if ($userHasDiscountOnReview)
           <div class="flex justify-between">
             <span>Скидка за отзыв</span>
-            <span>-2%</span>
+            <span class="font-bold"> -2%</span>
           </div>
         @endif
 
         <div class="flex justify-between text-gray-700">
           <span>Всего</span>
-          <span>{{ RUB($subTotal) }}</span>
+          <span class="font-bold">{{ RUB($subTotal) }}</span>
         </div>
         @if ($orderType == 0)
 
           <div class="flex justify-between">
             <span>Доставка</span>
-            <span>{{ RUB($deliveryCost) }}</span>
+            <span class="font-bold">{{ RUB($deliveryCost) }}</span>
           </div>
 
         @else
           <div class="flex justify-between">
             <span>Самовывоз</span>
-            <span>бесплатно</span>
+            <span class="font-bold">бесплатно</span>
           </div>
         @endif
         @if (count($shelterItems) > 0)
           <div class="flex justify-between">
             <span>Доставка в приют</span>
-            <span>{{ RUB($deliveryCostToShelter) }}</span>
+            <span class="font-bold">{{ RUB($deliveryCostToShelter) }}</span>
           </div>
         @endif
 
@@ -506,12 +516,12 @@
 
         <div class="flex justify-between pt-2 text-lg font-bold border-t">
           <span wire:ignore>Итого</span>
-          <span>{{ RUB($totalAmount) }}</span>
+          <span class="font-bold">{{ RUB($totalAmount) }}</span>
         </div>
       </div>
 
-      <div class="p-6 bg-white rounded-2xl">
-        <div class="space-y-4 text-gray-700">
+      <div class="p-6">
+        <div class="py-4 space-y-4 text-gray-700 border-t border-b border-gray-200">
 
           @if ($orderType == 1 and $date)
             <div class="flex space-x-2 text-sm">
@@ -521,7 +531,7 @@
           @endif
           @if ($orderType == 1 and $pickupStore)
             <div class="space-y-2 text-sm leading-tight">
-              <span class="___class_+?137___">Самовывоз из магазина: </span>
+              <span>Самовывоз из магазина: </span>
               <span class="font-bold">{{ $pickupStore }}</span>
             </div>
           @endif
@@ -561,25 +571,25 @@
           <div class="space-y-2 text-sm">
             <div class="flex justify-between ">
               <span>Количество</span>
-              <span>{{ $counter }} шт</span>
+              <span class="font-bold">{{ $counter }} шт</span>
             </div>
             @if ($totalWeight)
               <div class="flex justify-between">
                 <span>Вес заказа</span>
-                <span>{{ kg($totalWeight) }}</span>
+                <span class="font-bold">{{ kg($totalWeight) }}</span>
               </div>
             @endif
           </div>
         </div>
       </div>
 
-      <div class="sticky top-5">
+      <div class="sticky p-6 top-5 ">
         <div class="block px-6 md:px-0">
 
           <button wire:click="createOrder"
-            class="relative w-full px-5 py-5 font-semibold text-white bg-green-500 hover:bg-green-600 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
+            class="relative w-full px-3 py-4 text-lg font-bold text-white uppercase bg-green-500 hover:bg-green-600 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
             wire:loading.attr="disabled">
-            <div wire:loading wire:target="createOrder" class="absolute top-4 left-4">
+            <span wire:loading wire:target="createOrder" class="absolute top-4 left-4">
               <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -587,10 +597,10 @@
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                 </path>
               </svg>
-            </div>
-            <div>
+            </span>
+            <span>
               Оформить заказ
-            </div>
+            </span>
           </button>
 
           <div class="pt-4 text-xs text-gray-500">

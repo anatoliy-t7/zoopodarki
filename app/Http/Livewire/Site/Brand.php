@@ -118,7 +118,6 @@ class Brand extends Component
         $this->maxPrice  = 10000;
         $this->minPrice  = 0;
         $this->dispatchBrowserEvent('reset-range');
-
     }
 
     public function render()
@@ -152,5 +151,4 @@ class Brand extends Component
             'products' => $products,
         ]);
     }
-
 }
