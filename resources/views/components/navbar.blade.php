@@ -1,10 +1,10 @@
 <div>
 
   @if (Agent::isDesktop())
-    <div class="relative z-30 block">
+    <div class="relative z-40 block">
       <header class="text-gray-600 bg-gray-50">
-        <div class="flex items-center justify-between max-w-screen-xl py-1 mx-auto text-xs ">
-          <div class="pl-2 font-extrabold text-gray-500">Санкт-Петербург</div>
+        <div class="flex items-center justify-between max-w-screen-xl px-4 py-1 mx-auto text-xs">
+          <div class="font-bold text-gray-500">Санкт-Петербург</div>
           <div class="flex items-center justify-end space-x-2">
             <a href="#" class="px-3 py-2 hover:underline">
               Акции и Скидки
@@ -15,22 +15,22 @@
             <a href="#" class="px-3 py-2 hover:underline">
               Помощь
             </a>
-            <a href="#" class="px-3 py-2 hover:underline">
+            <a href="#" class="py-2 pl-3 hover:underline">
               Контакты
             </a>
           </div>
         </div>
       </header>
 
-      <header id="navbar" class="z-30 w-screen px-3 text-gray-700 bg-white navbar">
-        <div class="flex items-center justify-between max-w-screen-xl mx-auto">
+      <header id="navbar" class="z-40 w-screen text-gray-700 bg-white navbar">
+        <div class="flex items-center justify-between max-w-screen-xl px-4 mx-auto">
 
           <div class="flex items-center justify-start space-x-12">
             <div class="flex items-center justify-between p-2">
               <a href="/" class="flex items-center text-lg leading-normal font-semibol focus:outline-none"
-                title="Логотип {{ config('app.name') }}">
+                title="Магазин товаров для животных | {{ config('app.name') }}">
 
-                <span><span class="font-bold">Zoo</span>подарки</span>
+                <span class="font-bold text-gray-500"><span class="text-orange-500 ">Zoo</span>подарки</span>
               </a>
             </div>
 

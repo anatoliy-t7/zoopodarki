@@ -33,8 +33,7 @@
                 </div>
               </div>
               <input x-model="formatedPhone" x-bind:oninput="validatePhone()" wire:model.defer="phone" id="phone"
-                data-format="(***) ***-****" data-mask="(___) ___-____" type="tel" name="phone" required
-                autocomplete="tel-national" inputmode="tel"
+                type="text" name="phone" required inputmode="tel"
                 class="w-full px-4 py-3 pl-10 font-semibold border border-gray-200 bg-gray-50 rounded-2xl focus:outline-none focus:ring focus:bg-white">
             </div>
             @error('phone')
@@ -44,7 +43,7 @@
             @enderror
           </div>
 
-          <div>
+          <div class="space-y-4">
             <button x-bind:disabled="valid === false" x-on:click="createOtp(), $nextTick(() => {
               setTimeout(() => {
                   document.getElementById('otp').focus();
@@ -53,6 +52,13 @@
               class="flex items-center justify-center w-full py-4 font-bold text-white bg-green-500 border-green-500 rounded-2xl md:text-left hover:bg-green-600 hover:border-green-600">
               <span>Войти</span>
             </button>
+
+            <div class="flex items-center justify-start space-x-2 ">
+              <input wire:model.defer="subscribed" id="subscribed" aria-describedby="subscribed" type="checkbox"
+                class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-orange-300">
+              <label for="subscribed" class="text-sm text-gray-500">Подписаться на рассылку
+                акций</label>
+            </div>
           </div>
 
         </div>
@@ -62,12 +68,12 @@
           setTimeout(() => {
               document.getElementById('email').focus();
           }, 300);
-      })" class="text-sm text-blue-500 cursor-pointer hover:text-blue-600">Вход по почте</div>
+      })" class="text-sm text-orange-500 cursor-pointer hover:text-orange-600">Вход по почте</div>
       </div>
       <div class="p-4 text-xs text-center text-gray-400">
-        При входе или регистрации вы соглашаетесь с <a class="text-blue-500 hover:underline" href="/page/privacy-policy"
-          target="_blank">Политикой
-          конфиденциальности</a> и <a class="text-blue-500 hover:underline" href="/page/terms-of-use"
+        При входе или регистрации вы соглашаетесь с <a class="text-orange-500 hover:underline"
+          href="/page/privacy-policy" target="_blank">Политикой
+          конфиденциальности</a> и <a class="text-orange-500 hover:underline" href="/page/terms-of-use"
           target="_blank">Условиями
           использования</a>
       </div>
@@ -124,7 +130,7 @@
         </div>
       </div>
       <div class="p-4 text-center border-t">
-        <div wire:click="createOtp" class="text-sm text-blue-500 cursor-pointer hover:text-blue-600">
+        <div wire:click="createOtp" class="text-sm text-orange-500 cursor-pointer hover:text-orange-600">
           Не пришло? (Отправить еще раз)</div>
       </div>
     </div>
@@ -190,21 +196,21 @@
             </button>
 
             <a href="/password/reset"
-              class="block text-sm text-center text-blue-500 cursor-pointer hover:text-blue-600">Забыли
+              class="block text-sm text-center text-orange-500 cursor-pointer hover:text-orange-600">Забыли
               пароль?</a>
           </div>
 
         </div>
       </div>
       <div class="px-4 pt-4 text-center border-t">
-        <div x-on:click="windowType = 'phone'" class="text-sm text-blue-500 cursor-pointer hover:text-blue-600">Вход
+        <div x-on:click="windowType = 'phone'" class="text-sm text-orange-500 cursor-pointer hover:text-orange-600">Вход
           или
           регистрация по СМС</div>
       </div>
       <div class="p-4 text-xs text-center text-gray-400">
-        При входе или регистрации вы соглашаетесь с <a class="text-blue-500 hover:underline" href="/page/privacy-policy"
-          target="_blank">Политикой
-          конфиденциальности</a> и <a class="text-blue-500 hover:underline" href="/page/terms-of-use"
+        При входе или регистрации вы соглашаетесь с <a class="text-orange-500 hover:underline"
+          href="/page/privacy-policy" target="_blank">Политикой
+          конфиденциальности</a> и <a class="text-orange-500 hover:underline" href="/page/terms-of-use"
           target="_blank">Условиями
           использования</a>
       </div>
@@ -217,7 +223,7 @@
         document.getElementById('phone').focus();
     }, 300);
 })"
-    class="flex items-center justify-start px-4 py-2 space-x-2 text-sm rounded-lg hover:text-blue-500 focus:text-blue-500 focus:outline-none ">
+    class="flex items-center justify-start px-4 py-2 space-x-2 text-sm rounded-lg hover:text-orange-500 focus:text-orange-500 focus:outline-none ">
     <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M10 17l5-5-5-5" />
@@ -250,14 +256,25 @@
 
         validatePhone() {
           if (this.formatedPhone !== null) {
-            let formatedPhone = this.formatedPhone.replace(/[^0-9]/g, '')
-            this.formatedPhone = formatedPhone.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '($1)-$2-$3-$4');
+
+            if (this.formatedPhone.length > 12) {
+              this.formatedPhone = this.formatedPhone.replace(/.$/g, '').trim()
+              return
+            }
+
+            str = this.formatedPhone
+              .replace(/\D/g, '')
+              .match(/^(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})$/)
+
+            this.formatedPhone =
+              `${str[1]}${str[2] ? `-${str[2]}` : ''}${str[3] ? `-${str[3]}` : ''}${str[4] ? `${str[4]}` : ''}`
+
             this.phone = this.formatedPhone.replace(/[^\w\s]/gi, '');
 
-            if (this.phone.length < 10) {
-              this.valid = false;
-            } else {
+            if (this.phone.length === 10) {
               this.valid = true;
+            } else {
+              this.valid = false;
             }
           }
         },

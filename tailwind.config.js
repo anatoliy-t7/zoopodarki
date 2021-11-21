@@ -5,7 +5,7 @@ module.exports = {
 	darkMode: false,
 	theme: {
 		extend: {
-			ringWidth: ['hover', 'active'],
+			ringWidth: ['hover'],
 			minWidth: {
 				half: '50vw',
 			},

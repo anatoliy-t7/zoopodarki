@@ -19,6 +19,7 @@ class CreateCatalogsTable extends Migration
             $table->string('slug')->index();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
+            $table->string('extra_title')->nullable();
             $table->boolean('menu')->default(1);
             $table->integer('sort')->default(1);
             $table->text('icon')->nullable();

@@ -107,9 +107,11 @@
                                 class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 rounded-l-lg border border-gray-200 hover:bg-gray-300 {{ $item->quantity == 1 ? 'text-gray-400 cursor-not-allowed' : ' ' }} "
                                 {{ $item->quantity == 1 ? 'disabled' : ' ' }}>-</button>
                             @endif
-                            <span class="w-8 h-8 p-2 px-3 border-t border-b border-gray-200">
-                              {{ $item->quantity }}
-                            </span>
+                            <div class="flex items-center justify-center w-8 h-8 border-t border-b">
+                              <div class="border-gray-200 ">
+                                {{ $item->quantity }}
+                              </div>
+                            </div>
                             <button wire:click="increment({{ $item->id }})"
                               class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">+</button>
                           </div>

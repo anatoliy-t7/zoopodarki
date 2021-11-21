@@ -23,6 +23,8 @@ class In extends Component
     protected $user;
     protected $otp;
     public $token;
+    public $subscribed = false;
+
     protected $rules = [
         'email' => 'required|email',
         'password' => 'required',
@@ -32,7 +34,11 @@ class In extends Component
     public function createOtp($phone = null)
     {
         if ($phone !== null) {
-            $this->phone = $phone;
+            $this->phone = (int)$phone;
+
+             $this->validate([
+                 'phone' => 'required|digits:10',
+             ]);
         }
 
         $functionOtp = Otp::generate($this->phone);
@@ -41,7 +47,6 @@ class In extends Component
             toast()
                 ->danger('Вы превысили лимит СМС, попробуйте через 15 минут')
                 ->push();
-
         } else {
             $this->token = $functionOtp->token;
 
@@ -67,6 +72,7 @@ class In extends Component
 
     public function authUser()
     {
+
         $functionUser = User::where('phone', $this->phone)->first();
 
         Auth::login($functionUser, $remember = true);
@@ -95,19 +101,15 @@ class In extends Component
 
         if ($verify->status === false) {
             if ($verify->message == 'OTP does not match') {
-
                 toast()
                     ->info('OTP не соответствует')
                     ->push();
-
             }
 
             if ($verify->message == 'Reached the maximum allowed attempts') {
-
                 toast()
                     ->info('Достигнуто максимально допустимое количество попыток, попробуйте через 15 минут')
                     ->push();
-
             }
 
             return false;
@@ -121,6 +123,7 @@ class In extends Component
         $this->user = User::create([
             'phone' => $this->phone,
             'password' => Hash::make(Str::random(8)),
+            'subscribed' => $this->subscribed,
         ]);
     }
 
@@ -134,7 +137,6 @@ class In extends Component
             toast()
                 ->success('OTP отправлен')
                 ->push();
-
         } catch (\Throwable$th) {
             \Log::error($th);
 

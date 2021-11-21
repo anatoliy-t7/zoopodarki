@@ -8,7 +8,7 @@
 
 input:not([type='checkbox']):not([type='radio']):not([type='search']):not([type='hidden']):not([type='file']),
 textarea {
-	@apply w-full px-4 py-2 border-2 border-pink-50 hover:border-pink-200 bg-white rounded-xl focus:outline-none focus:ring focus:border-transparent;
+	@apply w-full px-3 py-2 border-2 border-pink-50 hover:border-pink-200 bg-white rounded-xl focus:outline-none focus:ring focus:border-transparent;
 }
 
 select {
@@ -16,7 +16,7 @@ select {
 	background-position: right 0.5rem center;
 	background-repeat: no-repeat;
 	background-size: 1.5em 1.5em;
-	@apply appearance-none pl-4 pr-10 py-2 border-2 border-pink-50 hover:border-pink-200 bg-white rounded-xl focus:outline-none focus:ring focus:bg-white  focus:border-transparent;
+	@apply appearance-none pl-3 pr-10 py-2 border-2 border-pink-50 hover:border-pink-200 bg-white rounded-xl focus:outline-none focus:ring focus:bg-white  focus:border-transparent;
 }
 
 .flip-horizontal-bottom {

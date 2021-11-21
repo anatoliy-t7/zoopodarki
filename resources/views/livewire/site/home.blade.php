@@ -1,37 +1,37 @@
-<div class="px-2 space-y-6">
+<div class="space-y-6">
 
   @if ($homePageBlockOne)
-  <div class="px-6 py-5 bg-white rounded-2xl">
-    <h3 class="pb-2 text-xl font-bold text-gray-500">{{ $homePageBlockOneTitle }}</h3>
-    <div class="flex items-center justify-between">
-      <div class="flex flex-col items-center justify-between space-x-2 md:flex-row">
-        @forelse ($homePageBlockOne as $item)
-        <div class="w-3/12">
-          <livewire:site.card-products :product="$item" :catalog="$item->categories[0]->catalog"
-            :category="$item->categories[0]" :key="'block-one-'.$item->id" />
+    <div class="px-6 py-5 bg-white rounded-2xl">
+      <h3 class="pb-2 text-xl font-bold text-gray-500">{{ $homePageBlockOneTitle }}</h3>
+      <div class="flex items-center justify-between">
+        <div class="flex flex-col items-center justify-between space-x-2 md:flex-row">
+          @forelse ($homePageBlockOne as $item)
+            <div class="w-3/12">
+              <livewire:site.card-products :product="$item" :catalog="$item->categories[0]->catalog"
+                :category="$item->categories[0]" :key="'block-one-'.$item->id" />
+            </div>
+          @empty
+          @endforelse
         </div>
-        @empty
-        @endforelse
       </div>
     </div>
-  </div>
   @endif
 
   @if ($homePageBlockTwo)
-  <div class="px-6 py-5 bg-white rounded-2xl">
-    <h3 class="pb-2 text-xl font-bold text-gray-500">{{ $homePageBlockTwoTitle }}</h3>
-    <div class="flex items-center justify-between">
-      <div class="flex flex-col items-center justify-between space-x-2 md:flex-row">
-        @forelse ($homePageBlockTwo as $item)
-        <div class="w-3/12">
-          <livewire:site.card-products :product="$item" :catalog="$item->categories[0]->catalog"
-            :category="$item->categories[0]" :key="'block-two-'.$item->id" />
+    <div class="px-6 py-5 bg-white rounded-2xl">
+      <h3 class="pb-2 text-xl font-bold text-gray-500">{{ $homePageBlockTwoTitle }}</h3>
+      <div class="flex items-center justify-between">
+        <div class="flex flex-col items-center justify-between space-x-2 md:flex-row">
+          @forelse ($homePageBlockTwo as $item)
+            <div class="w-3/12">
+              <livewire:site.card-products :product="$item" :catalog="$item->categories[0]->catalog"
+                :category="$item->categories[0]" :key="'block-two-'.$item->id" />
+            </div>
+          @empty
+          @endforelse
         </div>
-        @empty
-        @endforelse
       </div>
     </div>
-  </div>
   @endif
 
 
@@ -40,16 +40,16 @@
     <div>
       <div class="flex flex-col items-center justify-between space-x-2 md:flex-row">
         @forelse ($brandsSlider as $brand)
-        <div>
-          <a href="{{ route('site.brand', $brand->slug) }}">
-            @if ($brand->logo)
-            <img src="/brands/{{ $brand->logo }}" alt="{{ $brand->name }}">
-            @else
-            <div class="text-xl font-bold">{{ $brand->name }}</div>
-            @endif
+          <div>
+            <a href="{{ route('site.brand', $brand->slug) }}">
+              @if ($brand->logo)
+                <img src="/brands/{{ $brand->logo }}" alt="{{ $brand->name }}">
+              @else
+                <div class="text-xl font-bold">{{ $brand->name }}</div>
+              @endif
 
-          </a>
-        </div>
+            </a>
+          </div>
         @empty
         @endforelse
         <div class="">

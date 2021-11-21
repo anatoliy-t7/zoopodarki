@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Kirschbaum\PowerJoins\PowerJoins;
 // TODO on in production
 //use Laravel\Scout\Searchable;
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Image\Manipulations;
 
 class Product extends Model implements HasMedia
 {
@@ -114,6 +114,15 @@ class Product extends Model implements HasMedia
     public function scopeIsStatusActive($query)
     {
         return $query->where('status', 'active');
+    }
+
+
+
+    public function scopeHasStock($query)
+    {
+        return $query->whereHas('variations', function ($query) {
+            $query->where('stock', '>=', 1)->where('price', '>=', 1);
+        });
     }
 
     public function categories()

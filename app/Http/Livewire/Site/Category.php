@@ -26,6 +26,7 @@ class Category extends Component
     public $maxPrice = 10000;
     public $minPrice = 0;
     public $productsCount = 0;
+    public $filterStock = 2; // 0 without stock, 1 with stock, 2 all
     public $sortSelectedName = 'Название: от А до Я';
     public $sortSelectedType = 'name';
     public $sortBy = 'asc';
@@ -225,7 +226,17 @@ class Category extends Component
             ->has('media')
             ->whereHas('categories', fn ($q) => $q->where('category_id', $this->category->id))
             ->whereHas('variations', function ($query) {
-                $query->whereBetween('price', [$this->minPrice, $this->maxPrice])->hasStock();
+                $query->whereBetween('price', [$this->minPrice, $this->maxPrice])
+                ->when($this->filterStock == 0, function ($query) {
+                    $query->where('stock', 0);
+                })
+                ->when($this->filterStock == 1, function ($query) {
+                    $query->where('stock', '>=', 1);
+                })
+                ->when($this->filterStock == 0, function ($query) {
+                    $query->where('stock', 0);
+                })
+                ->where('price', '>=', 1);
             })
             ->when($this->attFilter, function ($query) {
                 if (count($this->attsFilters) >= 2) {
@@ -237,39 +248,39 @@ class Category extends Component
                 }
             })
             ->when($this->brandFilter, function ($query) {
-                $query->whereIn('brand_id', $this->brandFilter);
+                    $query->whereIn('brand_id', $this->brandFilter);
             })
             ->when($this->attributesRangeOn, function ($query) {
-                return $query->whereHas('attributes', function ($query1) {
-                    $query1->where(function ($subQuery) {
-                        if ($this->attributesRanges > 0) {
-                            foreach ($this->attributesRanges as $key => $range) {
-                                return $subQuery->where(
-                                    'attribute_item.attribute_id',
-                                    $this->attributesRanges[$key]['id']
-                                )
-                                    ->whereBetween('name', [
+                    return $query->whereHas('attributes', function ($query1) {
+                        $query1->where(function ($subQuery) {
+                            if ($this->attributesRanges > 0) {
+                                foreach ($this->attributesRanges as $key => $range) {
+                                    return $subQuery->where(
+                                        'attribute_item.attribute_id',
+                                        $this->attributesRanges[$key]['id']
+                                    )
+                                        ->whereBetween('name', [
                                         $this->attributesRanges[$key]['min'],
                                         $this->attributesRanges[$key]['max'],
                                     ]);
+                                }
                             }
-                        }
+                        });
                     });
-                });
             })
-            ->with('media')
-            ->with('brand')
-            ->with('unit')
-            ->with('attributes')
-            ->with('variations')
-            ->orderBy($this->sortSelectedType, $this->sortBy)
-            ->paginate(32);
+                ->with('media')
+                ->with('brand')
+                ->with('unit')
+                ->with('attributes')
+                ->with('variations')
+                ->orderBy($this->sortSelectedType, $this->sortBy)
+                ->paginate(32);
 
-        $this->resetPage();
+                $this->resetPage();
 
-        $this->emit('lozad', '');
+                $this->emit('lozad', '');
 
-        $this->productsCount = $products->count();
+                $this->productsCount = $products->count();
 
 
 
@@ -280,8 +291,8 @@ class Category extends Component
             $this->getAttributes();
         }
 
-        return view('livewire.site.category', [
-            'products' => $products,
-        ]);
+                return view('livewire.site.category', [
+                'products' => $products,
+                ]);
     }
 }

@@ -46,11 +46,14 @@ class ProductCard extends Component
 
     public function buyOneClick($orderOneClick, $productId, $count)
     {
-        $url = env('APP_URL') . '/pet/' . $this->catalog->slug . '/' . $this->category->slug . '/' . $this->product->slug;
+        $url = config('constants.website_url')
+        . '/pet/' . $this->catalog->slug . '/'
+        . $this->category->slug . '/'
+        . $this->product->slug;
 
         $product1c = Product1C::where('id', $productId)->firstOrFail();
 
-        Mail::to(env('MAIL_TO_MANAGER'))->send(new OrderOneClick($product1c, $count, $orderOneClick, $url));
+        Mail::to(config('constants.manager_mail'))->send(new OrderOneClick($product1c, $count, $orderOneClick, $url));
 
         $this->dispatchBrowserEvent('close-modal');
 
@@ -95,12 +98,14 @@ class ProductCard extends Component
             ->whereHas('categories', function ($query) {
                 $query->where('category_id', $this->category->id);
             })
+            ->hasStock()
             ->whereNotIn('id', [$this->product->id])
             ->has('media')
             ->with('brand')
             ->with('unit')
             ->with('variations')
             ->with('media')
+            ->orderBy('price_avg', 'asc')
             ->inRandomOrder()
             ->take(5)
             ->get();

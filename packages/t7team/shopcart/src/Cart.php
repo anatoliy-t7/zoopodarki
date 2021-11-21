@@ -631,7 +631,9 @@ class Cart
     {
         $subTotal = $this->getSubTotal(false);
 
-        $conditionTotal = 0.00;
+        $newTotal = 0.00;
+
+        $process = 0;
 
         $conditions = $this
             ->getConditions()
@@ -645,11 +647,14 @@ class Cart
         }
 
         $conditions
-        ->each(function (CartCondition $cond) use ($subTotal, &$conditionTotal) {
-            $conditionTotal = $cond->applyCondition($subTotal);
-        });
+        ->each(function (CartCondition $cond) use ($subTotal, &$newTotal, &$process) {
+                $toBeCalculated = ($process > 0) ? $newTotal : $subTotal;
 
-        return Helpers::formatValue($subTotal + $conditionTotal, $this->config['format_numbers'], $this->config);
+                $newTotal = $cond->applyCondition($toBeCalculated);
+
+                $process++;
+        });
+        return Helpers::formatValue($newTotal, $this->config['format_numbers'], $this->config);
     }
 
     /**

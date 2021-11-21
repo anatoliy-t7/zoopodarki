@@ -27,6 +27,7 @@ class Brands extends Component
     public $nameRus;
     public $title;
     public $description;
+    public $metaDescription;
     public $logo;
     public $logoName;
     public $itemsName = [];
@@ -75,7 +76,8 @@ class Brands extends Component
         $this->name = $brand->name;
         $this->nameRus = $brand->name_rus;
         $this->title = $brand->meta_title;
-        $this->description = $brand->meta_description;
+        $this->description = $brand->description;
+        $this->metaDescription = $brand->meta_description;
         $this->brandId = $brand->id;
         $this->logoName = $brand->logo;
     }
@@ -95,7 +97,8 @@ class Brands extends Component
                     'name' => trim($this->name),
                     'name_rus' => trim($this->nameRus),
                     'meta_title' => $this->title,
-                    'meta_description' => $this->description,
+                    'meta_description' => $this->metaDescription,
+                    'description' => $this->description,
                 ]
             );
 
@@ -144,9 +147,9 @@ class Brands extends Component
     {
         $this->logoName = $slug . '.' . $this->logo->getClientOriginalExtension();
 
-        $path = $this->logo->storeAs('brands', $this->logoName);
-        $img = \Image::make(public_path('storage') . '/' . $path);
-        $img->resize(150, 150, function ($constraint) {
+        $path = $this->logo->storeAs('public/brands', $this->logoName);
+        $img = \Image::make(storage_path('app/') . $path);
+        $img->resize(200, 200, function ($constraint) {
             $constraint->aspectRatio();
         });
         $img->save();
@@ -193,7 +196,17 @@ class Brands extends Component
 
     public function resetFields()
     {
-        $this->reset('brandId', 'name', 'nameRus', 'title', 'description', 'logo', 'logoName', 'itemsName');
+        $this->reset(
+            'brandId',
+            'name',
+            'nameRus',
+            'title',
+            'metaDescription',
+            'description',
+            'logo',
+            'logoName',
+            'itemsName'
+        );
     }
 
     public function render()

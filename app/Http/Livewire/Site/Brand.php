@@ -11,14 +11,13 @@ class Brand extends Component
 {
 
     use WithPagination;
-
     public $brand;
-
-    public $brands;
-    public $productId;
-    public $attributes;
-    public $attFilter        = [];
-    public $attId            = [];
+    public $attrs;
+    public $attributesRangeOn = false;
+    public $attributesRange;
+    public $attributesRanges = [];
+    public $attFilter = []; // Собирает выбранные свойства
+    private $attsFilters = [];
     public $maxPrice         = 10000;
     public $minPrice         = 0;
     public $sortSelectedName = 'Название: от А до Я';
@@ -61,7 +60,7 @@ class Brand extends Component
     {
         $ids = $this->brand->productsAttributes()->get()->pluck('id');
         // Берет свойства которые есть у товаров только этой категории
-        $this->attributes = Attribute::whereHas('items', function ($query) use ($ids) {
+        $this->attrs = Attribute::whereHas('items', function ($query) use ($ids) {
             $query->whereIn('id', $ids);
         })
             ->orderBy('name', 'asc')

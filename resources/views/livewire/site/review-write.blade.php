@@ -31,15 +31,15 @@
 
             <div class="absolute top-0 left-0 flex items-center justify-start w-full h-full px-2 space-x-2">
               @forelse ($photos as $photo)
-              <div class="relative z-10 w-24 h-24 py-2">
-                <img loading="lazy" class="object-cover object-center w-full h-full rounded-lg"
-                  src="{{ $photo->temporaryUrl() }}">
-              </div>
+                <div class="relative z-10 w-24 h-24 py-2">
+                  <img loading="lazy" class="object-cover object-center w-full h-full rounded-lg"
+                    src="{{ $photo->temporaryUrl() }}">
+                </div>
               @empty
-              <div class="flex flex-col items-center justify-center w-full space-y-2 text-gray-500">
-                <x-tabler-camera-plus class="w-6 h-6 stroke-current " />
-                <div class="flex text-sm ">Нажмите сюда для загрузки фотографий (max: 5)</div>
-              </div>
+                <div class="flex flex-col items-center justify-center w-full space-y-2 text-gray-500">
+                  <x-tabler-camera-plus class="w-6 h-6 stroke-current " />
+                  <div class="flex text-sm ">Нажмите сюда для загрузки фотографий (max: 5)</div>
+                </div>
               @endforelse
             </div>
 
@@ -91,22 +91,51 @@
 
           <div class="py-2 text-xs text-gray-500">Оцените товар от 1 до 5 звезд</div>
           @error('stars')
-          <div class="pt-1 text-sm text-red-500">Вы не поставили рейтинг</div>
+            <div class="pt-1 text-sm text-red-500">Вы не поставили рейтинг</div>
           @enderror
         </div>
 
       </div>
 
       <div class="flex flex-col items-start justify-between space-y-4 md:space-y-0 md:space-x-6 md:flex-row">
-        <div class="w-full md:w-8/12">
-
+        <div class="relative w-full md:w-8/12">
           <textarea wire:model.defer="body"
             class="w-full px-3 py-4 font-semibold border border-gray-50 hover:border-gray-200 bg-gray-50 rounded-xl focus:outline-none focus:ring focus:bg-white scrollbar"
-            placeholder="Напишите свой отзыв">
-            </textarea>
+            placeholder="Напишите свой отзыв" rows="6">
+          </textarea>
           @error('body')
-          <div class="pt-1 text-sm text-red-500">Вы не написали отзыв</div>
+            <div class="pt-1 text-sm text-red-500">Вы не написали отзыв</div>
           @enderror
+
+          <div x-data="{ alert: false }">
+            <div x-show="alert" x-transition.opacity class="relative px-5 py-4 bg-blue-100 rounded-2xl">
+
+              <div class="flex items-center justify-between pb-2">
+                <h3 class="text-sm font-semibold leading-tight">Мы ожидаем от вас честный и корректный отзыв!</h3>
+                <button x-on:click="alert = false" class="-mt-1 -mr-2 text-gray-600 rounded-full link-hover">
+                  <x-tabler-x class="w-6 h-6 stroke-current" />
+                </button>
+              </div>
+
+              <div>
+                <p class="text-xs">Отзыв не пройдет модерацию, если:</p>
+                <ul class="pl-2 ml-2 space-y-1 text-xs list-disc">
+                  <li class="">Использованы нецензурные выражения, оскорбления и угрозы</li>
+                  <li class="">Указаны адреса, телефоны и ссылки, содержащие прямую рекламу
+                  </li>
+                  <li class="">Обсуждается цена товара и ее изменения</li>
+                  <li class="">Отзыв не относится к теме</li>
+                </ul>
+              </div>
+
+            </div>
+            <div class="absolute px-2 bottom-2 right-2">
+              <button x-on:click="alert = true" x-show="alert == false" x-transition.opacity
+                class="-mt-1 -mr-2 text-blue-400 rounded-full hover:text-blue-500">
+                <x-tabler-alert-circle class="w-6 h-6 stroke-current" />
+              </button>
+            </div>
+          </div>
         </div>
         <div class="w-full md:w-4/12">
 
@@ -127,54 +156,26 @@
         </div>
       </div>
 
-      <div x-data="{ alert: true }">
-        <div x-show="alert" x-transition.opacity class="relative px-5 py-4 bg-gray-200 rounded-2xl">
 
-          <div class="flex items-center justify-between pb-2">
-            <h3 class="text-sm font-semibold leading-tight">Мы ожидаем от вас честный и корректный отзыв!</h3>
-            <button x-on:click="alert = false" class="-mt-1 -mr-2 text-gray-600 rounded-full link-hover">
-              <x-tabler-x class="w-5 h-5 stroke-current" />
-            </button>
-          </div>
-
-          <div>
-            <p class="text-xs">Отзыв не пройдет модерацию, если:</p>
-            <ul class="pl-2 ml-2 space-y-1 text-xs list-disc">
-              <li class="">Использованы нецензурные выражения, оскорбления и угрозы</li>
-              <li class="">Указаны адреса, телефоны и ссылки, содержащие прямую рекламу
-              </li>
-              <li class="">Обсуждается цена товара и ее изменения</li>
-              <li class="">Отзыв не относится к теме</li>
-            </ul>
-          </div>
-
-        </div>
-        <div class="flex items-start justify-end w-full px-2">
-          <button x-on:click="alert = true" x-show="alert == false" x-transition.opacity
-            class="-mt-1 -mr-2 text-green-500 rounded-full link-hover">
-            <x-tabler-alert-circle class="w-5 h-5 stroke-current" />
-          </button>
-        </div>
-      </div>
 
     </div>
   </div>
 
   <script>
     document.addEventListener('alpine:initializing', () => {
-        Alpine.data('writeRating', () => ({
-          body: document.body,
-            write: false,
-            open() {
-              this.write = true;
-                this.body.classList.add('overflow-hidden')
-            },
+      Alpine.data('writeRating', () => ({
+        body: document.body,
+        write: false,
+        open() {
+          this.write = true;
+          this.body.classList.add('overflow-hidden')
+        },
 
-            close() {
-              this.write = false;
-                this.body.classList.remove('overflow-hidden');
-            },
-        }))
+        close() {
+          this.write = false;
+          this.body.classList.remove('overflow-hidden');
+        },
+      }))
     })
   </script>
 </div>

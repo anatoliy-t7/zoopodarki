@@ -474,12 +474,7 @@
           </div>
         @endif
 
-        @if ($firstOrder !== 0)
-          <div class="flex justify-between">
-            <span>Скидка за первый заказ</span>
-            <span class="font-bold"> -{{ RUB($firstOrder) }}</span>
-          </div>
-        @endif
+
 
         @if ($userHasDiscountOnReview)
           <div class="flex justify-between">
@@ -509,6 +504,13 @@
           <div class="flex justify-between">
             <span>Доставка в приют</span>
             <span class="font-bold">{{ RUB($deliveryCostToShelter) }}</span>
+          </div>
+        @endif
+
+        @if ($firstOrder !== 0)
+          <div class="flex justify-between">
+            <span>Скидка за первый заказ</span>
+            <span class="font-bold"> -{{ RUB($firstOrder) }}</span>
           </div>
         @endif
 

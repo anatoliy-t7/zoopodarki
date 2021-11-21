@@ -130,36 +130,6 @@
                   @enderror
                 </div>
 
-                <div class="font-bold text-gray-600 ">
-                  <div class=pb-2>Картинка</div>
-                  <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
-                    x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-error="isUploading = false"
-                    x-on:livewire-upload-progress="progress = $event.detail.progress">
-
-                    <!-- File Input -->
-                    <div
-                      class="relative w-40 h-24 text-center bg-pink-100 border-2 border-gray-400 border-dashed rounded-lg hover:border-pink-200">
-                      @if ($logo)
-                        <img loading="lazy" src="{{ $logo->temporaryUrl() }}">
-                      @elseif($logoName)
-                        <img loading="lazy" src="/brands/{{ $logoName }}">
-                      @else
-                        <div class="p-2 pt-6">Darg and Drop image</div>
-                      @endif
-
-                      <input type="file" wire:model="logo" ondragover="drag()" ondrop="drop()" id="uploadFile"
-                        class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer">
-                    </div>
-
-                    @error('logo') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    <div x-show="isUploading">
-                      <progress max="100" x-bind:value="progress"></progress>
-                    </div>
-                  </div>
-
-                </div>
-
               </div>
 
               <div class="w-6/12 space-y-4">
@@ -182,6 +152,47 @@
                 </div>
               </div>
             </div>
+
+            <div class="flex space-x-6">
+
+              <div class="w-3/12 space-y-2">
+                <div class="font-bold text-gray-600 ">Лого бренда</div>
+                <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
+                  x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-error="isUploading = false"
+                  x-on:livewire-upload-progress="progress = $event.detail.progress">
+
+                  <!-- File Input -->
+                  <div
+                    class="relative w-full h-32 text-center bg-pink-100 border-2 border-gray-400 border-dashed rounded-lg hover:border-pink-200">
+                    @if ($logo)
+                      <img loading="lazy" class="w-full h-auto" src="{{ $logo->temporaryUrl() }}">
+                    @elseif($logoName)
+                      <img loading="lazy" class="w-full h-auto" src="/brands/{{ $logoName }}">
+                    @else
+                      <div class="pt-8 text-sm text-center">Скиньте сюда изображение или кликните для загрузки</div>
+                    @endif
+                    <input type="file" wire:model="logo" ondragover="drag()" ondrop="drop()" id="uploadFile"
+                      class="absolute top-0 left-0 z-50 w-full h-full opacity-0 cursor-pointer">
+                  </div>
+
+                  @error('logo') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+
+                  <div x-show="isUploading">
+                    <progress max="100" x-bind:value="progress"></progress>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w-9/12">
+                <div class="space-y-2">
+                  <label class="font-bold">Описание</label>
+                  <textarea rows="5" wire:model.defer="description" name="description"></textarea>
+                  @error('description')
+                  <span class="block text-sm text-red-500">{{ $message }}</span> @enderror
+                </div>
+              </div>
+            </div>
+
             <div class="pt-4 font-bold">Серии</div>
           </div>
 

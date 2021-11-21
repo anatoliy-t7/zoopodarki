@@ -7,14 +7,17 @@ trait Discounts
 {
     public $productDiscountIds = [];
 
-    public function getDiscountByCard($userHasDiscount)
+    public function getDiscountByCard($userHasDiscount, $cartId)
     {
         if ($userHasDiscount !== 0) {
             return new CartCondition([
                 'name' => 'Скидочная карта',
                 'type' => 'discount',
+                'target' => 'total',
                 'value' => '-' . $userHasDiscount . '%',
             ]);
+        } else {
+             \Cart::session($cartId)->removeCartCondition('Скидочная карта');
         }
 
         return false;
@@ -25,9 +28,10 @@ trait Discounts
         if (ceil($subTotal) >= 2000 && auth()->user()->extra_discount === 'first') {
             $condition = new CartCondition([
                 'name' => 'Первый заказ',
-                'target' => 'subtotal',
+                'target' => 'total',
                 'type' => 'discount',
                 'value' => '-200',
+                'order' => 1
             ]);
 
             \Cart::session($cartId)->condition($condition);
@@ -43,9 +47,10 @@ trait Discounts
         if (auth()->user()->review === 'on') {
             $condition = new CartCondition([
                 'name' => 'Скидка 2% за отзыв',
-                'target' => 'subtotal',
+                'target' => 'total',
                 'type' => 'discount',
                 'value' => '-2%',
+                'order' => 2
             ]);
 
             \Cart::session($cartId)->condition($condition);

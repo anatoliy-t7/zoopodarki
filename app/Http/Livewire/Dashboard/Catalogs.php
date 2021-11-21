@@ -24,6 +24,7 @@ class Catalogs extends Component
         'slug' => null,
         'meta_title' => null,
         'meta_description' => null,
+        'extra_title' => null,
         'menu' => 1,
         'sort' => 1,
     ];
@@ -126,7 +127,7 @@ class Catalogs extends Component
         $this->editCategory = [];
         $this->categories = Category::where('catalog_id', $this->editCatalog['id'])->get();
 
-        $this->resetValidation();
+        $this->reset('editCategory');
         $this->closeFormCategory();
     }
 
@@ -144,9 +145,11 @@ class Catalogs extends Component
                     'name' => trim($this->editCatalog['name']),
                     'slug' => trim(Str::of($this->editCatalog['slug'])->slug('-')),
                     'meta_title' => $this->editCatalog['meta_title'],
+                    'meta_description' => $this->editCatalog['meta_description'],
+                    'extra_title' => $this->editCatalog['extra_title'],
                     'menu' => $this->editCatalog['menu'],
                     'sort' => $this->editCatalog['sort'],
-                    'meta_description' => $this->editCatalog['meta_description'],
+
                 ]
             );
 
@@ -161,17 +164,17 @@ class Catalogs extends Component
                 }
             }
 
-            $this->categories = Category::where('catalog_id', $this->editCatalog->id)->get();
+            $this->categories = Category::where('catalog_id', $this->editCatalog['id'])->get();
 
             // Clean the cache after saving
             Cache::forget('categories-menu');
 
             toast()
-                ->success('Каталог "' . $this->editCatalog->name . '" сохранен.')
+                ->success('Каталог "' . $this->editCatalog['name'] . '" сохранен.')
                 ->push();
 
-            $this->resetValidation();
             $this->closeForm();
+            $this->reset('editCatalog');
         });
     }
 

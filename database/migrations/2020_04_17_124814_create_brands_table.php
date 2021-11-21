@@ -19,10 +19,10 @@ class CreateBrandsTable extends Migration
             $table->string('name_rus')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
+            $table->text('description')->nullable();
             $table->string('slug');
             $table->string('country')->nullable();
             $table->string('logo')->nullable();
-
         });
     }
 

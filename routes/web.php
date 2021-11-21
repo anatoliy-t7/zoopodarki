@@ -106,10 +106,10 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
     });
 
     // 1С exchange
-Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')->middleware(['throttle:1000,60', 'bot'])->name('exchange');
+    Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')->middleware(['throttle:1000,60', 'bot'])->name('exchange');
 
-Route::middleware(['throttle:1000,60', 'bot'])->group(function () {
-    Route::get('/checkout', \App\Http\Livewire\Site\Checkout::class)->name('checkout');
+    Route::middleware(['throttle:1000,60', 'bot'])->group(function () {
+        Route::get('/checkout', \App\Http\Livewire\Site\Checkout::class)->name('checkout');
 
-    Route::post('/payment/callback', 'App\Http\Controllers\Site\PaymentController@payCallback')->name('payment.callback');
-});
+        Route::post('/payment/callback', 'App\Http\Controllers\Site\PaymentController@payCallback')->name('payment.callback');
+    });

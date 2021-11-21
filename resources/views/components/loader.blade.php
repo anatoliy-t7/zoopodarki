@@ -1,5 +1,5 @@
 <div wire:loading.delay {{ $attributes }}
-  class="absolute top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full max-h-screen min-h-full text-center transition-all duration-500 transform bg-white bg-opacity-50 backdrop-filter backdrop-blur-sm">
+  class="absolute inset-0 z-50 flex items-center justify-center w-full h-full max-h-screen min-h-full text-center transition-all duration-500 transform bg-white bg-opacity-50 backdrop-filter backdrop-blur-sm">
 
   <div class="relative flex items-start justify-center w-full h-full pt-32">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-60 h-60 animate-reverse-spin" viewBox="0 0 353 336">

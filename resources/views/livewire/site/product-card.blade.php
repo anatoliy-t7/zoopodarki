@@ -17,7 +17,7 @@
       </h1>
       <div class="flex items-center justify-between space-x-6">
         <div>
-          @if ($product->brand()->isNotEmpty())
+          @if ($product->brand()->exists())
             <a href="{{ route('site.brand', $product->brand->slug) }}">
               @if ($product->brand->logo)
                 <img loading="lazy" class="w-auto h-10" src="/brands/{{ $product->brand->logo }}"
@@ -285,26 +285,34 @@
             @endforeach
           </div>
 
-          <div class="flex flex-col items-start justify-start w-full pt-1 space-y-1">
-            @forelse ($productAttributes as $items)
-              <div class="flex flex-row flex-wrap items-center justify-start w-full max-w-lg text-sm">
-                @foreach ($items as $item)
-                  @if ($loop->first)
-                    <div class="relative z-10 w-4/12 pr-4 my-1 text-gray-500 attribute">
-                      <span class="relative z-10 pr-1 bg-white">{{ $item['attribute']['name'] }}</span>
-                    </div>
-                  @endif
-                  {{ $loop->first ? '' : ', ' }}
-                  <div class="relative z-10 pl-1 my-1 bg-white whitespace-nowrap"><a
-                      class="text-blue-500 hover:underline"
-                      href="{{ route('site.category', ['catalog' => $catalog->slug, 'slug' => $category->slug]) . '?attFilter%5B0%5D=' . $item['id'] }}">{{ $item['name'] }}</a>
-                  </div>
-                @endforeach
-              </div>
-            @empty
-            @endforelse
-          </div>
+          <div>
 
+            <div class="flex flex-col items-start justify-start w-full pt-1 space-y-1">
+              @forelse ($productAttributes as $items)
+                <div class="flex flex-row flex-wrap items-center justify-start w-full max-w-lg text-sm">
+                  @foreach ($items as $item)
+                    @if ($loop->first)
+                      <div class="relative z-10 w-4/12 pr-4 my-1 text-gray-500 attribute">
+                        <span class="relative z-10 pr-1 bg-white">{{ $item['attribute']['name'] }}</span>
+                      </div>
+                    @endif
+                    {{ $loop->first ? '' : ', ' }}
+                    <div class="relative z-10 pl-1 my-1 bg-white whitespace-nowrap"><a
+                        class="text-blue-500 hover:underline"
+                        href="{{ route('site.category', ['catalog' => $catalog->slug, 'slug' => $category->slug]) . '?attFilter%5B0%5D=' . $item['id'] }}">{{ $item['name'] }}</a>
+                    </div>
+                  @endforeach
+                </div>
+              @empty
+              @endforelse
+            </div>
+            @if ($product->country)
+              <div class="flex flex-row flex-wrap items-center justify-start w-full max-w-lg text-sm">
+                <div class="relative z-10 w-4/12 pr-4 my-1 text-gray-500 attribute">Страна</div>
+                <div class="pl-1 capitalize bg-white whitespace-nowrap">{{ $product->country }}</div>
+              </div>
+            @endif
+          </div>
         </div>
 
         <div class="flex flex-col items-center justify-start w-full space-y-5 lg:items-end lg:w-4/12">
@@ -329,22 +337,14 @@
           </div>
 
           <button x-show="item.stock > 0" x-transition.opacity x-on:click="addToCart()"
-            class="flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-orange-500 cursor-pointer rounded-lg active:scale-95 hover:bg-orange-600">
+            class="flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-orange-500 cursor-pointer rounded-lg active:scale-95 hover:bg-orange-600"
+            wire:loading.attr="disabled">
             <span>В корзину</span>
-            <svg wire:loading.remove class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"
+            <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"
               viewBox="0 0 24 24">
               <path
                 d="M14,18a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,14,18Zm-4,0a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,10,18ZM19,6H17.62L15.89,2.55a1,1,0,1,0-1.78.9L15.38,6H8.62L9.89,3.45a1,1,0,0,0-1.78-.9L6.38,6H5a3,3,0,0,0-.92,5.84l.74,7.46a3,3,0,0,0,3,2.7h8.38a3,3,0,0,0,3-2.7l.74-7.46A3,3,0,0,0,19,6ZM17.19,19.1a1,1,0,0,1-1,.9H7.81a1,1,0,0,1-1-.9L6.1,12H17.9ZM19,10H5A1,1,0,0,1,5,8H19a1,1,0,0,1,0,2Z" />
             </svg>
-            <div wire:loading wire:target="addToCart">
-              <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                </path>
-              </svg>
-            </div>
           </button>
 
           <div x-show="item.stock > 0" x-transition.opacity>

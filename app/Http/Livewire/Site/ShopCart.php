@@ -106,12 +106,6 @@ class ShopCart extends Component
 
                     $cartDiscountByHoliday = $this->checkDiscountByHoliday($product_1c);
 
-                    $cartDiscountByCard = false;
-
-                    // Дис. карта действует сразу, но сама себя не учитывает
-                    if ($cartDiscountByHoliday === false && $product_1c->vendorcode !== 'DISCOUNT_CARD') {
-                        $cartDiscountByCard = $this->getDiscountByCard($this->userHasDiscount);
-                    }
 
                     if ($product_1c->promotion_type === 1) {
                         $cart = app('shelter')->session($this->shelterCartId);
@@ -143,10 +137,11 @@ class ShopCart extends Component
                         ]);
 
                         if ($product_1c->promotion_type === 1) {
-                            $cartDiscountByUcenka = $this->getDiscountByUcenka($product_1c->price - $product_1c->promotion_price);
+                            $cartDiscountByUcenka = $this->getDiscountByUcenka(
+                                $product_1c->price - $product_1c->promotion_price
+                            );
                             $cart->addItemCondition($product_1c->id, $cartDiscountByUcenka);
                         } else {
-                            $cart->addItemCondition($product_1c->id, $cartDiscountByCard);
                             $cart->addItemCondition($product_1c->id, $cartDiscountByHoliday);
                         }
                     }

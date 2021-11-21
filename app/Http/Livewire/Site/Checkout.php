@@ -54,7 +54,7 @@ class Checkout extends Component
         'getAddressFromComponent',
         'getCartCheckout'
     ];
-
+    // TODO проверить все скидки на правельный пересчет
     public function mount()
     {
 
@@ -130,10 +130,14 @@ class Checkout extends Component
 
     public function calcTotalAmount()
     {
+        // dd(\Cart::session($this->cartId)->getSubTotal());
         if (0 == $this->orderType) {
-            $this->totalAmount = $this->subTotal + $this->deliveryCost;
+            $this->totalAmount = \Cart::session($this->cartId)->getTotal()
+                + app('shelter')->session($this->shelterCartId)->getTotal()
+                + $this->deliveryCost;
         } else {
-            $this->totalAmount = $this->subTotal;
+            $this->totalAmount = \Cart::session($this->cartId)->getTotal()
+                + app('shelter')->session($this->shelterCartId)->getTotal();
         }
 
         if (count($this->shelterItems) > 0) {
@@ -155,13 +159,34 @@ class Checkout extends Component
             }
         }
 
+
+
         $shelterCart = app('shelter')->session($this->shelterCartId);
         $shelterCartCounter = $shelterCart->getTotalQuantity();
 
-        $this->counter = \Cart::session($this->cartId)->getTotalQuantity() + $shelterCartCounter;
+        $this->counter = $cart->getTotalQuantity() + $shelterCartCounter;
 
         $functionItems = $cart->getContent();
-        $this->subTotal = $cart->getSubTotal() + $shelterCart->getSubTotal();
+
+         // Дис. карта действует сразу, но сама себя не учитывает
+        $cartDiscountByCard = false;
+        foreach ($functionItems as $key => $item) {
+            if ($item->associatedModel['vendorcode'] === 'DISCOUNT_CARD') {
+                 $cartDiscountByCard = $this->getDiscountByCard($item->associatedModel['unit_value'], $this->cartId);
+            }
+            break;
+        }
+
+        if ($cartDiscountByCard) {
+            foreach ($functionItems as $key => $item) {
+                if ($item->associatedModel['vendorcode'] !== 'DISCOUNT_CARD'
+                    && $item->associatedModel['promotion_type'] !== 1
+                    && $item->associatedModel['promotion_type'] !== 4
+                ) {
+                     $cart->addItemCondition($item->id, $cartDiscountByCard);
+                }
+            }
+        }
 
         $this->items = $functionItems->all();
 
@@ -170,6 +195,7 @@ class Checkout extends Component
 
         $this->getTotalWeight($functionItems, $functionShelterItems);
 
+        $this->subTotal = $cart->getSubTotal() + $shelterCart->getSubTotal();
         if (auth() && round($this->subTotal) >= 2000 && 'first' === auth()->user()->extra_discount) {
             $this->firstOrder = 200;
         } else {
