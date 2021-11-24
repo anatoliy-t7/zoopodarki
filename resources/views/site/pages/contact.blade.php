@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Магазины ' . config('app.name') . ' в Санкт-Петербурге')
+@section('title', 'Контакты и магазины ' . config('app.name') . ' в Санкт-Петербурге')
 @section('description', 'Посмотреть расположение магазинов ' . config('app.name') . ' в Санкт-Петербурге')
 
 @section('content')

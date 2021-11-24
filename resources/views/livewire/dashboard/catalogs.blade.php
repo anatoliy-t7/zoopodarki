@@ -126,19 +126,27 @@
                   @error('editCatalog.name') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
                 </div>
 
-                <div class="space-y-1">
+                <div class="pb-4 space-y-1">
                   <div class="font-bold">URL (slug)</div>
                   <input wire:model.defer="editCatalog.slug" type="text">
                   @error('editCatalog.slug') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
                 </div>
 
-                <div class="w-16 space-y-1">
-                  <div class="font-bold">Сортировка</div>
-                  <input wire:model.defer="editCatalog.sort" type="number">
-                </div>
-
                 <x-toggle wire:model="editCatalog.menu" :property="$editCatalog['menu']" :lable="'Показывать в меню'" />
 
+                <div class="flex items-center justify-start space-x-8">
+                  <div class="space-y-1">
+                    <div class="font-bold">Сортировка</div>
+                    <div class="w-16"><input wire:model.defer="editCatalog.sort" type="number"></div>
+                  </div>
+
+                  <div class="space-y-1">
+                    <label class="font-bold" for=brandsForCatalog>ID брендов</label>
+                    <input wire:model.defer="brandsForCatalog" type="text" placeholder="id через запятую"
+                      id="brandsForCatalog">
+                    @error('brandsForCatalog') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                  </div>
+                </div>
 
               </div>
               <div class="w-6/12 space-y-4">
@@ -163,6 +171,8 @@
                   @error('editCatalog.extra_title') <span class="text-sm text-red-500">{{ $message }}</span>
                   @enderror
                 </div>
+
+
 
               </div>
             </div>
@@ -220,7 +230,7 @@
 
                         @if ($editCategory['menu'] == 1)
                           <div title="Отображается в меню">
-                            <x-tabler-layout-2 class="w-4 h-4 text-gray-400 stroke-current" />
+                            <x-tabler-menu-2 class="w-4 h-4 text-gray-400 stroke-current" />
                           </div>
                         @endif
 
@@ -343,7 +353,7 @@
                 <div class="block py-6 space-y-6">
 
                   <x-toggle wire:model="editCategory.show_in_catalog" :property="$editCategory['show_in_catalog']"
-                    :lable="'Показать избранные товары в каталоге'" />
+                    :lable="'Показать избранные товары на странице каталога'" />
 
                 </div>
               @endif

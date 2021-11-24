@@ -2,8 +2,8 @@
   itemtype="https://schema.org/Product">
 
   <div class="px-4 py-8 space-y-2 bg-white lg:px-8 lg:rounded-2xl">
-    <div class="flex flex-col justify-between space-y-2 lg:space-y-0 lg:space-x-4 lg:items-center lg:flex-row">
-      <h1 class="w-10/12 font-semibold text-left text-md lg:text-xl">
+    <div class="flex flex-col justify-between space-y-2 lg:space-y-0 lg:space-x-4 lg:items-start lg:flex-row">
+      <h1 class="w-9/12 font-semibold text-left text-md lg:text-xl">
         <span class="pr-1" x-show="tab == 2" x-transition>
           Состав
         </span>
@@ -31,6 +31,8 @@
         @auth
           <livewire:site.add-to-favorite :model="$product" :key="'product-'.$product->id" />
         @endauth
+
+        <x-share-buttons :url="route('site.product', [$catalog->slug, $category->slug, $slug])" />
 
       </div>
     </div>
@@ -423,21 +425,48 @@
 
           </div>
 
-          <button x-show="item.stock == 0" x-transition.opacity x-on:click="preOrder()"
-            class=" relative flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-blue-500 cursor-pointer rounded-lg active:scale-95 hover:bg-blue-600">
-            <span>Заказать</span>
-            <x-tabler-package wire:loading.remove class="w-6 h-6" />
+          <div x-show="item.stock == 0" x-transition.opacity>
+            <x-modal>
+              <x-slot name="button">
+                <button x-on:click="open()"
+                  class=" relative flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-blue-500 cursor-pointer rounded-lg active:scale-95 hover:bg-blue-600">
+                  <span>Заказать</span>
+                  <x-tabler-package class="w-6 h-6" />
+                </button>
+              </x-slot>
 
-            <div wire:loading wire:target="preOrder" class="absolute top-2 right-2">
-              <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                </path>
-              </svg>
-            </div>
-          </button>
+              <x-slot name="content">
+                <div class="w-full space-y-6">
+                  <div>
+                    <div class="text-center text-gray-600">Выберите как оповестить вас</div>
+                    <div>
+                      <div>
+                      </div>
+
+                    </div>
+                    <div class="pt-1 text-xs text-center text-gray-400">Оповестить когда<br>появиться в наличии</div>
+                  </div>
+                  <div class="flex justify-center w-full">
+                    <button wire:click="preOrder()"
+                      class="relative flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-blue-500 cursor-pointer rounded-lg active:scale-95 hover:bg-blue-600">
+                      <span>Заказать</span>
+                      <div wire:loading wire:target="preOrder" class="absolute top-2 right-2">
+                        <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg"
+                          fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                          </circle>
+                          <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                          </path>
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </x-slot>
+
+            </x-modal>
+          </div>
 
 
         </div>
@@ -580,6 +609,7 @@
             unit_value: '{{ $product->variations[0]->unit_value }}',
           },
           openModal: false,
+          preOrderModal: false,
           formatedPhone: null,
           phone: null,
           valid: false,
@@ -618,7 +648,10 @@
             window.livewire.emit('addToCart', this.item.id, this.count)
           },
           preOrder() {
-            window.livewire.emit('preOrder', this.item.id)
+
+            this.preOrderModal = true;
+
+            //window.livewire.emit('preOrder', this.item.id)
           },
           open() {
             this.openModal = true

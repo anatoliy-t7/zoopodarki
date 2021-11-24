@@ -9,6 +9,7 @@ use Kirschbaum\PowerJoins\PowerJoins;
 
 class Category extends Model
 {
+    use \Staudenmeir\EloquentEagerLimit\HasEagerLimit;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use Sluggable;
     use PowerJoins;
@@ -80,6 +81,6 @@ class Category extends Model
 
     public function tags()
     {
-        return $this->hasMany(Tag::class)->where('show_on_page', true);
+        return $this->hasMany(Tag::class);
     }
 }

@@ -18,7 +18,7 @@
       </div>
     @endif
 
-    <div itemprop="name" class="text-sm text-center text-gray-800">
+    <div itemprop="name" class="text-sm text-center text-gray-800 line-clamp-2">
       <a itemprop="url" href="{{ route('site.product', [$catalog, $category, $product->slug]) }}"
         title="{{ $product->name }}">
         {{ $product->name }}

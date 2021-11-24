@@ -96,7 +96,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
         Route::get('/brands/{brand}', 'App\Http\Controllers\Site\BrandController@show')->name('brand');
 
         // Pages
-        Route::view('/shops', 'site.pages.shops')->name('shops');
+        Route::view('/contact', 'site.pages.contact')->name('contact');
 
         Route::get('/page/{slug}', 'App\Http\Controllers\Site\PageController@show')->name('page');
 

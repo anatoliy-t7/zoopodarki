@@ -28,6 +28,7 @@ class Catalogs extends Component
         'menu' => 1,
         'sort' => 1,
     ];
+    public $brandsForCatalog;
     public $categories = [];
     public $editCategory = [
         'id' => null,
@@ -149,7 +150,6 @@ class Catalogs extends Component
                     'extra_title' => $this->editCatalog['extra_title'],
                     'menu' => $this->editCatalog['menu'],
                     'sort' => $this->editCatalog['sort'],
-
                 ]
             );
 
@@ -161,6 +161,14 @@ class Catalogs extends Component
                     ]);
 
                     $category->save();
+                }
+            }
+
+               $functionProduct->attributes()->detach();
+
+            if (count($this->brandsForCatalog) !== 0) {
+                foreach ($this->att_selected as $attribute) {
+                    $functionProduct->attributes()->attach($attribute['id']);
                 }
             }
 

@@ -9,8 +9,6 @@
     </x-slot>
 
     <x-slot name="content">
-
-
       <div>
 
         <h4 class="text-xl font-bold text-center ">Адреса</h4>

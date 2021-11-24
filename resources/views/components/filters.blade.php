@@ -120,8 +120,7 @@
      <div class="flex flex-col space-y-3">
        <label class="inline-flex items-center space-x-2">
          <input type="radio" wire:model="filterStock" value="2" name="filterStock"
-           class="w-5 h-5 text-orange-400 form-radio" checked><span class="text-sm text-gray-700 ">В наличии и под
-           заказ</span>
+           class="w-5 h-5 text-orange-400 form-radio" checked><span class="text-sm text-gray-700 ">Все товары</span>
        </label>
        <label class="inline-flex items-center space-x-2">
          <input type="radio" wire:model="filterStock" value="1" name="filterStock"

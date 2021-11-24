@@ -6,9 +6,15 @@
                     'border-yellow-500': toast.type === 'warning',
                     'border-red-500': toast.type === 'danger'
                 }">
-  <div>
-    <div class="pb-1 text-lg font-black tracking-widest text-gray-900 uppercase font-large dark:text-gray-100"
-      x-text="toast.title"></div>
-    <p class="text-gray-900 dark:text-gray-200" x-html="toast.message"></p>
+
+  <div class="flex items-center justify-between space-x-5">
+    <div class="flex-1 mr-2">
+      <div class="mb-1 text-lg font-black tracking-widest text-gray-900 uppercase font-large dark:text-gray-100"
+        x-show="toast.title !== undefined" x-html="toast.title"></div>
+
+      <div class="text-gray-900 dark:text-gray-200" x-show="toast.message !== undefined" x-html="toast.message"></div>
+    </div>
   </div>
+
+
 </div>

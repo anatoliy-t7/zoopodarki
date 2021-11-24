@@ -2,7 +2,6 @@
 namespace App\Http\Livewire\Site;
 
 use App\Models\Product1C;
-use App\Models\Waitlist;
 use App\Traits\Discounts;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +27,7 @@ class ShopCart extends Component
         'addToCart',
         'increment',
         'decrement',
-        'preOrder',
+
     ];
 
     public function mount()
@@ -42,31 +41,6 @@ class ShopCart extends Component
         }
 
         $this->getCart();
-    }
-
-    public function preOrder(int $itemId)
-    {
-        $this->getCart();
-
-        if (!auth()->user()) {
-            $this->dispatchBrowserEvent('auth');
-
-            return toast()
-                ->success('Вам необходимо авторизоваться что бы заказать товар')
-                ->push();
-        }
-
-        Waitlist::create([
-            'phone' => auth()->user()->phone,
-            'email' => auth()->user()->email,
-            'status' => 'pending',
-            'user_id' => auth()->user()->id,
-            'product1c_id' => $itemId,
-        ]);
-
-        return toast()
-            ->success('Ваш заказ принят, мы сообщим вам когда товар поступит в продажу')
-            ->push();
     }
 
     public function addToCart(int $itemId, int $quantity)

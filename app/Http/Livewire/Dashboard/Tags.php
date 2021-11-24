@@ -168,7 +168,6 @@ class Tags extends Component
         toast()
             ->success('Тег "' . $tag_name . '" удален.')
             ->push();
-
     }
 
     public function closeForm()

@@ -1,24 +1,24 @@
-<div>
+<div itemscope itemtype="http://schema.org/WPHeader">
 
   @if (Agent::isDesktop())
     <div class="relative z-40 block">
       <header class="text-gray-600 bg-gray-50">
         <div class="flex items-center justify-between max-w-screen-xl px-4 py-1 mx-auto text-xs">
           <div class="font-bold text-gray-500">Санкт-Петербург</div>
-          <div class="flex items-center justify-end space-x-2">
-            <a href="#" class="px-3 py-2 hover:underline">
-              Акции и Скидки
-            </a>
-            <a href="{{ route('site.shops') }}" class="px-3 py-2 hover:underline">
-              Магазины
-            </a>
-            <a href="#" class="px-3 py-2 hover:underline">
-              Помощь
-            </a>
-            <a href="#" class="py-2 pl-3 hover:underline">
-              Контакты
-            </a>
-          </div>
+          <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+            <div itemprop="about" itemscope itemtype="http://schema.org/ItemList"
+              class="flex items-center justify-end space-x-2">
+              <a itemprop="itemListElement" href="#" class="px-3 py-2 hover:underline">
+                Акции и Скидки
+              </a>
+              <a itemprop="itemListElement" href="{{ route('site.contact') }}" class="px-3 py-2 hover:underline">
+                Адреса и контакты
+              </a>
+              <a itemprop="itemListElement" href="#" class="px-3 py-2 hover:underline">
+                Помощь
+              </a>
+            </div>
+          </nav>
         </div>
       </header>
 

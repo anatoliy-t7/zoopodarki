@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Json;
 use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
@@ -11,6 +12,6 @@ class Setting extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'options' => 'array',
+        'options' => Json::class,
     ];
 }

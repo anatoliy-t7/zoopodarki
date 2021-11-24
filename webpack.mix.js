@@ -35,9 +35,16 @@ mix.options({
 	autoprefixer: false,
 });
 
+const domain = 'zoopodarki.test';
+const homedir = require('os').homedir();
+
 mix.browserSync({
-	proxy: 'zoopodarki.test',
-	host: 'zoopodarki.test',
+	proxy: 'https://' + domain,
+	host: domain,
+	https: {
+		key: homedir + '/.config/valet/Certificates/' + domain + '.key',
+		cert: homedir + '/.config/valet/Certificates/' + domain + '.crt',
+	},
 	port: '8080',
 	open: 'external',
 	files: [

@@ -21,7 +21,7 @@ class CreateTagsTable extends Migration
             $table->string('meta_title')->nullable();
             $table->string('slug');
 
-            $table->json('filter')->default('[]');
+            $table->json('filter');
             $table->boolean('show_on_page')->default(false);
 
             $table->unsignedBigInteger('category_id')->index();
@@ -29,7 +29,6 @@ class CreateTagsTable extends Migration
                 ->references('id')
                 ->on('categories')
                 ->onDelete('cascade');
-
         });
     }
 

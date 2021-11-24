@@ -26,7 +26,7 @@ class Category extends Component
     public $maxPrice = 10000;
     public $minPrice = 0;
     public $productsCount = 0;
-    public $filterStock = 2; // 0 without stock, 1 with stock, 2 all
+    public $filterStock = 1; // 0 without stock, 1 with stock, 2 all
     public $sortSelectedName = 'Название: от А до Я';
     public $sortSelectedType = 'name';
     public $sortBy = 'asc';

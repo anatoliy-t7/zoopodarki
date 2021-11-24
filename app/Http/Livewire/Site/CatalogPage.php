@@ -16,7 +16,9 @@ class CatalogPage extends Component
     {
         $this->catalog = Catalog::where('slug', $slug)->with('categories')->first();
 
-        $categoriesId = $this->catalog->categories()->where('show_in_catalog', true)->get('id'); // Categories ID that marked with show in catalog
+        $categoriesId = $this->catalog->categories()
+            ->where('show_in_catalog', true)
+            ->get('id'); // Categories ID that marked with show in catalog
 
         $this->selectedCategories = Category::whereIn('id', $categoriesId)
             ->with(

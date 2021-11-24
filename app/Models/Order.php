@@ -10,9 +10,10 @@ class Order extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'contact' => 'array',
-        'address' => 'array',
+        'contact'  => 'array',
+        'address'  => 'array',
     ];
+
 
     public function user()
     {

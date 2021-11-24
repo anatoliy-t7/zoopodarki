@@ -5,6 +5,7 @@ use App\Mail\OrderOneClick;
 use App\Models\Category;
 use App\Models\Product1C;
 use App\Models\Product;
+use App\Models\Waitlist;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Mail;
@@ -22,7 +23,11 @@ class ProductCard extends Component
     public $catalog;
     public $tab = 1;
     public $related = null;
-    protected $listeners = ['getProduct', 'buyOneClick'];
+    protected $listeners = [
+        'getProduct',
+        'buyOneClick',
+        'preOrder',
+    ];
 
     public function mount()
     {
@@ -42,6 +47,30 @@ class ProductCard extends Component
         if ($this->product->media->count() > 0) {
             OpenGraph::addImage(config('app.url') . $this->product->getMedia('product-images')[0]->getUrl('medium'));
         }
+    }
+
+    public function preOrder(int $itemId)
+    {
+
+        if (!auth()->user()) {
+            $this->dispatchBrowserEvent('auth');
+
+            return toast()
+                ->success('Вам необходимо авторизоваться что бы заказать товар')
+                ->push();
+        }
+
+        Waitlist::create([
+            'phone' => auth()->user()->phone,
+            'email' => auth()->user()->email,
+            'status' => 'pending',
+            'user_id' => auth()->user()->id,
+            'product1c_id' => $itemId,
+        ]);
+
+        return toast()
+            ->success('Ваш заказ принят, мы сообщим вам когда товар поступит в продажу')
+            ->push();
     }
 
     public function buyOneClick($orderOneClick, $productId, $count)

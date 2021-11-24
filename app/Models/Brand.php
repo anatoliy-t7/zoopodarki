@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BrandSerie;
+use App\Models\Catalog;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -41,7 +42,10 @@ class Brand extends Model
     {
 
         return $this->hasManyDeepFromRelations($this->products(), (new Product())->attributes());
-
     }
 
+    public function catalogs()
+    {
+        return $this->belongsToMany(Catalog::class, 'catalog_brand', 'brand_id', 'catalog_id');
+    }
 }

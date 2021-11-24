@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
+    use \Staudenmeir\EloquentEagerLimit\HasEagerLimit;
     use Sluggable;
 
     protected $table = 'tags';
@@ -32,5 +33,4 @@ class Tag extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
-
 }
