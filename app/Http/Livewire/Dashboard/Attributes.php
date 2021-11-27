@@ -87,37 +87,39 @@ class Attributes extends Component
             'name' => 'required|unique:attributes,name,' . $this->attribute_id,
         ]);
 
-        DB::transaction(function () use ($items) {
-            $attribute = Attribute::updateOrCreate(
-                ['id' => $this->attribute_id],
-                [
+        DB::transaction(
+            function () use ($items) {
+                $attribute = Attribute::updateOrCreate(
+                    ['id' => $this->attribute_id],
+                    [
                     'name' => trim($this->name),
                     'range' => $this->range,
-                ]
-            );
+                    ]
+                );
 
-            foreach ($items as $item) {
-                if (Arr::has($item, 'id') && $item['id'] !== "") {
-                    AttributeItem::updateOrCreate(
-                        ['id' => $item['id']],
-                        [
-                        'name' => trim($item['name']),
-                        'attribute_id' => $attribute->id,
-                        ]
-                    );
+                foreach ($items as $item) {
+                    if (Arr::has($item, 'id') && $item['id'] !== "" && $item['name'] !== "") {
+                        $attribute_item = AttributeItem::find($item['id']);
+                        $attribute_item->update([
+                            'name' => trim($item['name']),
+                        ]);
+                    }
+                    if ($item['id'] === "" && $item['name'] !== "") {
+                        AttributeItem::create([
+                            'name' => trim($item['name']),
+                            'attribute_id' => $attribute->id,
+                        ]);
+                    }
                 }
-            }
-
-            $this->attribute_id = $attribute->id;
-            $this->items = AttributeItem::where('attribute_id', $attribute->id)->get(['id', 'name']);
-            $this->dispatchBrowserEvent('get-items', $this->items);
-
-            toast()
+                $this->attribute_id = $attribute->id;
+                $this->items = AttributeItem::where('attribute_id', $attribute->id)->get(['id', 'name']);
+                $this->dispatchBrowserEvent('get-items', $this->items);
+                toast()
                 ->success('Свойство "' . $attribute->name . '" обновлено.')
                 ->push();
-
-            $this->closeForm();
-        });
+                $this->closeForm();
+            }
+        );
     }
 
     public function removeItem($itemId)
