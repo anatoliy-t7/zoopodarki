@@ -7,7 +7,6 @@
       class="fixed top-0 left-0 z-40 flex items-center justify-center w-screen h-screen bg-gray-500 bg-opacity-50"
       role="dialog" aria-modal="true">
 
-
       <div x-on:click.outside="close()" @keydown.window.escape="openAuthModal = false"
         class="absolute z-50 flex flex-col bg-white shadow-xl rounded-2xl w-80">
   @endif
@@ -174,7 +173,8 @@
               <div class="absolute top-0 left-0 z-30 pt-4 pl-3 cursor-default">
                 <x-tabler-lock class="w-5 h-5 text-gray-400 stroke-current" />
               </div>
-              <input wire:model.defer="password" id="password" type="password" name="password" required
+              <input wire:model.defer="password" id="password" type="password" name="password"
+                autocomplete="new-password"
                 class="w-full px-4 py-3 pl-10 font-semibold border border-gray-200 bg-gray-50 rounded-2xl focus:outline-none focus:ring focus:bg-white">
             </div>
             @error('password')
@@ -280,7 +280,6 @@
       },
 
       checkUser() {
-
         if (this.enteredOtp.length > 5) {
           this.enteredOtp = this.enteredOtp.slice(0, 5);
         }

@@ -68,7 +68,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
 });
 
     // TODO delete in production 'auth'
-    Route::middleware(['throttle:1000,60'])
+    Route::middleware(['throttle:1000,60', 'auth'])
     ->name('site.')
     ->group(function () {
         Route::get('/', 'App\Http\Controllers\Site\HomeController@index')->name('home');

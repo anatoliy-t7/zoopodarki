@@ -51,12 +51,13 @@
         @endif
       </div>
 
-      <div>
-        {{-- @foreach ($noStockItems as $item)
-            <div>$item['']</div>
-
-          @endforeach --}}
-      </div>
+      @if (empty($noStockItems))
+        <div>
+          @foreach ($noStockItems as $item)
+            <div>{{ $item['name'] }}</div>
+          @endforeach
+        </div>
+      @endif
 
       <script type="text/javascript">
         //TODO create route
@@ -70,13 +71,13 @@
 
       <div class="p-6 space-y-4 text-sm ">
         <div class="text-lg font-bold">Ваш заказ</div>
-        @if ($items)
+        @if ($order->items()->exists())
           <div class="flex flex-col justify-between w-full ">
-            @foreach ($items as $item)
+            @foreach ($order->items as $item)
               <div class="py-2 border-b border-gray-200 ">
                 <div class="flex items-center justify-between space-x-2 ">
                   <div class="p-2 bg-white ">
-                    @if ($item->associatedModel['image'])
+                    @if ($item->product)
                       <a class="w-full" target="_blank"
                         href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}">
                         <img loading="lazy" class="object-fill w-12 h-full"

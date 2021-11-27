@@ -26,7 +26,7 @@ class CheckoutConfirm extends Component
             $order_id = request()->session()->input('order_id');
 
             $this->order = Order::where('id', $order_id)
-            ->with('items')
+            ->with('items', 'items.product')
             ->first();
         } else {
             return redirect()->route('site.home');

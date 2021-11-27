@@ -32,7 +32,9 @@ class CreateOrderItemTable extends Migration
                 ->onDelete('cascade');
 
             $table->unsignedBigInteger('product_id')->index();
-            $table->foreign('product_id')->references('id')->on('products_1c');
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products_1c');
         });
     }
 
