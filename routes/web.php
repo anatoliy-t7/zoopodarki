@@ -68,7 +68,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
 });
 
     // TODO delete in production 'auth'
-    Route::middleware(['throttle:1000,60', 'auth'])
+    Route::middleware(['throttle:1000,60'])
     ->name('site.')
     ->group(function () {
         Route::get('/', 'App\Http\Controllers\Site\HomeController@index')->name('home');
@@ -102,14 +102,21 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
 
         Route::get('/payment/cash', 'App\Http\Controllers\Site\PaymentController@payСash')->name('payment.cash');
 
-        Route::get('/payment/status', 'App\Http\Controllers\Site\PaymentController@userCameBack')->name('payment.status');
+        Route::get('/payment/status', 'App\Http\Controllers\Site\PaymentController@userCameBack')
+        ->name('payment.status');
     });
 
     // 1С exchange
-    Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')->middleware(['throttle:1000,60', 'bot'])->name('exchange');
+    Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')
+    ->middleware(['throttle:1000,60', 'bot'])
+    ->name('exchange');
 
     Route::middleware(['throttle:1000,60', 'bot'])->group(function () {
-        Route::get('/checkout', \App\Http\Livewire\Site\Checkout::class)->name('checkout');
+        Route::get('/checkout', \App\Http\Livewire\Site\Checkout\Checkout::class)->name('checkout');
 
-        Route::post('/payment/callback', 'App\Http\Controllers\Site\PaymentController@payCallback')->name('payment.callback');
+        Route::post('/payment/callback', 'App\Http\Controllers\Site\PaymentController@payCallback')
+        ->name('payment.callback');
+
+        Route::get('/checkout/confirm', \App\Http\Livewire\Site\Checkout\CheckoutConfirm::class)
+        ->name('checkout.confirm');
     });

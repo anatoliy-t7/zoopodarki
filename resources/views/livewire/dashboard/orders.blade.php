@@ -18,34 +18,21 @@
 
       <div>
         <div class="flex items-center justify-end py-3">
-          <div x-cloak x-data="{ open: false }" class="relative max-w-xs">
-            <button x-on:click="open = !open" x-on:click.outside="open = false"
-              class="flex items-center justify-between w-40 py-2 pl-3 pr-2 text-xs text-left text-gray-900 bg-white rounded-lg hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:bg-pink-100 hover:bg-pink-100">
-              <span>{{ $filteredByName }}</span>
-              <div :class="{'rotate-180': open, 'rotate-0': !open}"
-                class="inline align-middle transition-transform duration-200 transform ">
-                <x-tabler-chevron-down class="w-4 h-4 text-gray-500 stroke-current" />
-              </div>
-            </button>
-            <div x-show="open" x-transition:enter="transition ease-out duration-100"
-              x-transition:enter-start="transform opacity-0 scale-95"
-              x-transition:enter-end="transform opacity-100 scale-100"
-              x-transition:leave="transition ease-in duration-75"
-              x-transition:leave-start="transform opacity-100 scale-100"
-              x-transition:leave-end="transform opacity-0 scale-95"
-              class="absolute right-0 z-30 w-40 mt-2 origin-top-right shadow-xl rounded-2xl">
-              <div class="w-auto p-2 bg-white shadow-sm rounded-2xl" x-on:click="open = !open">
-                @foreach ($filterType as $filter)
-                  <div class="px-3 py-2 text-xs cursor-pointer hover:bg-gray-50 rounded-xl"
-                    wire:click="filterIt('{{ $filter['status'] }}', '{{ $filter['name'] }}')">
-                    {{ $filter['name'] }}
-                  </div>
-                @endforeach
-              </div>
-            </div>
-          </div>
-        </div>
 
+          <label class="flex items-center justify-end space-x-4">
+            <span class="text-gray-700">Фильтр по статусу</span>
+            <div class="relative">
+              <select wire:model="status" name="status" class="mt-1 field">
+                <option default value="">Все</option>
+                @foreach ($filterType as $item)
+                  <option value="{{ $item }}">{{ __('constants.order_status.' . $item) }}</option>
+                @endforeach
+              </select>
+            </div>
+            @error('status') <span class="text-xs text-red-500">Поле обязательно для
+              заполнения</span> @enderror
+          </label>
+        </div>
       </div>
 
     </div>

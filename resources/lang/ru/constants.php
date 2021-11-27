@@ -11,6 +11,7 @@ return [
     'product_status.unavailable' => 'недоступен',
     'product_status.retired' => 'устаревший',
 
+    'order_status.pending_confirm' => 'ожидающий подтверждения',
     'order_status.pending_payment' => 'ожидающий платеж',
     'order_status.processing' => 'в обработке',
     'order_status.ready' => 'ожидает отгрузки',

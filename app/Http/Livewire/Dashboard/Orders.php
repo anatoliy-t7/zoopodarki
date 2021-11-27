@@ -17,51 +17,23 @@ class Orders extends Component
     public $itemsPerPage = 30;
     public $order;
     public $orderSelected;
-    public $filteredBy = null;
-    public $filteredByName = 'Фильтр по статусу';
+    public $status;
     protected $queryString = [
         'search' => ['except' => ''],
         'page' => ['except' => 1],
         'sortField',
         'sortDirection',
         'itemsPerPage',
-        'filteredBy',
+        'status',
     ];
-    public $filterType = [
-        '0' => [
-            'name' => 'Все статусы',
-            'status' => '',
-        ],
-        '1' => [
-            'name' => 'В ожидании',
-            'status' => 'pending',
-        ],
-        '2' => [
-            'name' => ' В обработке',
-            'status' => 'processing',
-        ],
-        '3' => [
-            'name' => 'Готов к самовывозу',
-            'status' => 'pickup',
-        ],
-        '4' => [
-            'name' => 'Завершен',
-            'status' => 'completed',
-        ],
-        '5' => [
-            'name' => 'Отменен',
-            'status' => 'cancelled',
-        ],
-        '6' => [
-            'name' => 'Возврат',
-            'status' => 'return',
-        ],
-        '7' => [
-            'name' => 'Приостановлен',
-            'status' => 'hold',
-        ],
-    ];
+    public $filterType;
     protected $listeners = ['save'];
+
+    public function mount()
+    {
+        $this->filterType = config('constants.order_status');
+        $this->search = request()->query('search', $this->search);
+    }
 
     public function updatingSearch()
     {
@@ -78,17 +50,6 @@ class Orders extends Component
         $this->sortField = $field;
     }
 
-    public function mount()
-    {
-        $this->search = request()->query('search', $this->search);
-    }
-
-    public function filterIt($status, $name)
-    {
-        $this->filteredBy = $status;
-        $this->filteredByName = $name;
-    }
-
     public function openForm($orderId)
     {
         $this->orderSelected = Order::where('id', $orderId)
@@ -98,7 +59,7 @@ class Orders extends Component
 
     public function closeForm()
     {
-        $this->reset();
+        $this->reset('orderSelected');
         $this->dispatchBrowserEvent('close');
     }
 
@@ -116,8 +77,8 @@ class Orders extends Component
 
     public function render()
     {
-        $orders = Order::when($this->filteredBy, function ($query) {
-            return $query->where('status', $this->filteredBy);
+        $orders = Order::when($this->status, function ($query) {
+            return $query->where('status', $this->status);
         })
             ->when($this->search, function ($query) {
                 $query->whereLike(['order_number', 'id', 'name', 'amount'], $this->search);

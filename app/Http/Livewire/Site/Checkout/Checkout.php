@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Livewire\Site;
+namespace App\Http\Livewire\Site\Checkout;
 
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -11,17 +11,19 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
-use YooKassa\Client;
 
 class Checkout extends Component
 {
     use Discounts;
     use WireToast;
-
     use Delivery;
 
+    public $greenLine = 4; // 4, 50 проценты для полосы
+    public $step = 1; // 1, 2 шаги заказа
+    public $order = null;
     public $cartId; // индификатор корзины
     public $shelterCartId;
     public $counter; // количество товара в корзине
@@ -33,7 +35,6 @@ class Checkout extends Component
     public $totalAmount;
     public $totalWeight = 200;
     public $userId;
-    public $discount = 0;
     public $contact;
     public $address = [];
     public $date;
@@ -47,19 +48,30 @@ class Checkout extends Component
     public $storeId = 999; // 999 = не назначен
     public $storeGuid;
     public $firstOrder = 0;
+    public $userHasDiscount = 0;
     public $userHasDiscountOnReview = false;
+    public $productDiscountIdsByWeight = false;
     protected $listeners = [
         'setPickupStore',
         'getContactFromComponent',
         'getAddressFromComponent',
         'getCartCheckout'
     ];
-    // TODO проверить все скидки на правельный пересчет
+
+    public function booted()
+    {
+        if (!request()->session()->has('cart_id')) {
+            return redirect()->route('site.home');
+        }
+
+        $this->getCartCheckout();
+    }
+
     public function mount()
     {
 
-        if (request()->session()->missing('cart_id')) {
-             redirect()->route('site.home');
+        if (!request()->session()->has('cart_id')) {
+            return redirect()->route('site.home');
         } else {
             $this->cartId = session('cart_id');
             $this->shelterCartId = session('shelter_cart');
@@ -67,13 +79,11 @@ class Checkout extends Component
             if (\Cart::session($this->cartId)->isEmpty()) {
                 redirect('/');
             } else {
-                $this->getCartCheckout();
-
                 $this->generateDatesForDelivery();
-
                 if (auth()->user()) {
-                    $this->discount = auth()->user()->discount;
-
+                    $this->step = 2;
+                    $this->greenLine = 50;
+                    $this->userHasDiscount = auth()->user()->discount;
                     $this->getContacts();
                     $this->getAddresses();
                 }
@@ -123,14 +133,8 @@ class Checkout extends Component
         $this->render(); // TODO not working
     }
 
-    public function hydrate()
-    {
-        $this->getCartCheckout();
-    }
-
     public function calcTotalAmount()
     {
-        // dd(\Cart::session($this->cartId)->getSubTotal());
         if (0 == $this->orderType) {
             $this->totalAmount = \Cart::session($this->cartId)->getTotal()
                 + app('shelter')->session($this->shelterCartId)->getTotal()
@@ -147,60 +151,32 @@ class Checkout extends Component
 
     public function getCartCheckout()
     {
+
         $cart = \Cart::session($this->cartId);
-
-        if (auth()->user()) {
-            $this->checkIfFirstOrder($cart->getSubTotal(), $this->cartId);
-
-            if ($this->checkIfUserHasDiscountOnReview($this->cartId)) {
-                $this->userHasDiscountOnReview = true;
-            } else {
-                $this->userHasDiscountOnReview = false;
-            }
-        }
-
-
-
         $shelterCart = app('shelter')->session($this->shelterCartId);
-        $shelterCartCounter = $shelterCart->getTotalQuantity();
-
-        $this->counter = $cart->getTotalQuantity() + $shelterCartCounter;
 
         $functionItems = $cart->getContent();
-
-         // Дис. карта действует сразу, но сама себя не учитывает
-        $cartDiscountByCard = false;
-        foreach ($functionItems as $key => $item) {
-            if ($item->associatedModel['vendorcode'] === 'DISCOUNT_CARD') {
-                 $cartDiscountByCard = $this->getDiscountByCard($item->associatedModel['unit_value'], $this->cartId);
-            }
-            break;
-        }
-
-        if ($cartDiscountByCard) {
-            foreach ($functionItems as $key => $item) {
-                if ($item->associatedModel['vendorcode'] !== 'DISCOUNT_CARD'
-                    && $item->associatedModel['promotion_type'] !== 1
-                    && $item->associatedModel['promotion_type'] !== 4
-                ) {
-                     $cart->addItemCondition($item->id, $cartDiscountByCard);
-                }
-            }
-        }
-
         $this->items = $functionItems->all();
-
         $functionShelterItems = $shelterCart->getContent();
         $this->shelterItems = $functionShelterItems->all();
 
+        $shelterCartCounter = $shelterCart->getTotalQuantity();
+        $this->counter = $cart->getTotalQuantity() + $shelterCartCounter;
+
         $this->getTotalWeight($functionItems, $functionShelterItems);
 
-        $this->subTotal = $cart->getSubTotal() + $shelterCart->getSubTotal();
-        if (auth() && round($this->subTotal) >= 2000 && 'first' === auth()->user()->extra_discount) {
-            $this->firstOrder = 200;
-        } else {
-            $this->firstOrder = 0;
+        // Check and set discounts
+        if ($functionItems) {
+            $this->productDiscountIdsByWeight = $this->checkDiscountByWeight($this->cartId, $functionItems);
+
+            $this->getDiscountByCard($this->userHasDiscount, $this->cartId, $functionItems);
         }
+
+        if (auth()->user() && $this->checkIfFirstOrder($cart->getSubTotal(), $this->cartId)) {
+            $this->firstOrder = 200;
+        }
+
+        $this->subTotal = $cart->getSubTotal() + $shelterCart->getSubTotal();
 
         if (auth()->user()) {
             $this->updatedOrderType();
@@ -252,43 +228,48 @@ class Checkout extends Component
 
     public function createOrder()
     {
+
         if (!auth()->user()) {
+            $this->greenLine = 4;
+             $this->step = 1;
             return $this->dispatchBrowserEvent('auth');
         }
 
         if ($this->deliveryCost === false) {
-            return toast()->warning('Дорогой покупатель, в настоящее время мы доставляем только в пределах КАД, но совсем скоро начнем доставку и за его пределами!')->push();
+            return toast()
+            ->warning('Дорогой покупатель, в настоящее время мы доставляем только в пределах КАД,
+            но совсем скоро начнем доставку и за его пределами!')
+            ->push();
         }
 
         $this->validate([
-        'contact' => 'required',
+            'contact' => 'required',
         ]);
 
         if (0 == $this->orderType) {
             $this->validate([
-            'date' => 'required',
-            'deliveryTime' => 'required',
-            'address' => 'required',
+                'date' => 'required',
+                'deliveryTime' => 'required',
+                'address' => 'required',
             ]);
         } else {
             $this->validate([
-            'pickupStore' => 'required',
+                'pickupStore' => 'required',
             ]);
 
             $this->address = 'Магазин из которого заберут: ' . $this->pickupStore;
         }
 
+        $noStockItems = [];
+        $noStockItems = $this->reserveStock($this->cartId);
+        array_merge($noStockItems, $this->reserveStock($this->shelterCartId, true));
+
         $this->getCartCheckout();
 
-        DB::transaction(function () {
+        try {
+            DB::beginTransaction();
+
             $this->userId = auth()->user()->id;
-
-            $status = 'pending_payment';
-
-            // 1 cash
-            if (1 === $this->orderPaymentType) {
-                $status = 'processing';
-            }
 
             $orderNumber = getNextOrderNumber();
 
@@ -297,32 +278,32 @@ class Checkout extends Component
                 . $this->firstOrder . ' рублей | ' . $this->orderComment;
             }
 
-            if (auth()->user()->review === 'on') {
-                $this->orderComment = 'Скидка 2% за отзыв | ' . $this->orderComment;
-            }
+            // if (auth()->user()->review === 'on') {
+            //     $this->orderComment = 'Скидка 2% за отзыв | ' . $this->orderComment;
+            // }
 
             if (count($this->shelterItems) > 0) {
                 $this->deliveryCost = $this->deliveryCost + $this->deliveryCostToShelter;
             }
 
             $order = Order::create([
-            'order_number' => $orderNumber,
-            'user_id' => $this->userId,
-            'amount' => $this->totalAmount,
-            'quantity' => $this->counter,
-            'weight' => $this->totalWeight,
-            'status' => $status,
-            'payment_status' => 'pending',
-            'payment_method' => $this->orderPaymentType,
-            'need_change' => $this->needChange,
-            'order_type' => $this->orderType,
-            'pickup_store' => $this->storeGuid,
-            'date' => Carbon::parse($this->date),
-            'delivery_time' => $this->deliveryTime,
-            'delivery_cost' => $this->deliveryCost,
-            'contact' => $this->contact,
-            'address' => $this->address,
-            'order_comment' => $this->orderComment . ' | ',
+                'order_number' => $orderNumber,
+                'user_id' => $this->userId,
+                'amount' => $this->totalAmount,
+                'quantity' => $this->counter,
+                'weight' => $this->totalWeight,
+                'status' => 'pending_confirm',
+                'payment_status' => 'pending',
+                'payment_method' => $this->orderPaymentType,
+                'need_change' => $this->needChange,
+                'order_type' => $this->orderType,
+                'pickup_store' => $this->storeGuid,
+                'date' => Carbon::parse($this->date),
+                'delivery_time' => $this->deliveryTime,
+                'delivery_cost' => $this->deliveryCost,
+                'contact' => $this->contact,
+                'address' => $this->address,
+                'order_comment' => $this->orderComment . ' | ',
             ]);
 
             foreach ($this->items as $item) {
@@ -332,26 +313,28 @@ class Checkout extends Component
 
                 if (0 == $item->associatedModel['promotion_type']) {
                     $discountComment = '';
+                } elseif (1 == $item->associatedModel['promotion_type']) {
+                    $discountComment = 'Акция "Уценка"';
                 } elseif (2 == $item->associatedModel['promotion_type']) {
-                    $discountComment = '1+1';
+                    $discountComment = 'Акция "1+1"';
                 } elseif (3 == $item->associatedModel['promotion_type']) {
-                    $discountComment = 'Акция поставщика, скидка -' . $product1c->promotion_percent;
+                    $discountComment = 'Акция поставщика, -' . $product1c->promotion_percent;
                 } elseif (4 == $item->associatedModel['promotion_type']) {
-                    $discountComment = 'Праздничные, скидка -' . $product1c->promotion_percent;
+                    $discountComment = 'Праздничные скидки, -' . $product1c->promotion_percent;
                 }
 
                 OrderItem::create([
-                'name' => $item->name,
-                'uuid' => $product1c->uuid,
-                'barcode' => $product1c->barcode,
-                'vendorcode' => $product1c->vendorcode,
-                'quantity' => $item->quantity,
-                'price' => $item->price,
-                'amount' => $item->getPriceSumWithConditions(),
-                'order_id' => $order->id,
-                'product_id' => $item->id,
-                'discount_comment' => $discountComment,
-                'discount' => round($item->getPriceSum() - $item->getPriceSumWithConditions()),
+                    'name' => $item->name,
+                    'uuid' => $product1c->uuid,
+                    'barcode' => $product1c->barcode,
+                    'vendorcode' => $product1c->vendorcode,
+                    'quantity' => $item->quantity,
+                    'price' => $item->price,
+                    'amount' => $item->getPriceSumWithConditions(),
+                    'order_id' => $order->id,
+                    'product_id' => $item->id,
+                    'discount_comment' => $discountComment,
+                    'discount' => round($item->getPriceSum() - $item->getPriceSumWithConditions()),
                 ]);
             }
 
@@ -377,55 +360,103 @@ class Checkout extends Component
                 }
             }
 
+            $order->load('items');
+
+            // if (auth()->user()->review === 'on') {
+            //     $user = auth()->user();
+            //     $user->review = 'off';
+            //     $user->save();
+            // }
+
             session(['order_id' => $order->id]);
 
-            \Cart::session($this->cartId)->clear();
-            app('shelter')->session($this->shelterCartId)->clear();
+            // Happy ending :)
+            DB::commit();
 
-            if (auth()->user()->review === 'on') {
-                $user = auth()->user();
-                $user->review = 'off';
-                $user->save();
-            }
-
-            if (0 === $this->orderPaymentType) {
-                $this->payCreate($order);
-            } else {
-                redirect()->route('site.payment.cash', ['order_id' => $order->id]);
-            }
-        });
-
-        toast()
-        ->warning('Ваш заказ не создан, попробуйте еще раз')
-        ->push();
+            return redirect()->route('checkout.confirm', [
+                'no_stock_items' => $noStockItems
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e);
+            return toast()
+            ->warning('Ваш заказ не создан, попробуйте еще раз')
+            ->push();
+            ;
+        }
     }
 
-    public function payCreate($order)
+    public function reserveStock($cartId, $shelterCart = false)
     {
-        $clientId = config('services.yookassa.client_id');
-        $clientSecret = config('services.yookassa.client_secret');
+        if ($shelterCart) {
+            $cart = app('shelter')->session($cartId);
+        } else {
+            $cart = \Cart::session($cartId);
+        }
+        $functionItems = $cart->getContent();
+        $items = $functionItems->all();
 
-        $client = new Client();
-        $client->setAuth($clientId, $clientSecret);
+        $noStockItems = [];
 
-        $payment = $client->createPayment([
-        'amount' => [
-            'value' => $order->amount,
-            'currency' => 'RUB',
-        ],
-        'description' => 'Заказ ' . $order->order_number,
-        'confirmation' => [
-            'type' => 'redirect',
-            'locale' => 'ru_RU',
-            'return_url' => route('site.payment.status'),
-        ],
-        'capture' => true,
-        'metadata' => [
-            'order_id' => $order->id,
-        ],
-        ], uniqid('', true));
+        DB::transaction(
+            function () use ($items, $shelterCart, $cartId, $noStockItems) {
+                foreach ($items as $item) {
+                    $product_1c = Product1C::find($item['id']);
+                    if ($product_1c->stock === 0) {
+                        array_push($noStockItems, [
+                          'id' =>  $item['id'],
+                          'name' =>  $item['name'],
+                          'stock' =>  0,
+                        ]);
 
-        return redirect()->to($payment->getConfirmation()->getConfirmationUrl());
+                        if ($shelterCart) {
+                            app('shelter')->session($cartId)
+                                ->remove($item['id']);
+                        } else {
+                            \Cart::session($cartId)
+                                ->remove($item['id']);
+                        }
+
+                        session()->flash(
+                            'message',
+                            'К сожалению, к настоящему моменту кто-то уже купил товар, выделенный ниже серым. Вы можете продолжить покупку без этого товара, заказать его или вернуться обратно в магазин. Надеемся на ваше понимание:) Спасибо!'
+                        );
+                    } elseif ($product_1c->stock < $item['quantity']) {
+                        array_push($noStockItems, [
+                          'id' =>  $item['id'],
+                          'name' =>  $item['name'],
+                          'stock' =>  $product_1c->stock,
+                        ]);
+
+                        if ($shelterCart) {
+                            app('shelter')
+                                ->session($cartId)
+                                ->update($item['id'], array(
+                                'quantity' => $product_1c->stock,
+                                ));
+                        } else {
+                            \Cart::session($cartId)
+                                ->update($item['id'], array(
+                                    'quantity' => $product_1c->stock,
+                                ));
+                        }
+
+                        $product_1c->stock = 0;
+                        $product_1c->save();
+
+                        session()->flash(
+                            'message',
+                            'К сожалению, к настоящему моменту кто-то уже купил товар, выделенный ниже красным. Мы уменьшили количество до имеющегося у нас на складе. Надеемся на ваше понимание:) Спасибо!'
+                        );
+                    } else {
+                        $product_1c->stock = $product_1c->stock - $item['quantity'];
+                        $product_1c->save();
+                    }
+                }
+            }
+        );
+
+        return $noStockItems;
     }
 
     public function getContacts()
@@ -454,8 +485,8 @@ class Checkout extends Component
 
     public function render()
     {
-        return view('livewire.site.checkout')
-        ->extends('layouts.app')
+        return view('livewire.site.checkout.checkout')
+        ->extends('layouts.clean')
         ->section('content');
     }
 }

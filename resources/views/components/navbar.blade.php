@@ -27,11 +27,7 @@
 
           <div class="flex items-center justify-start space-x-12">
             <div class="flex items-center justify-between p-2">
-              <a href="/" class="flex items-center text-lg leading-normal font-semibol focus:outline-none"
-                title="Магазин товаров для животных | {{ config('app.name') }}">
-
-                <span class="font-bold text-gray-500"><span class="text-orange-500 ">Zoo</span>подарки</span>
-              </a>
+              <x-logo />
             </div>
 
             <x-mainmenu />

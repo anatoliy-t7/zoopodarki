@@ -7,6 +7,7 @@ use App\Notifications\SendOTP;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Seshac\Otp\Otp;
@@ -22,14 +23,18 @@ class In extends Component
     public $password;
     protected $user;
     protected $otp;
+    protected $rules;
     public $token;
     public $subscribed = false;
+    public $currentUr = '';
 
-    protected $rules = [
-        'email' => 'required|email',
-        'password' => 'required',
-    ];
+
     protected $listeners = ['createOtp', 'checkUser'];
+
+    public function mount()
+    {
+        $this->currentUrl = Route::currentRouteName();
+    }
 
     public function createOtp($phone = null)
     {
@@ -148,19 +153,34 @@ class In extends Component
 
     public function loginByEmail()
     {
-        $this->validate();
+
+        $this->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (!User::where('email', $this->email)->first()) {
+            return toast()
+                ->warning('Этот email не зарегистрирован')
+                ->push();
+        }
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
             if (auth()->user()->discount === 0) {
                 GetUserDiscountFrom1C::dispatch(auth()->user());
             }
 
-            $this->dispatchBrowserEvent('reloadPage');
+            return $this->dispatchBrowserEvent('reloadPage');
+        } else {
+            return toast()
+                ->warning('Не правельный пароль')
+                ->push();
         }
     }
 
     public function render()
     {
+
         return view('livewire.auth.in');
     }
 }

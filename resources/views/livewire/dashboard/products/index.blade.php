@@ -3,7 +3,7 @@
 @endsection
 <div>
 
-  <div class="flex items-center justify-between w-full pb-2 space-x-6">
+  <div class="flex items-center justify-start w-full pb-2 space-x-8">
 
     <h3 class="text-2xl">Товары</h3>
 

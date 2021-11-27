@@ -23,29 +23,43 @@
       class="relative z-50 flex items-start w-full h-auto mx-auto overflow-y-auto text-gray-700 max-w-screen overscroll-contain pb-28">
       <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="w-3/12 py-6">
         <div itemprop="about" itemscope itemtype="http://schema.org/ItemList" class="h-full leading-snug bg-transparent">
-          @foreach ($menuCatalogs as $catalog)
+          @foreach ($menuCatalogs as $menuCatalog)
             <div itemprop="itemListElement" itemscope itemtype="http://schema.org/ItemList"
               class="flex justify-end text-left">
-              <a itemprop="url" x-on:mouseover="tab = {{ $catalog->id }}"
-                :class="{ 'bg-white text-orange-500 border-orange-400': tab === {{ $catalog->id }} }"
-                href="{{ route('site.catalog', ['slug' => $catalog->slug]) }}"
+              <a itemprop="url" x-on:mouseover="tab = {{ $menuCatalog->id }}"
+                :class="{ 'bg-white text-orange-500 border-orange-400': tab === {{ $menuCatalog->id }} }"
+                href="{{ route('site.catalog', ['slug' => $menuCatalog->slug]) }}"
                 class="relative flex items-center h-full py-4 pl-6 font-bold text-gray-900 border-r-4 border-transparent rounded-l-lg cursor-pointer hover:border-orange-400 w-80"
                 style="word-spacing: 4px;">
-                {{ $catalog->name }}
+                {{ $menuCatalog->name }}
               </a>
-              <meta itemprop="name" content="{{ $catalog->name }}" />
-              @if ($catalog->icon !== null)
+              <meta itemprop="name" content="{{ $menuCatalog->name }}" />
+              @if ($menuCatalog->icon !== null)
                 <div class="">
-                  {!! $catalog->icon !!}
+                  {!! $menuCatalog->icon !!}
                 </div>
               @endif
             </div>
           @endforeach
         </div>
       </nav>
-      <div class="flex self-stretch w-9/12 p-8 bg-white " :class=" { 'rounded-tl-none' : tab==={{ $catalog->id }} }">
+      <div class="flex self-stretch w-9/12 p-8 bg-white "
+        :class=" { 'rounded-tl-none' : tab==={{ $menuCatalog->id }} }">
         @foreach ($menuCatalogs as $catalog)
           <div x-show="tab == {{ $catalog->id }}" class="w-full">
+            @if ($catalog->brands)
+              <div class="flex items-center justify-start pb-6 pl-16 space-x-12">
+                @foreach ($catalog->brands as $brand)
+                  <a href="{{ route('site.brand', ['brand' => $brand->slug]) }}">
+                    @if ($brand->logo)
+                      <img loading="lazy" class="w-auto h-24" src="/brands/{{ $brand->logo }}">
+                    @else
+                      <div>{{ $brand->name }}</div>
+                    @endif
+                  </a>
+                @endforeach
+              </div>
+            @endif
             <div class="flex flex-wrap w-full max-w-screen-lg">
               @foreach ($catalog->categories as $category)
                 <div class="py-2 pl-12 w-80">

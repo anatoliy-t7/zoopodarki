@@ -59,33 +59,28 @@ class Products1c extends Component
             'promotion.type' => 'required',
         ]);
 
-        if ($this->promotion['type'] === '1') {
-            $this->validate([
-                'promotion.stock' => 'required|numeric',
-            ]);
-        } elseif ($this->promotion['type'] === '2') {
+        if ($this->promotion['type'] === '2') {
             $this->validate([
                 'promotion.stock' => 'required|numeric',
                 'promotion.date' => 'required|date|date|date_format:Y-m-d|after:today',
             ]);
         } elseif ($this->promotion['type'] === '3') {
             $this->validate([
-                'promotion.percent' => 'required|numeric|between:1,99',
+            'promotion.percent' => 'required|numeric|between:1,99',
             ]);
         } elseif ($this->promotion['type'] === '4') {
             $this->validate([
-                'promotion.percent' => 'required|numeric|between:1,99',
-                'promotion.date' => 'required|date|date_format:Y-m-d|after:today',
+            'promotion.percent' => 'required|numeric|between:1,99',
+            'promotion.date' => 'required|date|date_format:Y-m-d|after:today',
             ]);
         }
 
         try {
-            $this->initPromotion($this->product1c);
+            $this->initPromotion($this->product1c, $this->promotion);
 
             toast()
                 ->success('Акция создана')
                 ->push();
-
         } catch (\Throwable$th) {
             \Log::error($th);
 
@@ -106,7 +101,6 @@ class Products1c extends Component
         toast()
             ->success('Акция прекращена')
             ->push();
-
     }
 
     public function closeForm()

@@ -65,7 +65,6 @@
             <div class="text-sm divide-y divide-gray-100">
               @foreach ($items as $key => $item)
                 <div class="flex items-center justify-between space-x-2 md:space-x-3">
-
                   <div class="w-2/12 p-2">
                     @if ($item->associatedModel['image'])
                       <a class="w-full"
@@ -90,30 +89,38 @@
 
                         <div class="flex items-center justify-start w-2/12 py-2 text-xs text-gray-500">
                           @if ($item->attributes->has('unit'))
-                            <x-units :unit="$item->attributes['unit']" :value="$item->associatedModel['unit_value']">
+                            <x-units :unit="$item->attributes['unit']" :value="$item->associatedModel['weight']">
                             </x-units>
                           @endif
                         </div>
 
                         <div class="flex items-center justify-between w-10/12">
+
                           <div class="flex justify-center p-2 leading-none">
-                            @if ($item->quantity == 1)
+                            @if ($item->associatedModel['unit_value'] != 'на развес')
+                              @if ($item->quantity == 1)
+                                <button wire:click="delete({{ $item->id }})"
+                                  class="px-1 text-gray-400 bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
+                                  <x-tabler-trash class="w-5 h-5" />
+                                </button>
+                              @else
+                                <button wire:click="decrement({{ $item->id }})"
+                                  class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 rounded-l-lg border border-gray-200 hover:bg-gray-300 {{ $item->quantity == 1 ? 'text-gray-400 cursor-not-allowed' : ' ' }} "
+                                  {{ $item->quantity == 1 ? 'disabled' : ' ' }}>-</button>
+                              @endif
+                              <div class="flex items-center justify-center w-8 h-8 border-t border-b">
+                                <div class="border-gray-200 ">
+                                  {{ $item->quantity }}
+                                </div>
+                              </div>
+                              <button wire:click="increment({{ $item->id }})"
+                                class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">+</button>
+                            @else
                               <button wire:click="delete({{ $item->id }})"
-                                class="px-1 text-gray-400 bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
+                                class="p-1 text-gray-400 bg-gray-200 border border-gray-200 rounded-lg hover:bg-gray-300">
                                 <x-tabler-trash class="w-5 h-5" />
                               </button>
-                            @else
-                              <button wire:click="decrement({{ $item->id }})"
-                                class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 rounded-l-lg border border-gray-200 hover:bg-gray-300 {{ $item->quantity == 1 ? 'text-gray-400 cursor-not-allowed' : ' ' }} "
-                                {{ $item->quantity == 1 ? 'disabled' : ' ' }}>-</button>
                             @endif
-                            <div class="flex items-center justify-center w-8 h-8 border-t border-b">
-                              <div class="border-gray-200 ">
-                                {{ $item->quantity }}
-                              </div>
-                            </div>
-                            <button wire:click="increment({{ $item->id }})"
-                              class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">+</button>
                           </div>
 
                           <div class="flex justify-end p-2">
@@ -122,32 +129,28 @@
                               @if ($item->associatedModel['promotion_type'] === 0)
                                 <div class="flex items-center justify-end p-2 ">
                                   <div class="font-bold">
-                                    {{ RUB($item->getPriceSum()) }}
+                                    {{ RUB($item->price) }}
                                   </div>
                                 </div>
-                              @elseif ($item->associatedModel['promotion_type'] === 2)
+                              @elseif ($item->associatedModel['promotion_type'] === 1 ||
+                                $item->associatedModel['promotion_type'] === 3)
                                 <div class="flex items-center justify-end p-2 space-x-2">
                                   <div class="text-xs line-through">
-                                    {{ RUB($item->getPriceSum()) }}
+                                    {{ RUB($item->associatedModel['promotion_price']) }}
                                   </div>
                                   <div class="font-bold text-orange-500">
-                                    {{ RUB($item->getPriceSumWithConditions()) }}</div>
+                                    {{ RUB($item->price) }}
+                                  </div>
                                 </div>
-                              @elseif ($item->associatedModel['promotion_type'] === 3)
+                              @elseif ($item->associatedModel['promotion_type'] === 2 ||
+                                $item->associatedModel['promotion_type'] === 4)
                                 <div class="flex items-center justify-end p-2 space-x-2">
                                   <div class="text-xs line-through">
-                                    {{ RUB(discountRevert($item->getPriceSum(), $item->associatedModel['promotion_percent'])) }}
+                                    {{ RUB($item->price) }}
                                   </div>
                                   <div class="font-bold text-orange-500">
-                                    {{ RUB($item->getPriceSumWithConditions()) }}</div>
-                                </div>
-                              @elseif ($item->associatedModel['promotion_type'] === 4)
-                                <div class="flex items-center justify-end p-2 space-x-2">
-                                  <div class="text-xs line-through">
-                                    {{ RUB($item->getPriceSum()) }}
+                                    {{ RUB($item->getPriceWithConditions()) }}
                                   </div>
-                                  <div class="font-bold text-orange-500">
-                                    {{ RUB($item->getPriceSumWithConditions()) }}</div>
                                 </div>
                               @endif
                             </div>
@@ -205,19 +208,19 @@
                         <div class="flex items-center justify-between w-10/12">
                           <div class="flex justify-center p-2 leading-none">
                             @if ($shelterItem->quantity == 1)
-                              <button wire:click="delete({{ $shelterItem->id }})"
+                              <button wire:click="delete({{ $shelterItem->id }}), 82"
                                 class="px-1 text-gray-400 bg-gray-200 border border-gray-200 hover:bg-gray-300">
                                 <x-tabler-trash class="w-6 h-6" />
                               </button>
                             @else
-                              <button wire:click="decrement({{ $shelterItem->id }})"
+                              <button wire:click="decrement({{ $shelterItem->id }}, 82)"
                                 class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 hover:bg-gray-300 {{ $shelterItem->quantity == 1 ? 'text-gray-400 cursor-not-allowed' : ' ' }} "
                                 {{ $shelterItem->quantity == 1 ? 'disabled' : ' ' }}>-</button>
                             @endif
                             <span class="w-8 h-8 p-2 px-3 border-t border-b border-gray-200">
                               {{ $shelterItem->quantity }}
                             </span>
-                            <button wire:click="increment({{ $shelterItem->id }})"
+                            <button wire:click="increment({{ $shelterItem->id }}, 82)"
                               class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 hover:bg-gray-300">+</button>
                           </div>
 
@@ -261,10 +264,6 @@
               <div class="flex items-center justify-center space-x-2 text-sm ">
                 <span>Всего:</span>
                 <span class="text-base font-bold">{{ RUB($subTotal) }}</span>
-
-                @if (!Cart::session($cartId)->getConditions()->isEmpty())
-                  <div class="text-xs text-gray-400">(Со скидкой)</div>
-                @endif
               </div>
 
               @if ($totalWeight > 0)
@@ -281,7 +280,7 @@
 
             </div>
 
-            <div class="text-xs">Доставка и доп. скидки рассчитываются при оформлении заказа.</div>
+            <div class="text-xs">Дополнительные скидки рассчитываются при оформлении заказа.</div>
 
           </div>
 

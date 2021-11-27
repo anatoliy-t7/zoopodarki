@@ -37,7 +37,7 @@
             :direction="$sortField === 'id' ? $sortDirection : null">Id
           </x-dashboard.table.head>
           <x-dashboard.table.head sortable wire:click="sortBy('id')"
-            :direction="$sortField === 'phone' ? $sortDirection : null">Телефон</x-dashboard.table.head>
+            :direction="$sortField === 'phone' ? $sortDirection : null">Email</x-dashboard.table.head>
           <x-dashboard.table.head>Товар</x-dashboard.table.head>
           <x-dashboard.table.head>Статус</x-dashboard.table.head>
           <x-dashboard.table.head></x-dashboard.table.head>
@@ -52,7 +52,7 @@
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                {{ $waitlist->phone }}
+                {{ $waitlist->email }}
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>

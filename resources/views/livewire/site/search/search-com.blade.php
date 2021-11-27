@@ -9,9 +9,9 @@
         </svg>
       </div>
 
-      <input type="search" x-on:input.debounce.750="openResult = 1"
+      <input type="searchZoo" name="searchZoo" x-on:input.debounce.750="openResult = 1"
         class="w-full px-5 py-3 pl-12 font-semibold border border-gray-50 hover:border-gray-400 bg-gray-50 rounded-2xl focus:outline-none focus:ring focus:bg-white"
-        wire:model.debounce.600ms="search" placeholder="Поиск" autocomplete="off" inputmode="search">
+        wire:model.debounce.600ms="search" id="searchZoo" placeholder="Поиск">
 
       <div class="absolute top-0 left-0 right-0 z-30 w-full pt-3" wire:loading>
 

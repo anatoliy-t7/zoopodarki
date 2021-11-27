@@ -33,7 +33,7 @@
         @endif
       </button>
 
-      <div x-cloak x-show="open" x-transition class="absolute right-0 z-30 w-40 shadow-lg top-10 rounded-2xl">
+      <div x-cloak x-show="open" x-transition class="absolute right-0 z-50 w-40 shadow-lg top-10 rounded-2xl">
         <div class="flex flex-col items-start justify-between text-gray-700 shadow-lg bg-gray-50 rounded-xl">
 
           <a href="{{ route('account.profile') }}"

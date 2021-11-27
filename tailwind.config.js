@@ -23,6 +23,9 @@ module.exports = {
 					},
 				},
 			},
+			gridTemplateRows: {
+				8: 'repeat(8, minmax(0, 1fr))',
+			},
 		},
 		fontFamily: {
 			sans: ['Open Sans', 'sans-serif'],

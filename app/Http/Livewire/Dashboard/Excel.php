@@ -4,13 +4,13 @@ namespace App\Http\Livewire\Dashboard;
 //use App\Jobs\ImportProductsFromExcel;
 use App\Jobs\ProcessImportProduct1C;
 use App\Jobs\ProcessOffersProduct1C;
+use App\Models\Brand;
 use App\Traits\ExportImport;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
-use App\Models\Brand;
 use Livewire\WithFileUploads;
-use Usernotnull\Toast\Concerns\WireToast;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Excel extends Component
 {
@@ -34,16 +34,21 @@ class Excel extends Component
         if (Storage::disk('excel')->exists($fileName)) {
             $filePath = storage_path('app/excel') . '/' . $fileName;
 
-            $this->importFromFile($filePath);
+
+            if ($this->importFromFile($filePath)) {
+                 return toast()
+                ->warning('Done')
+                ->push();
+            }
+
+             return toast()
+                ->warning('Not done')
+                ->push();
 
             // ini_set('max_execution_time', 500);
 
             // $this->importData($collection);
             //ImportProductsFromExcel::dispatch($filePath);
-
-            return toast()
-                ->warning('Done')
-                ->push();
         } else {
             toast()
                 ->warning('No the file in the folder')

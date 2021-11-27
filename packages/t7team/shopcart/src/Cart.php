@@ -591,6 +591,7 @@ class Cart
             return $item->getPriceSumWithConditions(false);
         });
 
+
         // get the conditions that are meant to be applied
         // on the subtotal and apply it here before returning the subtotal
         $conditions = $this
@@ -651,9 +652,9 @@ class Cart
                 $toBeCalculated = ($process > 0) ? $newTotal : $subTotal;
 
                 $newTotal = $cond->applyCondition($toBeCalculated);
-
                 $process++;
         });
+
         return Helpers::formatValue($newTotal, $this->config['format_numbers'], $this->config);
     }
 

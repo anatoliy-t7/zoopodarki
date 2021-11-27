@@ -97,7 +97,7 @@ class Edit extends Component
 
         $this->productId = request()->query('id', $this->productId);
 
-        if (Product::where('id', $this->productId)->with('media')->first()) {
+        if (Product::where('id', $this->productId)->first()) {
             $functionProduct = Product::where('id', $this->productId)->with('media', 'categories')->first();
             $this->product = $functionProduct;
             $this->name = $functionProduct->name;
@@ -108,6 +108,7 @@ class Edit extends Component
             $this->applying = $functionProduct->applying;
             $this->status = $functionProduct->status;
             $this->unitId = $functionProduct->unit_id;
+
 
             if (!$functionProduct->brand == null) {
                 $this->productBrand[] = $functionProduct->brand->toArray();
@@ -372,30 +373,33 @@ class Edit extends Component
                 ]);
             }
 
-            $functionProduct->categories()->detach();
+
 
             if (count($this->readyCategories) !== 0) {
+                $functionProduct->categories()->detach();
                 foreach ($this->readyCategories as $category) {
                     $functionProduct->categories()->attach($category['id']);
                 }
             }
 
-            $functionProduct->attributes()->detach();
+
 
             if (count($this->att_selected) !== 0) {
+                $functionProduct->attributes()->detach();
                 foreach ($this->att_selected as $attribute) {
                     $functionProduct->attributes()->attach($attribute['id']);
                 }
             }
 
             $functionProduct->variations()->update(['product_id' => null]);
-
             foreach ($this->variations as $value) {
                 $product_1c = Product1C::find($value['id']);
                 $functionProduct->variations()->save($product_1c);
+
+                Str::replace(',', '.', $value['unit_value']);
                 $product_1c->update([
                     'product_id' => $functionProduct->id,
-                    'unit_value' => $value['unit_value'],
+                    'unit_value' => trim($value['unit_value']),
                 ]);
             }
             $this->productId = $functionProduct->id;

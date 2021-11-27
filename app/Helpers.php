@@ -13,15 +13,6 @@ if (!function_exists('discount')) {
     }
 }
 
-if (!function_exists('discountRevert')) {
-    function discountRevert($discount, $procent)
-    {
-        $price = $discount + ceil($discount * $procent / 100);
-
-        return ceil($price);
-    }
-}
-
 if (!function_exists('RUB')) {
     function RUB($number)
     {

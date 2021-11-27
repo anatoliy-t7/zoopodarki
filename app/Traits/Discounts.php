@@ -5,22 +5,62 @@ use T7team\Shopcart\CartCondition;
 
 trait Discounts
 {
-    public $productDiscountIds = [];
+    public function checkAndSetPromotionDiscount($cart, $product_1c)
+    {
+        $cartDiscountByHoliday = $this->checkDiscountByHoliday($product_1c);
 
-    public function getDiscountByCard($userHasDiscount, $cartId)
+        if ($product_1c->promotion_type === 1) {
+            $cartDiscountByUcenka = $this->getDiscountByUcenka(
+                $product_1c->price - $product_1c->promotion_price
+            );
+
+            $cart->addItemCondition($product_1c->id, $cartDiscountByUcenka);
+        } else {
+            $cart->addItemCondition($product_1c->id, $cartDiscountByHoliday);
+        }
+    }
+
+    public function checkDiscountByCard($userHasDiscount)
     {
         if ($userHasDiscount !== 0) {
-            return new CartCondition([
+            return $cartDiscountByCard = new CartCondition([
                 'name' => 'Скидочная карта',
-                'type' => 'discount',
-                'target' => 'total',
+                'type' => 'discount_card',
+                'target' => 'subtotal',
                 'value' => '-' . $userHasDiscount . '%',
             ]);
-        } else {
-             \Cart::session($cartId)->removeCartCondition('Скидочная карта');
+        }
+        return false;
+    }
+
+    public function getDiscountByCard($userHasDiscount, $cartId, $items)
+    {
+
+        $cartDiscountByCard = $this->checkDiscountByCard($userHasDiscount);
+
+        if ($cartDiscountByCard === false) {
+            // Дис. карта действует сразу, но сама себя не учитывает
+            foreach ($items as $item) {
+                if ($item->associatedModel['vendorcode'] === 'DISCOUNT_CARD') {
+                    $cartDiscountByCard = $this->getDiscountByCard($item->associatedModel['unit_value'], $this->cartId);
+                }
+                break;
+            }
         }
 
-        return false;
+        if ($cartDiscountByCard) {
+            foreach ($items as $item) {
+                if ($item->getConditionByType('discount_card')) {
+                        \Cart::session($cartId)->removeItemCondition($item['id'], 'discount_card');
+                }
+
+                if ($item->associatedModel['vendorcode'] !== 'DISCOUNT_CARD'
+                    && $item->associatedModel['promotion_type'] !== 4
+                    && !$item->getConditionByType('weight')) {
+                    \Cart::session($cartId)->addItemCondition($item['id'], $cartDiscountByCard);
+                }
+            }
+        }
     }
 
     public function checkIfFirstOrder($subTotal, $cartId)
@@ -35,10 +75,15 @@ trait Discounts
             ]);
 
             \Cart::session($cartId)->condition($condition);
+
+            return true;
         } elseif (ceil($subTotal) < 2000 && auth()->user()->extra_discount !== 'first') {
             \Cart::session($cartId)->removeCartCondition('Первый заказ');
+
+             return false;
         } else {
             \Cart::session($cartId)->removeCartCondition('Первый заказ');
+             return false;
         }
     }
 
@@ -67,49 +112,65 @@ trait Discounts
     {
         return new CartCondition([
             'name' => 'Скидочная 10% на сухие корма более 5кг',
+            'target' => 'subtotal',
             'type' => 'weight',
             'value' => '-10%',
         ]);
     }
 
-    public function getDiscountByUcenka($discount)
-    {
-        return new CartCondition([
-            'name' => 'Уценка',
-            'type' => 'weight',
-            'value' => '-' . $discount,
-        ]);
-    }
-
-    public function checkDiscountByWeight($cartItems)
+    public function checkDiscountByWeight($cartId, $items)
     {
 
+        // TODO при добавлении еще раз перезаписывать первый
         //у всех “сухих кормов для любого животного” считать вес, если более 5кг, то скидка 10% (дис. карта НЕ работает)
         //id сухих кормов: 18, 34
-
+        $productDiscountIds = [];
         $totalWeight = collect();
 
-        foreach ($cartItems as $item) {
-            if ($item->associatedModel['category_id'] === 18 || $item->associatedModel['category_id'] === 34) {
-                array_push($this->productDiscountIds, $item['id']);
+        foreach ($items as $item) {
+            // if ($item->associatedModel['category_id'] === 18 || $item->associatedModel['category_id'] === 34) {
 
+            if ($item->associatedModel['promotion_type'] === 0) {
+                array_push($productDiscountIds, $item['id']);
                 $itemWeight = $item->associatedModel['weight'] * $item->quantity;
 
                 $totalWeight->push($itemWeight);
-            }
-
-            if ($item->getConditionByType('weight')) {
-                \Cart::session($this->cartId)->removeItemCondition($item['id'], 'weight');
             }
         }
 
         $totalWeight = $totalWeight->sum();
 
+
         if ($totalWeight < 5000) {
             return false;
         }
 
-        return array_unique($this->productDiscountIds);
+        foreach ($items as $item) {
+            if ($item->getConditionByType('weight')) {
+                   \Cart::session($cartId)->removeItemCondition($item['id'], 'weight');
+            }
+            if ($item->getConditionByType('discount_card')) {
+                \Cart::session($cartId)->removeItemCondition($item['id'], 'discount_card');
+            }
+            if (in_array($item['id'], array_unique($productDiscountIds))) {
+                \Cart::session($cartId)->addItemCondition($item['id'], $this->getDiscountByWeight());
+            } else {
+                if ($item->getConditionByType('weight')) {
+                    \Cart::session($cartId)->removeItemCondition($item['id'], 'weight');
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function getDiscountByUcenka($discount)
+    {
+        return new CartCondition([
+        'name' => 'Уценка',
+        'type' => 'price_down',
+        'value' => '-' . $discount,
+        ]);
     }
 
     public function checkDiscountByOnePlusOne($cartItems, $cartId)
@@ -169,5 +230,18 @@ trait Discounts
         }
 
         return false;
+    }
+
+    public function removeCheckoutDiscounts($items, $cartId)
+    {
+        foreach ($items as $item) {
+            if ($item->getConditionByType('weight')) {
+                    \Cart::session($cartId)->removeItemCondition($item['id'], 'weight');
+            }
+
+            if ($item->getConditionByType('discount_card')) {
+                \Cart::session($cartId)->removeItemCondition($item['id'], 'discount_card');
+            }
+        }
     }
 }

@@ -20,6 +20,7 @@ class ProductCard extends Component
     public $productAttributes;
     public $slug;
     public $category;
+    public $email;
     public $catalog;
     public $tab = 1;
     public $related = null;
@@ -34,6 +35,9 @@ class ProductCard extends Component
         $this->getProduct();
         $this->getRelatedProducts();
         $this->seo();
+        if (auth()->user()) {
+            $this->email = auth()->user()->email;
+        }
     }
 
     public function seo()
@@ -49,24 +53,38 @@ class ProductCard extends Component
         }
     }
 
-    public function preOrder(int $itemId)
+    public function preOrder(int $itemId, $email)
     {
+        $this->email = $email;
 
-        if (!auth()->user()) {
-            $this->dispatchBrowserEvent('auth');
+        $this->validate([
+            'email' => 'required|email',
+        ]);
 
+
+        if (Waitlist::where('email', $this->email)
+            ->where('product1c_id', $itemId)
+            ->first()) {
             return toast()
-                ->success('Вам необходимо авторизоваться что бы заказать товар')
+                ->warning('Вы уже сделали заказ, мы сообщим вам когда товар поступит в продажу')
                 ->push();
         }
 
-        Waitlist::create([
-            'phone' => auth()->user()->phone,
-            'email' => auth()->user()->email,
+        if (!auth()->user()) {
+            Waitlist::create([
+            'email' => $this->email,
+            'status' => 'pending',
+            'user_id' => null,
+            'product1c_id' => $itemId,
+            ]);
+        } else {
+            Waitlist::create([
+            'email' => $this->email,
             'status' => 'pending',
             'user_id' => auth()->user()->id,
             'product1c_id' => $itemId,
-        ]);
+            ]);
+        }
 
         return toast()
             ->success('Ваш заказ принят, мы сообщим вам когда товар поступит в продажу')

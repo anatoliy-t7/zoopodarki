@@ -87,12 +87,10 @@
               <x-dashboard.table.cell>
                 @if ($product->promotion_type === 0 or $product->promotion_type === 2)
                   {{ RUB($product->price) }}
-                @elseif($product->promotion_type === 1)
-                  <span class="pr-1 line-through">{{ RUB($product->price) }}</span>
-                  <b>{{ RUB($product->promotion_price) }}</b>
-                @elseif($product->promotion_type === 3)
-                  <span
-                    class="pr-1 line-through">{{ RUB(discountRevert($product->price, $product->promotion_percent)) }}</span>
+                @elseif($product->promotion_type === 1 or $product->promotion_type === 3)
+                  <span class="pr-1 line-through">
+                    {{ RUB($product->promotion_price) }}
+                  </span>
                   <b>{{ RUB($product->price) }}</b>
                 @elseif($product->promotion_type === 4)
                   <span class="pr-1 line-through">{{ RUB($product->price) }}</span>
@@ -180,7 +178,7 @@
 
               <div class="flex space-x-8">
 
-                @if ($promotion['type'] === '1' or $promotion['type'] === '2')
+                @if ($promotion['type'] === '2')
                   <div class="w-6/12 space-y-1">
                     <label for="stock" class="font-bold">Количество товара <span class="font-normal ">(максимум:
                         {{ $product1c['stock'] }})</span></label>

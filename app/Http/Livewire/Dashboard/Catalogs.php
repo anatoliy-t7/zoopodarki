@@ -71,7 +71,11 @@ class Catalogs extends Component
     {
         $this->categories = Category::where('catalog_id', $catalog_id)->orderBy('sort')->get()->toArray();
 
-        $this->editCatalog = Catalog::where('id', $catalog_id)->first()->toArray();
+        $this->editCatalog = Catalog::where('id', $catalog_id)->with('brands')->first();
+        $this->brandsForCatalog = $this->editCatalog->brands()->get(['brand_id'])->pluck('brand_id');
+        $this->brandsForCatalog->unwrap($this->brandsForCatalog);
+
+        $this->editCatalog = $this->editCatalog->toArray();
     }
 
     public function openCategory($id)
@@ -140,7 +144,7 @@ class Catalogs extends Component
         ]);
 
         DB::transaction(function () {
-            $this->editCatalog = Catalog::updateOrCreate(
+            $editCatalog = Catalog::updateOrCreate(
                 ['id' => $this->editCatalog['id']],
                 [
                     'name' => trim($this->editCatalog['name']),
@@ -164,21 +168,28 @@ class Catalogs extends Component
                 }
             }
 
-               $functionProduct->attributes()->detach();
 
-            if (count($this->brandsForCatalog) !== 0) {
-                foreach ($this->att_selected as $attribute) {
-                    $functionProduct->attributes()->attach($attribute['id']);
+            if ($this->brandsForCatalog) {
+                $brands = explode(",", $this->brandsForCatalog);
+
+                array_walk($brands, function (&$v) {
+                    $v = intval($v);
+                });
+
+                $editCatalog->brands()->detach();
+
+                foreach ($brands as $brand) {
+                    $editCatalog->brands()->attach($brand);
                 }
             }
 
-            $this->categories = Category::where('catalog_id', $this->editCatalog['id'])->get();
+            $this->categories = Category::where('catalog_id', $editCatalog->id)->get();
 
             // Clean the cache after saving
             Cache::forget('categories-menu');
 
             toast()
-                ->success('Каталог "' . $this->editCatalog['name'] . '" сохранен.')
+                ->success('Каталог "' . $editCatalog->name . '" сохранен.')
                 ->push();
 
             $this->closeForm();

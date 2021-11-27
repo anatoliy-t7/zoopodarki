@@ -9,15 +9,16 @@ return [
     ],
 
     'order_status' => [
-        1 => 'pending_payment',
-        2 => 'processing',
-        3 => 'ready',
-        4 => 'shipped',
-        5 => 'delivered',
-        6 => 'completed',
-        7 => 'canceled',
-        8 => 'return',
-        9 => 'hold',
+        1 => 'pending_confirm',
+        2 => 'pending_payment',
+        3 => 'processing',
+        4 => 'ready',
+        5 => 'shipped',
+        6 => 'delivered',
+        7 => 'completed',
+        8 => 'canceled',
+        9 => 'return',
+        10 => 'hold',
     ],
 
     'payment_status' => [

@@ -4,10 +4,10 @@
 <div x-data="handler" @set-attributes.window="setAttributes(event)" @set-ready-items.window="setReadyItems(event)"
   @set-catalogs.window="setCatalogs(event)" @set-product-brand.window="setProductBrandFromServer(event)"
   @set-brands.window="setBrandsFromServer(event)" @set-series.window="setSeriesFromServer(event)"
-  @set-product-serie.window="setProductSerieFromServer(event)" @set-description.window="setDescContent(event)"
-  @set-consist.window="setConsistContent(event)" @update-categories.window="updateCategoriesFromServer(event)"
-  @update-brands.window="updateBrandsFromServer(event)" @save-it.window="saveIt(event)"
-  @update-query-id.window="updateQueryId(event)" wire:init="sendDataToFrontend" class="relative">
+  @set-product-serie.window="setProductSerieFromServer(event)" @set-consist.window="setConsistContent(event)"
+  @update-categories.window="updateCategoriesFromServer(event)" @update-brands.window="updateBrandsFromServer(event)"
+  @save-it.window="saveIt(event)" @update-query-id.window="updateQueryId(event)" wire:init="sendDataToFrontend"
+  class="relative">
   <x-loader wire:dirty />
   <div class="flex justify-between w-full space-x-6">
 
@@ -175,7 +175,7 @@
                   <div class="relative z-0 group">
 
                     <img loading="lazy" class="object-scale-down w-32 h-32 rounded-lg"
-                      src="{{ $image->getUrl('thumb') }}">
+                      title="{{ $image->getUrl('thumb') }}" src="{{ $image->getUrl('thumb') }}">
 
                     <div class="absolute z-10 opacity-0 -top-1 -right-1 group-hover:opacity-100">
                       <button wire:key="{{ $key }}" x-on:click="askDelete({{ $key }})" type="button"
@@ -233,7 +233,6 @@
                       <div class="relative z-10 w-24 h-24 py-2">
                         <img loading="lazy" class="object-scale-down w-full h-full rounded-lg"
                           src="{{ $photo->temporaryUrl() }}">
-
                       </div>
                     @empty
                       <div class="flex flex-col items-center justify-center w-full space-y-2 text-gray-500">
@@ -530,7 +529,8 @@
                         <select wire:model="unitId" name="unitId" class="w-32">
                           <option default value>Выбрать</option>
                           @foreach ($units as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            <option {{ $unitId === $item->id ? 'selected' : '' }} value="{{ $item->id }}">
+                              {{ $item->name }}</option>
                           @endforeach
                         </select>
                       </div>

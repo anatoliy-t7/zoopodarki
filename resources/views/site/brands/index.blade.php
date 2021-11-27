@@ -10,7 +10,7 @@
     </div>
     <div class="flex w-full">
 
-      <div class="grid w-full grid-cols-2 gap-6 lg:grid-cols-3 xl:grid-cols-4">
+      <div class="grid w-full grid-flow-col gap-6 grid-rows-8 ">
         @forelse ($brands as $brand)
           <a class="flex items-center justify-center px-3 py-4 bg-white rounded-xl hover:shadow-lg"
             href="{{ route('site.brand', $brand->slug) }}">

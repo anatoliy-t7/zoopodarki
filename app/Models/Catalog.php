@@ -14,9 +14,6 @@ class Catalog extends Model
 
     protected $table = 'catalogs';
     protected $guarded = [];
-    protected $casts = [
-        'brands' => 'array',
-       ];
 
     public $timestamps = false;
 

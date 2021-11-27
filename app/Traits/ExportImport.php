@@ -3,9 +3,10 @@ namespace App\Traits;
 
 use App\Models\Attribute;
 use App\Models\AttributeItem;
-use App\Models\BrandSerie;
 use App\Models\Product1C;
 use App\Models\Product;
+use App\Models\ProductUnit;
+use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
 
 trait ExportImport
@@ -14,7 +15,14 @@ trait ExportImport
     public function importFromFile($filePath)
     {
         $collection = (new FastExcel)->import($filePath);
-        $this->setName($collection);
+
+        try {
+            $this->setData($collection);
+             return true;
+        } catch (\Throwable $th) {
+            logger($th);
+            return false;
+        }
     }
 
     public function importData($collection)
@@ -135,57 +143,105 @@ trait ExportImport
     {
         $collection = collect();
 
-
-
-        $products = Product::has('categories')
-        ->whereHas('variations', function ($query) {
-                    $query->where('stock', 0);
+        $products = Product1C::has('product.categories')
+        ->whereHas('product', function ($query) {
+            $query->has('variations', '>=', 2)
+            ->whereNull('unit_id');
         })
-        ->with('attributes', 'categories')
+        ->with('product', 'product.categories')
         ->get();
 
         foreach ($products as $key => $product) {
             $arrayCategories = [];
-            foreach ($product->categories as $key => $cat) {
+            foreach ($product->product->categories as $key => $cat) {
                 array_push($arrayCategories, $cat->name);
             }
 
-            $arrayAttributes = [];
-            foreach ($product->attributes as $key => $cat) {
-                array_push($arrayAttributes, $cat->name);
+            // $arrayAttributes = [];
+            // foreach ($product->unit_value as $key => $cat) {
+            //     array_push($arrayAttributes, $cat->name . PHP_EOL);
+            // }
+            $unitName = '';
+            if ($product->product->unit !== null) {
+                 $unitName = $product->product->unit->name;
             }
 
             $collection->push([
-                'id' => $product->id,
-                'name' => $product->name,
-                'categories' => implode(", ", $arrayCategories),
-                'attributes' => implode(", ", $arrayAttributes),
+            'id' => $product->id,
+            'name' => $product->name,
+            'categories' => implode(", ", $arrayCategories),
+            $unitName => $product->unit_value,
             ]);
 
-            $arrayAttributes = [];
+           // $arrayAttributes = [];
             $arrayCategories = [];
         }
 
 
         $path = storage_path('app/excel');
-        $filePath = (new FastExcel($collection))->export($path . '/export.xlsx');
+        $filePath = (new FastExcel($collection))->export($path . '/empty.xlsx');
 
         return $filePath;
     }
 
-    public function setName($collection)
+    public function setData2($collection)
     {
 
         foreach ($collection->toArray() as $key => $row) {
-            if (Product::where('id', $row['id'])->first()) {
-                $product = Product::where('id', $row['id'])->first();
+            if (Product1C::where('id', $row['id'])->first()) {
+                $product1c = Product1C::where('id', $row['id'])
+                ->with('product')
+                ->first();
 
-                $product->name = $row['name'];
-                $product->meta_title = $row['name'];
+                foreach ([1, 2, 3, 5, 6] as $unitId) {
+                    if ($row[$unitId] !== "") {
+                        $unitValue = Str::replace(',', '.', $row[$unitId]);
+                        $product1c->unit_value = trim($unitValue);
+                        $product1c->save();
 
-                $product->save();
+                        if ($product1c->product !== null) {
+                            $product1c->product->unit_id = $unitId;
+                            $product1c->push();
+                        }
 
-                unset($product);
+                        unset($unitValue);
+
+                        break;
+                    }
+                }
+
+
+
+
+                unset($product1c);
+            }
+            unset($row);
+        }
+    }
+
+    public function setData($collection)
+    {
+        $unit = ProductUnit::find(1);
+
+        foreach ($collection->toArray() as $key => $row) {
+            if (Product1C::where('id', $row['id'])->first()) {
+                $product1c = Product1C::where('id', $row['id'])
+                    ->with('product', 'product.unit')
+                    ->first();
+
+                $unitValue = Str::replace(',', '.', $row['unit_value']);
+                $product1c->unit_value = trim($unitValue);
+
+                $product1c->save();
+
+                if ($product1c->product !== null) {
+                    $product1c->product->unit_id = 1;
+                    $product1c->push();
+                }
+
+
+                unset($unitValue);
+                unset($product1c);
             }
             unset($row);
         }

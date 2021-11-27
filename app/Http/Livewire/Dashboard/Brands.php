@@ -6,6 +6,7 @@ use App\Models\BrandSerie;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -72,7 +73,7 @@ class Brands extends Component
         $this->itemsName = BrandSerie::where('brand_id', $brandId)->get(['id', 'name', 'name_rus']);
         $this->dispatchBrowserEvent('get-items', $this->itemsName);
 
-        $brand = Brand::where('id', $brandId)->firstOrFail();
+        $brand = Brand::where('id', $brandId)->first();
         $this->name = $brand->name;
         $this->nameRus = $brand->name_rus;
         $this->title = $brand->meta_title;
@@ -89,6 +90,10 @@ class Brands extends Component
         $this->validate([
             'name' => 'required|unique:brands,name,' . $this->brandId,
         ]);
+
+        if (Str::of($this->description)->exactly('')) {
+            $this->description = null;
+        }
 
         DB::transaction(function () {
             $brand = Brand::updateOrCreate(

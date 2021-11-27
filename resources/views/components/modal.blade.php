@@ -1,4 +1,5 @@
-<div x-cloak x-data="modal">
+<div x-cloak x-data="modal"
+  x-effect="document.body.classList.toggle('overflow-hidden', showModal), document.body.classList.toggle('pr-4', showModal)">
   <div x-on:close-modal.window="showModal = false" x-show="showModal" x-transition.opacity
     @keydown.window.escape="showModal = false"
     class="fixed top-0 left-0 z-40 flex items-center justify-center w-screen h-screen bg-gray-500 bg-opacity-50"
@@ -24,11 +25,9 @@
         showModal: false,
         open() {
           this.showModal = true
-          this.body.classList.add('overflow-hidden', 'pr-4');
         },
         close() {
           this.showModal = false
-          this.body.classList.remove('overflow-hidden', 'pr-4');
         },
       }))
     })

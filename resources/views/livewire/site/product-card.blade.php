@@ -34,6 +34,22 @@
 
         <x-share-buttons :url="route('site.product', [$catalog->slug, $category->slug, $slug])" />
 
+        @can('dashboard')
+          <a class="text-gray-500 link-hover group" href="{{ route('dashboard.product.edit', ['id' => $product->id]) }}"
+            target="_blank">
+            <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path class="text-gray-500 stroke-current group-hover:text-orange-500" stroke-linecap="round"
+                stroke-linejoin="round" stroke-width="1.5" d="M11 2H9C4 2 2 4 2 9v6c0 5 2 7 7 7h6c5 0 7-2 7-7v-2" />
+              <path class="text-gray-500 stroke-current group-hover:text-orange-500" stroke-linecap="round"
+                stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"
+                d="M16.04 3.02 8.16 10.9c-.3.3-.6.89-.66 1.32l-.43 3.01c-.16 1.09.61 1.85 1.7 1.7l3.01-.43c.42-.06 1.01-.36 1.32-.66l7.88-7.88c1.36-1.36 2-2.94 0-4.94-2-2-3.58-1.36-4.94 0Z" />
+              <path class="text-gray-500 stroke-current group-hover:text-orange-500" stroke-linecap="round"
+                stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"
+                d="M14.91 4.15a7.144 7.144 0 0 0 4.94 4.94" />
+            </svg>
+          </a>
+        @endcan
+
       </div>
     </div>
 
@@ -127,13 +143,21 @@
             class="grid w-full grid-cols-3 gap-4 lg:grid-cols-4">
             @foreach ($product->variations as $key => $item)
 
-              @if ($category !== 'pomogi-priyutu' and $item->promotion_type !== 1)
+              @if ($category !== 'pomogi-priyutu')
 
                 <div wire:key="{{ $loop->index }}"
                   :class="item.id === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
                   class="relative flex flex-col items-start justify-between px-3 py-2 space-y-1 border rounded-xl"
                   x-on:click="item.id = {{ $item->id }}, item.stock = {{ $item->stock }}, item.unit_value = '{{ $item->unit_value }}'">
 
+
+                  @if ($item->promotion_type === 1)
+                    <div class="absolute z-20 block -top-3 -left-3">
+                      <div class="relative font-bold tooltip" data-title="Уценка">
+                        <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
+                      </div>
+                    </div>
+                  @endif
                   @if ($item->promotion_type === 2)
                     <div class="absolute z-20 -top-3 -left-3">
                       <div class="font-bold tooltip" data-title="Второй товар из этой акции бесплатно">
@@ -195,21 +219,19 @@
 
                   <div class="w-full font-semibold text-right "
                     :class="item.id === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
-                    @if ($item->promotion_type === 3)
-                      <div class="text-xs text-gray-500 line-through">
-                        {{ RUB(discountRevert($item->price, $item->promotion_percent)) }}</div>
+                    @if ($item->promotion_type === 0)
+                      <span>{{ RUB($item->price) }}</span>
+                      <span itemprop="price" content="{{ $item->price }}"></span>
+                    @elseif ($item->promotion_type === 1 || $item->promotion_type === 3)
+                      <div class="text-xs text-gray-500 line-through">{{ RUB($item->promotion_price) }}</div>
                       <div>{{ RUB($item->price) }}</div>
                       <span itemprop="price" content="{{ $item->price }}"></span>
-                    @elseif ($item->promotion_type === 4)
+                    @elseif ($item->promotion_type === 2 || $item->promotion_type === 4)
                       <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
                       <div>{{ RUB(discount($item->price, $item->promotion_percent)) }}</div>
                       <span itemprop="price" content="{{ discount($item->price, $item->promotion_percent) }}"></span>
-                    @else
-                      <span>{{ RUB($item->price) }}</span>
-                      <span itemprop="price" content="{{ $item->price }}"></span>
                     @endif
                     <span itemprop="priceCurrency" content="RUB"></span>
-
                   </div>
 
                 </div>
@@ -221,10 +243,9 @@
                   class="relative flex flex-col items-start justify-between px-3 py-2 space-y-1 border rounded-xl"
                   x-on:click="item.id = {{ $item->id }}, item.stock = {{ $item->stock }}, item.unit_value = '{{ $item->unit_value }}'">
 
-
                   @if ($item->promotion_type === 1)
                     <div class="absolute z-20 block -top-3 -left-3">
-                      <div class="font-bold tooltip" data-title="Помоги приюту">
+                      <div class="relative font-bold tooltip" data-title="Уценка">
                         <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
                       </div>
                     </div>
@@ -240,7 +261,6 @@
                   <div class="w-full">
                     <link itemprop="availability" href="http://schema.org/InStock">
                     @if ($item->stock <= 5 && $item->stock > 0)
-
                       <div class="flex items-center justify-center w-full mb-1 space-x-2 text-sm tooltip"
                         data-title="Осталось на складе {{ $item->stock }}">
                         <div>{{ $item->stock }}</div>
@@ -257,7 +277,6 @@
                         В наличии
                       </div>
                     @endif
-
                     <div>
                       @if ($item->stock === 0)
                         <div class="relative w-full text-xs text-red-500">
@@ -265,16 +284,16 @@
                         </div>
                       @endif
                     </div>
-
                   </div>
 
                   <div class="w-full font-semibold text-right "
                     :class="item.id === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
                     @if ($item->promotion_type === 1)
-                      <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
-                      <div>{{ RUB($item->promotion_price) }}</div>
-                      <span itemprop="price" content="{{ $item->promotion_price }}"></span>
-
+                      <div class="text-xs text-gray-500 line-through">
+                        {{ RUB($item->promotion_price) }}
+                      </div>
+                      <div>{{ RUB($item->price) }}</div>
+                      <span itemprop="price" content="{{ $item->price }}"></span>
                     @endif
                     <span itemprop="priceCurrency" content="RUB"></span>
 
@@ -319,23 +338,48 @@
 
         <div class="flex flex-col items-center justify-start w-full space-y-5 lg:items-end lg:w-4/12">
 
+          <div>
+            <div x-show="item.stock > 0 && item.unit_value != 'на развес'"
+              class="flex justify-center w-40 leading-none text-gray-500">
 
-          <div x-show="item.stock > 0" class="flex justify-center w-40 leading-none text-gray-500">
+              <button x-on:click="decrement()"
+                class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
+                <x-tabler-minus class="w-6 h-6 stroke-current" />
+              </button>
 
-            <button x-on:click="decrement()"
-              class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
-              <x-tabler-minus class="w-6 h-6 stroke-current" />
-            </button>
+              <input id="number" type="number" min="1" max="50"
+                class="w-20 h-10 p-3 text-lg font-bold text-center border-t border-b border-gray-200"
+                x-model.debounce.500="count">
 
-            <input id="number" type="number" min="1" max="50"
-              class="w-20 h-10 p-3 text-lg font-bold text-center border-t border-b border-gray-200"
-              x-model.debounce.500="count">
+              <button x-on:click="count++"
+                class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">
+                <x-tabler-plus class="w-6 h-6 stroke-current" />
+              </button>
 
-            <button x-on:click="count++"
-              class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">
-              <x-tabler-plus class="w-6 h-6 stroke-current" />
-            </button>
+            </div>
 
+            <div x-show="item.stock > 0 && item.unit_value == 'на развес'" x-transition.opacity class="w-40">
+              <select name="byWeight" id="byWeight" x-model="byWeight" class="field">
+                <option selected value="500">500 гр</option>
+                <option value="1000">1 кг</option>
+                <option value="1500">1.5 кг</option>
+                <option value="2000">2 кг</option>
+                <option value="2500">2.5 кг</option>
+                <option value="3000">3 кг</option>
+                <option value="3500">3.5 кг</option>
+                <option value="4000">4 кг</option>
+                <option value="4500">4.5 кг</option>
+                <option value="5000">5 кг</option>
+                <option value="6000">6 кг</option>
+                <option value="8000">8 кг</option>
+                <option value="10000">10 кг</option>
+                <option value="12000">12 кг</option>
+                <option value="14000">14 кг</option>
+                <option value="16000">16 кг</option>
+                <option value="18000">18 кг</option>
+                <option value="20000">20 кг</option>
+              </select>
+            </div>
           </div>
 
           <button x-show="item.stock > 0" x-transition.opacity x-on:click="addToCart()"
@@ -437,19 +481,34 @@
 
               <x-slot name="content">
                 <div class="w-full space-y-6">
-                  <div>
-                    <div class="text-center text-gray-600">Выберите как оповестить вас</div>
-                    <div>
-                      <div>
-                      </div>
 
+                  <div class="pt-4 font-bold leading-tight text-center text-gray-600">Оповестить когда
+                    появиться<br>в
+                    наличии</div>
+                  <div>
+                    <div>
+                      <label for="emailNotyf" class="block mb-2 text-sm font-bold text-gray-700">
+                        Email
+                      </label>
+                      <div class="relative text-lg">
+                        <div class="absolute top-0 left-0 z-30 pt-4 pl-3 cursor-default">
+                          <x-tabler-mail class="w-5 h-5 text-gray-400 stroke-current" />
+                        </div>
+                        <input x-model="email" id="emailNotyf" type="email" name="emailNotyf" autocomplete="email"
+                          inputmode="email"
+                          class="w-full px-4 py-3 pl-10 text-sm font-semibold border border-gray-200 bg-gray-50 rounded-2xl focus:outline-none focus:ring focus:bg-white">
+                      </div>
+                      @error('email')
+                        <p class="mt-2 text-xs italic text-red-500">
+                          {{ $message }}
+                        </p>
+                      @enderror
                     </div>
-                    <div class="pt-1 text-xs text-center text-gray-400">Оповестить когда<br>появиться в наличии</div>
                   </div>
                   <div class="flex justify-center w-full">
-                    <button wire:click="preOrder()"
-                      class="relative flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-blue-500 cursor-pointer rounded-lg active:scale-95 hover:bg-blue-600">
-                      <span>Заказать</span>
+                    <button x-on:click="preOrder()"
+                      class="relative flex items-center justify-center w-full space-x-3 font-bold text-white transition ease-in-out transform bg-blue-500 rounded-lg cursor-pointer btn active:scale-95 hover:bg-blue-600">
+                      <span>Оповестить</span>
                       <div wire:loading wire:target="preOrder" class="absolute top-2 right-2">
                         <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg"
                           fill="none" viewBox="0 0 24 24">
@@ -467,7 +526,6 @@
 
             </x-modal>
           </div>
-
 
         </div>
 
@@ -603,25 +661,26 @@
       document.addEventListener('alpine:initializing', () => {
         Alpine.data('variationsToggle', () => ({
           count: 1,
+          byWeight: 500,
           item: {
             id: parseInt('{{ $product->variations[0]->id }}'),
             stock: parseInt('{{ $product->variations[0]->stock }}'),
             unit_value: '{{ $product->variations[0]->unit_value }}',
           },
           openModal: false,
-          preOrderModal: false,
           formatedPhone: null,
           phone: null,
           valid: false,
           orderOneClick: {},
+          email: @entangle('email').defer,
           decrement() {
             if (this.count >= 2) {
               this.count--;
             }
           },
           validate() {
-            if (this.count >= 50) {
-              this.count = 50;
+            if (this.count >= 32) {
+              this.count = 32;
               var callToaster = new CustomEvent('toast', {
                 detail: {
 
@@ -645,13 +704,14 @@
             if (this.item.stock < 0) {
               this.item.stock = 0
             }
+            if (this.item.stock > 0 && this.item.unit_value == 'на развес') {
+              return window.livewire.emit('addToCart', this.item.id, this.count, this.byWeight)
+            }
             window.livewire.emit('addToCart', this.item.id, this.count)
           },
           preOrder() {
-
-            this.preOrderModal = true;
-
-            //window.livewire.emit('preOrder', this.item.id)
+            window.livewire.emit('preOrder', this.item.id, this.email)
+            this.showModal = false;
           },
           open() {
             this.openModal = true
@@ -678,7 +738,7 @@
       })
     </script>
 
-    @if ($product->media->isNotEmpty())
+    @if ($product->media()->exists())
       <script src="{{ mix('js/splide.min.js') }}"></script>
       <script>
         document.addEventListener('DOMContentLoaded', function() {

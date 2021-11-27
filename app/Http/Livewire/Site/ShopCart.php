@@ -15,13 +15,13 @@ class ShopCart extends Component
     use WireToast;
 
     public $cartId; // индификатор корзины
-    public $shelterCartId;
+    public $shelterCartId; // индификатор корзины shelter
     public $counter; // количество товара в корзине
     public $items;
     public $shelterItems;
     public $subTotal;
     public $totalWeight;
-    public $userHasDiscount = 0;
+
     public $currentUrl;
     protected $listeners = [
         'addToCart',
@@ -32,22 +32,48 @@ class ShopCart extends Component
 
     public function mount()
     {
+
+        if (request()->session()->has('cart_id')) {
+            $cart_id = session('cart_id');
+            $cart = session($cart_id . '_cart_items');
+
+            // foreach ($cart as $item) {
+            //     if ($item['quantity'] > 21) {
+            //         session()->flush();
+            //     }
+            // }
+        }
+
         $this->generateId();
 
-        $this->currentUrl = Route::currentRouteName();
+        $this->getCart();
+    }
 
-        if (auth()->user()) {
-            $this->userHasDiscount = auth()->user()->discount;
+    public function addToCart(int $itemId, int $quantity, int $categoryId = 0, int $byWeight = 0)
+    {
+
+        $cart = $this->checkShelterCategory($categoryId);
+
+        if ($cart->isEmpty()) {
+            $this->add($itemId, $quantity, $categoryId, $byWeight);
+        } else {
+            if ($cart->get($itemId) !== null) {
+                $this->increment($itemId, $categoryId);
+            } else {
+                 $this->add($itemId, $quantity, $categoryId, $byWeight);
+            }
         }
 
         $this->getCart();
     }
 
-    public function addToCart(int $itemId, int $quantity)
+    public function add(int $itemId, int $quantity, int $categoryId = 0, int $byWeight = 0)
     {
+
         DB::transaction(
-            function () use ($itemId, $quantity) {
-                $product_1c = Product1C::with('product', 'product.categories', 'product.categories.catalog')->find($itemId);
+            function () use ($itemId, $quantity, $categoryId, $byWeight) {
+                $product_1c = Product1C::with('product', 'product.categories', 'product.categories.catalog')
+                  ->find($itemId);
 
                 if ($product_1c->stock < $quantity) {
                     $quantity = $product_1c->stock;
@@ -60,156 +86,111 @@ class ShopCart extends Component
                         'toast',
                         ['type' => 'error', 'text' => 'Товара больше нет в наличии']
                     );
-
-                    $this->emit('getProduct');
                 } else {
-                    $product_1c->decrement('stock', $quantity);
+                    $cart = $this->checkShelterCategory($categoryId);
+
+                    if ($categoryId === 0) {
+                        $categoryId = $product_1c->product->categories[0]->id;
+                    }
 
                     $associatedModel = [
-                        'unit_value' => $product_1c->unit_value,
-                        'image' => $product_1c->product->getFirstMediaUrl('product-images', 'thumb'),
-                        'weight' => $product_1c->weight,
-                        'category_id' => $product_1c->product->categories[0]->id,
-                        'promotion_type' => $product_1c->promotion_type,
-                        'promotion_percent' => $product_1c->promotion_percent,
-                        'vendorcode' => $product_1c->vendorcode,
-                        'catalog_slug' => $product_1c->product->categories[0]->catalog->slug,
-                        'category_slug' => $product_1c->product->categories[0]->slug,
-                        'product_slug' => $product_1c->product->slug,
+                      'stock' => $product_1c->stock,
+                      'unit_value' => $product_1c->unit_value,
+                      'image' => $product_1c->product->getFirstMediaUrl('product-images', 'thumb'),
+                      'weight' => $product_1c->weight,
+                      'category_id' => $categoryId,
+                      'promotion_type' => $product_1c->promotion_type,
+                      'promotion_price' => $product_1c->promotion_price,
+                      'vendorcode' => $product_1c->vendorcode,
+                      'catalog_slug' => $product_1c->product->categories[0]->catalog->slug,
+                      'category_slug' => $product_1c->product->categories[0]->slug,
+                      'product_slug' => $product_1c->product->slug,
                     ];
 
-                    $cartDiscountByHoliday = $this->checkDiscountByHoliday($product_1c);
-
-
-                    if ($product_1c->promotion_type === 1) {
-                        $cart = app('shelter')->session($this->shelterCartId);
-                    } else {
-                        $cart = \Cart::session($this->cartId);
+                    if ($product_1c->unit_value == 'на развес') {
+                        $associatedModel['weight'] = $byWeight;
                     }
 
-                    if ($product_1c->vendorcode === 'DISCOUNT_CARD') {
-                        $cart->add([
-                            'id' => $product_1c->id,
-                            'name' => $product_1c->product->name,
-                            'price' => $product_1c->price,
-                            'quantity' => $quantity,
-                            'attributes' => [
-                                'unit' => $product_1c->product->unit,
-                            ],
-                            'associatedModel' => $associatedModel,
-                        ]);
-                    } else {
-                        $cart->add([
-                            'id' => $product_1c->id,
-                            'name' => $product_1c->product->name,
-                            'price' => $product_1c->price,
-                            'quantity' => $quantity,
-                            'attributes' => [
-                                'unit' => $product_1c->product->unit,
-                            ],
-                            'associatedModel' => $associatedModel,
-                        ]);
+                    $cart->add([
+                          'id' => $product_1c->id,
+                          'name' => $product_1c->product->name,
+                          'price' => $product_1c->price,
+                          'quantity' => $quantity,
+                          'attributes' => [
+                              'unit' => $product_1c->product->unit,
+                          ],
+                          'associatedModel' => $associatedModel,
+                    ]);
 
-                        if ($product_1c->promotion_type === 1) {
-                            $cartDiscountByUcenka = $this->getDiscountByUcenka(
-                                $product_1c->price - $product_1c->promotion_price
-                            );
-                            $cart->addItemCondition($product_1c->id, $cartDiscountByUcenka);
-                        } else {
-                            $cart->addItemCondition($product_1c->id, $cartDiscountByHoliday);
-                        }
+                    if ($product_1c->unit_value == 'на развес') {
+                        \Cart::update($product_1c->id, array(
+                        'quantity' => 1,
+                        ));
+                    }
+
+
+                    if ($product_1c->vendorcode !== 'DISCOUNT_CARD') {
+                        $this->checkAndSetPromotionDiscount($cart, $product_1c);
                     }
 
                     toast()
-                        ->success('Товар добавлен в корзину')
-                        ->push();
-
-                    $this->emit('getProduct');
+                      ->success('Товар добавлен в корзину')
+                      ->push();
                 }
-            }
-        );
-
-        $this->updateCart();
-        $this->getCart();
-    }
-
-    public function increment($itemId): void
-    {
-        DB::transaction(
-            function () use ($itemId) {
-                $product_1c = Product1C::find($itemId);
-
-                if ((int) $product_1c->stock === 0) {
-                    toast()
-                        ->info('Извините, товара больше нет в наличии')
-                        ->push();
-
-                    $this->getCart();
-                    $this->emitTo('product-card', 'render');
-                } else {
-                    if ($product_1c->promotion_type === 1) {
-                        $cart = app('shelter')->session($this->shelterCartId);
-                    } else {
-                        $cart = \Cart::session($this->cartId);
-                    }
-
-                    $product_1c->decrement('stock');
-                    $cart->update(
-                        $itemId,
-                        [
-                            'quantity' => 1,
-                        ]
-                    );
-                    $this->updateCart();
-                    $this->getCart();
-                    $this->emitTo('product-card', 'render');
-                }
-
-                $this->reloadCartCheckout();
             }
         );
     }
 
-    public function decrement($itemId): void
+    public function increment($itemId, $categoryId = 0): void
     {
-        $product_1c = Product1C::find($itemId);
 
-        if ($product_1c->promotion_type === 1) {
-            $cart = app('shelter')->session($this->shelterCartId);
+        $cart = $this->checkShelterCategory($categoryId);
+        $item = $cart->get($itemId);
+
+        if ($item->associatedModel['stock'] < $item->quantity + 1) {
+            toast()
+                ->info('Извините, товара больше нет в наличии')
+                ->push();
+
+            $this->getCart();
+            $this->emitTo('product-card', 'render');
         } else {
-            $cart = \Cart::session($this->cartId);
+            $cart->update(
+                $itemId,
+                [
+                    'quantity' => 1,
+                ]
+            );
+            $this->getCart();
+            $this->emitTo('product-card', 'render');
         }
+
+        $this->reloadCartCheckout();
+    }
+
+    public function decrement($itemId, $categoryId = 0): void
+    {
+
+        $cart = $this->checkShelterCategory($categoryId);
 
         $cart->update(
             $itemId,
             ['quantity' => -1]
         );
 
-        $product_1c->increment('stock', 1);
-
-        $this->updateCart();
         $this->getCart();
         $this->emitTo('product-card', 'render');
 
         $this->reloadCartCheckout();
     }
 
-    public function delete($itemId): void
+    public function delete($itemId, $categoryId = 0): void
     {
         if ($itemId) {
-            $product_1c = Product1C::find($itemId);
-
-            if ($product_1c->promotion_type === 1) {
-                $cart = app('shelter')->session($this->shelterCartId);
-            } else {
-                $cart = \Cart::session($this->cartId);
-            }
-
+            $cart = $this->checkShelterCategory($categoryId);
             $cart->remove($itemId);
-            Product1C::find($itemId)->increment('stock', 1);
             $this->getCart();
             $this->emitTo('product-card', 'render');
-
             $this->reloadCartCheckout();
         }
     }
@@ -231,27 +212,6 @@ class ShopCart extends Component
         }
     }
 
-    public function updateCart(): void
-    {
-        $cart = \Cart::session($this->cartId);
-
-        $items = $cart->getContent();
-
-        if ($items) {
-            $this->checkDiscountByOnePlusOne($items, $this->cartId);
-
-            $productDiscountIdsByWeight = $this->checkDiscountByWeight($items);
-
-            if ($productDiscountIdsByWeight !== false) {
-                foreach ($items as $item) {
-                    if (in_array($item['id'], $productDiscountIdsByWeight)) {
-                        \Cart::session($this->cartId)->addItemCondition($item['id'], $this->getDiscountByWeight());
-                    }
-                }
-            }
-        }
-    }
-
     public function getCart(): void
     {
         $cart = \Cart::session($this->cartId);
@@ -265,6 +225,8 @@ class ShopCart extends Component
         $this->subTotal = $cart->getSubTotal() + $shelterCart->getSubTotal();
 
         $this->items = $functionItems->all();
+
+        $this->removeCheckoutDiscounts($this->items, $this->cartId);
 
         $functionShelterItems = $shelterCart->getContent();
         $this->shelterItems = $functionShelterItems->all();
@@ -291,6 +253,15 @@ class ShopCart extends Component
         }
 
         $this->totalWeight = $this->totalWeight->sum();
+    }
+
+    public function checkShelterCategory($categoryId)
+    {
+        if ($categoryId === 82) { // Помоги приюту
+            return $cart = app('shelter')->session($this->shelterCartId);
+        } else {
+            return $cart = \Cart::session($this->cartId);
+        }
     }
 
     public function reloadCartCheckout(): void

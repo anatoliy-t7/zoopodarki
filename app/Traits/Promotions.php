@@ -1,73 +1,38 @@
 <?php
 namespace App\Traits;
 
-use App\Models\Product;
 use App\Models\Product1C;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 trait Promotions
 {
-    public function initPromotion($product1cArray)
+    public function initPromotion($product1cArray, $promotion)
     {
-        if ($this->promotion['type'] === '1') {
-            if ($this->promotionUcenka($promotion, $product1cArray)) {
-                return true;
-            }
-        } elseif ($this->promotion['type'] === '2') {
-            if ($this->promotionOnePlusOne($product1cArray)) {
-                return true;
-            }
-        } elseif ($this->promotion['type'] === '3') {
-            if ($this->promotionByProvider($product1cArray)) {
-                return true;
-            }
-        } elseif ($this->promotion['type'] === '4') {
-            if ($this->promotionHoliday($product1cArray)) {
-                return true;
-            }
+        if ($promotion['type'] === '1') {
+            return $this->promotionUcenka($product1cArray, $promotion);
+        } elseif ($promotion['type'] === '2') {
+            return $this->promotionOnePlusOne($product1cArray);
+        } elseif ($promotion['type'] === '3') {
+            return $this->promotionByProvider($product1cArray, $promotion);
+        } elseif ($promotion['type'] === '4') {
+            return $this->promotionHoliday($product1cArray, $promotion);
         }
 
         return false;
     }
 
-    public function promotionUcenka($promotion, $product1cArray) // 1 "Помоги приюту"
+    public function promotionUcenka($product1cArray, $promotion) // 1 "Уценка"
     {
         $product1c = $this->getModel($product1cArray['id']);
 
-        $promotionPrice = ($product1cArray['price'] / 1.22) * 1.08;
 
-        $product1c->loadMissing(['product', 'product.unit']);
+        $originalPrice = $this->discountRevertforUcenka($product1c->price);
 
-        DB::transaction(function () use ($product1c, $promotion, $promotionPrice) {
-
-            // клонируем товар сайта
-            $productClon = Product::find($product1c->product->id)->duplicate();
-
-            $productClon->categories()->attach(82); // ID категории "Помоги приюту"
-
-            // клонируем товар 1С
-            Product1C::create([
-                'uuid' => null,
-                'cod1c' => $product1c->cod1c,
-                'name' => $product1c->name,
-                'barcode' => $product1c->barcode,
-                'vendorcode' => $product1c->vendorcode,
-                'commission' => $product1c->commission,
-                'price' => $product1c->price,
-                'stock' => $promotion['stock'],
-                'promotion_type' => intval($this->promotion['type']),
-                'promotion_price' => $promotionPrice,
-                'promotion_percent' => null,
-                'promotion_date' => null,
-                'weight' => $product1c->weight,
-                'size' => $product1c->size,
-                'unit_value' => $product1c->unit_value,
-                'product_id' => $productClon->id,
-            ]);
-
-            $product1c->stock = max($product1c->stock - $promotion['stock'], 0);
-            $product1c->save();
-        });
+        $product1c->update([
+            'promotion_type' => intval($promotion['type']),
+            'promotion_price' => $originalPrice,
+        ]);
 
         return true;
     }
@@ -85,29 +50,34 @@ trait Promotions
         return true;
     }
 
-    public function promotionByProvider($product1cArray) // 3
+    public function promotionByProvider($product1cArray, $promotion) // 3 "Акции от поставщика"
     {
-        $product1c = $this->getModel($product1cArray['id']);
 
-        $originalPrice = discountRevert($product1c->price, $this->promotion['percent']);
+        try {
+            $product1c = $this->getModel($product1cArray['id']);
 
-        $product1c->update([
-            'promotion_type' => intval($this->promotion['type']),
-            'promotion_percent' => $this->promotion['percent'],
+            $originalPrice = $this->discountRevert($product1c->price, $promotion['percent']);
+
+            $product1c->update([
+            'promotion_type' => intval($promotion['type']),
+            'promotion_percent' => $promotion['percent'],
             'promotion_price' => $originalPrice,
-        ]);
+            ]);
 
-        return true;
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 
-    public function promotionHoliday($product1cArray) // 4
+    public function promotionHoliday($product1cArray, $promotion) // 4 "Праздники"
     {
         $product1c = $this->getModel($product1cArray['id']);
 
         $product1c->update([
-            'promotion_type' => intval($this->promotion['type']),
-            'promotion_percent' => $this->promotion['percent'],
-            'promotion_date' => $this->promotion['date'],
+            'promotion_type' => intval($promotion['type']),
+            'promotion_percent' => $promotion['percent'],
+            'promotion_date' => $promotion['date'],
         ]);
 
         return true;
@@ -122,17 +92,26 @@ trait Promotions
     {
         $product1c = $this->getModel($product1cId);
 
-        if ($product1c->promotion_type === 1) {
-            $product1c->loadMissing('product');
-            $product1c->product->delete();
-            $product1c->delete();
-        } else {
             $product1c->update([
                 'promotion_type' => 0,
                 'promotion_price' => null,
                 'promotion_percent' => null,
                 'promotion_date' => null,
             ]);
-        }
+    }
+
+    public function discountRevert($discount, $procent) : int
+    {
+        $price = $discount + ceil($discount * $procent / 100);
+
+        return ceil($price);
+    }
+
+    public function discountRevertforUcenka($promotionPrice) : int
+    {
+        // Стоимость товара/1,22+8% (должно работать в обратную сторону)
+        $price = ($promotionPrice * 1.22) / 1.08;
+
+        return ceil($price);
     }
 }

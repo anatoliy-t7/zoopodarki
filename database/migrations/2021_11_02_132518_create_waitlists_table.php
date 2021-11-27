@@ -16,7 +16,6 @@ class CreateWaitlistsTable extends Migration
         Schema::create('waitlists', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('phone')->index();
             $table->string('email')->nullable();
 
             $table->string('status')->default('pending');

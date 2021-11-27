@@ -3,6 +3,23 @@
 @endsection
 <div>
 
+  @push('header-css')
+    <style>
+      .trix-button-group--file-tools {
+        display: none !important;
+      }
+
+      .trix-button--icon-code {
+        display: none !important;
+      }
+
+      .trix-button--icon-quote {
+        display: none !important;
+      }
+
+    </style>
+  @endpush
+
   <div x-data="handler" @get-items.window="getItems(event)" @new.window="openForm(event)" @save.window="saveForm(event)"
     @close.window="closeForm(event)" class="space-y-2">
 
@@ -165,9 +182,11 @@
                   <div
                     class="relative w-full h-32 text-center bg-pink-100 border-2 border-gray-400 border-dashed rounded-lg hover:border-pink-200">
                     @if ($logo)
-                      <img loading="lazy" class="w-full h-auto" src="{{ $logo->temporaryUrl() }}">
+                      <img loading="lazy" class="object-contain object-center w-full h-32 pb-1"
+                        src="{{ $logo->temporaryUrl() }}">
                     @elseif($logoName)
-                      <img loading="lazy" class="w-full h-auto" src="/brands/{{ $logoName }}">
+                      <img loading="lazy" class="object-contain object-center w-full h-32 pb-1"
+                        src="/brands/{{ $logoName }}">
                     @else
                       <div class="pt-8 text-sm text-center">Скиньте сюда изображение или кликните для загрузки</div>
                     @endif
@@ -184,9 +203,20 @@
               </div>
 
               <div class="w-9/12">
-                <div class="space-y-2">
+                <div x-data="{ description: @entangle('description').defer }" x-init="$watch('description', function (value) {
+                             $refs.trix.editor.loadHTML(value)
+                             var length = $refs.trix.editor.getDocument().toString().length
+                             $refs.trix.editor.setSelectedRange(length - 1)
+                             }
+                         )" wire:ignore class="space-y-2">
                   <label class="font-bold">Описание</label>
-                  <textarea rows="5" wire:model.defer="description" name="description"></textarea>
+
+                  <input id="description" name="description" x-model="description" type="hidden" />
+                  <div x-on:trix-change.debounce.1000ms="description = $refs.trix.value"
+                    class="w-auto p-4 bg-white rounded-xl">
+                    <trix-editor x-ref="trix" input="description" class="h-48 overflow-y-scroll">
+                    </trix-editor>
+                  </div>
                   @error('description')
                   <span class="block text-sm text-red-500">{{ $message }}</span> @enderror
                 </div>
@@ -279,6 +309,7 @@
           form: false,
           confirm: null,
           body: document.body,
+
           addNewField() {
             this.items.push({
               name: '',
@@ -322,17 +353,6 @@
 
     <script>
       document.addEventListener("keydown", function(e) {
-        if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.keyCode == 83) {
-          e.preventDefault();
-          var event = new CustomEvent('save');
-          window.dispatchEvent(event);
-        }
-
-        if (e.keyCode == 112) {
-          e.preventDefault();
-          var event = new CustomEvent('new');
-          window.dispatchEvent(event);
-        }
 
         if (e.keyCode == 27) {
           e.preventDefault();
