@@ -31,7 +31,7 @@ return [
     |
      */
 
-    'lifetime' => env('SESSION_LIFETIME', 1440),
+    'lifetime' => env('SESSION_LIFETIME', 43800),
 
     'expire_on_close' => false,
 
@@ -124,10 +124,7 @@ return [
     |
      */
 
-    'cookie' => env(
-        'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'zoopodarki'), '_') . '_session'
-    ),
+    'cookie' => 'zoopodarki-session',
 
     /*
     |--------------------------------------------------------------------------

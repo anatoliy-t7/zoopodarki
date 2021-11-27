@@ -5,11 +5,8 @@
 <div class="py-6 space-y-4">
 
   <div class="flex items-start justify-start max-w-3xl px-4 space-x-12">
-
     <x-logo />
-
     <div class="flex items-center justify-between w-full pt-3">
-
       <div class="relative block w-full max-w-2xl">
         <div class="absolute -top-8" style="left: calc(100% - 1.7rem)">
           <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -29,19 +26,59 @@
           <div class="font-bold">Подтверждение</div>
         </div>
       </div>
-
-
     </div>
-
   </div>
-
 
   <h3 class="block px-4 text-2xl font-semibold">Подтверждение заказа</h3>
 
   <div class="justify-between block md:flex md:space-x-6">
-    <div class="block w-full px-6 pt-4 pb-6 space-y-6 bg-white md:w-8/12 rounded-2xl">
+    <div class="block w-full px-8 py-6 space-y-6 bg-white md:w-8/12 rounded-2xl">
+      <div class="space-y-4">
+        <div class="text-lg font-bold">Ваш заказ</div>
+        @if ($order->items()->exists())
+          <div class="flex flex-col justify-between w-full py-4 pl-4 space-y-12">
+            @foreach ($order->items as $item)
+              <div class="flex items-center justify-between space-x-6">
+                <div>
+                  @if ($item->product()->exists())
+                    <a class="w-full" target="_blank"
+                      href="{{ route('site.product', [$item->product->categories[0]->catalog->slug, $item->product->categories[0]->slug, $item->product->slug]) }}">
+                      <img loading="lazy" class="object-fill w-16 h-full"
+                        src="{{ $item->product->getFirstMediaUrl('product-images', 'thumb') }}"
+                        alt="{{ $item->name }}">
+                    </a>
+                  @endif
+                </div>
 
+                <div class="w-full space-y-4 text-gray-600">
+                  <a class="block w-full hover:underline" target="_blank"
+                    href="{{ route('site.product', [$item->product->categories[0]->catalog->slug, $item->product->categories[0]->slug, $item->product->slug]) }}">
+                    {{ $item->name }}
+                  </a>
 
+                  <div class="flex justify-between">
+                    <div class="flex justify-start space-x-4 text-xs text-gray-500">
+                      @if ($item->unit)
+                        {{ $item->unit }}
+                      @endif
+                    </div>
+                    <div class="flex space-x-4 items-centerjustify-end">
+                      <div> {{ $item->quantity }} шт x</div>
+                      <div class="flex justify-end ">
+                        <div class="font-bold ">
+                          {{ RUB($item->price) }}
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            @endforeach
+          </div>
+        @endif
+      </div>
 
       <div>
         @if (session()->has('message'))
@@ -59,261 +96,13 @@
         </div>
       @endif
 
-      <script type="text/javascript">
-        //TODO create route
-        window.addEventListener('beforeunload', function(e) {
-          navigator.sendBeacon('/closedTab', {{ $order->id }})
-        });
-      </script>
-
     </div>
+
     <div class="block w-full space-y-2 md:w-4/12">
-
-      <div class="p-6 space-y-4 text-sm ">
-        <div class="text-lg font-bold">Ваш заказ</div>
-        @if ($order->items()->exists())
-          <div class="flex flex-col justify-between w-full ">
-            @foreach ($order->items as $item)
-              <div class="py-2 border-b border-gray-200 ">
-                <div class="flex items-center justify-between space-x-2 ">
-                  <div class="p-2 bg-white ">
-                    @if ($item->product)
-                      <a class="w-full" target="_blank"
-                        href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}">
-                        <img loading="lazy" class="object-fill w-12 h-full"
-                          src="{{ $item->associatedModel['image'] }}" alt="{{ $item->name }}">
-                      </a>
-                    @endif
-                  </div>
-
-                  <div class="w-full">
-
-                    <a class="block w-full hover:underline" target="_blank"
-                      href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}">
-                      {{ $item->name }}
-                    </a>
-
-                    <div class="flex justify-between pt-2">
-                      <div class="flex justify-start space-x-4 text-xs text-gray-500">
-                        @if ($item->attributes->has('unit'))
-                          <x-units :unit="$item->attributes['unit']" :value="$item->associatedModel['weight']">
-                          </x-units>
-                        @endif
-                      </div>
-                      <div class="flex space-x-4 items-centerjustify-end">
-                        <div> {{ $item->quantity }} шт x</div>
-                        <div class="flex justify-end ">
-                          @if ($item->associatedModel['promotion_type'] === 0)
-                            <div class="font-bold ">
-                              {{ RUB($item->price) }}
-                            </div>
-                          @elseif ($item->associatedModel['promotion_type'] === 1 ||
-                            $item->associatedModel['promotion_type'] === 3)
-                            <div class="flex items-center justify-end space-x-2 ">
-                              <div class="text-xs line-through">
-                                {{ RUB($item->associatedModel['promotion_price']) }}
-                              </div>
-                              <div class="font-bold text-orange-500">
-                                {{ RUB($item->price) }}
-                              </div>
-                            </div>
-                          @elseif ($item->associatedModel['promotion_type'] === 2 ||
-                            $item->associatedModel['promotion_type'] === 4)
-                            <div class="flex items-center justify-end space-x-2 ">
-                              <div class="text-xs line-through">
-                                {{ RUB($item->price) }}
-                              </div>
-                              <div class="font-bold text-orange-500">
-                                {{ RUB($item->getPriceWithConditions()) }}
-                              </div>
-                            </div>
-                          @endif
-
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            @endforeach
-          </div>
-        @endif
-
-        @if ($shelterItems)
-          <div class="px-6 -mx-6 bg-gray-100">
-            <div class="py-2 font-semibold">"Помоги приюту"</div>
-
-            <div class="flex flex-col justify-between w-full ">
-              @foreach ($shelterItems as $shelterItem)
-                <div class="flex items-center justify-between py-2 space-x-2 border-b border-gray-200">
-
-                  <div class="p-2">
-                    <img loading="lazy" class="object-cover object-center w-12"
-                      src="{{ $shelterItem->associatedModel['image'] }}" alt="">
-                  </div>
-
-                  <div class="w-full">
-                    <div>
-                      {{ $shelterItem->name }}
-                    </div>
-
-                    <div class="flex justify-between py-2 ">
-                      <div class="flex justify-start text-xs text-gray-500">
-                        <span>
-                          {{ $shelterItem->quantity }} шт
-                        </span>
-                      </div>
-
-                      <div class="flex items-center justify-end space-x-2 font-bold">
-                        <div class="text-xs line-through">
-                          {{ RUB($shelterItem->getPriceSum()) }}
-                        </div>
-                        <div class="font-bold text-orange-500">
-                          {{ RUB($shelterItem->getPriceSumWithConditions()) }}</div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-              @endforeach
-            </div>
-          </div>
-        @endif
-
-
-        @if ($productDiscountIdsByWeight)
-          <div class="flex justify-between space-x-2">
-            <span>Скидка за вес (больше 5 кг)</span>
-            <span class="font-bold">-10%</span>
-          </div>
-        @endif
-
-        @if ($userHasDiscount !== 0)
-          <div class="flex justify-between space-x-2">
-            <span>Скидка дисконтной карты</span>
-            <span class="font-bold">-{{ $userHasDiscount }}%</span>
-          </div>
-        @endif
-
-
-        <div class="flex justify-between font-bold text-gray-700">
-          <span>Всего</span>
-          <span class="">{{ RUB($subTotal) }}</span>
-        </div>
-
-
-
-        @if ($userHasDiscountOnReview)
-          <div class="flex justify-between space-x-2">
-            <span>Скидка за отзыв</span>
-            <span class="font-bold">-2%</span>
-          </div>
-        @endif
-
-        @if ($firstOrder !== 0)
-          <div class="flex justify-between">
-            <span>Скидка за первый заказ</span>
-            <span class="font-bold"> -{{ RUB($firstOrder) }}</span>
-          </div>
-        @endif
-
-
-
-        @if ($orderType == 0)
-          <div class="flex justify-between">
-            <span>Доставка</span>
-            <span class="font-bold">{{ RUB($deliveryCost) }}</span>
-          </div>
-
-        @else
-          <div class="flex justify-between">
-            <span>Самовывоз</span>
-            <span class="font-bold">бесплатно</span>
-          </div>
-        @endif
-
-        @if (count($shelterItems) > 0)
-          <div class="flex justify-between">
-            <span>Доставка в приют</span>
-            <span class="font-bold">{{ RUB($deliveryCostToShelter) }}</span>
-          </div>
-        @endif
-
-
-
-        <div class="flex justify-between pt-2 text-lg font-bold border-t">
-          <span wire:ignore>Итого</span>
-          <span class="font-bold">{{ RUB($totalAmount) }}</span>
-        </div>
-      </div>
-
-      <div class="p-6">
-        <div class="py-4 space-y-4 text-gray-700 border-t border-b border-gray-200">
-
-          @if ($orderType == 1 and $date)
-            <div class="flex space-x-2 text-sm">
-              <span class="w-full md:w-4/6">Самовывоз на</span>
-              <span class="flex justify-end w-full font-bold md:w-8/6">{{ simpleDate($date) }}</span>
-            </div>
-          @endif
-          @if ($orderType == 1 and $pickupStore)
-            <div class="space-y-2 text-sm leading-tight">
-              <span>Самовывоз из магазина: </span>
-              <span class="font-bold">{{ $pickupStore }}</span>
-            </div>
-          @endif
-          @if ($orderType == 0 and $date)
-            <div class="flex space-x-2 text-sm">
-              <span class="w-full md:w-4/6">Доставка на</span> <span class="flex justify-end w-full font-bold md:w-8/6">
-                {{ simpleDate($date) }}</span>
-            </div>
-          @endif
-          @if ($orderType == 0 and $deliveryTime and $date)
-            <div class="flex space-x-2 text-sm">
-              <span class="w-full md:w-4/6">Время доставки</span>
-              <span class="flex justify-end w-full font-bold md:w-8/6">{{ $deliveryTime }}</span>
-            </div>
-          @endif
-
-          @if ($orderPaymentType == 1)
-            <div class="flex space-x-2 text-sm">
-              <span class="w-full md:w-3/6">Оплата</span>
-              <span class="flex justify-end w-full font-bold md:w-9/6">наличными при получении</span>
-            </div>
-            @if ($needChange)
-              <div class="flex space-x-2 text-sm">
-                <span class="w-full md:w-4/6">Сдача с</span>
-                <span class="flex justify-end w-full font-bold md:w-8/6">{{ $needChange }}<span
-                    class="pl-1">₽</span></span>
-              </div>
-            @endif
-          @else
-            <div class="flex space-x-2 text-sm">
-              <span class="w-full md:w-3/6">Оплата</span>
-              <span class="flex justify-end w-full font-bold md:w-9/6">онлайн</span>
-            </div>
-          @endif
-
-          <div class="space-y-2 text-sm">
-            <div class="flex justify-between ">
-              <span>Количество</span>
-              <span class="font-bold">{{ $counter }} шт</span>
-            </div>
-            @if ($totalWeight)
-              <div class="flex justify-between">
-                <span>Вес заказа</span>
-                <span class="font-bold">{{ kg($totalWeight) }}</span>
-              </div>
-            @endif
-          </div>
-        </div>
-      </div>
-
       <div class="sticky p-6 top-5 ">
         <div class="block px-6 md:px-0">
 
-          <button wire:click="createOrder"
+          <button wire:click="confirmOrder"
             class="relative w-full px-3 py-4 text-lg font-bold text-white uppercase bg-green-500 hover:bg-green-600 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
             wire:loading.attr="disabled">
             <span wire:loading wire:target="createOrder" class="absolute top-4 left-4">
@@ -326,18 +115,22 @@
               </svg>
             </span>
             <span>
-              Оформить заказ
+              Подтвердить заказ
             </span>
           </button>
-
-          <div class="pt-4 text-xs text-gray-500">
-            Нажимая кнопку "Оформить заказ", Вы соглашаетесь c <a class="leading-tight text-green-500"
-              href="/page/privacy-policy" target="_blank">условиями
-              политики конфиденциальности</a>.
-          </div>
 
         </div>
       </div>
     </div>
-
   </div>
+
+</div>
+
+<script type="text/javascript">
+  //TODO create route
+  window.addEventListener('beforeunload', function(e) {
+    navigator.sendBeacon('/closedTab', {{ $order->id }})
+  });
+</script>
+
+</div>

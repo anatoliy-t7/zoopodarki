@@ -39,7 +39,7 @@
   <h3 class="block px-4 text-2xl font-semibold">Оформление заказа</h3>
 
   <div class="justify-between block md:flex md:space-x-6">
-    <div class="block w-full px-6 pt-4 pb-6 space-y-6 bg-white md:w-8/12 rounded-2xl">
+    <div class="block w-full px-6 pt-4 pb-6 space-y-8 bg-white md:w-8/12 rounded-2xl">
 
       @guest
         <div x-cloak x-data class="py-4 text-sm text-center text-gray-600">Пожалуйста,
@@ -132,7 +132,7 @@
                 </button>
               </div>
 
-              <div wire:ignore class="flex items-center w-full md:w-6/12">
+              <div class="flex items-center w-full md:w-6/12">
                 <svg class="hidden w-8 h-8 pr-2 text-gray-300 fill-current md:block" xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24">
                   <path
@@ -146,7 +146,7 @@
 
               <div :class="{ 'flex': toggle == 0, 'hidden': toggle == 1}"
                 class="flex flex-col items-center justify-start space-y-6 md:space-y-0 md:space-x-6 md:flex-row">
-                @if (!empty($address))
+                @if (is_array($address) && !empty($address))
                   <div class="flex-col items-start justify-start w-full px-4 py-3 space-y-1 md:w-9/12 h-14">
                     <div>
                       {{ $address['address'] }} {{ $address['building'] }}
@@ -167,7 +167,7 @@
                 @else
                   <div class="w-9/12 pl-4">
                     Добавьте адрес
-                    @error('address.address')
+                    @error('address')
                       <div class="pt-1 text-sm text-red-500">
                         Вам необходимо добавить адрес
                       </div>
@@ -250,35 +250,33 @@
             </div>
 
             <div x-cloak :class="{ 'block': toggle == 0, 'hidden': toggle == 1}"
-              class="relative w-full pt-3 space-y-6 fadeIn">
+              class="relative w-full pt-6 space-y-6 fadeIn ">
               <div class="block w-full space-y-6 md:space-y-0 md:space-x-6 md:flex md:justify-between">
 
                 <div x-data="{date: @entangle('date')}" class="w-full md:w-9/12">
 
-                  <label class="block pb-2 text-lg font-bold text-gray-700">Дата доставки</label>
-                  // TODO
+                  <div class="block pb-2 text-lg font-bold text-gray-700">Дата доставки</div>
+
                   <div wire:ignore id="date" class="flex items-center justify-center w-full overflow-hidden splide">
-                    <div class="flex items-center text-blue-500 splide__arrows">
+                    <div class="flex items-center splide__arrows">
                       <button class="splide__arrow splide__arrow--prev">
-                        <div class="p-1 text-2xl border rounded-full hover:bg-gray-100">
+                        <div class="p-1 text-2xl hover:bg-gray-100">
                           <x-tabler-chevron-right />
                         </div>
                       </button>
                       <button class="splide__arrow splide__arrow--next">
-                        <div class="p-1 text-2xl border rounded-full hover:bg-gray-100">
+                        <div class="p-1 text-2xl hover:bg-gray-100">
                           <x-tabler-chevron-right class="text-gray-500 bg-transparent stroke-current" />
-
-
                         </div>
                       </button>
                     </div>
                     <div class="w-full max-w-xs md:max-w-md splide__track">
-                      <ul class="border-t border-b border-r splide__list">
+                      <ul class="splide__list">
                         @foreach ($dates as $item)
-                          <li class="relative cursor-pointer splide__slide hover:bg-gray-100"
+                          <li class="relative cursor-pointer splide__slide bg-gray-50 hover:bg-gray-100"
                             :class="{ 'text-green-500': date == '{{ $item['date'] }}'}">
                             <div x-on:click="$wire.set('date', '{{ $item['date'] }}')"
-                              class="block px-2 py-3 text-center border-l">
+                              class="block px-2 py-3 text-center border-r-2 border-white">
                               <div class="pb-1 font-semibold">
                                 {{ $item['number'] }}
                               </div>
@@ -333,8 +331,6 @@
 
           </div>
         </div>
-
-
 
         <div x-data="{payment: 'online'}" class="pt-2">
           <div class="pb-2 text-lg font-bold leading-normal text-gray-700">Вид оплаты</div>
@@ -398,7 +394,6 @@
           </div>
 
         </div>
-
       @endguest
 
     </div>
@@ -553,8 +548,6 @@
           </div>
         @endif
 
-
-
         @if ($orderType == 0)
           <div class="flex justify-between">
             <span>Доставка</span>
@@ -574,8 +567,6 @@
             <span class="font-bold">{{ RUB($deliveryCostToShelter) }}</span>
           </div>
         @endif
-
-
 
         <div class="flex justify-between pt-2 text-lg font-bold border-t">
           <span wire:ignore>Итого</span>

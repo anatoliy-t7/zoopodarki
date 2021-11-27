@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div x-show="windowType === 'phone'" x-transition>
+    <div :class="windowType === 'phone' ? 'block' : 'hidden'">
 
       <div class="px-6 pb-6">
         <h2 class="pb-4 text-xl font-bold leading-tight text-center text-gray-700">
@@ -95,7 +95,7 @@
 
     </div>
 
-    <div x-show="windowType === 'otp'" x-transition>
+    <div :class="windowType === 'otp' ? 'block' : 'hidden'">
       <div class="px-6 pb-6">
         <div class="pb-4">
 
@@ -139,7 +139,7 @@
       </div>
     </div>
 
-    <div x-show="windowType === 'email'" x-transition>
+    <div :class="windowType === 'email' ? 'block' : 'hidden'">
       <div class="px-6 pt-3 pb-4">
         <h2 class="pb-4 text-xl font-bold leading-tight text-center text-gray-700">
           Вход

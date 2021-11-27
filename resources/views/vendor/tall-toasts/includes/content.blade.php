@@ -12,7 +12,7 @@
       <div class="mb-1 text-lg font-black tracking-widest text-white uppercase" x-show="toast.title !== undefined"
         x-html="toast.title"></div>
 
-      <div class="font-semibold leading-snug text-white" x-show="toast.message !== undefined" x-text="toast.message">
+      <div class="font-semibold leading-snug text-white" x-show="toast.message !== undefined" x-html="toast.message">
       </div>
     </div>
   </div>

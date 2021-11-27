@@ -16,10 +16,9 @@ class Kernel extends HttpKernel
     protected $middleware = [
         \App\Http\Middleware\TrustProxies::class,
         \Fruitcake\Cors\HandleCors::class,
-        \App\Http\Middleware\CheckForMaintenanceMode::class,
+        \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
-        \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
     /**
@@ -82,5 +81,12 @@ class Kernel extends HttpKernel
         $schedule->command('backup:clean')->timezone('Europe/Moscow')->dailyAt('03:00');
 
         $schedule->command('sitemap:generate')->timezone('Europe/Moscow')->weeklyAt('04:00');
+    }
+
+    protected function commands()
+    {
+        $this->load(__DIR__ . '/Commands');
+
+        require base_path('routes/console.php');
     }
 }

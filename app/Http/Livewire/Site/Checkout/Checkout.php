@@ -130,7 +130,9 @@ class Checkout extends Component
     public function getAddressFromComponent($address)
     {
         $this->address = $address;
-        $this->render(); // TODO not working
+
+
+        // TODO не обновляет
     }
 
     public function calcTotalAmount()
@@ -159,6 +161,10 @@ class Checkout extends Component
         $this->items = $functionItems->all();
         $functionShelterItems = $shelterCart->getContent();
         $this->shelterItems = $functionShelterItems->all();
+
+        if (count($this->items) === 0 && count($this->shelterItems) === 0) {
+            return redirect()->route('site.home');
+        }
 
         $shelterCartCounter = $shelterCart->getTotalQuantity();
         $this->counter = $cart->getTotalQuantity() + $shelterCartCounter;
@@ -307,7 +313,9 @@ class Checkout extends Component
             ]);
 
             foreach ($this->items as $item) {
-                $product1c = Product1C::find($item->id);
+                $product1c = Product1C::where('id', $item->id)
+                    ->with('product', 'product.unit')
+                    ->first();
 
                 $discountComment = '';
 
@@ -323,16 +331,22 @@ class Checkout extends Component
                     $discountComment = 'Праздничные скидки, -' . $product1c->promotion_percent;
                 }
 
+                $unit = '';
+                if ($product1c->product->unit()->exists()) {
+                    $unit = $product1c->unit_value . ' ' . $product1c->product->unit->name;
+                }
+
                 OrderItem::create([
                     'name' => $item->name,
                     'uuid' => $product1c->uuid,
                     'barcode' => $product1c->barcode,
                     'vendorcode' => $product1c->vendorcode,
                     'quantity' => $item->quantity,
+                    'unit' => $unit,
                     'price' => $item->price,
                     'amount' => $item->getPriceSumWithConditions(),
                     'order_id' => $order->id,
-                    'product_id' => $item->id,
+                    'product_id' => $product1c->product->id,
                     'discount_comment' => $discountComment,
                     'discount' => round($item->getPriceSum() - $item->getPriceSumWithConditions()),
                 ]);
@@ -350,10 +364,11 @@ class Checkout extends Component
                     'barcode' => $product1c->barcode,
                     'vendorcode' => $product1c->vendorcode,
                     'quantity' => $shelterItem->quantity,
+                    'unit' => $unit,
                     'price' => $shelterItem->price,
                     'amount' => $shelterItem->getPriceSumWithConditions(),
                     'order_id' => $order->id,
-                    'product_id' => $shelterItem->id,
+                    'product_id' => $product1c->product->id,
                     'discount_comment' => $discountComment,
                     'discount' => round($shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions()),
                     ]);
@@ -369,13 +384,12 @@ class Checkout extends Component
             // }
 
             session(['order_id' => $order->id]);
+            session(['no_stock_items' => $noStockItems]);
 
             // Happy ending :)
             DB::commit();
 
-            return redirect()->route('checkout.confirm', [
-                'no_stock_items' => $noStockItems
-            ]);
+            return redirect()->route('checkout.confirm');
         } catch (\Exception $e) {
             DB::rollback();
             Log::error($e);

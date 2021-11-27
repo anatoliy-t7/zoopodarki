@@ -3,6 +3,7 @@
 namespace T7team\Shopcart;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class CartServiceProvider extends ServiceProvider
 {
@@ -45,7 +46,8 @@ class CartServiceProvider extends ServiceProvider
             // default session or cart identifier. This will be overridden when calling Cart::session($sessionKey)->add() etc..
             // like when adding a cart for a specific user name. Session Key can be string or maybe a unique identifier to bind a cart
             // to a specific user, this can also be a user ID
-            $session_key = '4yTlTDKu3oJOfzD';
+
+            $session_key = 'shelter_cart_id' . Str::random(10);
 
             return new Cart(
                 $storage,

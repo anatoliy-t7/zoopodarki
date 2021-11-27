@@ -18,7 +18,7 @@ class UserAddresses extends Component
     public bool $showDropdown = true;
 
 
-    public $address;
+    public $address = [];
     public $addressId;
     public $addresses;
     public $newAddress = [
@@ -171,13 +171,13 @@ class UserAddresses extends Component
 
     public function getAddresses()
     {
-            $user = auth()->user();
-            $user->load('addresses');
+        $user = auth()->user();
+        $user->load('addresses');
 
         if ($user->pref_address !== 0) {
             $this->address = $user->addresses->where('id', $user->pref_address)->first()->toArray();
             $this->addresses = $user->addresses;
-
+            $this->dispatchBrowserEvent('close-modal');
             $this->emitUp('getAddressFromComponent', $this->address);
         }
     }
@@ -188,8 +188,6 @@ class UserAddresses extends Component
             'pref_address' => $addressId,
         ]);
         $this->getAddresses();
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('close-form');
     }
 
     public function getCustomerLocation(String $address = '')

@@ -18,8 +18,9 @@ class CreateOrderItemTable extends Migration
             $table->uuid('uuid')->nullable();
             $table->string('barcode')->nullable(); //ШтрихкодЕдиницы
             $table->string('vendorcode')->nullable();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->unsignedInteger('quantity');
+            $table->string('unit')->nullable();
             $table->decimal('price', 20, 2);
             $table->decimal('amount', 20, 2);
             $table->string('discount_comment')->nullable();
@@ -34,7 +35,7 @@ class CreateOrderItemTable extends Migration
             $table->unsignedBigInteger('product_id')->index();
             $table->foreign('product_id')
                 ->references('id')
-                ->on('products_1c');
+                ->on('products');
         });
     }
 

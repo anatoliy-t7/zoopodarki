@@ -35,7 +35,6 @@ class ShopCart extends Component
 
         if (request()->session()->has('cart_id')) {
             $cart_id = session('cart_id');
-            $cart = session($cart_id . '_cart_items');
 
             // foreach ($cart as $item) {
             //     if ($item['quantity'] > 21) {

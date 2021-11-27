@@ -13,7 +13,7 @@ class CheckoutConfirm extends Component
     use WireToast;
 
     public $order;
-    public $noStockItems;
+    public $noStockItems = [];
 
     public function mount()
     {
@@ -23,17 +23,17 @@ class CheckoutConfirm extends Component
         }
 
         if (request()->session()->has('order_id')) {
-            $order_id = request()->session()->input('order_id');
+            $order_id = session('order_id');
 
             $this->order = Order::where('id', $order_id)
-            ->with('items', 'items.product')
+            ->with('items', 'items.product', 'items.product.media')
             ->first();
         } else {
             return redirect()->route('site.home');
         }
 
-        if (request()->has('no_stock_items')) {
-            $this->noStockItems = request()->input('no_stock_items');
+        if (request()->session()->has('no_stock_items')) {
+            $this->noStockItems = session('no_stock_items');
         }
     }
 
