@@ -65,6 +65,7 @@ class Catalogs extends Component
             $this->sortDirection = 'desc';
         }
         $this->sortField = $field;
+        $this->resetPage();
     }
 
     public function openForm($catalog_id)

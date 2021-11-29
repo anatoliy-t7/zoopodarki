@@ -2,6 +2,7 @@
 namespace App\Http\Livewire\Site\Checkout;
 
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -26,8 +27,18 @@ class CheckoutConfirm extends Component
             $order_id = session('order_id');
 
             $this->order = Order::where('id', $order_id)
-            ->with('items', 'items.product', 'items.product.media')
-            ->first();
+                ->with([
+                    'items',
+                    'items.product1c:id,product_id',
+                    'items.product1c.product:id,slug',
+                    'items.product1c.product.media',
+                    'items.product1c.product.categories:id,slug,catalog_id',
+                    'items.product1c.product.categories.catalog:id,slug',
+                    ])
+                ->first();
+            if ($this->order === null) {
+                       return redirect()->route('site.home');
+            }
         } else {
             return redirect()->route('site.home');
         }
@@ -44,20 +55,22 @@ class CheckoutConfirm extends Component
             ->first();
 
          // 1 cash
-        if (1 === $this->orderPaymentType) {
+        if ($order->payment_method == 0) {
             $order->status = 'processing';
         } else {
             $order->status = 'pending_payment';
         }
         $order->save();
 
-        \Cart::session($this->cartId)->clear();
-        app('shelter')->session($this->shelterCartId)->clear();
+        $this->stopDiscountFirstOrder();
 
-        if (0 === $this->orderPaymentType) {
+        \Cart::session(session('cart_id'))->clear();
+        app('shelter')->session(session('shelter_cart'))->clear();
+
+        if ($order->payment_method == 0) {
                 $this->payCreate($order);
         } else {
-            redirect()->route('site.payment.cash', [
+            redirect()->route('site.order.confirmed', [
                 'order_id' => $order->id
             ]);
         }
@@ -81,7 +94,7 @@ class CheckoutConfirm extends Component
             'confirmation' => [
             'type' => 'redirect',
             'locale' => 'ru_RU',
-            'return_url' => route('site.payment.status'),
+            'return_url' => route('site.order.status'),
             ],
             'capture' => true,
             'metadata' => [
@@ -90,6 +103,13 @@ class CheckoutConfirm extends Component
         ], uniqid('', true));
 
         return redirect()->to($payment->getConfirmation()->getConfirmationUrl());
+    }
+
+    public function stopDiscountFirstOrder()
+    {
+            $user = auth()->user();
+            $user->extra_discount = 'no';
+            $user->save();
     }
 
     public function render()

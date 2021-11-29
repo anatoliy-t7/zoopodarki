@@ -21,7 +21,7 @@ class CreateOrdersTable extends Migration
 
             $table->boolean('sent_to_1c')->default(0);
 
-            $table->decimal('amount', 8, 2);
+            $table->integer('amount')->default(0);
             $table->unsignedInteger('quantity');
             $table->integer('weight')->default(0); //Вес в граммах
 
@@ -34,7 +34,7 @@ class CreateOrdersTable extends Migration
             $table->string('pickup_store')->nullable();
             $table->date('date')->nullable();
             $table->string('delivery_time')->nullable();
-            $table->decimal('delivery_cost', 8, 2)->nullable();
+            $table->integer('delivery_cost')->default(0);
 
             $table->json('contact');
             $table->json('address');

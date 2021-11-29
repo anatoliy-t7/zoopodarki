@@ -27,7 +27,7 @@ class PaymentController extends Controller
             $comment = 'Ваш заказ отправлен на обработку, оплата наличными при получении';
 
             $this->incrementPopularity($order);
-            $this->stopDiscountFirstOrder();
+
 
             return view('site.payment-status', compact('order', 'comment'));
         } else {
@@ -64,6 +64,8 @@ class PaymentController extends Controller
 
     public function userCameBack()
     {
+
+        // todo здесь это не нужно
         if (!session()->has('order_id')) {
             return redirect()->route('site.home');
         }
@@ -84,7 +86,7 @@ class PaymentController extends Controller
             $comment = 'Возрат подтвержден';
         }
 
-        $this->stopDiscountFirstOrder();
+        $this->incrementPopularity($order);
 
         return view('site.payment-status', compact('order', 'comment'));
     }
@@ -92,18 +94,9 @@ class PaymentController extends Controller
     public function incrementPopularity($order)
     {
         foreach ($order->items as $key => $item) {
-            $product1c = Product1C::with('product:id,popularity')->find($item->product->id);
+            $product1c = Product1C::with('product:id,popularity')->where('uuid', $item->uuid)->first();
 
             $product1c->product->increment('popularity', 1);
-        }
-    }
-
-    public function stopDiscountFirstOrder()
-    {
-        if (auth()->user()->extra_discount === 'first') {
-            $user = auth()->user();
-            $user->extra_discount = 'no';
-            $user->save;
         }
     }
 }

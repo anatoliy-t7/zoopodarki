@@ -426,12 +426,17 @@
                     <div class="flex justify-between pt-2">
                       <div class="flex justify-start space-x-4 text-xs text-gray-500">
                         @if ($item->attributes->has('unit'))
-                          <x-units :unit="$item->attributes['unit']" :value="$item->associatedModel['weight']">
+                          <x-units :unit="$item->attributes['unit']" :value="$item->attributes->weight">
                           </x-units>
                         @endif
                       </div>
                       <div class="flex space-x-4 items-centerjustify-end">
-                        <div> {{ $item->quantity }} шт x</div>
+                        @if ($item->attributes->unit_value != 'на развес')
+                          <div>{{ $item->quantity }} шт x</div>
+                        @else
+                          <div>на развес</div>
+                        @endif
+
                         <div class="flex justify-end ">
                           @if ($item->associatedModel['promotion_type'] === 0)
                             <div class="font-bold ">
@@ -551,7 +556,13 @@
         @if ($orderType == 0)
           <div class="flex justify-between">
             <span>Доставка</span>
-            <span class="font-bold">{{ RUB($deliveryCost) }}</span>
+            <span class="font-bold">
+              @if ($deliveryCost == 0)
+                бесплатно
+              @else
+                {{ RUB($deliveryCost) }}
+              @endif
+            </span>
           </div>
 
         @else
@@ -574,7 +585,7 @@
         </div>
       </div>
 
-      <div class="p-6">
+      <div class="px-4 py-2">
         <div class="py-4 space-y-4 text-gray-700 border-t border-b border-gray-200">
 
           @if ($orderType == 1 and $date)

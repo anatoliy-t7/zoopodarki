@@ -20,10 +20,10 @@ trait Discounts
         }
     }
 
-    public function checkDiscountByCard($userHasDiscount)
+    public function checkDiscountByCard($userHasDiscount = 0)
     {
         if ($userHasDiscount !== 0) {
-            return $cartDiscountByCard = new CartCondition([
+            return new CartCondition([
                 'name' => 'Скидочная карта',
                 'type' => 'discount_card',
                 'target' => 'subtotal',
@@ -33,18 +33,30 @@ trait Discounts
         return false;
     }
 
-    public function getDiscountByCard($userHasDiscount, $cartId, $items)
+    public function checkIfCartHasDiscountCard($items)
+    {
+        foreach ($items as $item) {
+            if ($item->associatedModel['vendorcode'] == 'DISCOUNT_CARD') {
+                return $item->associatedModel['unit_value'];
+            }
+        }
+        return false;
+    }
+
+    public function getDiscountByCard($items, $cartId, $userHasDiscount = 0)
     {
 
         $cartDiscountByCard = $this->checkDiscountByCard($userHasDiscount);
 
         if ($cartDiscountByCard === false) {
-            // Дис. карта действует сразу, но сама себя не учитывает
-            foreach ($items as $item) {
-                if ($item->associatedModel['vendorcode'] === 'DISCOUNT_CARD') {
-                    $cartDiscountByCard = $this->getDiscountByCard($item->associatedModel['unit_value'], $this->cartId);
-                }
-                break;
+            $checked = $this->checkIfCartHasDiscountCard($items);
+            if ($checked !== false) {
+                return new CartCondition([
+                    'name' => 'Скидочная карта',
+                    'type' => 'discount_card',
+                    'target' => 'subtotal',
+                    'value' => '-' . $checked . '%',
+                    ]);
             }
         }
 
@@ -132,7 +144,7 @@ trait Discounts
 
             if ($item->associatedModel['promotion_type'] === 0) {
                 array_push($productDiscountIds, $item['id']);
-                $itemWeight = $item->associatedModel['weight'] * $item->quantity;
+                $itemWeight = $item->attributes->weight * $item->quantity;
 
                 $totalWeight->push($itemWeight);
             }
@@ -190,7 +202,7 @@ trait Discounts
         }
 
         if ($discountItems && count($discountItems) >= 2) {
-            $numberOfFree = floor(count($discountItems) / 2);
+            $numberOfFree = ceil(count($discountItems) / 2);
 
             $price = array_column($discountItems, 'price');
 

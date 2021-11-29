@@ -60,7 +60,7 @@ class Users extends Component
             $this->sortDirection = 'desc';
         }
         $this->sortField = $field;
-
+        $this->resetPage();
     }
 
     public function openForm($userId)
@@ -121,7 +121,6 @@ class Users extends Component
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');
-
         });
     }
 
@@ -129,13 +128,10 @@ class Users extends Component
     {
         $user = User::with('reviews')->find($itemId);
         if ($user->reviews()->exists()) {
-
             toast()
                 ->warning('У этого пользователя есть отзывы о товарах')
                 ->push();
-
         } else {
-
             $user_name = $user->name;
             $user->delete();
 
@@ -167,5 +163,4 @@ class Users extends Component
             ->extends('dashboard.app')
             ->section('content');
     }
-
 }

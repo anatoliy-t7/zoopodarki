@@ -2,8 +2,8 @@
   x-effect="document.body.classList.toggle('overflow-hidden', open), document.body.classList.toggle('pr-4', open)">
   <div>
     <button x-on:click="open = !open"
-      class="flex items-center px-3 py-2 text-white bg-orange-500 border-2 border-orange-500 rounded-xl focus:outline-none hover:bg-orange-600 focus:bg-orange-600"
-      :class="open  ? 'bg-orange-600' : ' '">
+      class="flex items-center px-3 py-2 text-white bg-orange-400 border-2 border-orange-400 rounded-xl focus:outline-none hover:bg-orange-500 focus:bg-orange-500"
+      :class="open  ? 'bg-orange-500' : ' '">
 
       <span x-show="!open">
         <x-tabler-menu-2 class="w-6 h-6" />

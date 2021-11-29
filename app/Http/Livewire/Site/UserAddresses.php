@@ -28,6 +28,8 @@ class UserAddresses extends Component
         'extra' => '',
     ];
 
+    protected $listeners = ['refreshComponent' => '$refresh'];
+
     public function reset(...$properties)
     {
         $this->sugestionAddresses = [];
@@ -163,9 +165,7 @@ class UserAddresses extends Component
 
             $this->reset('newAddress');
             $this->dispatchBrowserEvent('close-modal');
-            $this->dispatchBrowserEvent('close-form');
             $this->getAddresses();
-            $this->render();
         });
     }
 
@@ -177,8 +177,8 @@ class UserAddresses extends Component
         if ($user->pref_address !== 0) {
             $this->address = $user->addresses->where('id', $user->pref_address)->first()->toArray();
             $this->addresses = $user->addresses;
-            $this->dispatchBrowserEvent('close-modal');
-            $this->emitUp('getAddressFromComponent', $this->address);
+
+            $this->emitUp('getAddressesforCheckout');
         }
     }
 
@@ -187,6 +187,7 @@ class UserAddresses extends Component
         User::where('id', auth()->user()->id)->update([
             'pref_address' => $addressId,
         ]);
+        $this->dispatchBrowserEvent('close-modal');
         $this->getAddresses();
     }
 

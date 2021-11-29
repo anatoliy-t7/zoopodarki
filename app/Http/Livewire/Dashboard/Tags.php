@@ -80,6 +80,7 @@ class Tags extends Component
             $this->sortDirection = 'desc';
         }
         $this->sortField = $field;
+        $this->resetPage();
     }
 
     public function addNew()

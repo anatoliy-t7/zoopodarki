@@ -116,6 +116,7 @@ class Products1c extends Component
             $this->sortDirection = 'desc';
         }
         $this->sortField = $field;
+        $this->resetPage();
     }
 
     public function render()

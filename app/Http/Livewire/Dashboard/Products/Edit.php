@@ -98,7 +98,9 @@ class Edit extends Component
         $this->productId = request()->query('id', $this->productId);
 
         if (Product::where('id', $this->productId)->first()) {
-            $functionProduct = Product::where('id', $this->productId)->with('media', 'categories')->first();
+            $functionProduct = Product::where('id', $this->productId)
+            ->with('media', 'categories', 'categories.catalog', 'variations', 'attributes', 'brand')
+            ->first();
             $this->product = $functionProduct;
             $this->name = $functionProduct->name;
             $this->meta_title = $functionProduct->meta_title;
@@ -407,7 +409,7 @@ class Edit extends Component
             if ($this->photos) {
                 foreach ($this->photos as $photo) {
                     $path = $photo->store('photos');
-                    $img = \Image::make(storage_path('app/public/') . $path);
+                    $img = \Image::make(storage_path('app/') . $path);
                     $img->resize(800, 800, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
@@ -416,7 +418,7 @@ class Edit extends Component
                     $img->save();
 
                     $this->product
-                        ->addMedia(storage_path('app/public/') . $path)
+                        ->addMedia(storage_path('app/') . $path)
                         ->toMediaCollection('product-images');
                 }
 

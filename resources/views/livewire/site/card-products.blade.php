@@ -61,7 +61,7 @@
             </div>
 
             <div>
-              <button title="В корзину" wire:click="$emit('addToCart', {{ $item->id }}, 1, 0)"
+              <button title="В корзину" wire:click="$emit('addToCart', {{ $item->id }}, 1, 0, 1000)"
                 class="z-10 text-blue-500 transition ease-in-out transform cursor-pointer focus:outline-none hover:text-blue-600 active:scale-95 link-hover">
                 <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path

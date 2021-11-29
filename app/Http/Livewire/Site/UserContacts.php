@@ -26,7 +26,6 @@ class UserContacts extends Component
         toast()
             ->success('Контакт удален')
             ->push();
-
     }
 
     public function editContact($contactId)
@@ -89,7 +88,7 @@ class UserContacts extends Component
                 $this->contacts = $user->contacts;
             }
 
-            $this->emitUp('getContactFromComponent', $this->contact);
+            $this->emitUp('getContactsforCheckout', $this->contact);
         }
     }
 
@@ -98,9 +97,8 @@ class UserContacts extends Component
         User::where('id', auth()->user()->id)->update([
             'pref_contact' => $contactId,
         ]);
-        $this->getContacts();
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('close-form');
+        $this->getContacts();
     }
 
     public function render()

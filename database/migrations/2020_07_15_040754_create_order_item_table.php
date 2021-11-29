@@ -21,8 +21,8 @@ class CreateOrderItemTable extends Migration
             $table->string('name');
             $table->unsignedInteger('quantity');
             $table->string('unit')->nullable();
-            $table->decimal('price', 20, 2);
-            $table->decimal('amount', 20, 2);
+            $table->integer('price')->default(0);
+            $table->integer('amount')->default(0);
             $table->string('discount_comment')->nullable();
             $table->integer('discount')->default(0);
 
@@ -35,7 +35,7 @@ class CreateOrderItemTable extends Migration
             $table->unsignedBigInteger('product_id')->index();
             $table->foreign('product_id')
                 ->references('id')
-                ->on('products');
+                ->on('products_1c');
         });
     }
 

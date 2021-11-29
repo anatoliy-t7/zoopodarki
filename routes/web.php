@@ -84,11 +84,20 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
         Route::get('/search', \App\Http\Livewire\Site\Search\SearchPage::class)->name('search');
 
         // Tabs routes of product page
-        Route::get('/pet/{catalog}/{category}/{slug}', 'App\Http\Controllers\Site\ProductController@show')->name('product');
+        Route::get(
+            '/pet/{catalog}/{category}/{slug}',
+            'App\Http\Controllers\Site\ProductController@show'
+        )->name('product');
 
-        Route::get('/pet/{catalog}/{category}/{slug}/consist', 'App\Http\Controllers\Site\ProductController@showСonsist')->name('product.consist');
+        Route::get(
+            '/pet/{catalog}/{category}/{slug}/consist',
+            'App\Http\Controllers\Site\ProductController@showСonsist'
+        )->name('product.consist');
 
-        Route::get('/pet/{catalog}/{category}/{slug}/applying', 'App\Http\Controllers\Site\ProductController@showApplying')->name('product.applying');
+        Route::get(
+            '/pet/{catalog}/{category}/{slug}/applying',
+            'App\Http\Controllers\Site\ProductController@showApplying'
+        )->name('product.applying');
 
         // Brands
         Route::get('/brands', 'App\Http\Controllers\Site\BrandController@index')->name('brands');
@@ -100,23 +109,24 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
 
         Route::get('/page/{slug}', 'App\Http\Controllers\Site\PageController@show')->name('page');
 
-        Route::get('/payment/cash', 'App\Http\Controllers\Site\PaymentController@payСash')->name('payment.cash');
+        Route::get('/order/confirmed', 'App\Http\Controllers\Site\PaymentController@payСash')->name('order.confirmed');
 
-        Route::get('/payment/status', 'App\Http\Controllers\Site\PaymentController@userCameBack')
-        ->name('payment.status');
+        Route::get('/order/status', 'App\Http\Controllers\Site\PaymentController@userCameBack')
+        ->name('order.status'); // callback for YooKassa
     });
-
-    // 1С exchange
-    Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')
-    ->middleware(['throttle:1000,60', 'bot'])
-    ->name('exchange');
 
     Route::middleware(['throttle:1000,60', 'bot'])->group(function () {
         Route::get('/checkout', \App\Http\Livewire\Site\Checkout\Checkout::class)->name('checkout');
 
-        Route::post('/payment/callback', 'App\Http\Controllers\Site\PaymentController@payCallback')
-        ->name('payment.callback');
-
         Route::get('/checkout/confirm', \App\Http\Livewire\Site\Checkout\CheckoutConfirm::class)
+        ->middleware(['auth'])
         ->name('checkout.confirm');
+
+        Route::post('/payment/callback', 'App\Http\Controllers\Site\PaymentController@payCallback')
+        ->name('payment.callback'); // callback for YooKassa
     });
+
+        // 1С exchange
+    Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')
+    ->middleware(['throttle:1000,60', 'bot'])
+    ->name('exchange');

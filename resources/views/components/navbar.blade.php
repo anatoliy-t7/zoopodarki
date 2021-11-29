@@ -26,7 +26,7 @@
         <div class="flex items-center justify-between max-w-screen-xl px-4 mx-auto">
 
           <div class="flex items-center justify-start space-x-12">
-            <div class="flex items-center justify-between p-2">
+            <div class="flex items-center justify-between">
               <x-logo />
             </div>
 

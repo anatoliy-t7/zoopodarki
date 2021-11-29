@@ -48,18 +48,22 @@ class ShopCart extends Component
         $this->getCart();
     }
 
-    public function addToCart(int $itemId, int $quantity, int $categoryId = 0, int $byWeight = 0)
+    public function addToCart(int $itemId, int $quantity, $categoryId = 0, int $byWeight = 0)
     {
 
-        $cart = $this->checkShelterCategory($categoryId);
+        $cart = $this->checkShelterCategory((int)$categoryId);
 
         if ($cart->isEmpty()) {
-            $this->add($itemId, $quantity, $categoryId, $byWeight);
+            $this->add($itemId, $quantity, (int)$categoryId, $byWeight);
         } else {
             if ($cart->get($itemId) !== null) {
-                $this->increment($itemId, $categoryId);
+                if ($cart->get($itemId)->attributes->unit_value == 'на развес') {
+                    $this->add($itemId, $quantity, (int)$categoryId, $byWeight);
+                } else {
+                    $this->increment($itemId, (int)$categoryId, $byWeight);
+                }
             } else {
-                 $this->add($itemId, $quantity, $categoryId, $byWeight);
+                $this->add($itemId, $quantity, (int)$categoryId, $byWeight);
             }
         }
 
@@ -96,7 +100,6 @@ class ShopCart extends Component
                       'stock' => $product_1c->stock,
                       'unit_value' => $product_1c->unit_value,
                       'image' => $product_1c->product->getFirstMediaUrl('product-images', 'thumb'),
-                      'weight' => $product_1c->weight,
                       'category_id' => $categoryId,
                       'promotion_type' => $product_1c->promotion_type,
                       'promotion_price' => $product_1c->promotion_price,
@@ -106,8 +109,9 @@ class ShopCart extends Component
                       'product_slug' => $product_1c->product->slug,
                     ];
 
+                    $weight = $product_1c->weight;
                     if ($product_1c->unit_value == 'на развес') {
-                        $associatedModel['weight'] = $byWeight;
+                        $weight = $byWeight;
                     }
 
                     $cart->add([
@@ -117,16 +121,23 @@ class ShopCart extends Component
                           'quantity' => $quantity,
                           'attributes' => [
                               'unit' => $product_1c->product->unit,
+                              'weight' => $weight,
+                              'unit_value' => $product_1c->unit_value,
                           ],
                           'associatedModel' => $associatedModel,
                     ]);
 
                     if ($product_1c->unit_value == 'на развес') {
-                        \Cart::update($product_1c->id, array(
-                        'quantity' => 1,
+                        $price = ($byWeight / 1000) * $product_1c->price;
+
+                        $cart->update($product_1c->id, array(
+                         'quantity' => array(
+                            'relative' => false,
+                            'value' => 1
+                            ),
+                        'price' => $price,
                         ));
                     }
-
 
                     if ($product_1c->vendorcode !== 'DISCOUNT_CARD') {
                         $this->checkAndSetPromotionDiscount($cart, $product_1c);
@@ -140,16 +151,17 @@ class ShopCart extends Component
         );
     }
 
-    public function increment($itemId, $categoryId = 0): void
+    public function increment(int $itemId, int $categoryId = 0): void
     {
 
         $cart = $this->checkShelterCategory($categoryId);
         $item = $cart->get($itemId);
 
+
         if ($item->associatedModel['stock'] < $item->quantity + 1) {
             toast()
-                ->info('Извините, товара больше нет в наличии')
-                ->push();
+            ->info('Извините, товара больше нет в наличии')
+            ->push();
 
             $this->getCart();
             $this->emitTo('product-card', 'render');
@@ -157,7 +169,7 @@ class ShopCart extends Component
             $cart->update(
                 $itemId,
                 [
-                    'quantity' => 1,
+                'quantity' => 1,
                 ]
             );
             $this->getCart();
@@ -167,7 +179,7 @@ class ShopCart extends Component
         $this->reloadCartCheckout();
     }
 
-    public function decrement($itemId, $categoryId = 0): void
+    public function decrement(int $itemId, int $categoryId = 0): void
     {
 
         $cart = $this->checkShelterCategory($categoryId);
@@ -239,14 +251,14 @@ class ShopCart extends Component
 
         if (count($items) > 0) {
             foreach ($items as $item) {
-                $itemWeight = $item->associatedModel['weight'] * $item->quantity;
+                $itemWeight = $item->attributes->weight * $item->quantity;
                 $this->totalWeight->push($itemWeight);
             }
         }
 
         if (count($shelterItems) > 0) {
             foreach ($shelterItems as $shelterItem) {
-                $itemWeight = $shelterItem->associatedModel['weight'] * $shelterItem->quantity;
+                $itemWeight = $shelterItem->attributes->weight * $shelterItem->quantity;
                 $this->totalWeight->push($itemWeight);
             }
         }

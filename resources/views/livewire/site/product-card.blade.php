@@ -360,24 +360,24 @@
 
             <div x-show="item.stock > 0 && item.unit_value == 'на развес'" x-transition.opacity class="w-40">
               <select name="byWeight" id="byWeight" x-model="byWeight" class="field">
-                <option selected value="500">500 гр</option>
-                <option value="1000">1 кг</option>
-                <option value="1500">1.5 кг</option>
-                <option value="2000">2 кг</option>
-                <option value="2500">2.5 кг</option>
-                <option value="3000">3 кг</option>
-                <option value="3500">3.5 кг</option>
-                <option value="4000">4 кг</option>
-                <option value="4500">4.5 кг</option>
-                <option value="5000">5 кг</option>
-                <option value="6000">6 кг</option>
-                <option value="8000">8 кг</option>
-                <option value="10000">10 кг</option>
-                <option value="12000">12 кг</option>
-                <option value="14000">14 кг</option>
-                <option value="16000">16 кг</option>
-                <option value="18000">18 кг</option>
-                <option value="20000">20 кг</option>
+                <option value="500">500 гр</option>
+                <option selected value="1000">1 кг</option>
+                <option x-show="item.stock >= 1.5" value="1500">1.5 кг</option>
+                <option x-show="item.stock >= 2" value="2000">2 кг</option>
+                <option x-show="item.stock >= 2.5" value="2500">2.5 кг</option>
+                <option x-show="item.stock >= 3" value="3000">3 кг</option>
+                <option x-show="item.stock >= 3.5" value="3500">3.5 кг</option>
+                <option x-show="item.stock >= 4" value="4000">4 кг</option>
+                <option x-show="item.stock >= 4.5" value="4500">4.5 кг</option>
+                <option x-show="item.stock >= 5" value="5000">5 кг</option>
+                <option x-show="item.stock >= 6" value="6000">6 кг</option>
+                <option x-show="item.stock >= 8" value="8000">8 кг</option>
+                <option x-show="item.stock >= 10" value="10000">10 кг</option>
+                <option x-show="item.stock >= 12" value="12000">12 кг</option>
+                <option x-show="item.stock >= 14" value="14000">14 кг</option>
+                <option x-show="item.stock >= 16" value="16000">16 кг</option>
+                <option x-show="item.stock >= 18" value="18000">18 кг</option>
+                <option x-show="item.stock >= 20" value="20000">20 кг</option>
               </select>
             </div>
           </div>
@@ -661,7 +661,8 @@
       document.addEventListener('alpine:initializing', () => {
         Alpine.data('variationsToggle', () => ({
           count: 1,
-          byWeight: 500,
+          byWeight: 1000,
+          categoryId: '{{ $category->id }}',
           item: {
             id: parseInt('{{ $product->variations[0]->id }}'),
             stock: parseInt('{{ $product->variations[0]->stock }}'),
@@ -691,6 +692,7 @@
                   timeout: '7000',
                 }
               });
+              // TODO test
               callToaster.cancelable
               window.dispatchEvent(callToaster);
             }
@@ -704,10 +706,10 @@
             if (this.item.stock < 0) {
               this.item.stock = 0
             }
-            if (this.item.stock > 0 && this.item.unit_value == 'на развес') {
-              return window.livewire.emit('addToCart', this.item.id, this.count, this.byWeight)
+            if (this.item.unit_value == 'на развес') {
+              return window.livewire.emit('addToCart', this.item.id, this.count, this.categoryId, this.byWeight);
             }
-            window.livewire.emit('addToCart', this.item.id, this.count)
+            return window.livewire.emit('addToCart', this.item.id, this.count, this.categoryId)
           },
           preOrder() {
             window.livewire.emit('preOrder', this.item.id, this.email)

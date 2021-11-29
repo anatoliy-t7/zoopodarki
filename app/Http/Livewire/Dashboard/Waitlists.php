@@ -49,6 +49,7 @@ class Waitlists extends Component
             $this->sortDirection = 'desc';
         }
         $this->sortField = $field;
+        $this->resetPage();
     }
 
     public function openForm($waitlistId)
@@ -93,7 +94,6 @@ class Waitlists extends Component
         toast()
             ->success('Заказ удален')
             ->push();
-
     }
 
     public function closeForm()

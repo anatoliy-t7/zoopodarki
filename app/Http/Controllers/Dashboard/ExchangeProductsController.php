@@ -63,38 +63,18 @@ class ExchangeProductsController extends Controller
 
         switch ($mode) {
             case $this->stepCheckAuth:
-                Log::debug('stepCheckAuth');
-
                 return $this->checkAuth();
-
             case $this->stepInit:
-                Log::debug('stepInit');
-
                 return $this->init();
-
             case $this->stepFile:
-                Log::debug('stepFile');
-
                 return $this->getFile();
-
             case $this->stepImport:
-                Log::debug('stepImport');
-
-                try {
-                    return $this->parsing();
-                } catch (\Exception $e) {
-                    Log::warning($e->getMessage());
-
-                    return $this->failure($e->getMessage());
-                }
-
+                return $this->parsing();
             case $this->stepQuery:
                 return $this->processQuery();
-
             case $this->stepSuccess:
                 $date = date('Y-m-d H:i:s');
                 Log::info("[${date}][1C] Successful orders export to 1C");
-
         }
     }
 
@@ -135,10 +115,15 @@ class ExchangeProductsController extends Controller
 
     protected function checkAuth()
     {
-        $cookieName = config('session.cookie');
-        $cookieID = Session::getId();
+        try {
+            $cookieName = config('session.cookie');
+            $cookieID = Session::getId();
 
-        return $this->answer("success\n${cookieName}\n${cookieID}");
+            return $this->answer("success\n${cookieName}\n${cookieID}");
+        } catch (\Throwable $th) {
+            Log::error('stepCheckAuth');
+            Log::error($th);
+        }
     }
 
     /**
@@ -147,10 +132,16 @@ class ExchangeProductsController extends Controller
      */
     protected function init()
     {
-        $zip = 'zip=' . ($this->canUseZip() ? 'yes' : 'no');
-        $maxFileSize = 'file_limit=' . (10 * 1000 * 1024);
 
-        return $this->answer("${zip}\n${maxFileSize}");
+        try {
+            $zip = 'zip=' . ($this->canUseZip() ? 'yes' : 'no');
+            $maxFileSize = 'file_limit=' . (10 * 1000 * 1024);
+
+            return $this->answer("${zip}\n${maxFileSize}");
+        } catch (\Throwable $th) {
+            Log::error('stepInit');
+            Log::error($th);
+        }
     }
 
     /**
@@ -168,45 +159,50 @@ class ExchangeProductsController extends Controller
      */
     protected function getFile()
     {
-        $filename = preg_replace('#^(/tmp/|upload/1c/webdata)#', '', $this->request->get('filename'));
-        $filename = trim(str_replace('\\', '/', trim($filename)), '/');
+        try {
+                   $filename = preg_replace('#^(/tmp/|upload/1c/webdata)#', '', $this->request->get('filename'));
+            $filename = trim(str_replace('\\', '/', trim($filename)), '/');
 
-        if (empty($filename)) {
-            Log::error('filename is empty');
+            if (empty($filename)) {
+                Log::error('filename is empty');
 
-            return $this->failure('mode: ' . $this->stepFile
+                return $this->failure('mode: ' . $this->stepFile
                 . ', filename is empty');
-        }
-
-        $dir = storage_path('sync');
-
-        if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
-        }
-
-        $filePath = $dir . '/' . $filename;
-
-        $file = fopen($filePath, 'ab');
-
-        $data = file_get_contents('php://input');
-
-        $result = fwrite($file, $data);
-
-        $size = strlen($data);
-
-        if ($result !== $size) {
-            return $this->failure("Ошибка записи файла: ${filePath}");
-        }
-
-        if (substr($filePath, -3) == 'zip') {
-            if (!$this->unzip($dir, $filePath)) {
-                return $this->failure("Не удалось распаковать архив: ${filePath}");
-            } else {
-                unlink($filePath); // удаление архива
             }
-        }
 
-        return $this->answer('success');
+            $dir = storage_path('sync');
+
+            if (!file_exists($dir)) {
+                mkdir($dir, 0777, true);
+            }
+
+            $filePath = $dir . '/' . $filename;
+
+            $file = fopen($filePath, 'ab');
+
+            $data = file_get_contents('php://input');
+
+            $result = fwrite($file, $data);
+
+            $size = strlen($data);
+
+            if ($result !== $size) {
+                return $this->failure("Ошибка записи файла: ${filePath}");
+            }
+
+            if (substr($filePath, -3) == 'zip') {
+                if (!$this->unzip($dir, $filePath)) {
+                    return $this->failure("Не удалось распаковать архив: ${filePath}");
+                } else {
+                    unlink($filePath); // удаление архива
+                }
+            }
+
+            return $this->answer('success');
+        } catch (\Throwable $th) {
+            Log::error('step getFile');
+            Log::error($th);
+        }
     }
 
     protected function unzip($dir, $filePath)
@@ -253,20 +249,15 @@ class ExchangeProductsController extends Controller
         return iconv('UTF-8', 'windows-1251', $answer);
     }
 
-    /**
-     * parsing
-     *
-     * @return void
-     */
     protected function parsing()
     {
-        $filename = $this->request->get('filename');
-
-        $directory = storage_path('sync');
-
-        $file = $directory . '/' . $filename;
-
         try {
+            $filename = $this->request->get('filename');
+
+            $directory = storage_path('sync');
+
+            $file = $directory . '/' . $filename;
+
             if (file_exists($file)) {
                 if (strpos($filename, 'import0_1.xml') !== false) {
                     ProcessImportProduct1C::dispatch($file);
@@ -282,18 +273,17 @@ class ExchangeProductsController extends Controller
             }
 
             return $this->answer('success');
-        } catch (\Exception $e) {
-            return $this->failure($e->getMessage());
+        } catch (\Throwable $th) {
+            Log::error('step parsing');
+            Log::error($th);
+            return $this->failure($th);
         }
     }
 
     protected function processQuery()
     {
-        $orders = Order::where('sent_to_1c', 0)->with('items', 'items.product', 'user')->get();
-
         try {
-            Log::info('Sync of orders');
-
+            $orders = Order::where('sent_to_1c', 0)->with('items', 'items.product1c', 'user')->get();
             foreach ($orders as $order) {
                 $order->update([
                     'sent_to_1c' => 1,
@@ -301,10 +291,10 @@ class ExchangeProductsController extends Controller
             }
 
             return response()->view('export.orders', compact('orders'))->header('Content-Type', 'application/xml');
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
-            return $this->failure($e->getMessage());
+        } catch (\Throwable $th) {
+            Log::error('Sync of orders');
+            Log::error($th);
+            return $this->failure($th);
         }
     }
 }

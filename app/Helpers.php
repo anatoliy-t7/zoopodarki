@@ -74,7 +74,15 @@ if (!function_exists('getNextOrderNumber')) {
 if (!function_exists('kg')) {
     function kg($value)
     {
-        if ($value !== 0 and $value !== 'на развес') {
+        if ($value !== 0) {
+            if (is_string($value)) {
+                if (Str::contains($value, 'на развес')) {
+                    return $value;
+                }
+
+                $value = Str::replace('гр', '', $value);
+                $value = trim($value);
+            }
             $value = intval($value) / 1000;
 
             if (Str::of($value)->before('.') == '0') {
@@ -96,8 +104,7 @@ if (!function_exists('kg')) {
                 $value .= ' кг';
             }
         }
-
-        return $value;
+            return $value;
     }
 }
 

@@ -4,9 +4,9 @@
 <div>
 
   <div x-data="handler" @get-items.window="getItems(event)" @new.window="openForm(event)"
-    @close.window="closeForm(event)" class="space-y-2">
+    @close.window="closeForm(event)" class="space-y-4">
 
-    <div class="flex items-center justify-between w-full pb-2 space-x-6">
+    <div class="flex items-center justify-between w-full space-x-6">
 
       <h3 class="text-2xl">Заказы</h3>
 
@@ -17,7 +17,7 @@
       <x-dashboard.search />
 
       <div>
-        <div class="flex items-center justify-end py-3">
+        <div class="flex items-center justify-end">
 
           <label class="flex items-center justify-end space-x-4">
             <span class="text-gray-700">Фильтр по статусу</span>
@@ -37,7 +37,7 @@
 
     </div>
 
-    <div class="py-4">
+    <div>
       <x-dashboard.table>
         <x-slot name="head">
           <x-dashboard.table.head sortable wire:click="sortBy('order_number')"

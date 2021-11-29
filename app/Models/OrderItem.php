@@ -12,9 +12,9 @@ class OrderItem extends Model
 
     public $timestamps = false;
 
-    public function product()
+    public function product1c()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product1C::class, 'product_id');
     }
 
     public function order()

@@ -78,7 +78,6 @@
                   <div class="flex items-center w-10/12 space-x-3">
 
                     <div class="flex flex-col items-start justify-between w-full py-2">
-
                       <a class="block w-full"
                         href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}"
                         class="text-xs">
@@ -88,19 +87,20 @@
                       <div class="flex items-center justify-between w-full space-x-2">
 
                         <div class="flex items-center justify-start w-2/12 py-2 text-xs text-gray-500">
+
                           @if ($item->attributes->has('unit'))
-                            <x-units :unit="$item->attributes['unit']" :value="$item->associatedModel['weight']">
+                            <x-units :unit="$item->attributes['unit']" :value="$item->attributes->weight">
                             </x-units>
                           @endif
                         </div>
 
                         <div class="flex items-center justify-between w-10/12">
 
-                          <div class="flex justify-center p-2 leading-none">
-                            @if ($item->associatedModel['unit_value'] != 'на развес')
+                          <div class="flex items-center justify-center p-2 leading-none">
+                            @if ($item->attributes->unit_value != 'на развес')
                               @if ($item->quantity == 1)
                                 <button wire:click="delete({{ $item->id }})"
-                                  class="px-1 text-gray-400 bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
+                                  class="flex items-center justify-center w-8 h-8 text-gray-400 bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
                                   <x-tabler-trash class="w-5 h-5" />
                                 </button>
                               @else
@@ -115,11 +115,13 @@
                               </div>
                               <button wire:click="increment({{ $item->id }})"
                                 class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">+</button>
+
                             @else
                               <button wire:click="delete({{ $item->id }})"
                                 class="p-1 text-gray-400 bg-gray-200 border border-gray-200 rounded-lg hover:bg-gray-300">
                                 <x-tabler-trash class="w-5 h-5" />
                               </button>
+                              <div class="pl-2 text-sm text-gray-400">на развес</div>
                             @endif
                           </div>
 
@@ -200,7 +202,7 @@
                         <div class="flex items-center justify-start w-2/12 py-2 text-xs text-gray-500">
                           @if ($shelterItem->attributes->has('unit'))
                             <x-units :unit="$shelterItem->attributes['unit']"
-                              :value="$shelterItem->associatedModel['unit_value']">
+                              :value="$shelterItem->attributes->unit_value">
                             </x-units>
                           @endif
                         </div>

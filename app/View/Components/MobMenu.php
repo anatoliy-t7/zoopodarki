@@ -13,11 +13,23 @@ class MobMenu extends Component
     public function __construct()
     {
 
-        $this->catalogs = cache()->remember('categories-menu', 60 * 60 * 24, function () {
-            return Catalog::where('menu', true)->with('categories')
+        if (config('app.env') === 'local') {
+            $this->menuCatalogs = Catalog::where('menu', true)
+                ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
+                ->with('categories.tags', fn ($query) => $query->limit(6))
+                ->with('brands')
                 ->orderBy('sort', 'asc')
                 ->get();
-        });
+        } else {
+            $this->menuCatalogs = cache()->remember('categories-menu', 60 * 60 * 24, function () {
+                        return Catalog::where('menu', true)
+                        ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
+                        ->with('categories.tags', fn ($query) => $query->limit(6))
+                        ->with('brands', fn ($query) => $query->limit(6))
+                        ->orderBy('sort', 'asc')
+                        ->get();
+            });
+        }
     }
 
     /**

@@ -49,7 +49,7 @@ class ImportOrders implements ShouldQueue
             unset($order1c); // удаление переменной
         }
 
-        unlink($functionFile); // удаление файла
+       // unlink($functionFile); // удаление файла
     }
 
     public function getOrders($order1c)
