@@ -32,7 +32,6 @@ class ShopCart extends Component
 
     public function mount()
     {
-
         if (request()->session()->has('cart_id')) {
             $cart_id = session('cart_id');
 

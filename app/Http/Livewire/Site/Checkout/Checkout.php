@@ -233,10 +233,14 @@ class Checkout extends Component
             ->with('items', 'items.product1c')
             ->first();
             foreach ($order->items as $item) {
-                $product1c = Product1C::find($item->product_id);
-                $product1c->increment('stock', $item->quantity);
+                DB::transaction(function () use ($item) {
+                    $product1c = Product1C::find($item->product_id);
+                    $product1c->stock = $product1c->stock + $item->quantity;
+                    $product1c->save();
+                    unset($product1c);
+                });
             }
-            $order->delete();
+                $order->delete();
         }
     }
 
@@ -268,7 +272,7 @@ class Checkout extends Component
             ]);
         } else {
             $this->validate([
-                'pickupStore' => 'required',
+            'pickupStore' => 'required',
             ]);
 
             $this->address = 'Самовывоз из магазина: ' . $this->pickupStore;
@@ -381,7 +385,7 @@ class Checkout extends Component
                 }
 
                 $discountProcent = (round($item->getPriceSum()
-                    - $item->getPriceSumWithConditions()) * 100)
+                - $item->getPriceSumWithConditions()) * 100)
                     / $item->getPriceSum();
 
                 OrderItem::create([
@@ -409,7 +413,6 @@ class Checkout extends Component
 
                     $product1c->stock = $product1c->stock - $shelterItem->quantity <= 0
                     ? $product1c->stock : $shelterItem->quantity;
-
                     $product1c->save();
 
                     $unit = '';
@@ -420,7 +423,7 @@ class Checkout extends Component
                     $discountComment = 'Уценка "Помоги приюту"';
 
                     $discountProcent = (round($item->getPriceSum()
-                        - $shelterItem->getPriceSumWithConditions()) * 100)
+                    - $shelterItem->getPriceSumWithConditions()) * 100)
                         / $shelterItem->getPriceSum();
 
                     OrderItem::create([
@@ -510,18 +513,18 @@ class Checkout extends Component
                         app('shelter')
                         ->session($cartId)
                         ->update($item['id'], array(
-                            'quantity' => array(
-                                'relative' => false,
-                                'value' => $product_1c->stock
-                            ),
+                        'quantity' => array(
+                            'relative' => false,
+                            'value' => $product_1c->stock
+                        ),
                         ));
                     } else {
                         \Cart::session($cartId)
                         ->update($item['id'], array(
-                            'quantity' => array(
-                                'relative' => false,
-                                'value' => $product_1c->stock
-                            ),
+                        'quantity' => array(
+                            'relative' => false,
+                            'value' => $product_1c->stock
+                        ),
                         ));
                     }
 

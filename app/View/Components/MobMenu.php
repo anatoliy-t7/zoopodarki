@@ -16,7 +16,7 @@ class MobMenu extends Component
         if (config('app.env') === 'local') {
             $this->menuCatalogs = Catalog::where('menu', true)
                 ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
-                ->withWhereHas('categories.tags', fn ($query) => $query->where('show_in_menu', true)->limit(6))
+                ->with('categories.tags', fn ($query) => $query->where('show_in_menu', true))
                 ->with('brands')
                 ->orderBy('sort', 'asc')
                 ->get();
@@ -24,8 +24,8 @@ class MobMenu extends Component
             $this->menuCatalogs = cache()->remember('categories-menu', 60 * 60 * 24, function () {
                         return Catalog::where('menu', true)
                         ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
-                        ->withWhereHas('categories.tags', fn ($query) => $query->where('show_in_menu', true)->limit(6))
-                        ->with('brands', fn ($query) => $query->limit(6))
+                        ->with('categories.tags', fn ($query) => $query->where('show_in_menu', true))
+                        ->with('brands')
                         ->orderBy('sort', 'asc')
                         ->get();
             });

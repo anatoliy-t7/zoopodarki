@@ -9,7 +9,6 @@ use Kirschbaum\PowerJoins\PowerJoins;
 
 class Category extends Model
 {
-    use \Staudenmeir\EloquentEagerLimit\HasEagerLimit;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use Sluggable;
     use PowerJoins;
