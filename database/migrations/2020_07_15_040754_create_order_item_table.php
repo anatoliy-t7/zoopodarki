@@ -25,6 +25,7 @@ class CreateOrderItemTable extends Migration
             $table->integer('amount')->default(0);
             $table->string('discount_comment')->nullable();
             $table->integer('discount')->default(0);
+            $table->integer('discount_procent')->default(0);
 
             $table->unsignedBigInteger('order_id')->index();
             $table->foreign('order_id')

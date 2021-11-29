@@ -1,7 +1,7 @@
 <div
   class="z-50 px-4 py-3 overflow-hidden bg-green-500 rounded-md shadow cursor-pointer pointer-events-auto select-none hover:shadow-lg"
   x-bind:class="{
-                    'bg-blue-500': toast.type === 'info',
+                    'bg-orange-400': toast.type === 'info',
                     'bg-green-500': toast.type === 'success',
                     'bg-yellow-500': toast.type === 'warning',
                     'bg-red-500': toast.type === 'danger'

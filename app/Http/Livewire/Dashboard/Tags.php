@@ -22,6 +22,7 @@ class Tags extends Component
     public $itemsPerPage = 30;
     public $filteredByCategory = null;
     public $onlyOnPage = false;
+    public $onlyInMenu = false;
     public $catalogs;
     public $editTag = [
         'id' => null,
@@ -32,6 +33,7 @@ class Tags extends Component
         'filter' => [],
         'category_id' => null,
         'show_on_page' => false,
+        'show_in_menu' => false,
     ];
     public $categoryId; //  ID a selected category
     public $categoryfilters = []; // Array 'attributes' a selected category
@@ -46,6 +48,7 @@ class Tags extends Component
         'itemsPerPage',
         'filteredByCategory',
         'onlyOnPage',
+        'onlyInMenu',
     ];
 
     public function mount()
@@ -68,6 +71,11 @@ class Tags extends Component
     }
 
     public function updatingOnlyOnPage()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingOnlyInMenu()
     {
         $this->resetPage();
     }
@@ -143,6 +151,7 @@ class Tags extends Component
                     'filter' => $this->editTag['filter'],
                     'category_id' => $this->categoryId,
                     'show_on_page' => $this->editTag['show_on_page'],
+                    'show_in_menu' => $this->editTag['show_in_menu'],
 
                 ]
             );
@@ -201,6 +210,9 @@ class Tags extends Component
                 ->when($this->onlyOnPage, function ($query) {
                     $query->where('show_on_page', true);
                 })
+                 ->when($this->onlyInMenu, function ($query) {
+                    $query->where('show_in_menu', true);
+                 })
                 ->with('category', 'category.catalog')
                 ->orderBy($this->sortField, $this->sortDirection)
                 ->paginate($this->itemsPerPage),

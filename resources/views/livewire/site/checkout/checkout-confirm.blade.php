@@ -154,9 +154,8 @@
           </div>
         @endif
         @if ($order->order_type == 1 && $order->pickup_store)
-          <div class="space-y-2 text-sm leading-tight">
-            <span>Самовывоз из магазина: </span>
-            <span class="font-bold">{{ $order->pickup_store }}</span>
+          <div class="text-sm leading-tight">
+            <span>{{ $order->address }}</span>
           </div>
         @endif
         @if ($order->order_type == 0 and $order->date)
@@ -242,12 +241,5 @@
 </div>
 
 </div>
-
-<script type="text/javascript">
-  //TODO create route
-  window.addEventListener('beforeunload', function(e) {
-    navigator.sendBeacon('/closedTab', {{ $order->id }})
-  });
-</script>
 
 </div>

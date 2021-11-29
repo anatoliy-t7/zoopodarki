@@ -29,7 +29,7 @@ class CategoryController extends Controller
     public function tag($catalog, $slug, $tagslug)
     {
         $category = Category::where('slug', $slug)
-            ->with('tags')
+            ->with('tags', fn ($query) => $query->where('show_on_page', true))
             ->firstOrFail();
 
         $catalog = Catalog::where('slug', $catalog)

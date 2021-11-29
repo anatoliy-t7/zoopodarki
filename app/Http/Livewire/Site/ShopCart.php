@@ -85,10 +85,9 @@ class ShopCart extends Component
                 if ((int) $product_1c->stock === 0) {
                     $this->getCart();
 
-                    $this->dispatchBrowserEvent(
-                        'toast',
-                        ['type' => 'error', 'text' => 'Товара больше нет в наличии']
-                    );
+                    return toast()
+                    ->info('Извините, товара больше нет в наличии')
+                    ->push();
                 } else {
                     $cart = $this->checkShelterCategory($categoryId);
 
@@ -168,12 +167,14 @@ class ShopCart extends Component
         } else {
             $cart->update(
                 $itemId,
-                [
-                'quantity' => 1,
-                ]
+                [ 'quantity' => 1, ]
             );
             $this->getCart();
             $this->emitTo('product-card', 'render');
+
+            toast()
+            ->success('Товар добавлен в корзину')
+            ->push();
         }
 
         $this->reloadCartCheckout();

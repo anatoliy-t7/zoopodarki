@@ -184,6 +184,7 @@ class Checkout extends Component
 
     public function setPickupStore($store, $storeId, $storeGuid)
     {
+
         $this->pickupStore = $store;
         $this->storeId = $storeId;
         $this->storeGuid = $storeGuid;
@@ -232,12 +233,8 @@ class Checkout extends Component
             ->with('items', 'items.product1c')
             ->first();
             foreach ($order->items as $item) {
-                DB::transaction(function () use ($item) {
-                    $product1c = Product1C::where('id', $item->product_id)->first();
-                    $product1c->stock = $product1c->stock + $item->quantity;
-                    $product1c->save();
-                    unset($product1c);
-                });
+                $product1c = Product1C::find($item->product_id);
+                $product1c->increment('stock', $item->quantity);
             }
             $order->delete();
         }
@@ -271,10 +268,10 @@ class Checkout extends Component
             ]);
         } else {
             $this->validate([
-            'pickupStore' => 'required',
+                'pickupStore' => 'required',
             ]);
 
-            $this->address = 'Магазин из которого заберут: ' . $this->pickupStore;
+            $this->address = 'Самовывоз из магазина: ' . $this->pickupStore;
         }
 
         $this->checkIfUserHasOrderWithStatusPendingConfirm();
@@ -339,6 +336,11 @@ class Checkout extends Component
                     ->with('product.unit')
                     ->first();
 
+                $product1c->stock = $product1c->stock - $item->quantity <= 0
+                 ? $product1c->stock : $item->quantity;
+
+                 $product1c->save();
+
                 $unit = '';
                 if ($product1c->unit_value == 'на развес') {
                     $unit = $item->attributes->weight;
@@ -347,15 +349,14 @@ class Checkout extends Component
                     $unit = $product1c->unit_value . ' ' . $unit . ' ' . $product1c->product->unit->name;
                 }
 
-
-                $amount = $item->getPriceSum();
+                $amount = $item->getPriceSumWithConditions();
                 $discount = 0;
                 $discountComment = '';
                 $price = $item->price;
 
+
                 if (0 == $item->associatedModel['promotion_type']) {
                     $price = $item->getPriceWithConditions();
-                    $amount = $item->getPriceSumWithConditions();
                     $discount = round($item->getPriceSum() - $item->getPriceSumWithConditions());
                     $discountComment = '';
                 }
@@ -371,14 +372,17 @@ class Checkout extends Component
                 }
                 if (4 == $item->associatedModel['promotion_type']) {
                     $price = $item->getPriceWithConditions();
-                    $amount = $item->getPriceSumWithConditions();
-                    $discount = round($item->getPriceSum() - $amount);
+                    $discount = round($item->getPriceSum() - $item->getPriceSumWithConditions());
                     $discountComment = 'Праздничные скидки, -' . $product1c->promotion_percent;
                 }
 
                 if ($item->attributes->unit_value == 'на развес') {
                     $discountComment = 'на развес: '. $item->attributes->weight . 'гр,  \n ' . $discountComment;
                 }
+
+                $discountProcent = (round($item->getPriceSum()
+                    - $item->getPriceSumWithConditions()) * 100)
+                    / $item->getPriceSum();
 
                 OrderItem::create([
                 'name' => $item->name,
@@ -393,12 +397,20 @@ class Checkout extends Component
                 'product_id' => $product1c->id,
                 'discount_comment' => $discountComment,
                 'discount' => ceil($discount),
-                ]);
+                'discount_procent' => ceil($discountProcent),
+                 ]);
+
+                 unset($product1c);
             }
 
             if (count($this->shelterItems) > 0) {
                 foreach ($this->shelterItems as $shelterItem) {
                     $product1c = Product1C::find($shelterItem->id);
+
+                    $product1c->stock = $product1c->stock - $shelterItem->quantity <= 0
+                    ? $product1c->stock : $shelterItem->quantity;
+
+                    $product1c->save();
 
                     $unit = '';
                     if ($product1c->product->unit()->exists()) {
@@ -406,6 +418,10 @@ class Checkout extends Component
                     }
 
                     $discountComment = 'Уценка "Помоги приюту"';
+
+                    $discountProcent = (round($item->getPriceSum()
+                        - $shelterItem->getPriceSumWithConditions()) * 100)
+                        / $shelterItem->getPriceSum();
 
                     OrderItem::create([
                     'name' => $shelterItem->name,
@@ -420,6 +436,7 @@ class Checkout extends Component
                     'product_id' => $product1c->id,
                     'discount_comment' => $discountComment,
                     'discount' => ceil($shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions()),
+                    'discount_procent' => ceil($discountProcent),
                     ]);
                 }
             }

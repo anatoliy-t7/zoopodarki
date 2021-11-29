@@ -23,6 +23,7 @@ class CreateTagsTable extends Migration
 
             $table->json('filter');
             $table->boolean('show_on_page')->default(false);
+            $table->boolean('show_in_menu')->default(false);
 
             $table->unsignedBigInteger('category_id')->index();
             $table->foreign('category_id')
