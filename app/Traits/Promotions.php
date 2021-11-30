@@ -102,9 +102,9 @@ trait Promotions
 
     public function discountRevert($discount, $procent) : int
     {
-        $price = $discount + ceil($discount * $procent / 100);
+        $price = $discount + floor($discount * $procent / 100);
 
-        return ceil($price);
+        return floor($price);
     }
 
     public function discountRevertforUcenka($promotionPrice) : int
@@ -112,6 +112,6 @@ trait Promotions
         // Стоимость товара/1,22+8% (должно работать в обратную сторону)
         $price = ($promotionPrice * 1.22) / 1.08;
 
-        return ceil($price);
+        return floor($price);
     }
 }

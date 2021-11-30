@@ -24,9 +24,9 @@ class CheckoutConfirm extends Component
         }
 
         if (request()->session()->has('order_id')) {
-            $order_id = session('order_id');
+            $orderId = session('order_id');
 
-            $this->order = Order::where('id', $order_id)
+            $this->order = Order::where('id', $orderId)
                 ->with([
                     'items',
                     'items.product1c:id,product_id',
@@ -36,6 +36,9 @@ class CheckoutConfirm extends Component
                     'items.product1c.product.categories.catalog:id,slug',
                     ])
                 ->first();
+
+            unset($orderId);
+
             if ($this->order === null) {
                        return redirect()->route('site.home');
             }

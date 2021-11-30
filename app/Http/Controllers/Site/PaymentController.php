@@ -17,10 +17,10 @@ class PaymentController extends Controller
     public function payСash(Request $request)
     {
         if ($request->has('order_id')) {
-            $order_id = $request->input('order_id');
+            $orderId = $request->input('order_id');
 
             // TODO get data only needs
-            $order = Order::where('id', $order_id)
+            $order = Order::where('id', $orderId)
                 ->with('items')
                 ->first();
 

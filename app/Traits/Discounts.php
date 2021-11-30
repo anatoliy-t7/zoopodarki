@@ -77,7 +77,7 @@ trait Discounts
 
     public function checkIfFirstOrder($subTotal, $cartId)
     {
-        if (ceil($subTotal) >= 2000 && auth()->user()->extra_discount === 'first') {
+        if (floor($subTotal) >= 2000 && auth()->user()->extra_discount === 'first') {
             $condition = new CartCondition([
                 'name' => 'Первый заказ',
                 'target' => 'total',
@@ -89,7 +89,7 @@ trait Discounts
             \Cart::session($cartId)->condition($condition);
 
             return true;
-        } elseif (ceil($subTotal) < 2000 && auth()->user()->extra_discount !== 'first') {
+        } elseif (floor($subTotal) < 2000 && auth()->user()->extra_discount !== 'first') {
             \Cart::session($cartId)->removeCartCondition('Первый заказ');
 
              return false;
@@ -202,7 +202,7 @@ trait Discounts
         }
 
         if ($discountItems && count($discountItems) >= 2) {
-            $numberOfFree = ceil(count($discountItems) / 2);
+            $numberOfFree = floor(count($discountItems) / 2);
 
             $price = array_column($discountItems, 'price');
 
@@ -236,7 +236,7 @@ trait Discounts
 
             return new CartCondition([
                 'name' => 'Праздничные',
-                'type' => 'discount',
+                'type' => 'holiday',
                 'value' => '-' . $discount . '%',
             ]);
         }

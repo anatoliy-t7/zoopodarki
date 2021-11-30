@@ -91,14 +91,11 @@
           <Имя>{{ $order->contact['name'] }}</Имя>
           <Телефон>{{ $order->contact['phone'] }}</Телефон>
 
-          @if (!empty($order->address['address']) and !$order['order_type'])
+          @if (!empty($order->address) and !$order['order_type'])
             <Адрес>
 
               <Представление>
-                {{ $order->address['address'] }},
-                @if (!empty($order->address['extra']))
-                  {{ $order->address['extra'] }}
-                @endif
+                {{ $order->address }}
               </Представление>
 
               <АдресноеПоле>
@@ -108,15 +105,12 @@
 
               <АдресноеПоле>
                 <Тип>Улица</Тип>
-                <Значение>{{ $order->address['address'] }}</Значение>
+                <Значение>{{ $order->address }}</Значение>
               </АдресноеПоле>
             </Адрес>
             <АдресРегистрации>
               <Представление>
-                {{ $order->address['address'] }},
-                @if (!empty($order->address['extra']))
-                  {{ $order->address['extra'] }}
-                @endif
+                {{ $order->address }}
               </Представление>
             </АдресРегистрации>
           @endif

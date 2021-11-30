@@ -202,6 +202,12 @@
             </span>
             {{-- <span class="font-bold">{{ RUB($deliveryCostToShelter) }}</span> --}}
           </div>
+          <div class="flex space-x-2 text-sm">
+            <span class="w-full md:w-3/6">Адрес доставки</span>
+            <span class="flex justify-end w-full font-bold md:w-9/6">
+              {{ $order->address }}
+            </span>
+          </div>
         @else
           <div class="flex justify-between">
             <span>Самовывоз</span>

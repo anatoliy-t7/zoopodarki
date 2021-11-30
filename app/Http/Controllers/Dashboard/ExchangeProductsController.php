@@ -73,8 +73,7 @@ class ExchangeProductsController extends Controller
             case $this->stepQuery:
                 return $this->processQuery();
             case $this->stepSuccess:
-                $date = date('Y-m-d H:i:s');
-                Log::info("[${date}][1C] Successful orders export to 1C");
+                Log::info("Sync 1C");
         }
     }
 
@@ -170,7 +169,7 @@ class ExchangeProductsController extends Controller
                 . ', filename is empty');
             }
 
-            $dir = storage_path('sync');
+            $dir = storage_path('app/sync');
 
             if (!file_exists($dir)) {
                 mkdir($dir, 0777, true);
@@ -254,7 +253,7 @@ class ExchangeProductsController extends Controller
         try {
             $filename = $this->request->get('filename');
 
-            $directory = storage_path('sync');
+            $directory = storage_path('app/sync');
 
             $file = $directory . '/' . $filename;
 
@@ -276,7 +275,7 @@ class ExchangeProductsController extends Controller
         } catch (\Throwable $th) {
             Log::error('step parsing');
             Log::error($th);
-            return $this->failure($th);
+            return $this->failure('Error on step parsing');
         }
     }
 
@@ -292,9 +291,9 @@ class ExchangeProductsController extends Controller
 
             return response()->view('export.orders', compact('orders'))->header('Content-Type', 'application/xml');
         } catch (\Throwable $th) {
-            Log::error('Sync of orders');
+            Log::error('Error when synced of orders');
             Log::error($th);
-            return $this->failure($th);
+            return $this->failure('Error when synced of orders');
         }
     }
 }

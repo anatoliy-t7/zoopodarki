@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 if (!function_exists('discount')) {
     function discount($price, $procent)
     {
-        $discount = $price - ceil($price * $procent / 100);
+        $discount = $price - ($price * $procent / 100);
 
         return ceil($discount);
     }

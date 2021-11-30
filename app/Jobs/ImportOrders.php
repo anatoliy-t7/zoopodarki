@@ -49,7 +49,7 @@ class ImportOrders implements ShouldQueue
             unset($order1c); // удаление переменной
         }
 
-       // unlink($functionFile); // удаление файла
+        unlink($functionFile); // удаление файла
     }
 
     public function getOrders($order1c)
@@ -57,13 +57,36 @@ class ImportOrders implements ShouldQueue
         \DB::connection()->disableQueryLog();
 
         if (Order::where('order_number', $order1c['Номер'])->exists()) {
-            $order = Order::where('order_number', $order1c['Номер'])->first();
+            $order = Order::where('order_number', $order1c['Номер'])->with('items')->first();
 
             if ($order1c['Сумма'] !== $order->amount) {
                 $order->amount = $order1c['Сумма'];
 
                 $order->save();
             }
+
+            foreach ($order1c['Товары']['Товар'] as $order1cItem) {
+                if ($order->items->has(['uuid', $order1cItem['Ид']])) {
+                    $item = $order->items()->where('uuid', $order1cItem['Ид'])->first();
+
+                    if ($item->quantity !== $order1cItem['Количество']) {
+                        $order->items()
+                            ->where('uuid', $order1cItem['Ид'])
+                            ->update(['quantity' => $order1cItem['Количество']]);
+                    }
+
+                    if ($item->amount !== $order1cItem['Сумма']) {
+                        $order->items()
+                            ->where('uuid', $order1cItem['Ид'])
+                            ->update(['amount' => $order1cItem['Сумма']]);
+                    }
+                } else {
+                    $order->items()
+                            ->where('uuid', $order1cItem['Ид'])
+                            ->delete();
+                }
+            }
+
 
             foreach ($order1c['ЗначенияРеквизитов']['ЗначениеРеквизита'] as $item) {
                 if ($item['Наименование'] === 'Проведен' and $item['Значение'] === 'true') {

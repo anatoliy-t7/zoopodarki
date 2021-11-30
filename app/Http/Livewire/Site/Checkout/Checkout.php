@@ -226,21 +226,24 @@ class Checkout extends Component
 
     public function checkIfUserHasOrderWithStatusPendingConfirm()
     {
-        if (Order::where('user_id', auth()->user()->id)
-        ->where('status', 'pending_confirm')->first()) {
-            $order = Order::where('user_id', auth()->user()->id)
-            ->where('status', 'pending_confirm')
-            ->with('items', 'items.product1c')
-            ->first();
-            foreach ($order->items as $item) {
-                DB::transaction(function () use ($item) {
-                    $product1c = Product1C::find($item->product_id);
-                    $product1c->stock = $product1c->stock + $item->quantity;
-                    $product1c->save();
-                    unset($product1c);
-                });
-            }
+
+        if (request()->session()->has('order_id')) {
+            if (Order::where('id', session('order_id'))->where('status', 'pending_confirm')->first()) {
+                $order = Order::where('id', session('order_id'))
+                ->where('status', 'pending_confirm')
+                ->with('items', 'items.product1c')
+                ->first();
+
+                foreach ($order->items as $item) {
+                    DB::transaction(function () use ($item) {
+                        $product1c = Product1C::find($item->product_id);
+                        $product1c->stock = $product1c->stock + $item->quantity;
+                        $product1c->save();
+                        unset($product1c);
+                    });
+                }
                 $order->delete();
+            }
         }
     }
 
@@ -270,12 +273,22 @@ class Checkout extends Component
             'deliveryTime' => 'required',
             'address' => 'required',
             ]);
+
+            $address = $this->address['address'] . ' ' . $this->address['building'] ;
+
+            if (Arr::has($this->address, 'apartment')) {
+                $address = $address . ', кв ' . $this->address['apartment'];
+            }
+
+            if (Arr::has($this->address, 'extra')) {
+                $address = $address . ', ' . $this->address['extra'];
+            }
         } else {
             $this->validate([
             'pickupStore' => 'required',
             ]);
 
-            $this->address = 'Самовывоз из магазина: ' . $this->pickupStore;
+            $address = 'Самовывоз из магазина: ' . $this->pickupStore;
         }
 
         $this->checkIfUserHasOrderWithStatusPendingConfirm();
@@ -294,21 +307,17 @@ class Checkout extends Component
 
         if (0 !== $this->firstOrder) {
               $orderComment = 'Скидка за первый заказ -'
-              . $this->firstOrder . ' рублей (Применить) \n '
-            . $orderComment;
-        }
-
-        if ($this->userHasDiscount != 0) {
-            $orderComment = 'Применена дисконтная карта ' . $this->userHasDiscount . '% \n '
-            . $orderComment;
+              . $this->firstOrder . ' рублей (Применить)' . "\n" . $orderComment;
         }
 
         $this->userId = auth()->user()->id;
 
-        $orderNumber = getNextOrderNumber();
+
 
         try {
             DB::beginTransaction();
+
+            $orderNumber = getNextOrderNumber();
 
             // if (auth()->user()->review === 'on') {
             //     $this->orderComment = 'Скидка 2% за отзыв | ' . $this->orderComment;
@@ -330,8 +339,8 @@ class Checkout extends Component
             'delivery_time' => $this->deliveryTime,
             'delivery_cost' => $this->deliveryCost,
             'contact' => $this->contact,
-            'address' => $this->address,
-            'order_comment' => $orderComment . ' \n ',
+            'address' => $address,
+            'order_comment' => $orderComment,
             ]);
 
             foreach ($this->items as $item) {
@@ -339,11 +348,6 @@ class Checkout extends Component
                     ->with('product')
                     ->with('product.unit')
                     ->first();
-
-                $product1c->stock = $product1c->stock - $item->quantity <= 0
-                 ? $product1c->stock : $item->quantity;
-
-                 $product1c->save();
 
                 $unit = '';
                 if ($product1c->unit_value == 'на развес') {
@@ -356,12 +360,10 @@ class Checkout extends Component
                 $amount = $item->getPriceSumWithConditions();
                 $discount = 0;
                 $discountComment = '';
-                $price = $item->price;
 
 
                 if (0 == $item->associatedModel['promotion_type']) {
-                    $price = $item->getPriceWithConditions();
-                    $discount = round($item->getPriceSum() - $item->getPriceSumWithConditions());
+                    $discount = $item->getPriceSum() - $item->getPriceSumWithConditions();
                     $discountComment = '';
                 }
                 if (1 == $item->associatedModel['promotion_type']) {
@@ -375,18 +377,20 @@ class Checkout extends Component
                     $discountComment = 'Акция поставщика, -' . $product1c->promotion_percent;
                 }
                 if (4 == $item->associatedModel['promotion_type']) {
-                    $price = $item->getPriceWithConditions();
-                    $discount = round($item->getPriceSum() - $item->getPriceSumWithConditions());
-                    $discountComment = 'Праздничные скидки, -' . $product1c->promotion_percent;
+                    $discount = $item->getPriceSum() - $item->getPriceSumWithConditions();
+                    $discountComment = 'Праздничные скидки ' . $product1c->promotion_percent . '%';
                 }
 
                 if ($item->attributes->unit_value == 'на развес') {
-                    $discountComment = 'на развес: '. $item->attributes->weight . 'гр,  \n ' . $discountComment;
+                    $discountComment = 'на развес: '. $item->attributes->weight . 'гр, ' . $discountComment;
                 }
 
-                $discountProcent = (round($item->getPriceSum()
-                - $item->getPriceSumWithConditions()) * 100)
-                    / $item->getPriceSum();
+                if ($item->getConditionByType('discount_card')) {
+                    $discountComment = $discountComment . 'Прим. диск. карта ' . $this->userHasDiscount . '%';
+                }
+
+                $discountProcent = (($item->getPriceSum() - $item->getPriceSumWithConditions()) * 100)
+                 / $item->getPriceSum();
 
                 OrderItem::create([
                 'name' => $item->name,
@@ -395,13 +399,13 @@ class Checkout extends Component
                 'vendorcode' => $product1c->vendorcode,
                 'quantity' => $item->quantity,
                 'unit' => $unit,
-                'price' => ceil($price),
-                'amount' => ceil($amount),
+                'price' => floor($item->price),
+                'amount' => $amount,
                 'order_id' => $order->id,
                 'product_id' => $product1c->id,
                 'discount_comment' => $discountComment,
-                'discount' => ceil($discount),
-                'discount_procent' => ceil($discountProcent),
+                'discount' => $discount,
+                'discount_procent' => $discountProcent,
                  ]);
 
                  unset($product1c);
@@ -411,10 +415,6 @@ class Checkout extends Component
                 foreach ($this->shelterItems as $shelterItem) {
                     $product1c = Product1C::find($shelterItem->id);
 
-                    $product1c->stock = $product1c->stock - $shelterItem->quantity <= 0
-                    ? $product1c->stock : $shelterItem->quantity;
-                    $product1c->save();
-
                     $unit = '';
                     if ($product1c->product->unit()->exists()) {
                         $unit = $product1c->unit_value . ' ' . $product1c->product->unit->name;
@@ -422,9 +422,12 @@ class Checkout extends Component
 
                     $discountComment = 'Уценка "Помоги приюту"';
 
-                    $discountProcent = (round($item->getPriceSum()
-                    - $shelterItem->getPriceSumWithConditions()) * 100)
-                        / $shelterItem->getPriceSum();
+                    if ($shelterItem->getConditionByType('discount_card')) {
+                        $discountComment = $discountComment . 'Прим. диск. карта ' . $this->userHasDiscount . '%';
+                    }
+
+                    $discountProcent = (($item->getPriceSum() - $shelterItem->getPriceSumWithConditions()) * 100)
+                    / $shelterItem->getPriceSum();
 
                     OrderItem::create([
                     'name' => $shelterItem->name,
@@ -433,13 +436,13 @@ class Checkout extends Component
                     'vendorcode' => $product1c->vendorcode,
                     'quantity' => $shelterItem->quantity,
                     'unit' => $unit,
-                    'price' => ceil($shelterItem->price),
-                    'amount' => ceil($shelterItem->getPriceSumWithConditions()),
+                    'price' => $shelterItem->price,
+                    'amount' => $shelterItem->getPriceSumWithConditions(),
                     'order_id' => $order->id,
                     'product_id' => $product1c->id,
                     'discount_comment' => $discountComment,
-                    'discount' => ceil($shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions()),
-                    'discount_procent' => ceil($discountProcent),
+                    'discount' => $shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions(),
+                    'discount_procent' => $discountProcent,
                     ]);
                 }
             }
@@ -455,12 +458,11 @@ class Checkout extends Component
             if (request()->session()->has('order_id')) {
                 request()->session()->forget(['order_id', 'no_stock_items']);
             }
-
             session(['order_id' => $order->id]);
             session(['no_stock_items' => $noStockItems]);
 
             // Happy ending :)
-             DB::commit();
+            DB::commit();
 
             return redirect()->route('checkout.confirm');
         } catch (\Exception $e) {
@@ -514,16 +516,16 @@ class Checkout extends Component
                         ->session($cartId)
                         ->update($item['id'], array(
                         'quantity' => array(
-                            'relative' => false,
-                            'value' => $product_1c->stock
+                        'relative' => false,
+                        'value' => $product_1c->stock
                         ),
                         ));
                     } else {
                         \Cart::session($cartId)
                         ->update($item['id'], array(
                         'quantity' => array(
-                            'relative' => false,
-                            'value' => $product_1c->stock
+                        'relative' => false,
+                        'value' => $product_1c->stock
                         ),
                         ));
                     }

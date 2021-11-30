@@ -404,6 +404,7 @@
         @if ($items)
           <div class="flex flex-col justify-between w-full ">
             @foreach ($items as $item)
+
               <div class="py-2 border-b border-gray-200 ">
                 <div class="flex items-center justify-between space-x-2 ">
                   <div class="p-2 bg-white ">

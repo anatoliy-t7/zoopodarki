@@ -143,43 +143,39 @@ trait ExportImport
     {
         $collection = collect();
 
-        $products = Product1C::has('product.categories')
-        ->whereHas('product', function ($query) {
-            $query->has('variations', '>=', 2)
-            ->whereNull('unit_id');
-        })
-        ->with('product', 'product.categories')
-        ->get();
+        $products = Product::whereHas('categories', function ($query) {
+            $query->where('product_category.category_id', 44);
+        })->get();
 
         foreach ($products as $key => $product) {
-            $arrayCategories = [];
-            foreach ($product->product->categories as $key => $cat) {
-                array_push($arrayCategories, $cat->name);
-            }
+            // $arrayCategories = [];
+            // foreach ($product->product->categories as $key => $cat) {
+            //     array_push($arrayCategories, $cat->name);
+            // }
 
             // $arrayAttributes = [];
             // foreach ($product->unit_value as $key => $cat) {
             //     array_push($arrayAttributes, $cat->name . PHP_EOL);
             // }
-            $unitName = '';
-            if ($product->product->unit !== null) {
-                 $unitName = $product->product->unit->name;
-            }
+            // $unitName = '';
+            // if ($product->product->unit !== null) {
+            //      $unitName = $product->product->unit->name;
+            // }
 
             $collection->push([
             'id' => $product->id,
             'name' => $product->name,
-            'categories' => implode(", ", $arrayCategories),
-            $unitName => $product->unit_value,
+            // 'categories' => implode(", ", $arrayCategories),
+            // $unitName => $product->unit_value,
             ]);
 
            // $arrayAttributes = [];
-            $arrayCategories = [];
+            // $arrayCategories = [];
         }
 
 
         $path = storage_path('app/excel');
-        $filePath = (new FastExcel($collection))->export($path . '/empty.xlsx');
+        $filePath = (new FastExcel($collection))->export($path . '/products.xlsx');
 
         return $filePath;
     }

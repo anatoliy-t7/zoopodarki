@@ -61,7 +61,7 @@ class ProcessImportProduct1C implements ShouldQueue
 
         Log::debug('Product deleted: ' . $this->count);
         Log::debug('Product1C deleted: ' . $this->forDelete);
-       // unlink($this->file);
+        unlink($this->file);
     }
 
     public function getProducts($product1c)
