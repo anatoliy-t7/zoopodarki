@@ -21,7 +21,6 @@ class CreateBrandsTable extends Migration
             $table->text('meta_description')->nullable();
             $table->text('description')->nullable();
             $table->string('slug');
-            $table->string('country')->nullable();
             $table->string('logo')->nullable();
         });
     }

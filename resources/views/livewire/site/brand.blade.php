@@ -39,17 +39,26 @@
 
         <div class="space-y-4 sm:w-full">
 
-          @if ($brand->description)
-            <div class="flex items-start justify-start p-6 space-x-6 bg-white rounded-2xl">
-              @if ($brand->logo)
-                <img loading="lazy" class="w-3/12" src="/brands/{{ $brand->logo }}"
-                  alt="Логотип {{ $brand->name }}">
+
+          <div class="flex items-start justify-start p-6 space-x-6 bg-white rounded-2xl">
+            @if ($brand->logo)
+              <img loading="lazy" class="w-3/12" src="/brands/{{ $brand->logo }}"
+                alt="Логотип {{ $brand->name }}">
+            @endif
+            <div class="w-9/12">
+              @if ($countries)
+                <div class="flex items-center space-x-4">
+                  <div class="text-sm text-gray-500">Страна производства:</div>
+                  <div class="flex items-center space-x-4 text-sm">
+                    @foreach ($countries as $country)
+                      <div>{{ $country }}</div>
+                    @endforeach
+                  </div>
+                </div>
               @endif
-              <div class="w-9/12">
-                <p>{{ $brand->description }}</p>
-              </div>
+              <p>{{ $brand->description }}</p>
             </div>
-          @endif
+          </div>
 
           <div class="relative w-full px-4 pb-6 bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
 

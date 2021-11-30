@@ -24,8 +24,6 @@ class CreateProductsTable extends Migration
             $table->text('consist')->nullable(); // Состав
             $table->text('applying')->nullable(); // Применение
 
-            $table->string('country')->nullable(); // Страна Производства
-
             $table->integer('popularity')->default(0); // for sorting
             $table->integer('price_avg')->default(0); // for sorting
 

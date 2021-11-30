@@ -2,13 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Models\Attribute;
+use App\Models\AttributeItem;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Models\AttributeItem;
 
 class UpdateProduct implements ShouldQueue
 {
@@ -35,20 +36,12 @@ class UpdateProduct implements ShouldQueue
         $products = Product::with('attributes')->get();
 
         foreach ($products as $product) {
-            $this->update($product);
+            $this->addAttributeItem($product);
+            // $this->updateProduct($product);
         }
-
-        $attributes = AttributeItem::where('name', '')->get();
-
-        foreach ($attributes as $key => $attr) {
-            $attr->delete();
-            $this->count = $this->count + 1;
-        }
-
-        logger($this->count);
     }
 
-    public function update($product)
+    public function updateProduct($product)
     {
 
         $prodAttrs = [];
@@ -57,14 +50,39 @@ class UpdateProduct implements ShouldQueue
         foreach ($product->attributes as $attr) {
             if ($attr->name === "") {
                  array_push($prodAttrs, $attr->id);
-
             }
         }
 
         // $prodAttrsUnique = $prodAttrs->unique()->values()->all();
 
         $product->attributes()->detach($prodAttrs);
+    }
 
+    public function addAttributeItem($product)
+    {
+        $attribute = Attribute::where('id', 64)->with('items')->first();
 
+        if ($product->country !== null) {
+            if ($attribute->items()
+                ->where('name', trim($product->country))
+                ->first()) {
+                 $attributeItem = AttributeItem::where('name', trim($product->country))->first();
+            } else {
+                $attributeItem = AttributeItem::create([
+                'name' => trim($product->country),
+                'attribute_id' => $attribute->id,
+                ]);
+            }
+
+            if (!$product->attributes()
+                ->where('attribute_item.name', trim($product->country))
+                ->first()) {
+                $product->attributes()->attach($attributeItem->id);
+            }
+
+            unset($attributeItem);
+        }
+
+        unset($attribute);
     }
 }

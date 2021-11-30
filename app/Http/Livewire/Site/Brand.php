@@ -11,6 +11,8 @@ class Brand extends Component
 {
 
     use WithPagination;
+
+    public $countries;
     public $brand;
     public $attrs;
     public $attributesRangeOn = false;
@@ -60,7 +62,7 @@ class Brand extends Component
     {
         $ids = $this->brand->productsAttributes()->get()->pluck('id');
         // Берет свойства которые есть у товаров только этой категории
-        $this->attrs = Attribute::whereHas('items', function ($query) use ($ids) {
+        $this->attrs = Attribute::withWhereHas('items', function ($query) use ($ids) {
             $query->whereIn('id', $ids);
         })
             ->orderBy('name', 'asc')
@@ -87,6 +89,17 @@ class Brand extends Component
             ->whereIn('id', $variationsId)
             ->where('price', '>', 0)
             ->min('price');
+
+        $this->countries = cache()->remember('categories-menu', 60 * 60 * 24, function () {
+            return Product::where('brand_id', $this->brand->id)
+            ->withWhereHas('attributes', fn ($q) => $q->where('attribute_item.attribute_id', 64))
+            ->get()
+            ->pluck('attributes')
+            ->flatten()
+            ->pluck('name')
+            ->unique()
+            ->all();
+        });
     }
 
     public function updateAttributeFilter($attFilter)
@@ -123,31 +136,33 @@ class Brand extends Component
     {
 
         $products = Product::isStatusActive()
-            ->where('brand_id', $this->brand->id)
-            ->whereHas('variations', function ($query) {
-                $query
-                    ->whereBetween('price', [$this->minPrice, $this->maxPrice])
-                    ->where('stock', '>', 0)
-                    ->whereNotNull('price');
-            })
-            ->when($this->attFilter, function ($query) {
-                return $query->whereHas('attributes', function ($query) {
-                    $query->whereIn('attribute_item.id', $this->attFilter);
-                });
-            })
-            ->has('media')
-            ->with('brand')
-            ->with('unit')
-            ->with('attributes')
-            ->with('variations')
-            ->with('media')
-            ->orderBy($this->sortSelectedType, $this->sortBy)
-            ->paginate(32);
+        ->where('brand_id', $this->brand->id)
+        ->whereHas('variations', function ($query) {
+            $query
+                ->whereBetween('price', [$this->minPrice, $this->maxPrice])
+                ->where('stock', '>', 0)
+                ->whereNotNull('price');
+        })
+        ->when($this->attFilter, function ($query) {
+            return $query->whereHas('attributes', function ($query) {
+                $query->whereIn('attribute_item.id', $this->attFilter);
+            });
+        })
+        ->has('media')
+        ->with('brand')
+        ->with('unit')
+        ->with('attributes')
+        ->with('variations')
+        ->with('categories')
+        ->with('categories.catalog')
+        ->with('media')
+        ->orderBy($this->sortSelectedType, $this->sortBy)
+        ->paginate(32);
 
         $this->emit('lozad', '');
 
         return view('livewire.site.brand', [
-            'products' => $products,
+        'products' => $products,
         ]);
     }
 }

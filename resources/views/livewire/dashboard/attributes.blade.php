@@ -59,10 +59,16 @@
                 <div class="flex flex-wrap items-center justify-start">
                   @forelse($attribute->items as $key => $item)
                     <div class="p-1">
-                      <div class="px-2 py-1 text-xs text-gray-500 rounded-full bg-gray-50 ">
+                      <a title="Найти товары прикрепленные к свойству"
+                        href="{{ route('dashboard.products.index', [
+                            'filteredByAttribute' => true,
+                            'search' => $item->name,
+                            'attrId' => $attribute->id,
+                        ]) }}"
+                        target="_blank"
+                        class="px-2 py-1 text-xs text-gray-500 rounded-full bg-gray-50 hover:bg-gray-200 ">
                         {{ $item->name }}
-                        {{-- | <span class="">{{ $item->id }}</span> --}}
-                      </div>
+                      </a>
                     </div>
                   @empty
                   @endforelse

@@ -58,7 +58,6 @@ class Permissions extends Component
         toast()
             ->success('Права "' . $permission_name . '" удалены.')
             ->push();
-
     }
 
     public function closeForm()
@@ -80,5 +79,4 @@ class Permissions extends Component
             ->extends('dashboard.app')
             ->section('content');
     }
-
 }

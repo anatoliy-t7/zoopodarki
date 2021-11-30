@@ -327,12 +327,6 @@
               @empty
               @endforelse
             </div>
-            @if ($product->country)
-              <div class="flex flex-row flex-wrap items-center justify-start w-full max-w-lg text-sm">
-                <div class="relative z-10 w-4/12 pr-4 my-1 text-gray-500 attribute">Страна</div>
-                <div class="pl-1 capitalize bg-white whitespace-nowrap">{{ $product->country }}</div>
-              </div>
-            @endif
           </div>
         </div>
 

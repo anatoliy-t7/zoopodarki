@@ -62,7 +62,6 @@
           Run queue
         </div>
       </button>
-
       {{-- <button wire:click='updateProduct'
         class="flex items-center justify-between px-3 py-2 text-white bg-red-500 rounded-xl hover:bg-red-700">
         <div wire:loading wire:target="UpdateProduct">
