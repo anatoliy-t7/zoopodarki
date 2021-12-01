@@ -26,6 +26,7 @@ class CreateProductsTable extends Migration
 
             $table->integer('popularity')->default(0); // for sorting
             $table->integer('price_avg')->default(0); // for sorting
+            $table->boolean('discount_weight')->default(0);
 
             $table->string('status')->default('active');
 

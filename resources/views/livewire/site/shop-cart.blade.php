@@ -1,5 +1,6 @@
 <div x-data="cart" @close.window="close(event)" class="relative">
-  <button x-on:click="open" class="p-1 group focus:outline-none hover:text-orange-500 focus:text-orange-500">
+  <button x-on:click="open" class="p-1 group focus:outline-none hover:text-orange-500 focus:text-orange-500"
+    @add-to-cart.window="close(event)">
 
     <svg class="text-gray-600 w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
       <path class="text-gray-600 stroke-current group-hover:text-orange-500 focus:text-orange-500" stroke-linecap="round"

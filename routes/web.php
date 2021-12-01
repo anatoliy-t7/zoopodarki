@@ -16,7 +16,7 @@ Route::prefix('account')->name('account.')->middleware(['throttle:1000,60', 'aut
 
         Route::get('/orders', 'App\Http\Controllers\Site\OrderController@orders')->name('orders');
 
-        Route::get('/orders/order', 'App\Http\Controllers\Site\OrderController@order')->name('order');
+        Route::get('/orders/order', \App\Http\Livewire\Site\Account\OrderPage::class)->name('order');
 
     }
 );

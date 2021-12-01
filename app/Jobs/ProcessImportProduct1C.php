@@ -10,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Prewk\XmlStringStreamer;
 use Prewk\XmlStringStreamer\Parser;
 use Prewk\XmlStringStreamer\Stream;
@@ -59,8 +58,16 @@ class ProcessImportProduct1C implements ShouldQueue
             unset($product1c);
         }
 
-        Log::debug('Product deleted: '.$this->count);
-        Log::debug('Product1C deleted: '.$this->forDelete);
+        if ($this->count > 0) {
+            Log::info('Product deleted: '.$this->count);
+        }
+
+        if ($this->forDelete > 0) {
+            Log::info('Product1C deleted: '.$this->forDelete);
+        }
+
+        Log::info('import.xml processed successed');
+
         unlink($this->file);
     }
 
@@ -136,7 +143,15 @@ class ProcessImportProduct1C implements ShouldQueue
 
         if (Arr::exists($product1c, 'ЗначенияРеквизитов')
             && Arr::has($product1c['ЗначенияРеквизитов']['ЗначениеРеквизита'], 'ВесНоменклатуры')) {
-            $oldProduct->weight = $product1c['ЗначенияРеквизитов']['ЗначениеРеквизита']['Значение'];
+            $weight = $product1c['ЗначенияРеквизитов']['ЗначениеРеквизита']['Значение'] * 1000;
+
+            $oldProduct->weight = $weight;
+
+            if ($oldProduct->product->unit->id === 1) {
+                $oldProduct->unit_value = $weight;
+                $oldProduct->push();
+            }
+
             $oldProduct->save();
         }
 
@@ -186,8 +201,16 @@ class ProcessImportProduct1C implements ShouldQueue
 
         if (Arr::exists($product1c, 'ЗначенияРеквизитов')
             && Arr::has($product1c['ЗначенияРеквизитов']['ЗначениеРеквизита'], 'ВесНоменклатуры')) {
-            $newProduct->weight = $product1c['ЗначенияРеквизитов']['ЗначениеРеквизита']['Значение'];
-            $newProduct->save();
+            $weight = $product1c['ЗначенияРеквизитов']['ЗначениеРеквизита']['Значение'] * 1000;
+
+            $oldProduct->weight = $weight;
+
+            if ($oldProduct->product->unit->id === 1) {
+                $oldProduct->unit_value = $weight;
+                $oldProduct->push();
+            }
+
+            $oldProduct->save();
         }
 
         if (Arr::exists($product1c, 'ЗначенияСвойств')) {
@@ -208,22 +231,6 @@ class ProcessImportProduct1C implements ShouldQueue
         }
 
         unset($newProduct, $product1c);
-    }
-
-    protected function newNameImage($image, $product_name, $count = '0')
-    {
-        $extension = Str::afterLast($image, '.');
-
-        return Str::slug($product_name, '-').'-'.$count.'.'.$extension;
-    }
-
-    public function storeImage($image, $name, $product)
-    {
-        if (is_file(storage_path('sync/').$image)) {
-            $product->addMedia(storage_path('sync/').$image)->usingFileName($name)->toMediaCollection('product-images');
-        }
-
-        unset($name, $image);
     }
 
     public function failed(Throwable $exception)

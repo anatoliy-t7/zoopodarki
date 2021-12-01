@@ -6,7 +6,7 @@
 	height: calc(100vh - 16rem);
 }
 
-input:not([type='checkbox']):not([type='radio']):not([type='search']):not([type='hidden']):not([type='file']),
+input:not([type='checkbox']):not([type='radio']):not([type='search']):not([type='hidden']):not([type='file']):not([type='number']),
 textarea {
 	@apply w-full px-3 py-2 border-2 border-pink-50 hover:border-pink-200 bg-white rounded-xl focus:outline-none focus:ring focus:border-transparent;
 }

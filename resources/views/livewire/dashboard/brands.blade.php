@@ -203,6 +203,7 @@
               </div>
 
               <div class="w-9/12">
+
                 <div x-data="{ description: @entangle('description').defer }" x-init="$watch('description', function (value) {
                              $refs.trix.editor.loadHTML(value)
                              var length = $refs.trix.editor.getDocument().toString().length
@@ -210,9 +211,8 @@
                              }
                          )" wire:ignore class="space-y-2">
                   <label class="font-bold">Описание</label>
-
                   <input id="description" name="description" x-model="description" type="hidden" />
-                  <div x-on:trix-change.debounce.1000ms="description = $refs.trix.value"
+                  <div wire:ignore x-on:trix-change.debounce.1000ms="description = $refs.trix.value"
                     class="w-auto p-4 bg-white rounded-xl">
                     <trix-editor x-ref="trix" input="description" class="h-48 overflow-y-scroll">
                     </trix-editor>

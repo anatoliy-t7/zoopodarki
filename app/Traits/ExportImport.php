@@ -4,8 +4,8 @@ namespace App\Traits;
 
 use App\Models\Attribute;
 use App\Models\AttributeItem;
-use App\Models\Product;
 use App\Models\Product1C;
+use App\Models\Product;
 use App\Models\ProductUnit;
 use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -25,6 +25,9 @@ trait ExportImport
 
             return false;
         }
+
+        unlink($filePath);
+
     }
 
     public function importData($collection)

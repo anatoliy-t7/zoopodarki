@@ -1,27 +1,27 @@
-<div class="flex justify-start px-4 pb-4 text-xs font-semibold text-gray-300 xl:px-0" itemscope
+<div class="flex justify-start px-4 py-1 text-xs font-semibold text-gray-400 xl:px-0" itemscope
   itemtype="https://schema.org/BreadcrumbList">
 
   <div class="flex items-center justify-between" itemprop="itemListElement" itemscope
     itemtype="https://schema.org/ListItem">
 
-    @if(request()->is('brands/*'))
+    @if (request()->is('brands/*'))
 
-    <a itemprop="item" class="py-1 pr-1 hover:underline" href="{{ route('site.brands') }}">
-      <span itemprop="name">Бренды</span>
-    </a>
+      <a itemprop="item" class="py-1 pr-1 hover:underline" href="{{ route('site.brands') }}">
+        <span itemprop="name">Бренды</span>
+      </a>
 
     @elseif ($catalog->slug == 'goods')
 
-    <a itemprop="item" class="py-1 pr-1 hover:underline" href="{{ route('site.catalog', [ 'slug' => 'dogs' ]) }}">
-      <span itemprop="name">Собаки</span>
-    </a>
+      <a itemprop="item" class="py-1 pr-1 hover:underline" href="{{ route('site.catalog', ['slug' => 'dogs']) }}">
+        <span itemprop="name">Собаки</span>
+      </a>
 
     @else
 
-    <a itemprop="item" class="py-1 pr-1 hover:underline"
-      href="{{ route('site.catalog', [ 'slug' => $catalog->slug ]) }}">
-      <span itemprop="name">{{ $catalog->name }}</span>
-    </a>
+      <a itemprop="item" class="py-1 pr-1 hover:underline"
+        href="{{ route('site.catalog', ['slug' => $catalog->slug]) }}">
+        <span itemprop="name">{{ $catalog->name }}</span>
+      </a>
 
     @endif
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
@@ -30,38 +30,38 @@
     </svg>
   </div>
 
-  @if(request()->is('brands/*'))
-  @if($category)
+  @if (request()->is('brands/*'))
+    @if ($category)
 
-  <div itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"
-    class="flex items-center justify-between">
-    <a itemprop="item" class="p-1 hover:underline" href="{{ route('site.brand', $category->slug) }}">
-      <span itemprop="name">{{ $category->name }}</span>
-    </a>
-  </div>
-
-  @endif
-  @else
-
-  @if($category)
-  <div itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"
-    class="flex items-center justify-between">
-    @if ($catalog->slug == 'goods')
-
-    <a itemprop="item" class="p-1 hover:underline"
-      href="{{ route('site.category', [ 'catalog' =>  'dogs' , 'slug' =>  $category->slug ]) }}">
-      <span itemprop="name">{{ $category->name }}</span>
-    </a>
-
-    @else
-
-    <a itemprop="item" class="p-1 hover:underline"
-      href="{{ route('site.category', [ 'catalog' =>  $catalog->slug , 'slug' =>  $category->slug ]) }}">
-      <span itemprop="name">{{ $category->name }}</span>
-    </a>
+      <div itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"
+        class="flex items-center justify-between">
+        <a itemprop="item" class="p-1 hover:underline" href="{{ route('site.brand', $category->slug) }}">
+          <span itemprop="name">{{ $category->name }}</span>
+        </a>
+      </div>
 
     @endif
-  </div>
-  @endif
+  @else
+
+    @if ($category)
+      <div itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"
+        class="flex items-center justify-between">
+        @if ($catalog->slug == 'goods')
+
+          <a itemprop="item" class="p-1 hover:underline"
+            href="{{ route('site.category', ['catalog' => 'dogs', 'slug' => $category->slug]) }}">
+            <span itemprop="name">{{ $category->name }}</span>
+          </a>
+
+        @else
+
+          <a itemprop="item" class="p-1 hover:underline"
+            href="{{ route('site.category', ['catalog' => $catalog->slug, 'slug' => $category->slug]) }}">
+            <span itemprop="name">{{ $category->name }}</span>
+          </a>
+
+        @endif
+      </div>
+    @endif
   @endif
 </div>

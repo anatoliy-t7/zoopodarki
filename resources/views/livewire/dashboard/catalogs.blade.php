@@ -132,19 +132,53 @@
                   @error('editCatalog.slug') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
                 </div>
 
-                <x-toggle wire:model="editCatalog.menu" :property="$editCatalog['menu']" :lable="'Показывать в меню'" />
+                <div class="flex justify-between space-x-6">
+                  <x-toggle wire:model="editCatalog.menu" :property="$editCatalog['menu']"
+                    :lable="'Показывать в меню'" />
 
-                <div class="flex items-center justify-start space-x-8">
                   <div class="space-y-1">
                     <div class="font-bold">Сортировка</div>
-                    <div class="w-16"><input wire:model.defer="editCatalog.sort" type="number"></div>
+                    <div class="w-16">
+                      <input wire:model.defer="editCatalog.sort" type="number"
+                        class="w-16 px-3 py-2 bg-white border-2 border-pink-50 hover:border-pink-200 rounded-xl focus:outline-none focus:ring focus:border-transparent">
+                    </div>
                   </div>
 
-                  <div class="space-y-1">
-                    <label class="font-bold" for=brandsForCatalog>ID брендов</label>
-                    <input wire:model.defer="brandsForCatalog" type="text" placeholder="id через запятую"
-                      id="brandsForCatalog">
+                </div>
+
+                <div class="flex items-center justify-start w-full">
+
+                  <div class="w-full space-y-1">
+                    <label class="font-bold">ID брендов</label>
+
+                    <div x-data="{tags: @entangle('brandsForCatalog').defer, newTag: '', inputName: 'foo' }">
+
+                      <template x-for="(tag, index) in tags" :key="index">
+                        <input type="hidden" x-bind:name="inputName + '[]'" x-bind:value="tag">
+                      </template>
+                      <div class="w-full">
+                        <div class="flex flex-wrap p-2 bg-white border rounded-lg">
+                          <template x-for="(tag, index) in tags" :key="index">
+                            <span
+                              class="inline-flex items-center p-1 mr-2 space-x-1 text-sm leading-normal text-blue-100 bg-blue-500 rounded-lg select-none">
+                              <span x-text="tag"></span>
+                              <button type="button" class="tags-input-remove"
+                                @click="tags = tags.filter(i => i !== tag)">
+                                &times;
+                              </button>
+                            </span>
+                          </template>
+
+                          <input class="inline-flex flex-1 w-24 py-1 outline-none"
+                            placeholder="ввести id и нажать enter"
+                            @keydown.enter.prevent="if (newTag.trim() !== '') tags.push(newTag.trim()); newTag = ''"
+                            x-model="newTag" pattern="[0-9]" type="number">
+                        </div>
+                      </div>
+                    </div>
+
                     @error('brandsForCatalog') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+
                   </div>
                 </div>
 
@@ -323,6 +357,9 @@
                 </label>
                 <input wire:model.defer="editCategory.attributes" type="text">
                 <div class="text-xs text-gray-500 ">через запятую</div>
+
+
+
               </div>
 
             </div>

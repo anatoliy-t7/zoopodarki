@@ -47,9 +47,9 @@
         :class=" { 'rounded-tl-none' : tab==={{ $menuCatalog->id }} }">
         @foreach ($menuCatalogs as $catalog)
           <div x-show="tab == {{ $catalog->id }}" class="w-full">
-            @if ($catalog->brands)
+            @if ($catalog->brandsById)
               <div class="flex items-center justify-start pb-6 pl-16 space-x-12">
-                @foreach ($catalog->brands as $brand)
+                @foreach ($catalog->brandsById as $brand)
                   <a href="{{ route('site.brand', ['brand' => $brand->slug]) }}">
                     @if ($brand->logo)
                       <img loading="lazy" class="w-auto h-24" src="/brands/{{ $brand->logo }}">

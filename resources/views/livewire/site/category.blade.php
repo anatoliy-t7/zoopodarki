@@ -1,7 +1,7 @@
 <div>
   <div class="space-y-6">
 
-    <div class="flex items-center justify-start pt-4 space-x-4 text-2xl ">
+    <div class="flex items-center justify-start space-x-4 text-2xl ">
       <h1 class="font-bold">
         {{ $name }}
       </h1>

@@ -18,43 +18,13 @@ class OrderController extends Controller
         return view('site.account.orders', compact('orders'));
     }
 
-    public function order(Request $request)
-    {
-
-        if ($request->has('orderId')) {
-            $orderId = $request->input('orderId');
-
-            // TODO get data only needs
-            $order = Order::where('id', $orderId)->getOrderData();
-
-            if ($order === null) {
-                toast()
-                    ->info('Заказ не найден')
-                    ->pushOnNextPage();
-
-                return redirect()->route('account.orders');
-            }
-
-            return view('site.account.order', compact('order'));
-        }
-
-        toast()
-            ->info('Заказ не найден')
-            ->pushOnNextPage();
-
-        return redirect()->route('account.orders');
-    }
-
     public function checkoutCallback()
     {
         if (request()->session()->has('order_id')) {
              $orderId = session('order_id');
 
             // TODO get data only needs
-            $order = Order::where('id', $orderId)
-                ->where('user_id', auth()->user()->id)
-                ->with('items')
-                ->first();
+            $order = Order::where('id', $orderId)->getOrderData();
 
             $comment = '';
 
@@ -72,7 +42,7 @@ class OrderController extends Controller
 
             $this->incrementPopularity($order);
 
-            return view('site.checkout.checkout-callback', compact('order', 'comment'));
+            return view('livewire.site.checkout.checkout-callback', compact('order', 'comment'));
         } else {
 
             toast()

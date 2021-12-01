@@ -35,6 +35,7 @@ class ShopCart extends Component
         if (request()->session()->has('cart_id')) {
             $cart_id = session('cart_id');
 
+            // TODO
             // foreach ($cart as $item) {
             //     if ($item['quantity'] > 21) {
             //         session()->flush();
@@ -101,6 +102,7 @@ class ShopCart extends Component
                         'category_id' => $categoryId,
                         'promotion_type' => $product_1c->promotion_type,
                         'promotion_price' => $product_1c->promotion_price,
+                        'discount_weight' => $product_1c->product->discount_weight,
                         'vendorcode' => $product_1c->vendorcode,
                         'catalog_slug' => $product_1c->product->categories[0]->catalog->slug,
                         'category_slug' => $product_1c->product->categories[0]->slug,
@@ -155,24 +157,34 @@ class ShopCart extends Component
         $cart = $this->checkShelterCategory($categoryId);
         $item = $cart->get($itemId);
 
-        if ($item->associatedModel['stock'] < $item->quantity + 1) {
+        if ($item->associatedModel['vendorcode'] === 'DISCOUNT_CARD') {
+            $cart->update($item->id, [
+                'quantity' => [
+                    'relative' => false,
+                    'value' => 1,
+                ],
+            ]);
+        } else {
+            if ($item->associatedModel['stock'] < $item->quantity + 1) {
             toast()
             ->info('Извините, товара больше нет в наличии')
             ->push();
 
             $this->getCart();
             $this->emitTo('product-card', 'render');
-        } else {
-            $cart->update(
-                $itemId,
-                ['quantity' => 1]
-            );
-            $this->getCart();
-            $this->emitTo('product-card', 'render');
+            } else {
+                $cart->update(
+                    $itemId,
+                    ['quantity' => 1]
+                );
+                $this->getCart();
+                $this->emitTo('product-card', 'render');
 
-            toast()
-            ->success('Товар добавлен в корзину')
-            ->push();
+                toast()
+                ->success('Товар добавлен в корзину')
+                ->push();
+            }
+
         }
 
         $this->reloadCartCheckout();

@@ -44,27 +44,27 @@
         </x-slot>
 
         <x-slot name="body">
-          @forelse ($products1c as $product)
+          @forelse ($products1c as $product1c)
             <x-dashboard.table.row wire:key="{{ $loop->index }}">
 
               <x-dashboard.table.cell>
-                {{ $product->id }}
+                {{ $product1c->id }}
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
 
                 <div class="flex items-center justify-start max-w-sm space-x-2">
 
-                  @if ($product->product)
+                  @if ($product1c->product)
                     <a class="font-semibold text-orange-500 hover:text-orange-600" target="_blank"
-                      href="/dashboard/products/edit?id={{ $product->product->id }}">
+                      href="/dashboard/products/edit?id={{ $product1c->product->id }}">
                       <x-tabler-external-link class="w-5 h-5" />
                     </a>
                   @endif
 
-                  <button wire:click="openForm({{ $product->id }})" title="{{ $product->name }}"
+                  <button wire:click="openForm({{ $product1c->id }})" title="{{ $product1c->name }}"
                     class="max-w-md truncate hover:text-blue-500">
-                    {{ $product->name }}
+                    {{ $product1c->name }}
                   </button>
 
 
@@ -72,56 +72,59 @@
 
               @if ($onlyPromotions)
                 <x-dashboard.table.cell>
-                  @if ($product->promotion_type === 1)
+                  @if ($product1c->promotion_type === 1)
                     {{ $promotions['1'] }}
-                  @elseif ($product->promotion_type === 2)
+                  @elseif ($product1c->promotion_type === 2)
                     {{ $promotions['2'] }}
-                  @elseif ($product->promotion_type === 3)
+                  @elseif ($product1c->promotion_type === 3)
                     {{ $promotions['3'] }}
-                  @elseif ($product->promotion_type === 4)
+                  @elseif ($product1c->promotion_type === 4)
                     {{ $promotions['4'] }}
                   @endif
                 </x-dashboard.table.cell>
               @endif
 
               <x-dashboard.table.cell>
-                @if ($product->promotion_type === 0 or $product->promotion_type === 2)
-                  {{ RUB($product->price) }}
-                @elseif($product->promotion_type === 1 or $product->promotion_type === 3)
+                @if ($product1c->promotion_type === 0 or $product1c->promotion_type === 2)
+                  {{ RUB($product1c->price) }}
+                @elseif($product1c->promotion_type === 1 or $product1c->promotion_type === 3)
                   <span class="pr-1 line-through">
-                    {{ RUB($product->promotion_price) }}
+                    {{ RUB($product1c->promotion_price) }}
                   </span>
-                  <b>{{ RUB($product->price) }}</b>
-                @elseif($product->promotion_type === 4)
-                  <span class="pr-1 line-through">{{ RUB($product->price) }}</span>
-                  <b>{{ RUB(discount($product->price, $product->promotion_percent)) }}</b>
+                  <b>{{ RUB($product1c->price) }}</b>
+                @elseif($product1c->promotion_type === 4)
+                  <span class="pr-1 line-through">{{ RUB($product1c->price) }}</span>
+                  <b>{{ RUB(discount($product1c->price, $product1c->promotion_percent)) }}</b>
                 @endif
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                {{ $product->weight }}
+                {{ $product1c->weight }}
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                {{ $product->stock }}
+                {{ $product1c->stock }}
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                {{ $product->unit_value }}
+                @if ($product1c->product)
+                  <x-units :unit="$product1c->product->unit" :value="$product1c->unit_value"
+                    :wire:key="$product1c->product->id" />
+                @endif
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                {{ $product->cod1c }}
+                {{ $product1c->cod1c }}
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                {{ $product->barcode }}
+                {{ $product1c->barcode }}
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell class="flex items-center justify-end invisible group-hover:visible">
                 <div class="flex justify-end space-x-3">
 
-                  <button wire:click="openForm({{ $product->id }})" title="Edit">
+                  <button wire:click="openForm({{ $product1c->id }})" title="Edit">
                     <svg class="fill-current w-7 h-7 hover:text-blue-500" xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 32 32" title="edit">
                       <path

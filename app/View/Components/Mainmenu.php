@@ -16,7 +16,7 @@ class Mainmenu extends Component
             $this->menuCatalogs = Catalog::where('menu', true)
                 ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
                 ->with('categories.tags', fn ($query) => $query->where('show_in_menu', true))
-                ->with('brands')
+                ->with('brandsById')
                 ->orderBy('sort', 'asc')
                 ->get();
         } else {
@@ -24,7 +24,7 @@ class Mainmenu extends Component
                 return Catalog::where('menu', true)
                         ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
                         ->with('categories.tags', fn ($query) => $query->where('show_in_menu', true))
-                        ->with('brands')
+                        ->with('brandsById')
                         ->orderBy('sort', 'asc')
                         ->get();
             });

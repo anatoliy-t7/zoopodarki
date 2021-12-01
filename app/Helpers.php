@@ -66,7 +66,7 @@ if (! function_exists('getNextOrderNumber')) {
         // the %05d part makes sure that there are always 6 numbers in the string.
         // so it adds the missing zero's when needed.
 
-        return 'W'.sprintf('%06d', intval($number) + 1);
+        return 'ZOO'.sprintf('%06d', intval($number) + 1);
     }
 }
 

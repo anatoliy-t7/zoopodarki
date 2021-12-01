@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Catalogs extends Component
 {
+    use WireToast;
     use WithPagination;
 
     public $search;
@@ -29,7 +31,7 @@ class Catalogs extends Component
         'menu' => 1,
         'sort' => 1,
     ];
-    public $brandsForCatalog;
+    public $brandsForCatalog = [];
     public $categories = [];
     public $editCategory = [
         'id' => null,
@@ -73,8 +75,8 @@ class Catalogs extends Component
     {
         $this->categories = Category::where('catalog_id', $catalog_id)->orderBy('sort')->get()->toArray();
 
-        $this->editCatalog = Catalog::where('id', $catalog_id)->with('brands')->first();
-        $this->brandsForCatalog = $this->editCatalog->brands()->get(['brand_id'])->pluck('brand_id');
+        $this->editCatalog = Catalog::where('id', $catalog_id)->with('brandsById')->first();
+        $this->brandsForCatalog = $this->editCatalog->brandsById()->get(['brand_id'])->pluck('brand_id');
         $this->brandsForCatalog->unwrap($this->brandsForCatalog);
 
         $this->editCatalog = $this->editCatalog->toArray();
@@ -170,19 +172,15 @@ class Catalogs extends Component
                 }
             }
 
-            if ($this->brandsForCatalog) {
-                $brands = explode(',', $this->brandsForCatalog);
+                if (count($this->brandsForCatalog) > 0) {
+                    $editCatalog->brandsById()->detach();
 
-                array_walk($brands, function (&$v) {
-                    $v = intval($v);
-                });
-
-                $editCatalog->brands()->detach();
-
-                foreach ($brands as $brand) {
-                    $editCatalog->brands()->attach($brand);
+                    foreach ($this->brandsForCatalog as $brand) {
+                        $editCatalog->brandsById()->attach($brand);
+                    }
+                } else {
+                    $editCatalog->brandsById()->detach();
                 }
-            }
 
             $this->categories = Category::where('catalog_id', $editCatalog->id)->get();
 

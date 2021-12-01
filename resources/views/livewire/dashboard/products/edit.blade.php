@@ -267,23 +267,28 @@
 
                   <div class="w-full space-y-2">
 
-                    <div class="flex items-center justify-start w-full space-x-6">
-                      <div>
-                        <span wire:ignore class="font-bold">Категории</span>
-                      </div>
-                      <div class="block">
-                        <div class="flex items-center justify-start space-x-4">
+                    <div class="flex items-center justify-between w-full space-x-6">
+                      <div class="flex items-center justify-start space-x-6">
+                        <div>
+                          <span wire:ignore class="font-bold">Категории</span>
+                        </div>
+                        <div class="block">
+                          <div class="flex items-center justify-start space-x-4">
 
-                          <button title="Добавить каталог" x-on:click="addNewFieldCatalog()"
-                            class="text-sm text-white bg-indigo-500 btn hover:bg-indigo-600">
-                            <svg class="w-6 h-6 text-white fill-current" xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24">
-                              <path
-                                d="M19,11H13V5a1,1,0,0,0-2,0v6H5a1,1,0,0,0,0,2h6v6a1,1,0,0,0,2,0V13h6a1,1,0,0,0,0-2Z" />
-                            </svg>
-                          </button>
+                            <button title="Добавить каталог" x-on:click="addNewFieldCatalog()"
+                              class="text-sm text-white bg-indigo-500 btn hover:bg-indigo-600">
+                              <svg class="w-6 h-6 text-white fill-current" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
+                                <path
+                                  d="M19,11H13V5a1,1,0,0,0-2,0v6H5a1,1,0,0,0,0,2h6v6a1,1,0,0,0,2,0V13h6a1,1,0,0,0,0-2Z" />
+                              </svg>
+                            </button>
+                          </div>
                         </div>
                       </div>
+
+                      <x-toggle wire:model="discountWeight" :property="$discountWeight"
+                        :lable="'Применять скидку веса'" />
                     </div>
 
                     <div>
@@ -611,9 +616,6 @@
         </button>
 
       </div>
-    </div>
-
-    <div id="toolbar">
     </div>
 
   </div>

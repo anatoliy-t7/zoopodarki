@@ -66,6 +66,7 @@ class Category extends Component
     ];
     protected $queryString = [
         'attFilter' => ['except' => ''],
+        'brandFilter' => ['except' => ''],
     ];
     protected $listeners = ['updateMinPrice', 'updateMaxPrice', 'updateMinRange', 'updateMaxRange'];
 
@@ -96,7 +97,7 @@ class Category extends Component
             .$this->tag->meta_title
             .', купите в новом интернет зоомагазине спб с доставкой (цена от '
             .$this->minPrice.' рублей), акции и скидки, петшопы в Невском районе и пр. Просвещения';
-
+            // TODO вычесть 5% из $this->minPrice
             $this->name = $this->tag->name;
 
             $this->metaDescription = '👍 '

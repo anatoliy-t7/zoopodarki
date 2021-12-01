@@ -137,16 +137,14 @@ trait Discounts
     public function checkDiscountByWeight($cartId, $items)
     {
 
-        // TODO при добавлении еще раз перезаписывать первый
-        //у всех “сухих кормов для любого животного” считать вес, если более 5кг, то скидка 10% (дис. карта НЕ работает)
-        //id сухих кормов: 18, 34
+        // у всех “сухих кормов для любого животного” считать вес
+        // если более 5кг то скидка 10% (дис. карта НЕ работает)
+
         $productDiscountIds = [];
         $totalWeight = collect();
 
         foreach ($items as $item) {
-            // if ($item->associatedModel['category_id'] === 18 || $item->associatedModel['category_id'] === 34) {
-
-            if ($item->associatedModel['promotion_type'] === 0) {
+            if ($item->associatedModel['promotion_type'] === 0 && $item->associatedModel['discount_weight'] === true) {
                 array_push($productDiscountIds, $item['id']);
                 $itemWeight = $item->attributes->weight * $item->quantity;
 

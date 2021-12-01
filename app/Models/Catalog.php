@@ -25,7 +25,7 @@ class Catalog extends Model
         return $this->hasManyDeep(Product::class, [Category::class, 'product_category']);
     }
 
-    public function brands()
+    public function brandsById()
     {
         return $this->belongsToMany(Brand::class, 'catalog_brand', 'catalog_id', 'brand_id');
     }

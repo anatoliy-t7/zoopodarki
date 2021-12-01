@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
-<div class="pt-4 lg:pt-2">
+  <div class="space-y-2">
 
-  <x-breadcrumbs :category="$category" :catalog="$catalog" />
+    <x-breadcrumbs :category="$category" :catalog="$catalog" />
 
-  <livewire:site.product-card :slug="$slug" :tab="$tab" :category="$category" :catalog="$catalog">
+    <livewire:site.product-card :slug="$slug" :tab="$tab" :category="$category" :catalog="$catalog">
 
-</div>
+  </div>
 @endsection

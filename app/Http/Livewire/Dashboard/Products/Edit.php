@@ -7,8 +7,8 @@ use App\Models\Brand;
 use App\Models\BrandSerie;
 use App\Models\Catalog;
 use App\Models\Category;
-use App\Models\Product;
 use App\Models\Product1C;
+use App\Models\Product;
 use App\Models\ProductUnit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -47,6 +47,7 @@ class Edit extends Component
     public $variation;
     public $taken = true;
     public $emptyStock = true;
+    public $discountWeight = false;
     public $attributes;
     public $categories;
     public $catalogs;
@@ -111,6 +112,7 @@ class Edit extends Component
             $this->applying = $functionProduct->applying;
             $this->status = $functionProduct->status;
             $this->unitId = $functionProduct->unit_id;
+            $this->discountWeight = $functionProduct->discount_weight;
 
             if (! $functionProduct->brand == null) {
                 $this->productBrand[] = $functionProduct->brand->toArray();
@@ -348,6 +350,7 @@ class Edit extends Component
                     'consist' => $this->consist,
                     'applying' => $this->applying,
                     'status' => $this->status,
+                    'discount_weight' => $this->discountWeight,
                     'popularity' => 0,
                     'price_avg' => ceil($this->average),
                 ]
