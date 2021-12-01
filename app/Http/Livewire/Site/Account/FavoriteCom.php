@@ -27,7 +27,7 @@ class FavoriteCom extends Component
                 ->with('product.categories')
                 ->with('product.categories.catalog')
                 ->latest()
-                ->paginate(12)]
+                ->paginate(12), ]
         );
     }
 }

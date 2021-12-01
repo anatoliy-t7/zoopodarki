@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Site;
 
 use App\Models\Address;
@@ -16,7 +17,6 @@ class UserAddresses extends Component
     public array $sugestionAddresses = [];
     public int $highlightIndex = 0;
     public bool $showDropdown = true;
-
 
     public $address = [];
     public $addressId;
@@ -48,6 +48,7 @@ class UserAddresses extends Component
     {
         if ($this->highlightIndex === count($this->sugestionAddresses) - 1) {
             $this->highlightIndex = 0;
+
             return;
         }
 
@@ -58,6 +59,7 @@ class UserAddresses extends Component
     {
         if ($this->highlightIndex === 0) {
             $this->highlightIndex = count($this->sugestionAddresses) - 1;
+
             return;
         }
 
@@ -80,13 +82,13 @@ class UserAddresses extends Component
         $defaultCity = 'Санкт-Петербург+';
         $response = Http::get(
             'https://autocomplete.search.hereapi.com/v1/autocomplete?q='
-            . $defaultCity
-            . $this->query
-            . '&at=59.934261%2C30.334933'
-            . '&limit=20'
-            . '&lang=ru-RU'
-            . '&in=countryCode%3ARUS'
-            . '&apiKey='.config('constants.here_com_token')
+            .$defaultCity
+            .$this->query
+            .'&at=59.934261%2C30.334933'
+            .'&limit=20'
+            .'&lang=ru-RU'
+            .'&in=countryCode%3ARUS'
+            .'&apiKey='.config('constants.here_com_token')
         );
 
         if ($response->successful()) {
@@ -121,7 +123,6 @@ class UserAddresses extends Component
             'newAddress.building' => 'required|string|max:255',
         ]);
 
-
         DB::transaction(function () {
             if ($this->addressId) {
                 $this->address = Address::find($this->addressId);
@@ -145,7 +146,7 @@ class UserAddresses extends Component
                 $this->address->save();
             }
 
-            $addressData = $this->getCustomerLocation($this->address['address']. $this->address['building']);
+            $addressData = $this->getCustomerLocation($this->address['address'].$this->address['building']);
 
             if ($addressData === false) {
                 $this->address->zip = null;
@@ -191,16 +192,16 @@ class UserAddresses extends Component
         $this->getAddresses();
     }
 
-    public function getCustomerLocation(String $address = '')
+    public function getCustomerLocation(string $address = '')
     {
 
         $defaultCity = '%2C+Санкт-Петербург%2C+Россия';
 
         $response = Http::retry(3, 100)->get(
             'https://geocode.search.hereapi.com/v1/geocode?q='
-            . $address
-            . $defaultCity
-            . '&apiKey='.config('constants.here_com_token')
+            .$address
+            .$defaultCity
+            .'&apiKey='.config('constants.here_com_token')
         );
 
         if ($response->successful()) {
@@ -211,12 +212,15 @@ class UserAddresses extends Component
             ];
         } elseif ($response->failed()) {
             \Log::error('getCustomerLocation the status code is >= 400');
+
             return false;
         } elseif ($response->clientError()) {
             \Log::error('getCustomerLocation the response has a 400 level status code');
+
             return false;
         } elseif ($response->serverError()) {
             \Log::error('getCustomerLocation the response has a 500 level status code');
+
             return false;
         }
     }

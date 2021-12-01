@@ -47,7 +47,7 @@ class Category extends Model
         $attributesId = Str::replace('.', ',', $this->attributes['attributes']);
         $ids = explode(',', $attributesId);
 
-        if (!empty($filtredItems)) {
+        if (! empty($filtredItems)) {
             $items = $this->productsAttributes()
                 ->get()
                 ->unique()

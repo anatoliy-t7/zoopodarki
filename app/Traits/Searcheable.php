@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 use App\Models\Product;
@@ -24,8 +25,7 @@ trait Searcheable
                         ->with('brand')
                         ->with('unit')
                         ->with('attributes')
-                        ->with('variations')
-                    ;
+                        ->with('variations');
                 })
             // TODO orderBy не работает
                 ->orderBy($this->sortSelectedType, $this->sortBy)
@@ -54,7 +54,7 @@ trait Searcheable
 
     public function searchThis($q, $instant = false)
     {
-        if (!$instant) {
+        if (! $instant) {
             $result = $this->searchForPage($q);
             // TODO if search server not runing
             if ($result->total() == 0) {

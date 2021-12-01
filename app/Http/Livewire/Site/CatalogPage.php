@@ -8,7 +8,6 @@ use Livewire\Component;
 
 class CatalogPage extends Component
 {
-
     public $catalog;
     public $selectedCategories;
 

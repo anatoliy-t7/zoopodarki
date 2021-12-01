@@ -6,7 +6,6 @@ use Livewire\Component;
 
 class CardProducts extends Component
 {
-
     public $product;
     public $catalog;
     public $category;
@@ -15,5 +14,4 @@ class CardProducts extends Component
     {
         return view('livewire.site.card-products');
     }
-
 }

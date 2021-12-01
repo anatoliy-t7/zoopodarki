@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 use T7team\Shopcart\CartCondition;
@@ -27,9 +28,10 @@ trait Discounts
                 'name' => 'Скидочная карта',
                 'type' => 'discount_card',
                 'target' => 'subtotal',
-                'value' => '-' . $userHasDiscount . '%',
+                'value' => '-'.$userHasDiscount.'%',
             ]);
         }
+
         return false;
     }
 
@@ -40,6 +42,7 @@ trait Discounts
                 return $item->associatedModel['unit_value'];
             }
         }
+
         return false;
     }
 
@@ -55,8 +58,8 @@ trait Discounts
                     'name' => 'Скидочная карта',
                     'type' => 'discount_card',
                     'target' => 'subtotal',
-                    'value' => '-' . $checked . '%',
-                    ]);
+                    'value' => '-'.$checked.'%',
+                ]);
             }
         }
 
@@ -68,7 +71,7 @@ trait Discounts
 
                 if ($item->associatedModel['vendorcode'] !== 'DISCOUNT_CARD'
                     && $item->associatedModel['promotion_type'] !== 4
-                    && !$item->getConditionByType('weight')) {
+                    && ! $item->getConditionByType('weight')) {
                     \Cart::session($cartId)->addItemCondition($item['id'], $cartDiscountByCard);
                 }
             }
@@ -83,7 +86,7 @@ trait Discounts
                 'target' => 'total',
                 'type' => 'discount',
                 'value' => '-200',
-                'order' => 1
+                'order' => 1,
             ]);
 
             \Cart::session($cartId)->condition($condition);
@@ -95,6 +98,7 @@ trait Discounts
              return false;
         } else {
             \Cart::session($cartId)->removeCartCondition('Первый заказ');
+
              return false;
         }
     }
@@ -107,7 +111,7 @@ trait Discounts
                 'target' => 'total',
                 'type' => 'discount',
                 'value' => '-2%',
-                'order' => 2
+                'order' => 2,
             ]);
 
             \Cart::session($cartId)->condition($condition);
@@ -152,7 +156,6 @@ trait Discounts
 
         $totalWeight = $totalWeight->sum();
 
-
         if ($totalWeight < 5000) {
             return false;
         }
@@ -179,9 +182,9 @@ trait Discounts
     public function getDiscountByUcenka($discount)
     {
         return new CartCondition([
-        'name' => 'Уценка',
-        'type' => 'price_down',
-        'value' => '-' . $discount,
+            'name' => 'Уценка',
+            'type' => 'price_down',
+            'value' => '-'.$discount,
         ]);
     }
 
@@ -218,7 +221,7 @@ trait Discounts
                 $itemDiscount = new CartCondition([
                     'name' => '1 + 1',
                     'type' => 'discountPlus',
-                    'value' => '-' . $cheapestItem['price'] * $count . ' ',
+                    'value' => '-'.$cheapestItem['price'] * $count.' ',
                 ]);
 
                 // TODO все время показывает 0
@@ -237,7 +240,7 @@ trait Discounts
             return new CartCondition([
                 'name' => 'Праздничные',
                 'type' => 'holiday',
-                'value' => '-' . $discount . '%',
+                'value' => '-'.$discount.'%',
             ]);
         }
 

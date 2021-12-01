@@ -7,7 +7,6 @@ use Kirschbaum\PowerJoins\PowerJoins;
 
 class Media extends Model
 {
-
     use PowerJoins;
 
     protected $table = 'media';

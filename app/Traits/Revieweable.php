@@ -9,12 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 trait Revieweable
 {
-
     public function rate($value, $body)
     {
-        $review          = new Review();
-        $review->rating  = $value;
-        $review->body    = $body;
+        $review = new Review();
+        $review->rating = $value;
+        $review->body = $body;
         $review->user_id = Auth::id();
     }
 
@@ -24,12 +23,11 @@ trait Revieweable
             ->where('revieweable_type', '=', get_class($this))
             ->where('revieweable_id', '=', $this->id)
             ->where('user_id', '=', Auth::id())
-            ->first()
-        ;
+            ->first();
 
         if ($review) {
             $review->rating = $value;
-            $review->body   = $body;
+            $review->body = $body;
             $review->save();
         } else {
             $this->rate($value, $body);
@@ -74,7 +72,7 @@ trait Revieweable
     public function ratingPercent($max = 5)
     {
         $quantity = $this->reviews()->count();
-        $total    = $this->sumRating();
+        $total = $this->sumRating();
 
         return $quantity * $max > 0 ? $total / ($quantity * $max / 100) : 0;
     }

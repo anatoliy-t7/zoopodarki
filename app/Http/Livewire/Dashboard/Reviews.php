@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Mail\ReviewChangedToUser;
@@ -107,7 +108,7 @@ class Reviews extends Component
             }
 
             toast()
-                ->success('Отзыв сохранен с статусом "' . __('constants.review_status.' . $review->status) . '"')
+                ->success('Отзыв сохранен с статусом "'.__('constants.review_status.'.$review->status).'"')
                 ->push();
 
             $this->closeForm();
@@ -121,7 +122,7 @@ class Reviews extends Component
         if ($this->reviewEdit->user->email) {
             $productName = $this->reviewEdit->revieweable->name;
 
-            $productLink = env('APP_URL') . '/pet/' . $this->reviewEdit->revieweable->categories[0]->catalog->slug . '/' . $this->reviewEdit->revieweable->categories[0]->slug . '/' . $this->reviewEdit->revieweable->slug;
+            $productLink = env('APP_URL').'/pet/'.$this->reviewEdit->revieweable->categories[0]->catalog->slug.'/'.$this->reviewEdit->revieweable->categories[0]->slug.'/'.$this->reviewEdit->revieweable->slug;
 
             Mail::to($this->reviewEdit->user->email)
                 ->send(new ReviewChangedToUser($this->reviewEdit, $productName, $productLink));
@@ -168,16 +169,16 @@ class Reviews extends Component
             $query->where('status', $this->filteredBy);
         })
             ->when($this->search, function ($query) {
-                $query->where('id', 'like', '%' . $this->search . '%')
+                $query->where('id', 'like', '%'.$this->search.'%')
                     ->whereHasMorph(
                         'revieweable',
                         'App\Models\Product',
                         function (Builder $query) {
-                            $query->where('name', 'like', '%' . $this->search . '%');
+                            $query->where('name', 'like', '%'.$this->search.'%');
                         }
                     )
                     ->orWhereHas('user', function (Builder $query) {
-                        $query->where('name', 'like', '%' . $this->search . '%');
+                        $query->where('name', 'like', '%'.$this->search.'%');
                     });
 
                 return $query;

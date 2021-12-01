@@ -10,7 +10,6 @@ use Usernotnull\Toast\Concerns\WireToast;
 
 class Roles extends Component
 {
-
     use WireToast;
 
     public $roleId;
@@ -30,7 +29,7 @@ class Roles extends Component
     public function save()
     {
         $this->validate([
-            'name' => 'required|unique:roles,name,' . $this->roleId,
+            'name' => 'required|unique:roles,name,'.$this->roleId,
             'rolePermissions' => 'required',
         ]);
 
@@ -46,7 +45,7 @@ class Roles extends Component
             $role->syncPermissions($this->rolePermissions);
 
             toast()
-                ->success($this->name . ' сохранена')
+                ->success($this->name.' сохранена')
                 ->push();
 
             $this->closeForm();

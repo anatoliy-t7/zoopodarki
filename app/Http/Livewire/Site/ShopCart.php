@@ -1,10 +1,10 @@
 <?php
+
 namespace App\Http\Livewire\Site;
 
 use App\Models\Product1C;
 use App\Traits\Discounts;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
@@ -50,19 +50,19 @@ class ShopCart extends Component
     public function addToCart(int $itemId, int $quantity, $categoryId = 0, int $byWeight = 0)
     {
 
-        $cart = $this->checkShelterCategory((int)$categoryId);
+        $cart = $this->checkShelterCategory((int) $categoryId);
 
         if ($cart->isEmpty()) {
-            $this->add($itemId, $quantity, (int)$categoryId, $byWeight);
+            $this->add($itemId, $quantity, (int) $categoryId, $byWeight);
         } else {
             if ($cart->get($itemId) !== null) {
                 if ($cart->get($itemId)->attributes->unit_value == 'на развес') {
-                    $this->add($itemId, $quantity, (int)$categoryId, $byWeight);
+                    $this->add($itemId, $quantity, (int) $categoryId, $byWeight);
                 } else {
-                    $this->increment($itemId, (int)$categoryId, $byWeight);
+                    $this->increment($itemId, (int) $categoryId, $byWeight);
                 }
             } else {
-                $this->add($itemId, $quantity, (int)$categoryId, $byWeight);
+                $this->add($itemId, $quantity, (int) $categoryId, $byWeight);
             }
         }
 
@@ -95,16 +95,16 @@ class ShopCart extends Component
                     }
 
                     $associatedModel = [
-                      'stock' => $product_1c->stock,
-                      'unit_value' => $product_1c->unit_value,
-                      'image' => $product_1c->product->getFirstMediaUrl('product-images', 'thumb'),
-                      'category_id' => $categoryId,
-                      'promotion_type' => $product_1c->promotion_type,
-                      'promotion_price' => $product_1c->promotion_price,
-                      'vendorcode' => $product_1c->vendorcode,
-                      'catalog_slug' => $product_1c->product->categories[0]->catalog->slug,
-                      'category_slug' => $product_1c->product->categories[0]->slug,
-                      'product_slug' => $product_1c->product->slug,
+                        'stock' => $product_1c->stock,
+                        'unit_value' => $product_1c->unit_value,
+                        'image' => $product_1c->product->getFirstMediaUrl('product-images', 'thumb'),
+                        'category_id' => $categoryId,
+                        'promotion_type' => $product_1c->promotion_type,
+                        'promotion_price' => $product_1c->promotion_price,
+                        'vendorcode' => $product_1c->vendorcode,
+                        'catalog_slug' => $product_1c->product->categories[0]->catalog->slug,
+                        'category_slug' => $product_1c->product->categories[0]->slug,
+                        'product_slug' => $product_1c->product->slug,
                     ];
 
                     $weight = $product_1c->weight;
@@ -113,28 +113,28 @@ class ShopCart extends Component
                     }
 
                     $cart->add([
-                          'id' => $product_1c->id,
-                          'name' => $product_1c->product->name,
-                          'price' => $product_1c->price,
-                          'quantity' => $quantity,
-                          'attributes' => [
-                              'unit' => $product_1c->product->unit,
-                              'weight' => $weight,
-                              'unit_value' => $product_1c->unit_value,
-                          ],
-                          'associatedModel' => $associatedModel,
+                        'id' => $product_1c->id,
+                        'name' => $product_1c->product->name,
+                        'price' => $product_1c->price,
+                        'quantity' => $quantity,
+                        'attributes' => [
+                            'unit' => $product_1c->product->unit,
+                            'weight' => $weight,
+                            'unit_value' => $product_1c->unit_value,
+                        ],
+                        'associatedModel' => $associatedModel,
                     ]);
 
                     if ($product_1c->unit_value == 'на развес') {
                         $price = ($byWeight / 1000) * $product_1c->price;
 
-                        $cart->update($product_1c->id, array(
-                         'quantity' => array(
-                            'relative' => false,
-                            'value' => 1
-                            ),
-                        'price' => $price,
-                        ));
+                        $cart->update($product_1c->id, [
+                            'quantity' => [
+                                'relative' => false,
+                                'value' => 1,
+                            ],
+                            'price' => $price,
+                        ]);
                     }
 
                     if ($product_1c->vendorcode !== 'DISCOUNT_CARD') {
@@ -155,7 +155,6 @@ class ShopCart extends Component
         $cart = $this->checkShelterCategory($categoryId);
         $item = $cart->get($itemId);
 
-
         if ($item->associatedModel['stock'] < $item->quantity + 1) {
             toast()
             ->info('Извините, товара больше нет в наличии')
@@ -166,7 +165,7 @@ class ShopCart extends Component
         } else {
             $cart->update(
                 $itemId,
-                [ 'quantity' => 1, ]
+                ['quantity' => 1]
             );
             $this->getCart();
             $this->emitTo('product-card', 'render');
@@ -209,14 +208,14 @@ class ShopCart extends Component
     public function generateId(): void
     {
         if (request()->session()->missing('cart_id')) {
-            $this->cartId = 'cart_id' . Str::random(10);
+            $this->cartId = 'cart_id'.Str::random(10);
             session(['cart_id' => $this->cartId]);
         } else {
             $this->cartId = session('cart_id');
         }
 
         if (request()->session()->missing('shelter_cart')) {
-            $this->shelterCartId = 'shelter_cart' . Str::random(10);
+            $this->shelterCartId = 'shelter_cart'.Str::random(10);
             session(['shelter_cart' => $this->shelterCartId]);
         } else {
             $this->shelterCartId = session('shelter_cart');

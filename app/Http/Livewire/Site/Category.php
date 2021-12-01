@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Site;
 
 use App\Models\AttributeItem;
@@ -89,19 +90,19 @@ class Category extends Component
             ->where('price', '>', 0)
             ->min('price');
 
-        if (!empty($this->tag)) {
+        if (! empty($this->tag)) {
             $this->getTagFilters();
             $this->metaTitle = '👍 '
-            . $this->tag->meta_title
-            . ', купите в новом интернет зоомагазине спб с доставкой (цена от '
-            . $this->minPrice . ' рублей), акции и скидки, петшопы в Невском районе и пр. Просвещения';
+            .$this->tag->meta_title
+            .', купите в новом интернет зоомагазине спб с доставкой (цена от '
+            .$this->minPrice.' рублей), акции и скидки, петшопы в Невском районе и пр. Просвещения';
 
             $this->name = $this->tag->name;
 
             $this->metaDescription = '👍 '
-            . $this->tag->meta_title .
+            .$this->tag->meta_title.
             ' (в наличии) купите в спб 🚚 с бесплатной доставкой в интернет зоомагазине (цена от '
-            . $this->minPrice .
+            .$this->minPrice.
             ' рублей) ❗ фото, составы, описание, применение, дозировка, акции и скидки 🧡 душевное обслуживание, гарантии, самовывоз из Невского района и с пр. Просвещения';
         } else {
             $this->metaTitle = $this->category->meta_title;
@@ -215,7 +216,7 @@ class Category extends Component
             'brandFilter',
             'attributesRanges',
             'maxPrice',
-            'minPrice'
+            'minPrice',
         ]);
 
         $this->dispatchBrowserEvent('reset-range');
@@ -269,9 +270,9 @@ class Category extends Component
                                         $this->attributesRanges[$key]['id']
                                     )
                                         ->whereBetween('name', [
-                                        $this->attributesRanges[$key]['min'],
-                                        $this->attributesRanges[$key]['max'],
-                                    ]);
+                                            $this->attributesRanges[$key]['min'],
+                                            $this->attributesRanges[$key]['max'],
+                                        ]);
                                 }
                             }
                         });
@@ -291,8 +292,6 @@ class Category extends Component
 
                 $this->productsCount = $products->count();
 
-
-
         // TODO пропадают фильтры
         if ($this->attFilter) {
             $this->getAttributes($products->pluck('attributes')->flatten()->pluck('id')->unique()->values()->toArray());
@@ -301,7 +300,7 @@ class Category extends Component
         }
 
                 return view('livewire.site.category', [
-                'products' => $products,
+                    'products' => $products,
                 ]);
     }
 }

@@ -5,128 +5,144 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['register' => false]);
 
     // Account
-Route::prefix('account')->middleware(['throttle:1000,60', 'auth'])->group(function () {
-    Route::get('/profile', 'App\Http\Controllers\Site\AccountController@profile')->name('account.profile');
+Route::prefix('account')->name('account.')->middleware(['throttle:1000,60', 'auth'])->group(
+    function () {
+        Route::get('/profile', 'App\Http\Controllers\Site\AccountController@profile')->name('profile');
 
-    Route::get('/orders', 'App\Http\Controllers\Site\AccountController@orders')->name('account.orders');
+        Route::PATCH('/profile/{id}', 'App\Http\Controllers\Site\AccountController@profileUpdate')
+        ->name('user.update');
 
-    Route::view('/favorites', 'site.account.favorites')->name('account.favorites');
+        Route::view('/favorites', 'site.account.favorites')->name('favorites');
 
-    Route::PATCH('/profile/{id}', 'App\Http\Controllers\Site\AccountController@profileUpdate')->name('account.user.update');
-});
+        Route::get('/orders', 'App\Http\Controllers\Site\OrderController@orders')->name('orders');
 
-    // Admin
-Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 'auth', 'permission:dashboard'])->group(function () {
-    Route::get('/', \App\Http\Livewire\Dashboard\Dashboard::class)->name('dashboard');
+        Route::get('/orders/order', 'App\Http\Controllers\Site\OrderController@order')->name('order');
 
-    Route::middleware(['permission: admin'])->group(function () {
-        Route::get('/permissions', \App\Http\Livewire\Dashboard\Permissions::class)->name('permissions');
+    }
+);
 
-        Route::get('/roles', \App\Http\Livewire\Dashboard\Roles::class)->name('roles');
+    // Dashboard
+Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 'auth', 'permission:dashboard'])->group(
+    function () {
+        Route::get('/', \App\Http\Livewire\Dashboard\Dashboard::class)->name('dashboard');
 
-        Route::get('/users', \App\Http\Livewire\Dashboard\Users::class)->name('users');
+        Route::middleware(['permission: admin'])->group(
+            function () {
+                Route::get('/permissions', \App\Http\Livewire\Dashboard\Permissions::class)->name('permissions');
 
-        Route::get('/logs', \App\Http\Livewire\Dashboard\LogsViewer::class)->name('logs');
+                Route::get('/roles', \App\Http\Livewire\Dashboard\Roles::class)->name('roles');
 
-        Route::prefix('settings')->name('settings.')->group(function () {
-            Route::get('/backup', \App\Http\Livewire\Dashboard\Settings\Backup::class)->name('backup');
-            Route::get('/main', \App\Http\Livewire\Dashboard\Settings\Main::class)->name('main');
-        });
-    });
+                Route::get('/users', \App\Http\Livewire\Dashboard\Users::class)->name('users');
 
-    Route::get('/tags', \App\Http\Livewire\Dashboard\Tags::class)->name('tags');
+                Route::get('/logs', \App\Http\Livewire\Dashboard\LogsViewer::class)->name('logs');
 
-    Route::get('/attributes', \App\Http\Livewire\Dashboard\Attributes::class)->name('attributes');
+                Route::prefix('settings')->name('settings.')->group(
+                    function () {
+                        Route::get('/backup', \App\Http\Livewire\Dashboard\Settings\Backup::class)->name('backup');
+                        Route::get('/main', \App\Http\Livewire\Dashboard\Settings\Main::class)->name('main');
+                    }
+                );
+            }
+        );
 
-    Route::get('/brands', \App\Http\Livewire\Dashboard\Brands::class)->name('brands');
+        Route::get('/tags', \App\Http\Livewire\Dashboard\Tags::class)->name('tags');
 
-    Route::get('/units', \App\Http\Livewire\Dashboard\Units::class)->name('units');
+        Route::get('/attributes', \App\Http\Livewire\Dashboard\Attributes::class)->name('attributes');
 
-    Route::get('/catalogs', \App\Http\Livewire\Dashboard\Catalogs::class)->name('catalogs');
+        Route::get('/brands', \App\Http\Livewire\Dashboard\Brands::class)->name('brands');
 
-    Route::get('/variations', \App\Http\Livewire\Dashboard\Products1c::class)->name('products1c');
+        Route::get('/units', \App\Http\Livewire\Dashboard\Units::class)->name('units');
 
-    Route::get('/products', \App\Http\Livewire\Dashboard\Products\Index::class)->name('products.index');
+        Route::get('/catalogs', \App\Http\Livewire\Dashboard\Catalogs::class)->name('catalogs');
 
-    Route::get('products/edit', \App\Http\Livewire\Dashboard\Products\Edit::class)->name('product.edit');
+        Route::get('/variations', \App\Http\Livewire\Dashboard\Products1c::class)->name('products1c');
 
-    Route::get('/pages', \App\Http\Livewire\Dashboard\Pages\Pages::class)->name('pages');
+        Route::get('/products', \App\Http\Livewire\Dashboard\Products\Index::class)->name('products.index');
 
-    Route::prefix('page')->group(function () {
-        Route::get('/home', \App\Http\Livewire\Dashboard\Pages\Home::class)->name('home.edit');
+        Route::get('products/edit', \App\Http\Livewire\Dashboard\Products\Edit::class)->name('product.edit');
 
-        Route::get('/edit', \App\Http\Livewire\Dashboard\Pages\PageEdit::class)->name('page.edit');
-    });
+        Route::get('/pages', \App\Http\Livewire\Dashboard\Pages\Pages::class)->name('pages');
 
-    Route::get('/reviews', \App\Http\Livewire\Dashboard\Reviews::class)->name('reviews');
+        Route::prefix('page')->group(
+            function () {
+                Route::get('/home', \App\Http\Livewire\Dashboard\Pages\Home::class)->name('home.edit');
 
-    Route::get('/orders', \App\Http\Livewire\Dashboard\Orders::class)->name('orders');
+                Route::get('/edit', \App\Http\Livewire\Dashboard\Pages\PageEdit::class)->name('page.edit');
+            }
+        );
 
-    Route::get('/waitlists', \App\Http\Livewire\Dashboard\Waitlists::class)->name('waitlists');
+        Route::get('/reviews', \App\Http\Livewire\Dashboard\Reviews::class)->name('reviews');
 
-    Route::get('/excel', \App\Http\Livewire\Dashboard\Excel::class)->name('excel');
-});
+        Route::get('/orders', \App\Http\Livewire\Dashboard\Orders::class)->name('orders');
+
+        Route::get('/waitlists', \App\Http\Livewire\Dashboard\Waitlists::class)->name('waitlists');
+
+        Route::get('/excel', \App\Http\Livewire\Dashboard\Excel::class)->name('excel');
+    }
+);
 
     // TODO delete in production 'auth'
-    Route::middleware(['throttle:1000,60', 'auth'])
+Route::middleware(['throttle:1000,60', 'auth'])
     ->name('site.')
-    ->group(function () {
-        Route::get('/', 'App\Http\Controllers\Site\HomeController@index')->name('home');
+    ->group(
+        function () {
+            Route::get('/', 'App\Http\Controllers\Site\HomeController@index')->name('home');
 
-        Route::get('/pet/{catalog}/{slug}/f/{tagslug}', 'App\Http\Controllers\Site\CategoryController@tag')
+            Route::get('/pet/{catalog}/{slug}/f/{tagslug}', 'App\Http\Controllers\Site\CategoryController@tag')
             ->name('tag');
 
-        Route::get('/pet/{catalog}/{slug}', 'App\Http\Controllers\Site\CategoryController@show')
+            Route::get('/pet/{catalog}/{slug}', 'App\Http\Controllers\Site\CategoryController@show')
             ->name('category');
 
-        Route::get('/pet/{slug}', \App\Http\Livewire\Site\CatalogPage::class)->name('catalog');
+            Route::get('/pet/{slug}', \App\Http\Livewire\Site\CatalogPage::class)->name('catalog');
 
-        Route::get('/search', \App\Http\Livewire\Site\Search\SearchPage::class)->name('search');
+            Route::get('/search', \App\Http\Livewire\Site\Search\SearchPage::class)->name('search');
 
-        // Tabs routes of product page
-        Route::get(
-            '/pet/{catalog}/{category}/{slug}',
-            'App\Http\Controllers\Site\ProductController@show'
-        )->name('product');
+            // Tabs routes of product page
+            Route::get(
+                '/pet/{catalog}/{category}/{slug}',
+                'App\Http\Controllers\Site\ProductController@show'
+            )->name('product');
 
-        Route::get(
-            '/pet/{catalog}/{category}/{slug}/consist',
-            'App\Http\Controllers\Site\ProductController@showСonsist'
-        )->name('product.consist');
+            Route::get(
+                '/pet/{catalog}/{category}/{slug}/consist',
+                'App\Http\Controllers\Site\ProductController@showСonsist'
+            )->name('product.consist');
 
-        Route::get(
-            '/pet/{catalog}/{category}/{slug}/applying',
-            'App\Http\Controllers\Site\ProductController@showApplying'
-        )->name('product.applying');
+            Route::get(
+                '/pet/{catalog}/{category}/{slug}/applying',
+                'App\Http\Controllers\Site\ProductController@showApplying'
+            )->name('product.applying');
 
-        // Brands
-        Route::get('/brands', 'App\Http\Controllers\Site\BrandController@index')->name('brands');
+            // Brands
+            Route::get('/brands', 'App\Http\Controllers\Site\BrandController@index')->name('brands');
 
-        Route::get('/brands/{brand}', 'App\Http\Controllers\Site\BrandController@show')->name('brand');
+            Route::get('/brands/{brand}', 'App\Http\Controllers\Site\BrandController@show')->name('brand');
 
-        // Pages
-        Route::view('/contact', 'site.pages.contact')->name('contact');
+            // Pages
+            Route::view('/contact', 'site.pages.contact')->name('contact');
 
-        Route::get('/page/{slug}', 'App\Http\Controllers\Site\PageController@show')->name('page');
+            Route::get('/page/{slug}', 'App\Http\Controllers\Site\PageController@show')->name('page');
 
-        Route::get('/order/confirmed', 'App\Http\Controllers\Site\PaymentController@payСash')->name('order.confirmed');
+            Route::get('/checkout/confirm', \App\Http\Livewire\Site\Checkout\CheckoutConfirm::class)
+                ->middleware(['auth'])
+                ->name('checkout.confirm');
 
-        Route::get('/order/status', 'App\Http\Controllers\Site\PaymentController@userCameBack')
-        ->name('order.status'); // callback for YooKassa
-    });
+            Route::get('/checkout/callback', 'App\Http\Controllers\Site\OrderController@checkoutCallback')->name('checkout.callback');
 
-    Route::middleware(['throttle:1000,60', 'bot'])->group(function () {
+        }
+    );
+
+Route::middleware(['throttle:1000,60'])->group(
+    function () {
         Route::get('/checkout', \App\Http\Livewire\Site\Checkout\Checkout::class)->name('checkout');
 
-        Route::get('/checkout/confirm', \App\Http\Livewire\Site\Checkout\CheckoutConfirm::class)
-        ->middleware(['auth'])
-        ->name('checkout.confirm');
-
-        Route::post('/payment/callback', 'App\Http\Controllers\Site\PaymentController@payCallback')
+        Route::any('/payment/callback', 'App\Http\Controllers\Site\OrderController@yooKassaCallback')
         ->name('payment.callback'); // callback for YooKassa
-    });
+    }
+);
 
         // 1С exchange
-    Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')
+Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')
     ->middleware(['throttle:1000,60', 'bot'])
     ->name('exchange');

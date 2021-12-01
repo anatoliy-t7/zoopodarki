@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Product1C;
@@ -66,12 +67,12 @@ class Products1c extends Component
             ]);
         } elseif ($this->promotion['type'] === '3') {
             $this->validate([
-            'promotion.percent' => 'required|numeric|between:1,99',
+                'promotion.percent' => 'required|numeric|between:1,99',
             ]);
         } elseif ($this->promotion['type'] === '4') {
             $this->validate([
-            'promotion.percent' => 'required|numeric|between:1,99',
-            'promotion.date' => 'required|date|date_format:Y-m-d|after:today',
+                'promotion.percent' => 'required|numeric|between:1,99',
+                'promotion.date' => 'required|date|date_format:Y-m-d|after:today',
             ]);
         }
 

@@ -26,7 +26,7 @@ class Permissions extends Component
     public function save()
     {
         $this->validate([
-            'name' => 'required|unique:permissions,name,' . $this->permissionId,
+            'name' => 'required|unique:permissions,name,'.$this->permissionId,
         ]);
 
         DB::transaction(function () {
@@ -39,7 +39,7 @@ class Permissions extends Component
             );
 
             toast()
-                ->success($permission->name . ' сохранены.')
+                ->success($permission->name.' сохранены.')
                 ->push();
 
             $this->closeForm();
@@ -56,7 +56,7 @@ class Permissions extends Component
         $this->resetFields();
 
         toast()
-            ->success('Права "' . $permission_name . '" удалены.')
+            ->success('Права "'.$permission_name.'" удалены.')
             ->push();
     }
 

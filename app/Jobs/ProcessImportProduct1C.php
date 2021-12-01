@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Jobs;
 
 use App\Models\Product1C;
@@ -27,7 +28,6 @@ class ProcessImportProduct1C implements ShouldQueue
     protected $consist = null;
     protected $barcode = null;
     protected $vendorcode = null;
-
 
     /**
      * Create a new job instance.
@@ -59,8 +59,8 @@ class ProcessImportProduct1C implements ShouldQueue
             unset($product1c);
         }
 
-        Log::debug('Product deleted: ' . $this->count);
-        Log::debug('Product1C deleted: ' . $this->forDelete);
+        Log::debug('Product deleted: '.$this->count);
+        Log::debug('Product1C deleted: '.$this->forDelete);
         unlink($this->file);
     }
 
@@ -113,7 +113,7 @@ class ProcessImportProduct1C implements ShouldQueue
         $oldProduct = Product1C::where('uuid', $product1c['Ид'])->with('product')->first();
 
         if (Arr::exists($product1c, 'Описание')
-            && !empty($product1c['Описание'])
+            && ! empty($product1c['Описание'])
             && $oldProduct->product()->exists()
             && $oldProduct->product->consist === null) {
             $oldProduct->product->consist = $product1c['Описание'];
@@ -121,14 +121,14 @@ class ProcessImportProduct1C implements ShouldQueue
         }
 
         if (Arr::exists($product1c, 'Артикул')
-            && !empty($product1c['Артикул'])
+            && ! empty($product1c['Артикул'])
             && $product1c['Артикул'] !== $oldProduct->vendorcode) {
             $oldProduct->vendorcode = $product1c['Артикул'];
             $oldProduct->save();
         }
 
         if (Arr::exists($product1c, 'Штрихкод')
-            && !empty($product1c['Штрихкод'])
+            && ! empty($product1c['Штрихкод'])
             && $product1c['Штрихкод'] !== $oldProduct->barcode) {
             $oldProduct->barcode = $product1c['Штрихкод'];
             $oldProduct->save();
@@ -166,11 +166,11 @@ class ProcessImportProduct1C implements ShouldQueue
 
     public function createProduct($product1c)
     {
-        if (Arr::exists($product1c, 'Штрихкод') && !empty($product1c['Штрихкод'])) {
+        if (Arr::exists($product1c, 'Штрихкод') && ! empty($product1c['Штрихкод'])) {
             $this->barcode = $product1c['Штрихкод'];
         }
 
-        if (Arr::exists($product1c, 'Артикул') && !empty($product1c['Артикул'])) {
+        if (Arr::exists($product1c, 'Артикул') && ! empty($product1c['Артикул'])) {
             $this->vendorcode = $product1c['Артикул'];
         }
 
@@ -214,13 +214,13 @@ class ProcessImportProduct1C implements ShouldQueue
     {
         $extension = Str::afterLast($image, '.');
 
-        return Str::slug($product_name, '-') . '-' . $count . '.' . $extension;
+        return Str::slug($product_name, '-').'-'.$count.'.'.$extension;
     }
 
     public function storeImage($image, $name, $product)
     {
-        if (is_file(storage_path('sync/') . $image)) {
-            $product->addMedia(storage_path('sync/') . $image)->usingFileName($name)->toMediaCollection('product-images');
+        if (is_file(storage_path('sync/').$image)) {
+            $product->addMedia(storage_path('sync/').$image)->usingFileName($name)->toMediaCollection('product-images');
         }
 
         unset($name, $image);

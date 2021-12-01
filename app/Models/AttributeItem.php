@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Attribute;
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\PowerJoins\PowerJoins;
 
@@ -25,5 +23,4 @@ class AttributeItem extends Model
     {
         return $this->belongsToMany(Product::class, 'product_attribute', 'attribute_id', 'product_id');
     }
-
 }

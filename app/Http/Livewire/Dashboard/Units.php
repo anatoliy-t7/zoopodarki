@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\ProductUnit;
@@ -65,7 +66,7 @@ class Units extends Component
             );
 
             toast()
-                ->success('Единица измерения "' . $this->editUnit['name'] . '" сохранена.')
+                ->success('Единица измерения "'.$this->editUnit['name'].'" сохранена.')
                 ->push();
 
             $this->closeForm();
@@ -88,7 +89,7 @@ class Units extends Component
             $this->reset(['editUnit']);
 
             toast()
-                ->warning('Единица измерения "' . $unit_name . '" удалена.')
+                ->warning('Единица измерения "'.$unit_name.'" удалена.')
                 ->push();
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Attribute;
@@ -157,7 +158,7 @@ class Tags extends Component
             );
 
             toast()
-                ->success('Тег "' . $tag->name . '" сохранен.')
+                ->success('Тег "'.$tag->name.'" сохранен.')
                 ->push();
 
             $this->closeForm();
@@ -176,7 +177,7 @@ class Tags extends Component
         $tag->delete();
 
         toast()
-            ->success('Тег "' . $tag_name . '" удален.')
+            ->success('Тег "'.$tag_name.'" удален.')
             ->push();
     }
 

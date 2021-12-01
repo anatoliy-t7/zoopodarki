@@ -6,7 +6,6 @@ use Illuminate\View\Component;
 
 class Breadcrumbs extends Component
 {
-
     public $category;
     public $catalog;
 
@@ -34,5 +33,4 @@ class Breadcrumbs extends Component
     {
         return view('components.breadcrumbs');
     }
-
 }

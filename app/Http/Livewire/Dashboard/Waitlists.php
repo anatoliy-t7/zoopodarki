@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Waitlist;
@@ -74,7 +75,7 @@ class Waitlists extends Component
             );
 
             toast()
-                ->success('Заказ сохранен с статусом "' . __('constants.review_status.' . $waitlist->status) . '"')
+                ->success('Заказ сохранен с статусом "'.__('constants.review_status.'.$waitlist->status).'"')
                 ->push();
 
             $this->closeForm();

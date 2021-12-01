@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-
     public $category;
     public $catalog;
     public $slug;
@@ -29,6 +28,7 @@ class ProductController extends Controller
         $catalog = $this->catalog;
         $slug = $this->slug;
         $tab = 1;
+
         return view('site.product', compact('category', 'tab', 'catalog', 'slug'));
     }
 
@@ -38,6 +38,7 @@ class ProductController extends Controller
         $catalog = $this->catalog;
         $slug = $this->slug;
         $tab = 2;
+
         return view('site.product', compact('category', 'tab', 'catalog', 'slug'));
     }
 
@@ -47,7 +48,7 @@ class ProductController extends Controller
         $catalog = $this->catalog;
         $slug = $this->slug;
         $tab = 3;
+
         return view('site.product', compact('category', 'tab', 'catalog', 'slug'));
     }
-
 }

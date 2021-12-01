@@ -6,7 +6,6 @@ use Illuminate\View\Component;
 
 class Units extends Component
 {
-
     public $unit;
     public $value;
 

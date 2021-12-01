@@ -55,7 +55,7 @@
 		"t7team/smscru": "*",
 		"usernotnull/tall-toasts": "^1.2",
 		"vlucas/phpdotenv": "^5.3",
-		"yoomoney/yookassa-sdk-php": "^2.1"
+		"yoomoney/yookassa-sdk-php": "^2"
 	},
 	"require-dev": {
 		"barryvdh/laravel-debugbar": "^3",
@@ -63,6 +63,7 @@
 		"enlightn/security-checker": "^1.9",
 		"facade/ignition": "^2",
 		"fzaninotto/faker": "^1",
+		"matt-allan/laravel-code-style": "^0.7.0",
 		"mockery/mockery": "^1",
 		"nunomaduro/collision": "^5",
 		"nunomaduro/larastan": "^0.7.6",

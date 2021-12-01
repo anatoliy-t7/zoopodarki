@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Support\Collection;
@@ -67,7 +68,7 @@ class LogsViewer extends Component
         $files = array_reverse($files);
         $dates = [];
 
-        if (!$files) {
+        if (! $files) {
             return [];
         }
 
@@ -92,7 +93,7 @@ class LogsViewer extends Component
             return false;
         }
 
-        if (!in_array($this->date, $this->availableDates)) {
+        if (! in_array($this->date, $this->availableDates)) {
 
             toast()
                 ->warning('No log file found with selected date')
@@ -101,7 +102,7 @@ class LogsViewer extends Component
             return false;
         }
 
-        $this->filename = 'laravel-' . $this->date . '.log';
+        $this->filename = 'laravel-'.$this->date.'.log';
     }
 
     public function openForm($id)
@@ -118,13 +119,13 @@ class LogsViewer extends Component
 
     public function delete()
     {
-        if (!$this->filename) {
+        if (! $this->filename) {
             return toast()
                 ->warning('Log file not found')
                 ->push();
         }
 
-        $file = 'logs/' . $this->filename;
+        $file = 'logs/'.$this->filename;
 
         if ($this->date === str_replace('.', '-', dataYmd(today()))) {
             if (File::exists(storage_path($file))) {
@@ -149,13 +150,13 @@ class LogsViewer extends Component
     {
         $this->getDate();
 
-        if (!is_file(storage_path('logs/' . $this->filename))) {
+        if (! is_file(storage_path('logs/'.$this->filename))) {
             return [];
         }
 
         $pattern = "/^\[(?<date>.*)\]\s(?<env>\w+)\.(?<type>\w+):(?<message>.*)/m";
 
-        $content = file_get_contents(storage_path('logs/' . $this->filename));
+        $content = file_get_contents(storage_path('logs/'.$this->filename));
         preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0);
 
         preg_match('/(?<=laravel-)(.*)(?=.log)/', $this->filename, $dtMatch);
@@ -190,7 +191,7 @@ class LogsViewer extends Component
         $logs = (new Collection($logs))->paginate(30);
 
         return view('livewire.dashboard.logs-viewer', [
-            'logs' => $logs])
+            'logs' => $logs, ])
             ->extends('dashboard.app')
             ->section('content');
     }

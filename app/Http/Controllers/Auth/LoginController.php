@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-
     use AuthenticatesUsers;
 
     /**
@@ -35,7 +34,6 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         /**
-
          * @get('/login')
          * @name('login')
          * @middlewares(web, guest)
@@ -45,7 +43,7 @@ class LoginController extends Controller
         $urlBase = url()->to('/');
 
         // Set the previous url that we came from to redirect to after successful login but only if is internal
-        if (($urlPrevious != $urlBase . '/login') && (substr($urlPrevious, 0, strlen($urlBase)) === $urlBase)) {
+        if (($urlPrevious != $urlBase.'/login') && (substr($urlPrevious, 0, strlen($urlBase)) === $urlBase)) {
             session()->put('url.intended', $urlPrevious);
         }
 

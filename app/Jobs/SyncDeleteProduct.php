@@ -14,6 +14,7 @@ class SyncDeleteProduct implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     public $timeout = 600;
     public $counter = 0;
+
     /**
      * Create a new job instance.
      *
@@ -73,5 +74,4 @@ class SyncDeleteProduct implements ShouldQueue
         $product->forceDelete();
 
     }
-
 }

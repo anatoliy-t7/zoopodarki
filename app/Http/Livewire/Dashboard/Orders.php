@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Order;
@@ -72,7 +73,7 @@ class Orders extends Component
 
         $this->closeForm();
         toast()
-            ->success('Заказ "' . $orderNumber . '" удален.')
+            ->success('Заказ "'.$orderNumber.'" удален.')
             ->push();
     }
 

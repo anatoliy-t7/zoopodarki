@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard\Settings;
 
 use Illuminate\Support\Facades\Cache;
@@ -8,7 +9,6 @@ use Usernotnull\Toast\Concerns\WireToast;
 
 class Main extends Component
 {
-
     use WireToast;
 
     public function removeAllCache()
@@ -21,6 +21,7 @@ class Main extends Component
                 ->push();
         } catch (\Throwable $th) {
             Log::error($th);
+
             return toast()
                 ->success('Кеш не отчистин')
                 ->push();

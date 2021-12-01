@@ -17,6 +17,7 @@ class UpdateProduct implements ShouldQueue
     public $timeout = 300;
 
     public $count = 0;
+
     /**
      * Create a new job instance.
      *
@@ -48,7 +49,7 @@ class UpdateProduct implements ShouldQueue
         // $prodAttrsUnique = [];
 
         foreach ($product->attributes as $attr) {
-            if ($attr->name === "") {
+            if ($attr->name === '') {
                  array_push($prodAttrs, $attr->id);
             }
         }
@@ -69,12 +70,12 @@ class UpdateProduct implements ShouldQueue
                  $attributeItem = AttributeItem::where('name', trim($product->country))->first();
             } else {
                 $attributeItem = AttributeItem::create([
-                'name' => trim($product->country),
-                'attribute_id' => $attribute->id,
+                    'name' => trim($product->country),
+                    'attribute_id' => $attribute->id,
                 ]);
             }
 
-            if (!$product->attributes()
+            if (! $product->attributes()
                 ->where('attribute_item.name', trim($product->country))
                 ->first()) {
                 $product->attributes()->attach($attributeItem->id);

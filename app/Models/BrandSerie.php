@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Brand;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\PowerJoins\PowerJoins;
 
@@ -11,7 +10,7 @@ class BrandSerie extends Model
     use PowerJoins;
 
     public $timestamps = false;
-    protected $table   = 'brand_series';
+    protected $table = 'brand_series';
 
     protected $guarded = [];
 

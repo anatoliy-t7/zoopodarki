@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard\Pages;
 
 use App\Models\Page;
@@ -75,7 +76,7 @@ class PageEdit extends Component
     public function save()
     {
         $this->validate([
-            'title' => 'required|unique:pages,title,' . $this->pageId,
+            'title' => 'required|unique:pages,title,'.$this->pageId,
             'slug' => 'required',
         ]);
 
@@ -98,7 +99,7 @@ class PageEdit extends Component
 
             $this->pageId = $page->id;
             toast()
-                ->success($page->title . ' сохранена.')
+                ->success($page->title.' сохранена.')
                 ->push();
 
         });

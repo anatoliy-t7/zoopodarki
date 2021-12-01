@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard\Settings;
 
 use App\Jobs\UpdateProduct;

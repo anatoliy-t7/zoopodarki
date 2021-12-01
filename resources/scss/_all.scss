@@ -219,3 +219,40 @@ article p {
 .animate-spin-once {
 	animation: spin 300ms linear 1;
 }
+
+.blink {
+	background: white;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	transform-origin: 50%;
+	animation: blink 5s infinite;
+	-webkit-transform-origin: 50%;
+	-webkit-animation: blink 5s infinite;
+}
+
+@keyframes blink {
+	0%,
+	100% {
+		transform: scale(1, 0.05);
+	}
+	5%,
+	95% {
+		transform: scale(1, 1);
+	}
+}
+
+@-webkit-keyframes blink {
+	0%,
+	100% {
+		transform: scale(1, 0.05);
+	}
+	5%,
+	95% {
+		transform: scale(1, 1);
+	}
+}
+
+.first-letter::first-letter {
+	text-transform: capitalize;
+}

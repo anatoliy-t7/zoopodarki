@@ -7,7 +7,6 @@ use Illuminate\View\Component;
 
 class MobMenu extends Component
 {
-
     public $catalogs;
 
     public function __construct()

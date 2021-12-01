@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Site;
 
 use App\Models\Product;
@@ -59,7 +60,7 @@ class ReviewWrite extends Component
             foreach ($this->photos as $photo) {
                 $path = $photo->store('photos');
 
-                $img = \Image::make(storage_path('app/public/') . $path);
+                $img = \Image::make(storage_path('app/public/').$path);
 
                 $img->resize(800, 800, function ($constraint) {
                     $constraint->aspectRatio();
@@ -68,7 +69,7 @@ class ReviewWrite extends Component
 
                 $img->save();
 
-                $review->addMedia(storage_path('app/public/') . $path)->toMediaCollection('product-customers-photos');
+                $review->addMedia(storage_path('app/public/').$path)->toMediaCollection('product-customers-photos');
             }
 
             $this->dispatchBrowserEvent('close-writer');

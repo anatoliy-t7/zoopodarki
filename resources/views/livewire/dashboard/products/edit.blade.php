@@ -429,7 +429,7 @@
                       <div x-show="att_field" x-transition.opacity>
                         <div class="relative">
                           <select x-on:input.debounce.750="attributeSelected($event.target.value)"
-                            class="h-12 field">
+                            class="w-full h-12 field">
                             <option default>Свойства</option>
                             <template x-for="(attribute, index) in attributes" :key="index" hidden>
                               <option :key="index" x-text="attribute.name" x-model="attribute.id">
@@ -526,7 +526,7 @@
                     <label class="flex items-center justify-between space-x-2">
                       <span class="text-sm text-gray-700">Единицы измерения</span>
                       <div class="relative">
-                        <select wire:model="unitId" name="unitId" class="w-32">
+                        <select wire:model.defer="unitId" name="unitId" class="w-32">
                           <option default value>Выбрать</option>
                           @foreach ($units as $item)
                             <option {{ $unitId === $item->id ? 'selected' : '' }} value="{{ $item->id }}">
@@ -719,7 +719,6 @@
           this.att_selected = this.attSelected;
           this.att_item_field = true;
 
-
           this.attItemSelected = [];
           this.att_selected.items = [];
 
@@ -759,7 +758,6 @@
               'id': data.id,
               'attribute_id': this.att_selected.id,
             }];
-
           }
 
           this.att_field = false;
@@ -772,7 +770,6 @@
         },
 
         initAttributeItems() {
-
           this.AttributeItemsInputElm = document.querySelector('input[name=attribute_items]');
           this.tagifyAttributeItems = new Tagify(this.AttributeItemsInputElm, {
             whitelist: this.attribute_items,

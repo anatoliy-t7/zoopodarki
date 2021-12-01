@@ -1,15 +1,14 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 //use App\Jobs\ImportProductsFromExcel;
 use App\Jobs\ProcessImportProduct1C;
 use App\Jobs\ProcessOffersProduct1C;
-use App\Models\Brand;
 use App\Traits\ExportImport;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Rap2hpoutre\FastExcel\FastExcel;
 use Usernotnull\Toast\Concerns\WireToast;
 
 class Excel extends Component
@@ -32,8 +31,7 @@ class Excel extends Component
         $this->excel->storeAs('', $fileName, 'excel');
 
         if (Storage::disk('excel')->exists($fileName)) {
-            $filePath = storage_path('app/excel') . '/' . $fileName;
-
+            $filePath = storage_path('app/excel').'/'.$fileName;
 
             if ($this->importFromFile($filePath)) {
                  return toast()
@@ -58,8 +56,8 @@ class Excel extends Component
 
     public function importProducts1Cimport()
     {
-        if (is_file(storage_path('app/sync') . '/import.xml')) {
-            $file = storage_path('app/sync') . '/import.xml';
+        if (is_file(storage_path('app/sync').'/import.xml')) {
+            $file = storage_path('app/sync').'/import.xml';
 
             ProcessImportProduct1C::dispatch($file);
 
@@ -75,8 +73,8 @@ class Excel extends Component
 
     public function importProducts1Coffers()
     {
-        if (is_file(storage_path('app/sync') . '/offers.xml')) {
-            $file = storage_path('app/sync') . '/offers.xml';
+        if (is_file(storage_path('app/sync').'/offers.xml')) {
+            $file = storage_path('app/sync').'/offers.xml';
 
             ProcessOffersProduct1C::dispatch($file);
 

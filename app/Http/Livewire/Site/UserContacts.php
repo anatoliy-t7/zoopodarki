@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Site;
 
 use App\Models\Contact;
@@ -43,7 +44,7 @@ class UserContacts extends Component
             'newContact.email' => 'nullable|email',
         ]);
 
-        if (!Arr::has($this->newContact, 'email')) {
+        if (! Arr::has($this->newContact, 'email')) {
             $this->newContact['email'] = null;
         }
 

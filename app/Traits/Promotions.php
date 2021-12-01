@@ -1,9 +1,8 @@
 <?php
+
 namespace App\Traits;
 
 use App\Models\Product1C;
-use App\Models\Product;
-use Illuminate\Support\Facades\DB;
 
 trait Promotions
 {
@@ -25,7 +24,6 @@ trait Promotions
     public function promotionUcenka($product1cArray, $promotion) // 1 "Уценка"
     {
         $product1c = $this->getModel($product1cArray['id']);
-
 
         $originalPrice = $this->discountRevertforUcenka($product1c->price);
 
@@ -59,9 +57,9 @@ trait Promotions
             $originalPrice = $this->discountRevert($product1c->price, $promotion['percent']);
 
             $product1c->update([
-            'promotion_type' => intval($promotion['type']),
-            'promotion_percent' => $promotion['percent'],
-            'promotion_price' => $originalPrice,
+                'promotion_type' => intval($promotion['type']),
+                'promotion_percent' => $promotion['percent'],
+                'promotion_price' => $originalPrice,
             ]);
 
             return true;
@@ -100,14 +98,14 @@ trait Promotions
             ]);
     }
 
-    public function discountRevert($discount, $procent) : int
+    public function discountRevert($discount, $procent): int
     {
         $price = $discount + floor($discount * $procent / 100);
 
         return floor($price);
     }
 
-    public function discountRevertforUcenka($promotionPrice) : int
+    public function discountRevertforUcenka($promotionPrice): int
     {
         // Стоимость товара/1,22+8% (должно работать в обратную сторону)
         $price = ($promotionPrice * 1.22) / 1.08;

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Traits\Revieweable;
@@ -115,8 +116,6 @@ class Product extends Model implements HasMedia
     {
         return $query->where('status', 'active');
     }
-
-
 
     public function scopeHasStock($query)
     {

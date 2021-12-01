@@ -88,8 +88,8 @@ class ReviewsCom extends Component
         return view(
             'livewire.site.reviews-com',
             [
-            'reviews' => $reviews,
-            'gallery' => $gallery,
+                'reviews' => $reviews,
+                'gallery' => $gallery,
             ]
         );
     }

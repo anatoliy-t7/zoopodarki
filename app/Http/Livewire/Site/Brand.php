@@ -9,7 +9,6 @@ use Livewire\WithPagination;
 
 class Brand extends Component
 {
-
     use WithPagination;
 
     public $countries;
@@ -20,11 +19,11 @@ class Brand extends Component
     public $attributesRanges = [];
     public $attFilter = []; // Собирает выбранные свойства
     private $attsFilters = [];
-    public $maxPrice         = 10000;
-    public $minPrice         = 0;
+    public $maxPrice = 10000;
+    public $minPrice = 0;
     public $sortSelectedName = 'Название: от А до Я';
     public $sortSelectedType = 'name';
-    public $sortBy           = 'asc';
+    public $sortBy = 'asc';
 
     protected $queryString = ['attFilter'];
 
@@ -92,13 +91,13 @@ class Brand extends Component
 
         $this->countries = cache()->remember('categories-menu', 60 * 60 * 24, function () {
             return Product::where('brand_id', $this->brand->id)
-            ->withWhereHas('attributes', fn ($q) => $q->where('attribute_item.attribute_id', 64))
-            ->get()
-            ->pluck('attributes')
-            ->flatten()
-            ->pluck('name')
-            ->unique()
-            ->all();
+                ->withWhereHas('attributes', fn ($q) => $q->where('attribute_item.attribute_id', 64))
+                ->get()
+                ->pluck('attributes')
+                ->flatten()
+                ->pluck('name')
+                ->unique()
+                ->all();
         });
     }
 
@@ -121,14 +120,14 @@ class Brand extends Component
     {
         $this->sortSelectedType = $type;
         $this->sortSelectedName = $name;
-        $this->sortBy           = $sort;
+        $this->sortBy = $sort;
     }
 
     public function resetFilters()
     {
         $this->attFilter = [];
-        $this->maxPrice  = 10000;
-        $this->minPrice  = 0;
+        $this->maxPrice = 10000;
+        $this->minPrice = 0;
         $this->dispatchBrowserEvent('reset-range');
     }
 
@@ -162,7 +161,7 @@ class Brand extends Component
         $this->emit('lozad', '');
 
         return view('livewire.site.brand', [
-        'products' => $products,
+            'products' => $products,
         ]);
     }
 }

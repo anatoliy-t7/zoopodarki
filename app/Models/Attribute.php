@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\AttributeItem;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\PowerJoins\PowerJoins;
 
@@ -17,5 +16,4 @@ class Attribute extends Model
     {
         return $this->hasMany(AttributeItem::class)->orderBy('name', 'ASC');
     }
-
 }

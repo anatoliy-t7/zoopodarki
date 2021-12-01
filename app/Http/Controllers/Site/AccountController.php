@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,28 +12,26 @@ class AccountController extends Controller
     public function profile()
     {
         /**
-
          * @get('/account/profile')
          * @name('account.profile')
          * @middlewares(web, auth)
          */
         $userId = auth()->user()->id;
         $user = User::where('id', $userId)->firstOrFail();
+
         return view('site.account.profile', compact('user'));
     }
 
     public function profileUpdate(Request $request, $id)
     {
         /**
-
          * @patch('/account/profile/{id}')
          * @name('account.user.update')
          * @middlewares(web, auth)
          */
-
         $request->validate([
             'name' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'unique:users,email,' . auth()->user()->id],
+            'email' => ['required', 'unique:users,email,'.auth()->user()->id],
             'phone' => ['nullable', 'digits:10', 'unique:users,phone'],
             'address' => ['nullable', 'string', 'max:255'],
         ]);
@@ -56,20 +53,6 @@ class AccountController extends Controller
 
         return redirect()->route('account.profile', compact('user'))
             ->with('message', 'Данные обновлены.');
-    }
-
-    public function orders()
-    {
-        /**
-
-         * @get('/account/orders')
-         * @name('account.orders')
-         * @middlewares(web, auth)
-         */
-        $id = auth()->user()->id;
-        $orders = Order::where('user_id', $id)->orderBy('created_at', 'ASC')
-            ->paginate(10);
-        return view('site.account.orders', compact('orders'));
     }
 
     public function favorite()

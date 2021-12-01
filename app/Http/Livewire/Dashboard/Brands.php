@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Brand;
@@ -89,7 +90,7 @@ class Brands extends Component
         $this->itemsName = $itemsName;
 
         $this->validate([
-            'name' => 'required|unique:brands,name,' . $this->brandId,
+            'name' => 'required|unique:brands,name,'.$this->brandId,
         ]);
 
         if (Str::of($this->description)->exactly('')) {
@@ -109,7 +110,7 @@ class Brands extends Component
             );
 
             if ($this->logo) {
-                Storage::delete('brands/' . $brand->logo);
+                Storage::delete('brands/'.$brand->logo);
 
                 $this->storeImage($brand->slug);
 
@@ -142,7 +143,7 @@ class Brands extends Component
             $this->dispatchBrowserEvent('get-items', $this->itemsName);
 
             toast()
-                ->success($brand->name . ' сохранен.')
+                ->success($brand->name.' сохранен.')
                 ->push();
 
             $this->closeForm();
@@ -151,10 +152,10 @@ class Brands extends Component
 
     public function storeImage($slug)
     {
-        $this->logoName = $slug . '.' . $this->logo->getClientOriginalExtension();
+        $this->logoName = $slug.'.'.$this->logo->getClientOriginalExtension();
 
         $path = $this->logo->storeAs('public/brands', $this->logoName);
-        $img = \Image::make(storage_path('app/') . $path);
+        $img = \Image::make(storage_path('app/').$path);
         $img->resize(200, 200, function ($constraint) {
             $constraint->aspectRatio();
         });
@@ -182,13 +183,13 @@ class Brands extends Component
                 ->push();
         } else {
             $brand_name = $brand->name;
-            Storage::delete('brands/' . $brand->logo);
+            Storage::delete('brands/'.$brand->logo);
             $brand->delete();
 
             $this->resetFields();
 
             toast()
-                ->success('Бренд "' . $brand_name . '" удален')
+                ->success('Бренд "'.$brand_name.'" удален')
                 ->push();
         }
     }

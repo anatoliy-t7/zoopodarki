@@ -6,8 +6,8 @@ use Illuminate\View\Component;
 
 class Tooltip extends Component
 {
-
     public $width = 'w-48';
+
     /**
      * Create a new component instance.
      *

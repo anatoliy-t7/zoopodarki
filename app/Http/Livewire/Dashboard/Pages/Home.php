@@ -59,20 +59,20 @@ class Home extends Component
             ['options' => $this->homePageBrands]
         );
 
-        $homePageBlockOne = array(
-            "title" => $this->homePageBlockOneTitle,
-            "products" => $this->homePageBlockOneProducts,
-        );
+        $homePageBlockOne = [
+            'title' => $this->homePageBlockOneTitle,
+            'products' => $this->homePageBlockOneProducts,
+        ];
 
         Setting::updateOrCreate(
             ['name' => 'homePageBlockOne'],
             ['options' => $homePageBlockOne]
         );
 
-        $homePageBlockTwo = array(
-            "title" => $this->homePageBlockTwoTitle,
-            "products" => $this->homePageBlockTwoProducts,
-        );
+        $homePageBlockTwo = [
+            'title' => $this->homePageBlockTwoTitle,
+            'products' => $this->homePageBlockTwoProducts,
+        ];
 
         Setting::updateOrCreate(
             ['name' => 'homePageBlockTwo'],

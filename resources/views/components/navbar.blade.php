@@ -29,9 +29,7 @@
             <div class="flex items-center justify-between">
               <x-logo />
             </div>
-
             <x-mainmenu />
-
           </div>
 
           <div class="w-5/12">

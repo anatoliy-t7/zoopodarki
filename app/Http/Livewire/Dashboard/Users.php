@@ -83,12 +83,12 @@ class Users extends Component
         ]);
 
         $this->validate([
-            'email' => 'required|between:5,64|email|unique:users,email,' . $this->userId,
+            'email' => 'required|between:5,64|email|unique:users,email,'.$this->userId,
         ]);
 
         if ($this->phone) {
             $this->validate([
-                'phone' => 'required|digits:10|unique:users,phone,' . $this->userId,
+                'phone' => 'required|digits:10|unique:users,phone,'.$this->userId,
             ]);
         }
 
@@ -116,7 +116,7 @@ class Users extends Component
             $user->syncRoles($this->userRoles);
 
             toast()
-                ->success($this->name . ' сохранен')
+                ->success($this->name.' сохранен')
                 ->push();
 
             $this->closeForm();
@@ -138,7 +138,7 @@ class Users extends Component
             $this->reset();
 
             toast()
-                ->success('Пользователь "' . $user_name . '" удален.')
+                ->success('Пользователь "'.$user_name.'" удален.')
                 ->push();
         }
     }

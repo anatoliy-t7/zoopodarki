@@ -45,6 +45,7 @@ class RunMeilisearch extends Command
         if ($process->run()) {
             return true;
         }
+
         return false;
         // shell_exec('meilisearch --db-path' . base_path('data.ms'));
     }

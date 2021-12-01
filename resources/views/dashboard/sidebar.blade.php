@@ -3,9 +3,8 @@
 
   <div class="flex flex-col items-stretch justify-between h-full">
     <div class="flex flex-col flex-shrink-0 w-full">
-      <div class="flex items-center justify-center px-8 py-3 text-center">
-        <a href="/"
-          class="text-lg leading-normal text-orange-400 hover:text-orange-500 focus:outline-none focus:ring">{{ config('app.name') }}</a>
+      <div class="flex items-center justify-center px-8 py-3 text-center dark">
+        <x-logo class="w-16 h-auto" />
       </div>
 
       <nav>

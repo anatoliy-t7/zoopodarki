@@ -2,7 +2,6 @@
 
 namespace App\View\Components;
 
-use App\Models\Brand;
 use App\Models\Catalog;
 use Illuminate\View\Component;
 

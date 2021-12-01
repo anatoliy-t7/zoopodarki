@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Jobs;
 
 use App\Models\Product1C;
@@ -8,7 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Prewk\XmlStringStreamer;
 use Prewk\XmlStringStreamer\Parser;
 use Prewk\XmlStringStreamer\Stream;
@@ -65,7 +65,7 @@ class ProcessOffersProduct1C implements ShouldQueue
                 'stock' => $offer['Количество'],
             ]);
 
-            if (Arr::exists($offer, 'Скидка') and !empty($offer['Скидка'])) {
+            if (Arr::exists($offer, 'Скидка') and ! empty($offer['Скидка'])) {
                 $product->discount = $offer['Скидка'];
                 $product->save();
             }

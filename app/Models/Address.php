@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-
     public $timestamps = false;
 
     protected $guarded = [];
@@ -15,5 +14,4 @@ class Address extends Model
     {
         return $this->belongsTo('App\Models\User', 'user_id')->withDefault(['name' => 'Anonymous']);
     }
-
 }

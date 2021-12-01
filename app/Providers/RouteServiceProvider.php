@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-
     public const HOME = '/';
 
     /**
@@ -34,7 +33,7 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-        /**
+    /**
      * Configure the rate limiters for the application.
      *
      * @return void

@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\BrandSerie;
-use App\Models\Catalog;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
 {
-
     use Sluggable;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 

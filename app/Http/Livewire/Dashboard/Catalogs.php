@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Catalog;
@@ -126,7 +127,7 @@ class Catalogs extends Component
             });
 
             toast()
-                ->success('Категория "' . $this->editCategory['name'] . '" сохранена')
+                ->success('Категория "'.$this->editCategory['name'].'" сохранена')
                 ->push();
         }
 
@@ -140,8 +141,8 @@ class Catalogs extends Component
     public function save()
     {
         $this->validate([
-            'editCatalog.name' => 'required|unique:catalogs,name,' . $this->editCatalog['id'],
-            'editCatalog.slug' => 'required|unique:catalogs,slug,' . $this->editCatalog['id'],
+            'editCatalog.name' => 'required|unique:catalogs,name,'.$this->editCatalog['id'],
+            'editCatalog.slug' => 'required|unique:catalogs,slug,'.$this->editCatalog['id'],
         ]);
 
         DB::transaction(function () {
@@ -169,9 +170,8 @@ class Catalogs extends Component
                 }
             }
 
-
             if ($this->brandsForCatalog) {
-                $brands = explode(",", $this->brandsForCatalog);
+                $brands = explode(',', $this->brandsForCatalog);
 
                 array_walk($brands, function (&$v) {
                     $v = intval($v);
@@ -190,7 +190,7 @@ class Catalogs extends Component
             Cache::forget('categories-menu');
 
             toast()
-                ->success('Каталог "' . $editCatalog->name . '" сохранен.')
+                ->success('Каталог "'.$editCatalog->name.'" сохранен.')
                 ->push();
 
             $this->closeForm();
@@ -203,7 +203,7 @@ class Catalogs extends Component
         if ($category = Category::find($id)) {
             if ($category->products->isNotEmpty()) {
                 toast()
-                    ->warning('У категории "' . $category->name . '" есть товары')
+                    ->warning('У категории "'.$category->name.'" есть товары')
                     ->push();
             } else {
                 $category->delete();
@@ -232,7 +232,7 @@ class Catalogs extends Component
                 foreach ($catalog->categories as $item) {
                     if ($item->products->isNotEmpty()) {
                         return toast()
-                            ->warning('У категории "' . $item->name . '" есть товары')
+                            ->warning('У категории "'.$item->name.'" есть товары')
                             ->push();
                     } else {
                         $this->removeItem($item);
@@ -244,7 +244,7 @@ class Catalogs extends Component
                     $this->resetFields();
 
                     toast()
-                        ->success('Каталог "' . $catalog_name . '" удален.')
+                        ->success('Каталог "'.$catalog_name.'" удален.')
                         ->push();
                 }
             } else {
@@ -254,7 +254,7 @@ class Catalogs extends Component
                 $this->resetFields();
 
                 toast()
-                    ->success('Каталог "' . $catalog_name . '" удален.')
+                    ->success('Каталог "'.$catalog_name.'" удален.')
                     ->push();
             }
         });

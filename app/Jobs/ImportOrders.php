@@ -1,7 +1,7 @@
 <?php
+
 namespace App\Jobs;
 
-use App\Jobs\GetUserDiscountFrom1C;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -34,7 +34,7 @@ class ImportOrders implements ShouldQueue
     public function handle()
     {
         $directory = storage_path('sync');
-        $functionFile = $directory . '/' . $this->file;
+        $functionFile = $directory.'/'.$this->file;
 
         $stream = new Stream\File($functionFile, 1024);
         $parser = new Parser\UniqueNode(['uniqueNode' => 'Документ']);
@@ -86,7 +86,6 @@ class ImportOrders implements ShouldQueue
                             ->delete();
                 }
             }
-
 
             foreach ($order1c['ЗначенияРеквизитов']['ЗначениеРеквизита'] as $item) {
                 if ($item['Наименование'] === 'Проведен' and $item['Значение'] === 'true') {

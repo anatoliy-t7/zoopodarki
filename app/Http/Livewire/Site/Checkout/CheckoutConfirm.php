@@ -1,10 +1,8 @@
 <?php
+
 namespace App\Http\Livewire\Site\Checkout;
 
 use App\Models\Order;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
 use YooKassa\Client;
@@ -19,23 +17,14 @@ class CheckoutConfirm extends Component
     public function mount()
     {
 
-        if (!auth()->user()) {
+        if (! auth()->user()) {
             return redirect()->route('site.home');
         }
 
         if (request()->session()->has('order_id')) {
             $orderId = session('order_id');
 
-            $this->order = Order::where('id', $orderId)
-                ->with([
-                    'items',
-                    'items.product1c:id,product_id',
-                    'items.product1c.product:id,slug',
-                    'items.product1c.product.media',
-                    'items.product1c.product.categories:id,slug,catalog_id',
-                    'items.product1c.product.categories.catalog:id,slug',
-                    ])
-                ->first();
+            $this->order = Order::where('id', $orderId)->getOrderData();
 
             unset($orderId);
 
@@ -67,18 +56,21 @@ class CheckoutConfirm extends Component
 
         $this->stopDiscountFirstOrder();
 
+        if (request()->session()->has('no_stock_items')) {
+            request()->session()->forget(['no_stock_items']);
+        }
+
         \Cart::session(session('cart_id'))->clear();
         app('shelter')->session(session('shelter_cart'))->clear();
 
         if ($order->payment_method == 0) {
                 $this->payCreate($order);
         } else {
-            redirect()->route('site.order.confirmed', [
-                'order_id' => $order->id
+            redirect()->route('account.order', [
+                'order_id' => $order->id,
             ]);
         }
     }
-
 
     public function payCreate($order)
     {
@@ -90,18 +82,18 @@ class CheckoutConfirm extends Component
 
         $payment = $client->createPayment([
             'amount' => [
-            'value' => $order->amount,
-            'currency' => 'RUB',
+                'value' => $order->amount,
+                'currency' => 'RUB',
             ],
-            'description' => 'Заказ ' . $order->order_number,
+            'description' => 'Заказ '.$order->order_number,
             'confirmation' => [
-            'type' => 'redirect',
-            'locale' => 'ru_RU',
-            'return_url' => route('site.order.status'),
+                'type' => 'redirect',
+                'locale' => 'ru_RU',
+                'return_url' => route('checkout.callback'),
             ],
             'capture' => true,
             'metadata' => [
-            'order_id' => $order->id,
+                'order_id' => $order->id,
             ],
         ], uniqid('', true));
 

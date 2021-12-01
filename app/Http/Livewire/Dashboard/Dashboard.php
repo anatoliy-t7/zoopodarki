@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Product;
@@ -23,7 +24,6 @@ class Dashboard extends Component
     {
         $this->pendingReviews = Review::where('status', 'pending')->get();
         $this->pendingWaitlist = Waitlist::where('status', 'pending')->get();
-
 
         // TODO удалить в production
         $this->productsHaveDescription = Product::whereNotNull('description')->count();

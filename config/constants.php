@@ -23,10 +23,11 @@ return [
 
     'payment_status' => [
         1 => 'pending',
-        2 => 'waiting_for_capture',
-        3 => 'succeeded',
-        4 => 'canceled',
-        5 => 'refund_succeeded',
+        2 => 'cash',
+        3 => 'waiting_for_capture',
+        4 => 'succeeded',
+        5 => 'canceled',
+        6 => 'refund_succeeded',
     ],
 
     'review_status' => [

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Attribute;
@@ -35,10 +36,10 @@ class Attributes extends Component
     public function updatedFildName($value)
     {
         redirect()->route('dashboard.products.index', [
-                'filteredByAttribute' => true,
-                'search' => $this->fildName,
-                'attrId' => $this->attribute_id
-                ]);
+            'filteredByAttribute' => true,
+            'search' => $this->fildName,
+            'attrId' => $this->attribute_id,
+        ]);
     }
 
     public function updatingSearch()
@@ -85,7 +86,7 @@ class Attributes extends Component
     {
 
         $this->validate([
-            'name' => 'required|unique:attributes,name,' . $this->attribute_id,
+            'name' => 'required|unique:attributes,name,'.$this->attribute_id,
         ]);
 
         DB::transaction(
@@ -93,19 +94,19 @@ class Attributes extends Component
                 $attribute = Attribute::updateOrCreate(
                     ['id' => $this->attribute_id],
                     [
-                    'name' => trim($this->name),
-                    'range' => $this->range,
+                        'name' => trim($this->name),
+                        'range' => $this->range,
                     ]
                 );
 
                 foreach ($items as $item) {
-                    if (Arr::has($item, 'id') && $item['id'] !== "" && $item['name'] !== "") {
+                    if (Arr::has($item, 'id') && $item['id'] !== '' && $item['name'] !== '') {
                         $attribute_item = AttributeItem::find($item['id']);
                         $attribute_item->update([
                             'name' => trim($item['name']),
                         ]);
                     }
-                    if ($item['id'] === "" && $item['name'] !== "") {
+                    if ($item['id'] === '' && $item['name'] !== '') {
                         AttributeItem::create([
                             'name' => trim($item['name']),
                             'attribute_id' => $attribute->id,
@@ -116,7 +117,7 @@ class Attributes extends Component
                 $this->items = AttributeItem::where('attribute_id', $attribute->id)->get(['id', 'name']);
                 $this->dispatchBrowserEvent('get-items', $this->items);
                 toast()
-                ->success('Свойство "' . $attribute->name . '" обновлено.')
+                ->success('Свойство "'.$attribute->name.'" обновлено.')
                 ->push();
                 $this->closeForm();
             }
@@ -145,7 +146,7 @@ class Attributes extends Component
             $this->openForm($this->attribute_id);
 
             return toast()
-            ->success('Вид свойства ' . $removeItemName . ' удален.')
+            ->success('Вид свойства '.$removeItemName.' удален.')
             ->push();
         }
     }
@@ -159,7 +160,7 @@ class Attributes extends Component
                 foreach ($attribute->items as $item) {
                     if ($item->products->isNotEmpty()) {
                         return toast()
-                        ->warning('У свойства "' . $attribute->name . '" есть товары ({$item->name})')
+                        ->warning('У свойства "'.$attribute->name.'" есть товары ({$item->name})')
                         ->push();
                     } else {
                         $this->removeItem($item);
@@ -172,7 +173,7 @@ class Attributes extends Component
                 $this->resetFields();
 
                 toast()
-                ->success('Свойство "' . $attribute_name . '" удалено')
+                ->success('Свойство "'.$attribute_name.'" удалено')
                 ->push();
             }
         });
@@ -202,7 +203,7 @@ class Attributes extends Component
         ->paginate($this->itemsPerPage);
 
         return view('livewire.dashboard.attributes', [
-        'attributes' => $attributes,
+            'attributes' => $attributes,
         ])
         ->extends('dashboard.app')
         ->section('content');

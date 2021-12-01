@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Site\Search;
 
 use App\Traits\Searcheable;

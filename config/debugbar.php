@@ -19,7 +19,8 @@ return [
         'telescope*',
         'horizon*',
         'exchange*',
-        'dashboard.excel*',
+        'dashboard/excel*',
+        'payment/callback',
     ],
 
     /*

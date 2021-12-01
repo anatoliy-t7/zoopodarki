@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard\Products;
 
 use App\Models\Attribute;
@@ -6,8 +7,8 @@ use App\Models\Brand;
 use App\Models\BrandSerie;
 use App\Models\Catalog;
 use App\Models\Category;
-use App\Models\Product1C;
 use App\Models\Product;
+use App\Models\Product1C;
 use App\Models\ProductUnit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -111,8 +112,7 @@ class Edit extends Component
             $this->status = $functionProduct->status;
             $this->unitId = $functionProduct->unit_id;
 
-
-            if (!$functionProduct->brand == null) {
+            if (! $functionProduct->brand == null) {
                 $this->productBrand[] = $functionProduct->brand->toArray();
 
                 if ($functionProduct->serie) {
@@ -260,11 +260,11 @@ class Edit extends Component
 
         $this->setName($this->variation[0]['name']);
 
-        if (!empty($this->variation[0]['description'])) {
+        if (! empty($this->variation[0]['description'])) {
             $this->setDescription($this->variation[0]['description']);
         }
 
-        if (!empty($this->variation[0]['consist'])) {
+        if (! empty($this->variation[0]['consist'])) {
             $this->setConsist($this->variation[0]['consist']);
         }
     }
@@ -308,7 +308,7 @@ class Edit extends Component
         $productBrand,
         $productSerie
     ) {
-        if (!$this->unitId) {
+        if (! $this->unitId) {
             $this->unitId = null;
         }
 
@@ -364,7 +364,7 @@ class Edit extends Component
                     ->save();
             }
 
-            if (!$this->productSerie == null) {
+            if (! $this->productSerie == null) {
                 $functionProduct
                     ->serie()
                     ->associate($this->productSerie)
@@ -375,16 +375,12 @@ class Edit extends Component
                 ]);
             }
 
-
-
             if (count($this->readyCategories) !== 0) {
                 $functionProduct->categories()->detach();
                 foreach ($this->readyCategories as $category) {
                     $functionProduct->categories()->attach($category['id']);
                 }
             }
-
-
 
             if (count($this->att_selected) !== 0) {
                 $functionProduct->attributes()->detach();
@@ -409,7 +405,7 @@ class Edit extends Component
             if ($this->photos) {
                 foreach ($this->photos as $photo) {
                     $path = $photo->store('photos');
-                    $img = \Image::make(storage_path('app/') . $path);
+                    $img = \Image::make(storage_path('app/').$path);
                     $img->resize(800, 800, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
@@ -418,7 +414,7 @@ class Edit extends Component
                     $img->save();
 
                     $this->product
-                        ->addMedia(storage_path('app/') . $path)
+                        ->addMedia(storage_path('app/').$path)
                         ->toMediaCollection('product-images');
                 }
 
@@ -432,7 +428,7 @@ class Edit extends Component
             $this->dispatchBrowserEvent('update-query-id', $this->productId);
 
             toast()
-                ->success('Товар ' . $functionProduct->name . ' сохранен')
+                ->success('Товар '.$functionProduct->name.' сохранен')
                 ->push();
         });
     }
@@ -505,7 +501,7 @@ class Edit extends Component
     public function getProducts1C()
     {
         return Product1C::select('name', 'id', 'product_id', 'vendorcode')
-            ->where('name', 'like', '%' . $this->search . '%')
+            ->where('name', 'like', '%'.$this->search.'%')
             ->when($this->emptyStock, function ($query) {
                 $query->where('stock', '>', 0);
             })

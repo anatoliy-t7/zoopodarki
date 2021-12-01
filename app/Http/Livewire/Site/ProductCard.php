@@ -1,10 +1,10 @@
 <?php
+
 namespace App\Http\Livewire\Site;
 
 use App\Mail\OrderOneClick;
-use App\Models\Category;
-use App\Models\Product1C;
 use App\Models\Product;
+use App\Models\Product1C;
 use App\Models\Waitlist;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
@@ -49,7 +49,7 @@ class ProductCard extends Component
         OpenGraph::addProperty('type', 'product');
 
         if ($this->product->media->count() > 0) {
-            OpenGraph::addImage(config('app.url') . $this->product->getMedia('product-images')[0]->getUrl('medium'));
+            OpenGraph::addImage(config('app.url').$this->product->getMedia('product-images')[0]->getUrl('medium'));
         }
     }
 
@@ -61,7 +61,6 @@ class ProductCard extends Component
             'email' => 'required|email',
         ]);
 
-
         if (Waitlist::where('email', $this->email)
             ->where('product1c_id', $itemId)
             ->first()) {
@@ -70,19 +69,19 @@ class ProductCard extends Component
                 ->push();
         }
 
-        if (!auth()->user()) {
+        if (! auth()->user()) {
             Waitlist::create([
-            'email' => $this->email,
-            'status' => 'pending',
-            'user_id' => null,
-            'product1c_id' => $itemId,
+                'email' => $this->email,
+                'status' => 'pending',
+                'user_id' => null,
+                'product1c_id' => $itemId,
             ]);
         } else {
             Waitlist::create([
-            'email' => $this->email,
-            'status' => 'pending',
-            'user_id' => auth()->user()->id,
-            'product1c_id' => $itemId,
+                'email' => $this->email,
+                'status' => 'pending',
+                'user_id' => auth()->user()->id,
+                'product1c_id' => $itemId,
             ]);
         }
 
@@ -94,9 +93,9 @@ class ProductCard extends Component
     public function buyOneClick($orderOneClick, $productId, $count)
     {
         $url = config('constants.website_url')
-        . '/pet/' . $this->catalog->slug . '/'
-        . $this->category->slug . '/'
-        . $this->product->slug;
+        .'/pet/'.$this->catalog->slug.'/'
+        .$this->category->slug.'/'
+        .$this->product->slug;
 
         $product1c = Product1C::where('id', $productId)->firstOrFail();
 

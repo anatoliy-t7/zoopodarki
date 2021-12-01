@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Auth;
 
 use App\Jobs\GetUserDiscountFrom1C;
@@ -28,7 +29,6 @@ class In extends Component
     public $subscribed = false;
     public $currentUr = '';
 
-
     protected $listeners = ['createOtp', 'checkUser'];
 
     public function mount()
@@ -39,7 +39,7 @@ class In extends Component
     public function createOtp($phone = null)
     {
         if ($phone !== null) {
-            $this->phone = (int)$phone;
+            $this->phone = (int) $phone;
 
              $this->validate([
                  'phone' => 'required|digits:10',
@@ -136,7 +136,7 @@ class In extends Component
     {
         try {
             (new AnonymousNotifiable())
-                ->route('smscru', '+7' . $this->phone)
+                ->route('smscru', '+7'.$this->phone)
                 ->notify(new SendOTP($this->token));
 
             toast()
@@ -159,7 +159,7 @@ class In extends Component
             'password' => 'required',
         ]);
 
-        if (!User::where('email', $this->email)->first()) {
+        if (! User::where('email', $this->email)->first()) {
             return toast()
                 ->warning('Этот email не зарегистрирован')
                 ->push();
