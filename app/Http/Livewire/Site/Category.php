@@ -107,6 +107,7 @@ class Category extends Component
             ' рублей) ❗ фото, составы, описание, применение, дозировка, акции и скидки 🧡 душевное обслуживание, гарантии, самовывоз из Невского района и с пр. Просвещения';
         } else {
             $this->metaTitle = $this->category->meta_title;
+             // TODO добавить в title . ' | страница ' . $this->products->links()->paginator->currentPage() . ' из ' . $this->products->links()->paginator->lastPage();
             $this->name = $this->category->name;
             $this->metaDescription = $this->category->meta_description;
         }

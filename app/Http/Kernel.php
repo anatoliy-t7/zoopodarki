@@ -84,10 +84,4 @@ class Kernel extends HttpKernel
         $schedule->command('sitemap:generate')->timezone('Europe/Moscow')->weeklyAt('04:00');
     }
 
-    protected function commands()
-    {
-        $this->load(__DIR__.'/Commands');
-
-        require base_path('routes/console.php');
-    }
 }

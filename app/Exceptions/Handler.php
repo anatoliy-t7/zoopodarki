@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Kernel;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -52,8 +53,24 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
-    {
+
+    public function render ($request, Throwable $exception)
+{
+    if ($this->isHttpException($exception)) {
+        switch ($exception->getStatusCode()) {
+            case '404':
+                \Route::any(request()->path(), function () use ($exception, $request) {
+                    return parent::render($request, $exception);
+                })->middleware('web');
+                return app()->make(Kernel::class)->handle($request);
+                break;
+            default:
+                return $this->renderHttpException($exception);
+                break;
+        }
+    } else {
+
         return parent::render($request, $exception);
     }
+}
 }
