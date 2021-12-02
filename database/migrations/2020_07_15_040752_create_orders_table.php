@@ -37,7 +37,7 @@ class CreateOrdersTable extends Migration
             $table->integer('delivery_cost')->default(0);
 
             $table->json('contact');
-            $table->string('address')->nullable();
+            $table->text('address')->nullable();
             $table->text('order_comment')->nullable();
 
             $table->unsignedBigInteger('user_id');

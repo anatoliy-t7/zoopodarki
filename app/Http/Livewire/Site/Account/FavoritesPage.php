@@ -6,7 +6,7 @@ use App\Models\Favorite;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class FavoriteCom extends Component
+class FavoritesPage extends Component
 {
     use WithPagination;
 
@@ -19,7 +19,8 @@ class FavoriteCom extends Component
 
     public function render()
     {
-        return view('livewire.site.account.favorite-com', ['favorites' => Favorite::where('user_id', auth()->user()->id)
+        return view('livewire.site.account.favorites-page',
+        ['favorites' => Favorite::where('user_id', auth()->user()->id)
                 ->with(['product' => function ($query) {
                     $query->with('variations')->with('variations.media');
                 }])
@@ -28,6 +29,8 @@ class FavoriteCom extends Component
                 ->with('product.categories.catalog')
                 ->latest()
                 ->paginate(12), ]
-        );
+        )
+            ->extends('layouts.app')
+            ->section('content');
     }
 }

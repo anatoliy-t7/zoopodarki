@@ -28,7 +28,7 @@
               class="flex justify-end text-left">
               <a itemprop="url" x-on:mouseover="tab = {{ $menuCatalog->id }}"
                 :class="{ 'bg-white text-orange-500 border-orange-400': tab === {{ $menuCatalog->id }} }"
-                href="{{ route('site.catalog', ['slug' => $menuCatalog->slug]) }}"
+                href="{{ route('site.catalog', ['catalogslug' => $menuCatalog->slug]) }}"
                 class="relative flex items-center h-full py-4 pl-6 font-bold text-gray-900 border-r-4 border-transparent rounded-l-lg cursor-pointer hover:border-orange-400 w-80"
                 style="word-spacing: 4px;">
                 {{ $menuCatalog->name }}
@@ -63,7 +63,7 @@
             <div class="flex flex-wrap w-full max-w-screen-lg">
               @foreach ($catalog->categories as $key => $category)
                 <div class="py-2 pl-12 w-80">
-                  <a href="{{ route('site.category', ['catalog' => $catalog->slug, 'slug' => $category->slug]) }}"
+                  <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}"
                     class="block p-2 text-lg font-bold text-gray-900 hover:text-orange-500">
                     {{ $category->name }}
                   </a>
@@ -71,7 +71,7 @@
                     <div class="px-2 space-y-2">
                       @foreach ($category->tags as $key => $tag)
                         <a href="
-                      {{ route('site.tag', ['catalog' => $catalog->slug, 'slug' => $category->slug, 'tagslug' => $tag->slug]) }}"
+                      {{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug, 'tagslug' => $tag->slug]) }}"
                           class="block text-base text-gray-800 hover:text-orange-500">
                           {{ $tag->name }}
                         </a>

@@ -33,7 +33,7 @@ class SmscRuApi
         $this->login = Arr::get($config, 'login');
         $this->secret = Arr::get($config, 'secret');
         $this->sender = Arr::get($config, 'sender');
-        $this->endpoint = Arr::get($config, 'host', 'https://smsc.ru/').'sys/send.php';
+        $this->endpoint = Arr::get($config, 'host', 'https://smsc.ru/') . 'sys/send.php';
 
         $this->extra = Arr::get($config, 'extra', []);
 
@@ -47,10 +47,10 @@ class SmscRuApi
     {
         $base = [
             'charset' => 'utf-8',
-            'login'   => $this->login,
-            'psw'     => $this->secret,
-            'sender'  => $this->sender,
-            'fmt'     => self::FORMAT_JSON,
+            'login' => $this->login,
+            'psw' => $this->secret,
+            'sender' => $this->sender,
+            'fmt' => self::FORMAT_JSON,
         ];
 
         $params = \array_merge($base, \array_filter($params), $this->extra);

@@ -18,8 +18,7 @@ class OrderPage extends Component
 
     public function getOrder()
     {
-
-        $order = Order::where('id', $this->orderId)->getOrderData();
+        $order = Order::where('id', $this->orderId)->getOrderData()->first();
 
         if ($order === null) {
             toast()
@@ -30,14 +29,13 @@ class OrderPage extends Component
         }
 
         return $order;
-
     }
 
     public function render()
     {
         $order = $this->getOrder();
 
-        return view('livewire.site.account.order', [
+        return view('livewire.site.account.order-page', [
             'order' => $order,
         ])
             ->extends('layouts.app')

@@ -2,7 +2,7 @@
 
   <div class="flex justify-start px-4 py-1 text-xs font-semibold text-gray-400 xl:px-0">
     <div class="flex items-center justify-between">
-      <a class="py-1 pr-1 hover:underline" href="#">
+      <a class="py-1 pr-1 hover:underline" href="{{ route('account.account') }}">
         Акаунт
       </a>
       <x-tabler-chevron-right class="w-5 h-5" />
@@ -104,7 +104,7 @@
                     alt="{{ $item->name }}">
 
                   <a class="hover:underline" target="_blank"
-                    href="{{ route('site.product', [$item->product1c->product->categories[0]->catalog->slug, $item->product1c->product->categories[0]->slug, $item->product1c->product->slug]) }}">
+                    href="{{ route('site.product', ['catalogslug' => $item->product1c->product->categories[0]->catalog->slug, 'categoryslug' => $item->product1c->product->categories[0]->slug, 'productslug' => $item->product1c->product->slug]) }}">
                     {{ $item->name }}
                   </a>
                 </div>

@@ -71,9 +71,7 @@ class Attributes extends Component
     {
         $oneAttribute = Attribute::where('id', $attId)->with('items')->first();
 
-        $this->items = $oneAttribute->items()->get(['id', 'name'])->toArray();
-
-        // dd($this->items);
+        $this->items = $oneAttribute->items()->get(['id', 'name', 'show'])->toArray();
 
         $this->dispatchBrowserEvent('get-items', $this->items);
 
@@ -84,9 +82,8 @@ class Attributes extends Component
 
     public function saveIt($items)
     {
-
         $this->validate([
-            'name' => 'required|unique:attributes,name,'.$this->attribute_id,
+            'name' => 'required|unique:attributes,name,' . $this->attribute_id,
         ]);
 
         DB::transaction(
@@ -104,11 +101,13 @@ class Attributes extends Component
                         $attribute_item = AttributeItem::find($item['id']);
                         $attribute_item->update([
                             'name' => trim($item['name']),
+                            'show' => $item['show'],
                         ]);
                     }
                     if ($item['id'] === '' && $item['name'] !== '') {
                         AttributeItem::create([
                             'name' => trim($item['name']),
+                            'show' => $item['show'],
                             'attribute_id' => $attribute->id,
                         ]);
                     }
@@ -117,7 +116,7 @@ class Attributes extends Component
                 $this->items = AttributeItem::where('attribute_id', $attribute->id)->get(['id', 'name']);
                 $this->dispatchBrowserEvent('get-items', $this->items);
                 toast()
-                ->success('Свойство "'.$attribute->name.'" обновлено.')
+                ->success('Свойство "' . $attribute->name . '" обновлено.')
                 ->push();
                 $this->closeForm();
             }
@@ -126,7 +125,6 @@ class Attributes extends Component
 
     public function removeItem($itemId)
     {
-
         if ($itemId) {
             $attributeItem = AttributeItem::where('id', $itemId)
             ->with('products')
@@ -146,7 +144,7 @@ class Attributes extends Component
             $this->openForm($this->attribute_id);
 
             return toast()
-            ->success('Вид свойства '.$removeItemName.' удален.')
+            ->success('Вид свойства ' . $removeItemName . ' удален.')
             ->push();
         }
     }
@@ -160,7 +158,7 @@ class Attributes extends Component
                 foreach ($attribute->items as $item) {
                     if ($item->products->isNotEmpty()) {
                         return toast()
-                        ->warning('У свойства "'.$attribute->name.'" есть товары ({$item->name})')
+                        ->warning('У свойства "' . $attribute->name . '" есть товары ({$item->name})')
                         ->push();
                     } else {
                         $this->removeItem($item);
@@ -173,7 +171,7 @@ class Attributes extends Component
                 $this->resetFields();
 
                 toast()
-                ->success('Свойство "'.$attribute_name.'" удалено')
+                ->success('Свойство "' . $attribute_name . '" удалено')
                 ->push();
             }
         });

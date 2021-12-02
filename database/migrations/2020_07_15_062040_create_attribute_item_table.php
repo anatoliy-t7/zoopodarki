@@ -16,6 +16,7 @@ class CreateAttributeItemTable extends Migration
         Schema::create('attribute_item', function (Blueprint $table) {
             $table->bigIncrements('id')->index();
             $table->string('name');
+            $table->boolean('show')->default(true);
 
             $table->unsignedBigInteger('attribute_id');
             $table->foreign('attribute_id')

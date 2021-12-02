@@ -11,44 +11,46 @@ class ProductController extends Controller
 {
     public $category;
     public $catalog;
-    public $slug;
+    public $productslug;
 
     public function __construct(Request $request)
     {
-        $this->category = Category::where('slug', $request->category)->first();
+        $this->catalog = Catalog::where('slug', $request->catalogslug)->first();
+        $this->category = Category::where('slug', $request->categoryslug)->first();
 
-        $this->slug = $request->slug;
+        $this->productslug = $request->productslug;
 
-        $this->catalog = Catalog::where('slug', $request->catalog)->first();
+
+        // dd($this->catalog);
     }
 
     public function show()
     {
         $category = $this->category;
         $catalog = $this->catalog;
-        $slug = $this->slug;
+        $productslug = $this->productslug;
         $tab = 1;
 
-        return view('site.product', compact('category', 'tab', 'catalog', 'slug'));
+        return view('site.product', compact('category', 'tab', 'catalog', 'productslug'));
     }
 
     public function showСonsist()
     {
         $category = $this->category;
         $catalog = $this->catalog;
-        $slug = $this->slug;
+        $productslug = $this->productslug;
         $tab = 2;
 
-        return view('site.product', compact('category', 'tab', 'catalog', 'slug'));
+        return view('site.product', compact('category', 'tab', 'catalog', 'productslug'));
     }
 
     public function showApplying()
     {
         $category = $this->category;
         $catalog = $this->catalog;
-        $slug = $this->slug;
+        $productslug = $this->productslug;
         $tab = 3;
 
-        return view('site.product', compact('category', 'tab', 'catalog', 'slug'));
+        return view('site.product', compact('category', 'tab', 'catalog', 'productslug'));
     }
 }

@@ -61,7 +61,7 @@ class Checkout extends Component
 
     public function booted()
     {
-        if (! request()->session()->has('cart_id')) {
+        if (!request()->session()->has('cart_id')) {
             return redirect()->route('site.home');
         }
 
@@ -70,8 +70,7 @@ class Checkout extends Component
 
     public function mount()
     {
-
-        if (! request()->session()->has('cart_id')) {
+        if (!request()->session()->has('cart_id')) {
             return redirect()->route('site.home');
         } else {
             $this->cartId = session('cart_id');
@@ -95,7 +94,7 @@ class Checkout extends Component
 
     public function updatedOrderType()
     {
-        if ($this->orderType === 0 && ! empty($this->address)) {
+        if ($this->orderType === 0 && !empty($this->address)) {
             //$this->getDeliveryCostsByBoxberry($this->totalWeight, $this->address['zip']);
             if (Arr::has($this->address, 'lat')) {
                 $this->deliveryCost = $this->getDeliveryCostsByStore(
@@ -141,7 +140,6 @@ class Checkout extends Component
 
     public function getCartCheckout()
     {
-
         $cart = \Cart::session($this->cartId);
         $shelterCart = app('shelter')->session($this->shelterCartId);
 
@@ -185,7 +183,6 @@ class Checkout extends Component
 
     public function setPickupStore($store, $storeId, $storeGuid)
     {
-
         $this->pickupStore = $store;
         $this->storeId = $storeId;
         $this->storeGuid = $storeGuid;
@@ -227,7 +224,6 @@ class Checkout extends Component
 
     public function checkIfUserHasOrderWithStatusPendingConfirm()
     {
-
         if (request()->session()->has('order_id')) {
             if (Order::where('id', session('order_id'))->where('status', 'pending_confirm')->first()) {
                 $order = Order::where('id', session('order_id'))
@@ -250,10 +246,9 @@ class Checkout extends Component
 
     public function createOrder()
     {
-
-        if (! auth()->user()) {
+        if (!auth()->user()) {
             $this->greenLine = 4;
-             $this->step = 1;
+            $this->step = 1;
 
             return $this->dispatchBrowserEvent('auth');
         }
@@ -276,21 +271,21 @@ class Checkout extends Component
                 'address' => 'required',
             ]);
 
-            $address = $this->address['address'].' '.$this->address['building'];
+            $address = $this->address['address'] . ' ' . $this->address['building'];
 
             if (Arr::has($this->address, 'apartment')) {
-                $address = $address.', кв '.$this->address['apartment'];
+                $address = $address . ', кв ' . $this->address['apartment'];
             }
 
             if (Arr::has($this->address, 'extra')) {
-                $address = $address.', '.$this->address['extra'];
+                $address = $address . ', ' . $this->address['extra'];
             }
         } else {
             $this->validate([
                 'pickupStore' => 'required',
             ]);
 
-            $address = 'Самовывоз из магазина: '.$this->pickupStore;
+            $address = 'Самовывоз из магазина: ' . $this->pickupStore;
         }
 
         $this->checkIfUserHasOrderWithStatusPendingConfirm();
@@ -302,14 +297,14 @@ class Checkout extends Component
         $this->getCartCheckout();
 
         if (count($this->shelterItems) > 0) {
-              $this->deliveryCost = $this->deliveryCost + $this->deliveryCostToShelter;
+            $this->deliveryCost = $this->deliveryCost + $this->deliveryCostToShelter;
         }
 
         $orderComment = $this->orderComment;
 
         if (0 !== $this->firstOrder) {
-              $orderComment = 'Скидка за первый заказ -'
-              .$this->firstOrder.' рублей (Применить)'."\n".$orderComment;
+            $orderComment = 'Скидка за первый заказ -'
+              . $this->firstOrder . ' рублей (Применить)' . "\n" . $orderComment;
         }
 
         $this->userId = auth()->user()->id;
@@ -326,7 +321,7 @@ class Checkout extends Component
             $order = Order::create([
                 'order_number' => $orderNumber,
                 'user_id' => $this->userId,
-                'amount' => $this->totalAmount,
+                'amount' => ceil($this->totalAmount),
                 'quantity' => $this->counter,
                 'weight' => $this->totalWeight,
                 'status' => 'pending_confirm',
@@ -354,7 +349,7 @@ class Checkout extends Component
                     $unit = $item->attributes->weight;
                 }
                 if ($product1c->product->unit()->exists()) {
-                    $unit = $product1c->unit_value.' '.$unit.' '.$product1c->product->unit->name;
+                    $unit = $product1c->unit_value . ' ' . $unit . ' ' . $product1c->product->unit->name;
                 }
 
                 $amount = $item->getPriceSumWithConditions();
@@ -373,19 +368,19 @@ class Checkout extends Component
                     $discountComment = 'Акция "1+1"';
                 }
                 if (3 == $item->associatedModel['promotion_type']) {
-                    $discountComment = 'Акция поставщика, -'.$product1c->promotion_percent;
+                    $discountComment = 'Акция поставщика, -' . $product1c->promotion_percent;
                 }
                 if (4 == $item->associatedModel['promotion_type']) {
                     $discount = $item->getPriceSum() - $item->getPriceSumWithConditions();
-                    $discountComment = 'Праздничные скидки '.$product1c->promotion_percent.'%';
+                    $discountComment = 'Праздничные скидки ' . $product1c->promotion_percent . '%';
                 }
 
                 if ($item->attributes->unit_value == 'на развес') {
-                    $discountComment = 'на развес: '.$item->attributes->weight.'гр, '.$discountComment;
+                    $discountComment = 'на развес: ' . $item->attributes->weight . 'гр, ' . $discountComment;
                 }
 
                 if ($item->getConditionByType('discount_card')) {
-                    $discountComment = $discountComment.'Прим. диск. карта '.$this->userHasDiscount.'%';
+                    $discountComment = $discountComment . 'Прим. диск. карта ' . $this->userHasDiscount . '%';
                 }
 
                 $discountProcent = (($item->getPriceSum() - $item->getPriceSumWithConditions()) * 100)
@@ -398,16 +393,16 @@ class Checkout extends Component
                     'vendorcode' => $product1c->vendorcode,
                     'quantity' => $item->quantity,
                     'unit' => $unit,
-                    'price' => floor($item->price),
-                    'amount' => $amount,
+                    'price' => $item->price,
+                    'amount' => ceil($amount),
                     'order_id' => $order->id,
                     'product_id' => $product1c->id,
                     'discount_comment' => $discountComment,
-                    'discount' => $discount,
+                    'discount' => ceil($discount),
                     'discount_procent' => $discountProcent,
                 ]);
 
-                 unset($product1c);
+                unset($product1c);
             }
 
             if (count($this->shelterItems) > 0) {
@@ -416,13 +411,13 @@ class Checkout extends Component
 
                     $unit = '';
                     if ($product1c->product->unit()->exists()) {
-                        $unit = $product1c->unit_value.' '.$product1c->product->unit->name;
+                        $unit = $product1c->unit_value . ' ' . $product1c->product->unit->name;
                     }
 
                     $discountComment = 'Уценка "Помоги приюту"';
 
                     if ($shelterItem->getConditionByType('discount_card')) {
-                        $discountComment = $discountComment.'Прим. диск. карта '.$this->userHasDiscount.'%';
+                        $discountComment = $discountComment . 'Прим. диск. карта ' . $this->userHasDiscount . '%';
                     }
 
                     $discountProcent = (($item->getPriceSum() - $shelterItem->getPriceSumWithConditions()) * 100)
@@ -436,11 +431,11 @@ class Checkout extends Component
                         'quantity' => $shelterItem->quantity,
                         'unit' => $unit,
                         'price' => $shelterItem->price,
-                        'amount' => $shelterItem->getPriceSumWithConditions(),
+                        'amount' => ceil($shelterItem->getPriceSumWithConditions()),
                         'order_id' => $order->id,
                         'product_id' => $product1c->id,
                         'discount_comment' => $discountComment,
-                        'discount' => $shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions(),
+                        'discount' => ceil($shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions()),
                         'discount_procent' => $discountProcent,
                     ]);
                 }
@@ -495,12 +490,12 @@ class Checkout extends Component
                 ->first();
 
                 if ($product_1c->stock === 0) {
-                      array_push($noStockItems['no_stock'], [
-                          'name' => $product_1c->product->name,
-                          'image' => $product_1c->product->getFirstMediaUrl('product-images', 'thumb'),
-                          'unit' => $product_1c->unit_value.' '.$product_1c->product->unit,
-                          'price' => $product_1c->price,
-                      ]);
+                    array_push($noStockItems['no_stock'], [
+                        'name' => $product_1c->product->name,
+                        'image' => $product_1c->product->getFirstMediaUrl('product-images', 'thumb'),
+                        'unit' => $product_1c->unit_value . ' ' . $product_1c->product->unit,
+                        'price' => $product_1c->price,
+                    ]);
 
                     if ($shelterCart) {
                         app('shelter')->session($cartId)
@@ -510,7 +505,7 @@ class Checkout extends Component
                         ->remove($item['id']);
                     }
                 } elseif ($product_1c->stock < $item['quantity']) {
-                      array_push($noStockItems['less_stock'], $item['id']);
+                    array_push($noStockItems['less_stock'], $item['id']);
                     if ($shelterCart) {
                         app('shelter')
                         ->session($cartId)

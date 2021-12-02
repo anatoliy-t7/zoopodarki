@@ -83,7 +83,7 @@
                         alt="{{ $item->name }}">
 
                       <a class="hover:underline" target="_blank"
-                        href="{{ route('site.product', [$item->product1c->product->categories[0]->catalog->slug, $item->product1c->product->categories[0]->slug, $item->product1c->product->slug]) }}">
+                        href="{{ route('site.product', ['catalogslug' => $item->product1c->product->categories[0]->catalog->slug, 'categoryslug' => $item->product1c->product->categories[0]->slug, 'productslug' => $item->product1c->product->slug]) }}">
                         {{ $item->name }}
                       </a>
                     </div>

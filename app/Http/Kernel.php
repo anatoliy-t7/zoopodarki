@@ -83,5 +83,4 @@ class Kernel extends HttpKernel
 
         $schedule->command('sitemap:generate')->timezone('Europe/Moscow')->weeklyAt('04:00');
     }
-
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Order;
+use App\Notifications\SendSms;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Usernotnull\Toast\Concerns\WireToast;
@@ -17,6 +19,7 @@ class Orders extends Component
     public $sortDirection = 'desc';
     public $itemsPerPage = 30;
     public $order;
+    public $smsText = '';
     public $orderSelected;
     public $status;
     protected $queryString = [
@@ -27,12 +30,16 @@ class Orders extends Component
         'itemsPerPage',
         'status',
     ];
-    public $filterType;
-    protected $listeners = ['save'];
+    public $orderStatuses;
+
+    protected $rules = [
+        'orderSelected.status' => 'required',
+    ];
+
 
     public function mount()
     {
-        $this->filterType = config('constants.order_status');
+        $this->orderStatuses = config('constants.order_status');
         $this->search = request()->query('search', $this->search);
     }
 
@@ -56,7 +63,46 @@ class Orders extends Component
     {
         $this->orderSelected = Order::where('id', $orderId)
             ->with('items')
-            ->firstOrFail();
+            ->first();
+    }
+
+    public function save()
+    {
+        $this->validate();
+
+        $orderSelected = Order::where('id', $this->orderSelected->id)
+        ->update([
+            'status' => $this->orderSelected->status,
+        ]);
+
+        toast()
+            ->success('Статус заказа изменен')
+            ->push();
+    }
+
+    public function setSms($phone)
+    {
+        $this->validate([
+            'smsText' => 'required|string',
+        ]);
+
+        try {
+            (new AnonymousNotifiable())
+                ->route('smscru', '+7' . $phone)
+                ->notify(new SendSms($this->smsText));
+
+            toast()
+                ->success('Sms отправлено')
+                ->push();
+
+            $this->reset('smsText');
+        } catch (\Throwable$th) {
+            \Log::error($th);
+
+            toast()
+                ->warning('Sms не отправлено')
+                ->push();
+        }
     }
 
     public function closeForm()
@@ -73,7 +119,7 @@ class Orders extends Component
 
         $this->closeForm();
         toast()
-            ->success('Заказ "'.$orderNumber.'" удален.')
+            ->success('Заказ "' . $orderNumber . '" удален.')
             ->push();
     }
 

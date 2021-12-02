@@ -16,20 +16,19 @@ class CheckoutConfirm extends Component
 
     public function mount()
     {
-
-        if (! auth()->user()) {
+        if (!auth()->user()) {
             return redirect()->route('site.home');
         }
 
         if (request()->session()->has('order_id')) {
             $orderId = session('order_id');
 
-            $this->order = Order::where('id', $orderId)->getOrderData();
+            $this->order = Order::where('id', $orderId)->getOrderData()->first();
 
             unset($orderId);
 
             if ($this->order === null) {
-                       return redirect()->route('site.home');
+                return redirect()->route('site.home');
             }
         } else {
             return redirect()->route('site.home');
@@ -42,15 +41,14 @@ class CheckoutConfirm extends Component
 
     public function confirmOrder()
     {
-
         $order = Order::where('id', $this->order->id)
             ->first();
 
-         // 1 cash
+        // 1 cash
         if ($order->payment_method == 0) {
-            $order->status = 'processing';
-        } else {
             $order->status = 'pending_payment';
+        } else {
+            $order->status = 'processing';
         }
         $order->save();
 
@@ -64,9 +62,9 @@ class CheckoutConfirm extends Component
         app('shelter')->session(session('shelter_cart'))->clear();
 
         if ($order->payment_method == 0) {
-                $this->payCreate($order);
+            $this->payCreate($order);
         } else {
-            redirect()->route('account.order', [
+            redirect()->route('site.checkout.callback', [
                 'order_id' => $order->id,
             ]);
         }
@@ -85,7 +83,7 @@ class CheckoutConfirm extends Component
                 'value' => $order->amount,
                 'currency' => 'RUB',
             ],
-            'description' => 'Заказ '.$order->order_number,
+            'description' => 'Заказ ' . $order->order_number,
             'confirmation' => [
                 'type' => 'redirect',
                 'locale' => 'ru_RU',
@@ -102,9 +100,9 @@ class CheckoutConfirm extends Component
 
     public function stopDiscountFirstOrder()
     {
-            $user = auth()->user();
-            $user->extra_discount = 'no';
-            $user->save();
+        $user = auth()->user();
+        $user->extra_discount = 'no';
+        $user->save();
     }
 
     public function render()

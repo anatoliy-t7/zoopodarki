@@ -35,7 +35,7 @@
           @forelse ($result['hits'] as $item)
             <div>
               @if (array_key_exists('category', $item)) <a
-                  href="{{ route('site.product', [$item['catalog'], $item['category'], $item['slug']]) }}"
+                  href="{{ route('site.product', ['catalogslug' => $item['catalog'], 'categoryslug' => $item['category'], 'productslug' => $item['slug']]) }}"
                   class="flex items-center justify-start px-4 py-2 space-x-2 text-sm hover:bg-gray-50">
               @endif
 

@@ -108,7 +108,7 @@
     </div>
 
     <div class="relative">
-      <x-overflow-bg />
+      <x-overflow-bg x-on:click="closeForm" />
 
       <x-dashboard.modal>
 

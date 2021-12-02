@@ -1,4 +1,5 @@
-<label class="relative flex items-center justify-start h-8 space-x-3 text-gray-500 cursor-pointer group"
+<label {{ $attributes }}
+  class="relative flex items-center justify-start h-8 space-x-3 text-gray-500 cursor-pointer group"
   for="toggle{{ $unique }}">
   <div
     class="relative z-10 w-12 h-6 transition-all duration-200 ease-linear rounded-full

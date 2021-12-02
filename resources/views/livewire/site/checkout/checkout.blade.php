@@ -410,7 +410,7 @@
                   <div class="p-2 bg-white ">
                     @if ($item->associatedModel['image'])
                       <a class="w-full" target="_blank"
-                        href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}">
+                        href="{{ route('site.product', ['catalogslug' => $item->associatedModel['catalog_slug'], 'categoryslug' => $item->associatedModel['category_slug'], 'productslug' => $item->associatedModel['product_slug']]) }}">
                         <img loading="lazy" class="object-fill w-12 h-full"
                           src="{{ $item->associatedModel['image'] }}" alt="{{ $item->name }}">
                       </a>
@@ -420,7 +420,7 @@
                   <div class="w-full">
 
                     <a class="block w-full hover:underline" target="_blank"
-                      href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}">
+                      href="{{ route('site.product', ['catalogslug' => $item->associatedModel['catalog_slug'], 'categoryslug' => $item->associatedModel['category_slug'], 'productslug' => $item->associatedModel['product_slug']]) }}">
                       {{ $item->name }}
                     </a>
 

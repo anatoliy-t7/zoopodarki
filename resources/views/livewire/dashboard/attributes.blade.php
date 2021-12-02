@@ -141,11 +141,21 @@
           <div id="bottom" class="h-full px-4 py-2 overflow-y-auto bg-white scrollbar rounded-xl">
 
             <template x-for="(field, index) in items" :key="index" hidden>
-              <div class="flex items-center justify-start max-w-sm space-x-4 ">
+              <div class="flex items-center justify-start max-w-lg space-x-4 ">
                 <span x-text="field.id" class="w-12 text-xs text-right text-gray-400"></span>
                 <div class="w-full py-2">
-                  <input x-ref="fieldName" x-model="field.name" type="text" class="field"
+                  <input x-ref="fieldName" x-model="field.name" type="text" class="field "
                     :class="confirm === index && 'text-red-500'">
+                </div>
+
+                <div class="w-12 pb-6 pl-1">
+                  <div class="relative block cursor-pointer select-none " title="Показывать">
+                    <input :id="'show' + index" type="checkbox" x-model="field.show" :checked="field.show == 1"
+                      class="absolute inset-0 z-30 w-full h-full opacity-0 cursor-pointer">
+                    <label :for="'show' + index" class="absolute inset-0 z-10 block cursor-pointer">
+                      <x-tabler-eye class="w-6 h-6 text-gray-400" />
+                    </label>
+                  </div>
                 </div>
 
                 <a title="Товары прикрепленные к свойству" x-on:click="$wire.set('fildName', field.name)">
@@ -186,6 +196,7 @@
                     </div>
                   @endcan
                 </div>
+
               </div>
             </template>
 
@@ -227,6 +238,7 @@
           items: [{
             name: '',
             id: '',
+            show: 0,
           }],
           attrName: '',
           form: false,
@@ -236,6 +248,7 @@
             this.items.push({
               name: '',
               id: '',
+              show: 0,
             });
             setTimeout(function() {
               var div = document.getElementById('bottom');

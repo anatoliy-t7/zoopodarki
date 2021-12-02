@@ -4,24 +4,89 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['register' => false]);
 
-    // Account
+    // TODO delete in production 'auth'
+Route::middleware(['throttle:1000,60', 'web', 'auth'])
+    ->name('site.')
+    ->group(
+        function () {
+            Route::get('/', 'App\Http\Controllers\Site\HomeController@index')->name('home');
+
+            Route::get('/pet/{catalogslug}/{categoryslug}/tag/{tagslug}', \App\Http\Livewire\Site\CategoryPage::class)->name('tag');
+
+            Route::get('/pet/{catalogslug}/{categoryslug}', \App\Http\Livewire\Site\CategoryPage::class)->name('category');
+
+            Route::get('/pet/{catalogslug}', \App\Http\Livewire\Site\CatalogPage::class)->name('catalog');
+
+            Route::get('/search', \App\Http\Livewire\Site\Search\SearchPage::class)->name('search');
+
+            // Tabs routes of product page
+            Route::get(
+                '/pet/{catalogslug}/{categoryslug}/{productslug}',
+                'App\Http\Controllers\Site\ProductController@show'
+            )->name('product');
+
+            Route::get(
+                '/pet/{catalogslug}/{categoryslug}/{productslug}/consist',
+                'App\Http\Controllers\Site\ProductController@showСonsist'
+            )->name('product.consist');
+
+            Route::get(
+                '/pet/{catalogslug}/{categoryslug}/{productslug}/applying',
+                'App\Http\Controllers\Site\ProductController@showApplying'
+            )->name('product.applying');
+
+            // Brands
+            Route::get('/brands', 'App\Http\Controllers\Site\BrandController@index')->name('brands');
+
+            Route::get('/brands/{brand}', 'App\Http\Controllers\Site\BrandController@show')->name('brand');
+
+            // Pages
+            Route::view('/contact', 'site.pages.contact')->name('contact');
+
+            Route::get('/page/{slug}', 'App\Http\Controllers\Site\PageController@show')->name('page');
+
+            Route::get('/checkout/confirm', \App\Http\Livewire\Site\Checkout\CheckoutConfirm::class)
+                ->middleware(['auth'])
+                ->name('checkout.confirm');
+
+            Route::get('/checkout/callback', 'App\Http\Controllers\Site\OrderController@checkoutCallback')->name('checkout.callback');
+        }
+    );
+
+Route::middleware(['throttle:1000,60'])->group(
+    function () {
+        Route::get('/checkout', \App\Http\Livewire\Site\Checkout\Checkout::class)->name('checkout');
+
+        Route::any('/payment/callback', 'App\Http\Controllers\Site\OrderController@yooKassaCallback')
+        ->name('payment.callback'); // callback for YooKassa
+    }
+);
+
+        // 1С exchange
+Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')
+    ->middleware(['throttle:1000,60', 'bot'])
+    ->name('exchange');
+
+
+        // Account
 Route::prefix('account')->name('account.')->middleware(['throttle:1000,60', 'auth'])->group(
     function () {
+        Route::view('/account', 'site.account.account')->name('account');
+
         Route::get('/profile', 'App\Http\Controllers\Site\AccountController@profile')->name('profile');
 
         Route::PATCH('/profile/{id}', 'App\Http\Controllers\Site\AccountController@profileUpdate')
         ->name('user.update');
 
-        Route::view('/favorites', 'site.account.favorites')->name('favorites');
+        Route::get('/favorites', \App\Http\Livewire\Site\Account\FavoritesPage::class)->name('favorites');
 
         Route::get('/orders', 'App\Http\Controllers\Site\OrderController@orders')->name('orders');
 
         Route::get('/orders/order', \App\Http\Livewire\Site\Account\OrderPage::class)->name('order');
-
     }
 );
 
-    // Dashboard
+        // Dashboard
 Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 'auth', 'permission:dashboard'])->group(
     function () {
         Route::get('/', \App\Http\Livewire\Dashboard\Dashboard::class)->name('dashboard');
@@ -80,69 +145,3 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
         Route::get('/excel', \App\Http\Livewire\Dashboard\Excel::class)->name('excel');
     }
 );
-
-    // TODO delete in production 'auth'
-Route::middleware(['throttle:1000,60', 'auth'])
-    ->name('site.')
-    ->group(
-        function () {
-            Route::get('/', 'App\Http\Controllers\Site\HomeController@index')->name('home');
-
-            Route::get('/pet/{catalog}/{slug}/f/{tagslug}', 'App\Http\Controllers\Site\CategoryController@tag')
-            ->name('tag');
-
-            Route::get('/pet/{catalog}/{slug}', 'App\Http\Controllers\Site\CategoryController@show')
-            ->name('category');
-
-            Route::get('/pet/{slug}', \App\Http\Livewire\Site\CatalogPage::class)->name('catalog');
-
-            Route::get('/search', \App\Http\Livewire\Site\Search\SearchPage::class)->name('search');
-
-            // Tabs routes of product page
-            Route::get(
-                '/pet/{catalog}/{category}/{slug}',
-                'App\Http\Controllers\Site\ProductController@show'
-            )->name('product');
-
-            Route::get(
-                '/pet/{catalog}/{category}/{slug}/consist',
-                'App\Http\Controllers\Site\ProductController@showСonsist'
-            )->name('product.consist');
-
-            Route::get(
-                '/pet/{catalog}/{category}/{slug}/applying',
-                'App\Http\Controllers\Site\ProductController@showApplying'
-            )->name('product.applying');
-
-            // Brands
-            Route::get('/brands', 'App\Http\Controllers\Site\BrandController@index')->name('brands');
-
-            Route::get('/brands/{brand}', 'App\Http\Controllers\Site\BrandController@show')->name('brand');
-
-            // Pages
-            Route::view('/contact', 'site.pages.contact')->name('contact');
-
-            Route::get('/page/{slug}', 'App\Http\Controllers\Site\PageController@show')->name('page');
-
-            Route::get('/checkout/confirm', \App\Http\Livewire\Site\Checkout\CheckoutConfirm::class)
-                ->middleware(['auth'])
-                ->name('checkout.confirm');
-
-            Route::get('/checkout/callback', 'App\Http\Controllers\Site\OrderController@checkoutCallback')->name('checkout.callback');
-
-        }
-    );
-
-Route::middleware(['throttle:1000,60'])->group(
-    function () {
-        Route::get('/checkout', \App\Http\Livewire\Site\Checkout\Checkout::class)->name('checkout');
-
-        Route::any('/payment/callback', 'App\Http\Controllers\Site\OrderController@yooKassaCallback')
-        ->name('payment.callback'); // callback for YooKassa
-    }
-);
-
-        // 1С exchange
-Route::any('/exchange', 'App\Http\Controllers\Dashboard\ExchangeProductsController@exchange')
-    ->middleware(['throttle:1000,60', 'bot'])
-    ->name('exchange');

@@ -6,7 +6,8 @@
   @else
     <div x-data="{ open: false }" @click.outside="open = false" class="relative">
 
-      <button @mouseenter="open = true" class="flex items-center w-auto p-1 text-xs rounded-lg group focus:outline-none">
+      <button @mouseenter="open = true" @click="open = !open"
+        class="flex items-center w-auto p-1 text-xs rounded-lg group focus:outline-none">
 
         <svg class="text-gray-600 w-7 h-7 focus:text-orange-500 focus:outline-none" xmlns="http://www.w3.org/2000/svg"
           fill="none" viewBox="0 0 24 24">
@@ -36,14 +37,14 @@
       <div x-cloak x-show="open" x-transition class="absolute right-0 z-50 w-40 shadow-lg top-10 rounded-2xl">
         <div class="flex flex-col items-start justify-between text-gray-700 shadow-lg bg-gray-50 rounded-xl">
 
-          <a href="{{ route('account.profile') }}"
+          <a href="{{ route('account.account') }}"
             class="flex items-center justify-start w-full px-4 py-2 space-x-3 text-sm group rounded-t-xl hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring">
             <svg class="w-6 h-6 text-gray-600 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <path class="text-gray-600 stroke-current group-hover:text-orange-500 focus:text-orange-500"
                 stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                 d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm8.59 10c0-3.87-3.85-7-8.59-7s-8.59 3.13-8.59 7" />
             </svg>
-            <span>Профайл</span>
+            <span>Аккаунт</span>
           </a>
 
           <a href="{{ route('account.orders') }}"

@@ -18,13 +18,13 @@ class OrderController extends Controller
         return view('site.account.orders', compact('orders'));
     }
 
-    public function checkoutCallback()
+    public function checkoutCallback(Request $request)
     {
-        if (request()->session()->has('order_id')) {
-             $orderId = session('order_id');
+        if ($request->has('order_id')) {
+            $orderId = $request->input('order_id');
 
             // TODO get data only needs
-            $order = Order::where('id', $orderId)->getOrderData();
+            $order = Order::where('id', $orderId)->getOrderData()->first();
 
             $comment = '';
 
@@ -44,14 +44,12 @@ class OrderController extends Controller
 
             return view('livewire.site.checkout.checkout-callback', compact('order', 'comment'));
         } else {
-
             toast()
                 ->info('Авторизуйтесь, что бы посмотреть ваш статус заказа')
                 ->pushOnNextPage();
 
             return redirect()->route('site.home');
         }
-
     }
 
     public function yooKassaCallback(Request $request)

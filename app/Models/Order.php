@@ -33,7 +33,6 @@ class Order extends Model
                     'items.product1c.product.media',
                     'items.product1c.product.categories:id,slug,catalog_id',
                     'items.product1c.product.categories.catalog:id,slug',
-                ])
-                ->first();
+                ]);
     }
 }

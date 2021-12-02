@@ -2,8 +2,9 @@
   class="relative flex flex-col justify-between h-full border border-gray-100 lg:border-white hover:border-green-300 rounded-2xl">
 
   <div class="p-2">
-    <a itemprop="url" href="{{ route('site.product', [$catalog, $category, $product->slug]) }}" class="block "
-      title="{{ $product->name }}">
+    <a itemprop="url"
+      href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product->slug]) }}"
+      class="block " title="{{ $product->name }}">
       <img itemprop="image" loading="lazy" class="object-contain object-center w-full h-64 lozad "
         src="/assets/img/placeholder.svg" data-src="{{ $product->getFirstMediaUrl('product-images', 'thumb') }}"
         alt="{{ $product->name }}">
@@ -11,7 +12,8 @@
 
     @if ($product->brand)
       <div class="py-2 text-center text-green-600">
-        <a itemprop="url" href="{{ route('site.product', [$catalog, $category, $product->slug]) }}"
+        <a itemprop="url"
+          href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product->slug]) }}"
           title="{{ $product->brand->name }}">
           {{ $product->brand->name }}
         </a>
@@ -19,7 +21,8 @@
     @endif
 
     <div itemprop="name" class="text-sm text-center text-gray-800 line-clamp-2">
-      <a itemprop="url" href="{{ route('site.product', [$catalog, $category, $product->slug]) }}"
+      <a itemprop="url"
+        href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product->slug]) }}"
         title="{{ $product->name }}">
         {{ $product->name }}
       </a>

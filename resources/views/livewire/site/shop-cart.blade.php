@@ -69,7 +69,7 @@
                   <div class="w-2/12 p-2">
                     @if ($item->associatedModel['image'])
                       <a class="w-full"
-                        href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}">
+                        href="{{ route('site.product', ['catalogslug' => $item->associatedModel['catalog_slug'], 'categoryslug' => $item->associatedModel['category_slug'], 'productslug' => $item->associatedModel['product_slug']]) }}">
                         <img loading="lazy" class="object-fill w-20 h-full"
                           src="{{ $item->associatedModel['image'] }}" alt="{{ $item->name }}">
                       </a>
@@ -80,7 +80,7 @@
 
                     <div class="flex flex-col items-start justify-between w-full py-2">
                       <a class="block w-full"
-                        href="{{ route('site.product', ['catalog' => $item->associatedModel['catalog_slug'], 'category' => $item->associatedModel['category_slug'], 'slug' => $item->associatedModel['product_slug']]) }}"
+                        href="{{ route('site.product', ['catalogslug' => $item->associatedModel['catalog_slug'], 'categoryslug' => $item->associatedModel['category_slug'], 'productslug' => $item->associatedModel['product_slug']]) }}"
                         class="text-xs">
                         {{ $item->name }}
                       </a>
@@ -180,7 +180,7 @@
                   <div class="w-24 p-2">
                     @if ($shelterItem->associatedModel['image'])
                       <a class="w-full"
-                        href="{{ route('site.product', ['catalog' => $shelterItem->associatedModel['catalog_slug'], 'category' => $shelterItem->associatedModel['category_slug'], 'slug' => $shelterItem->associatedModel['product_slug']]) }}">
+                        href="{{ route('site.product', ['catalogslug' => $shelterItem->associatedModel['catalog_slug'], 'categoryslug' => $shelterItem->associatedModel['category_slug'], 'productslug' => $shelterItem->associatedModel['product_slug']]) }}">
                         <img loading="lazy" class="object-fill w-20 h-full"
                           src="{{ $shelterItem->associatedModel['image'] }}" alt="{{ $shelterItem->name }}">
                       </a>
@@ -193,7 +193,7 @@
                     <div class="flex flex-col items-start justify-between w-full py-2">
 
                       <a class="block w-full"
-                        href="{{ route('site.product', ['catalog' => $shelterItem->associatedModel['catalog_slug'], 'category' => $shelterItem->associatedModel['category_slug'], 'slug' => $shelterItem->associatedModel['product_slug']]) }}"
+                        href="{{ route('site.product', ['catalogslug' => $shelterItem->associatedModel['catalog_slug'], 'categoryslug' => $shelterItem->associatedModel['category_slug'], 'productslug' => $shelterItem->associatedModel['product_slug']]) }}"
                         class="text-xs">
                         {{ $shelterItem->name }}
                       </a>
@@ -289,7 +289,7 @@
 
           <div class="px-6 py-4">
             <a href="{{ route('checkout') }}"
-              class="block w-full px-4 py-3 font-bold leading-snug text-center text-white uppercase bg-orange-500 rounded-lg hover:bg-orange-600">
+              class="w-full px-4 py-3 font-bold leading-snug text-center text-white uppercase bg-orange-400 rounded-lg btn hover:bg-orange-500">
               Оформить заказ
             </a>
           </div>

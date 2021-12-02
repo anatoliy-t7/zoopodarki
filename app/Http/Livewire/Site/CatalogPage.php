@@ -11,9 +11,9 @@ class CatalogPage extends Component
     public $catalog;
     public $selectedCategories;
 
-    public function mount($slug)
+    public function mount($catalogslug)
     {
-        $this->catalog = Catalog::where('slug', $slug)->with('categories')->first();
+        $this->catalog = Catalog::where('slug', $catalogslug)->with('categories')->first();
 
         $categoriesId = $this->catalog->categories()
             ->where('show_in_catalog', true)
@@ -31,7 +31,7 @@ class CatalogPage extends Component
 
     public function render()
     {
-        return view('livewire.site.catalog')
+        return view('livewire.site.catalog-page')
             ->extends('layouts.app')
             ->section('content');
     }

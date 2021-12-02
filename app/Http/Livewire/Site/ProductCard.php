@@ -3,11 +3,9 @@
 namespace App\Http\Livewire\Site;
 
 use App\Mail\OrderOneClick;
-use App\Models\Product;
 use App\Models\Product1C;
+use App\Models\Product;
 use App\Models\Waitlist;
-use Artesaos\SEOTools\Facades\OpenGraph;
-use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
@@ -18,7 +16,7 @@ class ProductCard extends Component
 
     public $product;
     public $productAttributes;
-    public $slug;
+    public $productslug;
     public $category;
     public $email;
     public $catalog;
@@ -32,26 +30,17 @@ class ProductCard extends Component
 
     public function mount()
     {
+        if ($this->productslug === 'tag') {
+            return redirect()->route('site.home');
+        }
         $this->getProduct();
         $this->getRelatedProducts();
-        $this->seo();
+
         if (auth()->user()) {
             $this->email = auth()->user()->email;
         }
     }
 
-    public function seo()
-    {
-        SEOMeta::setTitle($this->product->meta_title);
-        SEOMeta::setDescription($this->product->meta_description);
-        OpenGraph::setTitle($this->product->meta_title);
-        OpenGraph::setDescription($this->product->meta_description);
-        OpenGraph::addProperty('type', 'product');
-
-        if ($this->product->media->count() > 0) {
-            OpenGraph::addImage(config('app.url').$this->product->getMedia('product-images')[0]->getUrl('medium'));
-        }
-    }
 
     public function preOrder(int $itemId, $email)
     {
@@ -69,7 +58,7 @@ class ProductCard extends Component
                 ->push();
         }
 
-        if (! auth()->user()) {
+        if (!auth()->user()) {
             Waitlist::create([
                 'email' => $this->email,
                 'status' => 'pending',
@@ -93,9 +82,9 @@ class ProductCard extends Component
     public function buyOneClick($orderOneClick, $productId, $count)
     {
         $url = config('constants.website_url')
-        .'/pet/'.$this->catalog->slug.'/'
-        .$this->category->slug.'/'
-        .$this->product->slug;
+        . '/pet/' . $this->catalog->slug . '/'
+        . $this->category->slug . '/'
+        . $this->product->slug;
 
         $product1c = Product1C::where('id', $productId)->firstOrFail();
 
@@ -110,7 +99,7 @@ class ProductCard extends Component
 
     public function getProduct()
     {
-        $this->product = Product::where('slug', $this->slug)
+        $this->product = Product::where('slug', $this->productslug)
             ->isStatusActive()
             ->whereHas('variations', function ($query) {
                 $query

@@ -54,7 +54,7 @@
               ">
                 <div>
                   <a class="w-full" target="_blank"
-                    href="{{ route('site.product', [$item->product1c->product->categories[0]->catalog->slug, $item->product1c->product->categories[0]->slug, $item->product1c->product->slug]) }}">
+                    href="{{ route('site.product', ['catalogslug' => $item->product1c->product->categories[0]->catalog->slug, 'categoryslug' => $item->product1c->product->categories[0]->slug, 'productslug' => $item->product1c->product->slug]) }}">
                     <img loading="lazy" class="object-fill w-16 h-full"
                       src="{{ $item->product1c->product->getFirstMediaUrl('product-images', 'thumb') }}"
                       alt="{{ $item->name }}">
@@ -63,7 +63,7 @@
 
                 <div class="w-full space-y-4 text-gray-600">
                   <a class="block w-full hover:underline" target="_blank"
-                    href="{{ route('site.product', [$item->product1c->product->categories[0]->catalog->slug, $item->product1c->product->categories[0]->slug, $item->product1c->product->slug]) }}">
+                    href="{{ route('site.product', ['catalogslug' => $item->product1c->product->categories[0]->catalog->slug, 'categoryslug' => $item->product1c->product->categories[0]->slug, 'productslug' => $item->product1c->product->slug]) }}">
                     {{ $item->name }}
                   </a>
 

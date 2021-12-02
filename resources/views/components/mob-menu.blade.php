@@ -62,7 +62,7 @@
                 <x-tabler-chevron-left class="w-6 h-6 stroke-current" />
               </div>
               <a @mouseover="tab = {{ $catalog->id }}" :class="{ 'bg-gray-50': tab === {{ $catalog->id }} }"
-                href="{{ route('site.catalog', ['slug' => $catalog->slug]) }}"
+                href="{{ route('site.catalog', ['catalogslug' => $catalog->slug]) }}"
                 class="block px-4 py-4 font-semibold cursor-pointer">{{ $catalog->name }}
               </a>
             </div>
@@ -70,7 +70,7 @@
             <div class="relative z-40 flex-col justify-between h-screen px-6 pt-16 space-y-2 overflow-y-auto pb-36">
 
               @foreach ($catalog->categories as $category)
-                <a href="{{ route('site.category', ['catalog' => $catalog->slug, 'slug' => $category->slug]) }}"
+                <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}"
                   class="block p-1 text-lg font-semibold text-gray-800">
                   {{ $category->name }}
                 </a>

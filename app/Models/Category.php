@@ -47,7 +47,7 @@ class Category extends Model
         $attributesId = Str::replace('.', ',', $this->attributes['attributes']);
         $ids = explode(',', $attributesId);
 
-        if (! empty($filtredItems)) {
+        if (!empty($filtredItems)) {
             $items = $this->productsAttributes()
                 ->get()
                 ->unique()
@@ -61,7 +61,7 @@ class Category extends Model
         }
 
         return Attribute::whereIn('id', $ids)
-            ->withWhereHas('items', fn ($query) => $query->whereIn('id', $items))
+            ->withWhereHas('items', fn ($query) => $query->whereIn('id', $items)->where('show', true))
             ->whereHas('items.products', fn ($q) => $q->isStatusActive())
             ->whereHas('items.products.variations', fn ($q) => $q->hasStock())
             ->orderBy('name', 'asc')

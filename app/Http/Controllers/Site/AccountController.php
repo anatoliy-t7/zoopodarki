@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
 {
+
     public function profile()
     {
         /**
@@ -55,8 +56,4 @@ class AccountController extends Controller
             ->with('message', 'Данные обновлены.');
     }
 
-    public function favorite()
-    {
-        return view('site.account.favorites');
-    }
 }

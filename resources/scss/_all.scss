@@ -42,30 +42,34 @@ p:not(:last-child) {
 	@apply mb-1;
 }
 
+.btn,
 button {
 	@apply transition ease-in-out cursor-pointer;
 }
 
+.btn:active,
 button:active {
 	@apply scale-95;
 }
 
+.btn:focus,
 button:focus {
 	@apply outline-none;
 }
+.btn:disabled,
 button:disabled {
 	@apply opacity-50 cursor-not-allowed;
 }
 .btn {
-	@apply flex px-3 py-3 text-center rounded-xl focus:outline-none focus:ring;
+	@apply flex px-3 py-3 justify-center items-center rounded-xl focus:outline-none focus:ring;
 }
 
 .container-checkbox {
-	@apply block relative pl-8 cursor-pointer select-none text-sm;
+	@apply block relative pl-8 cursor-pointer select-none text-sm z-10;
 }
 
 .container-checkbox input {
-	@apply absolute opacity-0 cursor-pointer top-0 left-0 w-full h-full z-20;
+	@apply absolute opacity-0 cursor-pointer inset-0 w-full h-full z-30;
 }
 
 .container-checkbox .checkmark {
@@ -78,6 +82,10 @@ button:disabled {
 
 .container-checkbox input:checked ~ .checkmark {
 	@apply bg-yellow-500 border-yellow-500;
+}
+
+input:checked ~ label > svg {
+	@apply text-orange-400;
 }
 
 .link-hover,

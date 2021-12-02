@@ -10,16 +10,10 @@
         <span itemprop="name">Бренды</span>
       </a>
 
-    @elseif ($catalog->slug == 'goods')
-
-      <a itemprop="item" class="py-1 pr-1 hover:underline" href="{{ route('site.catalog', ['slug' => 'dogs']) }}">
-        <span itemprop="name">Собаки</span>
-      </a>
-
     @else
 
       <a itemprop="item" class="py-1 pr-1 hover:underline"
-        href="{{ route('site.catalog', ['slug' => $catalog->slug]) }}">
+        href="{{ route('site.catalog', ['catalogslug' => $catalog->slug]) }}">
         <span itemprop="name">{{ $catalog->name }}</span>
       </a>
 
@@ -49,14 +43,14 @@
         @if ($catalog->slug == 'goods')
 
           <a itemprop="item" class="p-1 hover:underline"
-            href="{{ route('site.category', ['catalog' => 'dogs', 'slug' => $category->slug]) }}">
+            href="{{ route('site.category', ['catalogslug' => 'dogs', 'categoryslug' => $category->slug]) }}">
             <span itemprop="name">{{ $category->name }}</span>
           </a>
 
         @else
 
           <a itemprop="item" class="p-1 hover:underline"
-            href="{{ route('site.category', ['catalog' => $catalog->slug, 'slug' => $category->slug]) }}">
+            href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}">
             <span itemprop="name">{{ $category->name }}</span>
           </a>
 
