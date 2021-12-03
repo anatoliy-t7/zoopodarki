@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Kirschbaum\PowerJoins\PowerJoins;
 
 class ProductUnit extends Model
 {
-    use PowerJoins;
-
     protected $table = 'product_units';
 
     protected $guarded = [];

@@ -23,7 +23,6 @@ class GenerateSitemap extends Command
 
     public function handle()
     {
-
         $sitemapIndex = SitemapIndex::create();
 
         $productChunks = Product::select(['id', 'slug', 'updated_at'])
@@ -34,11 +33,11 @@ class GenerateSitemap extends Command
             ->with('categories')
             ->with('categories.catalog')
             ->chunk(5000, function ($products, $chunk) use ($sitemapIndex) {
-                $sitemapName = 'products_sitemap_'.$chunk.'.xml';
+                $sitemapName = 'products_sitemap_' . $chunk . '.xml';
                 $sitemap = Sitemap::create();
 
                 foreach ($products as $product) {
-                    $sitemap->add(Url::create('/pet'.'/'.$product->categories[0]->catalog->slug.'/'.$product->categories[0]->slug.'/'.$product->slug)
+                    $sitemap->add(Url::create('/pet' . '/' . $product->categories[0]->catalog->slug . '/' . $product->categories[0]->slug . '/' . $product->slug)
                             ->setLastModificationDate($product->updated_at));
                 }
 
@@ -61,7 +60,7 @@ class GenerateSitemap extends Command
         $sitemapName = 'catalogs.xml';
         $sitemap = Sitemap::create();
         foreach ($catalogs as $key => $catalog) {
-            $sitemap->add(Url::create('/pet'.'/'.$catalog->slug)
+            $sitemap->add(Url::create('/pet' . '/' . $catalog->slug)
                     ->setLastModificationDate(now()));
         }
         $sitemap->writeToFile(public_path($sitemapName));
@@ -75,11 +74,9 @@ class GenerateSitemap extends Command
         $sitemapName = 'categories.xml';
         $sitemap = Sitemap::create();
         foreach ($categories as $key => $category) {
-
-            $url = '/pet'.'/'.$category->catalog->slug.'/'.$category->slug;
+            $url = '/pet' . '/' . $category->catalog->slug . '/' . $category->slug;
             $sitemap->add(Url::create($url)
                     ->setLastModificationDate(now()));
-
         }
         $sitemap->writeToFile(public_path($sitemapName));
 

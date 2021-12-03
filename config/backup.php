@@ -71,7 +71,7 @@ return [
              * For a complete list of available customization options, see https://github.com/spatie/db-dumper
              */
 
-            'databases' => ['mysql',],
+            'databases' => ['mysql', ],
         ],
 
         /*
@@ -85,8 +85,7 @@ return [
          *
          * If you do not want any compressor at all, set it to null.
          */
-        'database_dump_compressor' =>
-            Spatie\DbDumper\Compressors\GzipCompressor::class,
+        'database_dump_compressor' => Spatie\DbDumper\Compressors\GzipCompressor::class,
 
         /*
          * The file extension used for the database dump files.
@@ -148,13 +147,13 @@ return [
                 'mail',
             ],
             \Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification::class => [
-                'mail',
+                '',
             ],
             \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFoundNotification::class => [
                 'mail',
             ],
             \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessfulNotification::class => [
-                'mail',
+                '',
             ],
         ],
 
@@ -232,8 +231,7 @@ return [
          * No matter how you configure it the default strategy will never
          * delete the newest backup.
          */
-        'strategy' =>
-            \Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy::class,
+        'strategy' => \Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy::class,
 
         'default_strategy' => [
             /*

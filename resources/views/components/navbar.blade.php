@@ -33,9 +33,8 @@
           </div>
 
           <div class="w-5/12">
-            <livewire:site.search.search-com>
+            <livewire:site.search.search-com />
           </div>
-
 
           <div class="flex items-center justify-between space-x-4">
 

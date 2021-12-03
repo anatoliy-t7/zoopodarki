@@ -37,7 +37,8 @@
                     :brands="$brands" :attrs="$allAttributes" :stockF="$stockF" />
                 @else
                   <x-filters :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges"
-                    :brands="$brands" :attrs="$allAttributes" :stockF="$stockF" :showPromoF="$showPromoF" />
+                    :brands="$brands" :attrs="$allAttributes" :stockF="$stockF" :showPromoF="$showPromoF"
+                    :attrsF="$attrsF" />
                 @endif
                 <!--/noindex-->
                 <!--googleon: all-->

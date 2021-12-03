@@ -179,6 +179,8 @@ class CategoryPage extends Component
         }
 
         $this->allAttributes = $allAttributes->where('range', 0)->all();
+
+        dd($this->allAttributes);
     }
 
     public function updatedAttFilter($attrsF = [])
@@ -305,8 +307,6 @@ class CategoryPage extends Component
                     $query->whereHas('attributes', fn ($q) => $q->whereIn('attribute_item.id', $this->attrsF));
                 }
             })
-
-
 
             ->when($this->stockF, function ($query) {
                 $query->checkStock($this->stockF);

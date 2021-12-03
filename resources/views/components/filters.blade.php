@@ -14,109 +14,114 @@
      @endforelse
    </div>
 
-   @if ($showPromoF)
-     <div class="pt-4">
-       <div class="container-checkbox">
-         <label>Акции</label>
-         <input wire:model="promoF" type="checkbox">
-         <span class="checkmark"></span>
+   <div>
+     @if ($showPromoF)
+       <div class="pt-4">
+         <div class="container-checkbox">
+           <label>Акции</label>
+           <input wire:model="promoF" type="checkbox">
+           <span class="checkmark"></span>
+         </div>
        </div>
-     </div>
-   @endif
+     @endif
+   </div>
 
-   @if ($brands)
-     <div x-data="searchBrand" class="space-y-4">
-       <div class="font-bold">Бренд</div>
+   <div>
+     @if ($brands)
+       <div x-data="searchBrand" class="space-y-4">
+         <div class="font-bold">Бренд</div>
 
-       <div>
-         @if ($brands->count() > 10)
-           <input x-ref="searchField" x-model="search" x-on:keydown.window.prevent.slash="$refs.searchField.focus()"
-             placeholder="Поиск" type="search" class="h-8 text-xs placeholder-gray-400 bg-gray-50 field" />
+         <div>
+           @if ($brands->count() > 10)
+             <input x-ref="searchField" x-model="search" x-on:keydown.window.prevent.slash="$refs.searchField.focus()"
+               placeholder="Поиск" type="search" class="h-8 text-xs placeholder-gray-400 bg-gray-50 field" />
+           @endif
+         </div>
+
+         <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
+
+           <template x-for="(item, index) in filteredBrands" :key="item.id" hidden>
+             <div class=" container-checkbox">
+               <span class="text-sm" x-text="item.name"></span>
+               <input :value="item.id" type="checkbox" x-model.number="brandsF">
+               <span class="checkmark"></span>
+             </div>
+           </template>
+
+           <script>
+             document.addEventListener('alpine:init', () => {
+               Alpine.data('searchBrand', () => ({
+                 search: "",
+                 brandsF: @entangle('brandsF'),
+                 brandsData: @json($brands),
+                 get filteredBrands() {
+                   if (this.search === "") {
+                     return this.brandsData;
+                   }
+                   return this.brandsData.filter((item) => {
+                     return item.name
+                       .toLowerCase()
+                       .includes(this.search.toLowerCase());
+                   });
+                 },
+               }))
+             });
+           </script>
+         </div>
+       </div>
+     @endif
+   </div>
+
+   <div x-data="{attributeFilter: @entangle('attrsF')}" class="space-y-6">
+     @foreach ($attrs as $attr)
+       <div wire:key="{{ $attr->id }}">
+         @if ($attr->items->count() > 0)
+           <div wire:ignore x-data="searchAttribute{{ $attr->id }}">
+             <div class="space-y-3">
+               <div class="font-bold">{{ $attr->name }}</div>
+
+               <div>
+                 @if ($attr->items->count() >= 10)
+                   <input x-ref="searchField" x-model="search"
+                     x-on:keydown.window.prevent.slash="$refs.searchField.focus()" placeholder="Поиск" type="search"
+                     class="h-8 text-xs placeholder-gray-400 bg-gray-50 field" />
+                 @endif
+               </div>
+
+               <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
+                 <template x-for="(item, index) in filteredAttribute" :key="index" hidden>
+                   <label for="item.id" class="container-checkbox">
+                     <span class="text-sm" x-text="item.name"></span>
+                     <input id="item.id" :value="item.id" type="checkbox" x-model.number.debounce.700="attributeFilter">
+                     <span class="checkmark"></span>
+                   </label>
+                 </template>
+               </div>
+             </div>
+
+             <script>
+               document.addEventListener('alpine:init', () => {
+                 Alpine.data('searchAttribute{{ $attr->id }}', () => ({
+                   search: "",
+                   attributerData: @json($attr->items),
+                   get filteredAttribute() {
+                     if (this.search === "") {
+                       return this.attributerData;
+                     }
+                     return this.attributerData.filter((item) => {
+                       return item.name
+                         .toLowerCase()
+                         .includes(this.search.toLowerCase());
+                     });
+                   },
+                 }))
+               });
+             </script>
+           </div>
          @endif
        </div>
+     @endforeach
 
-       <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
-
-         <template x-for="(item, index) in filteredBrands" :key="item.id" hidden>
-           <div class=" container-checkbox">
-             <span class="text-sm" x-text="item.name"></span>
-             <input :value="item.id" type="checkbox" x-model.number="brandsF">
-             <span class="checkmark"></span>
-           </div>
-         </template>
-
-         <script>
-           document.addEventListener('alpine:init', () => {
-             Alpine.data('searchBrand', () => ({
-               search: "",
-               brandsF: @entangle('brandsF'),
-               brandsData: @json($brands),
-               get filteredBrands() {
-                 if (this.search === "") {
-                   return this.brandsData;
-                 }
-                 return this.brandsData.filter((item) => {
-                   return item.name
-                     .toLowerCase()
-                     .includes(this.search.toLowerCase());
-                 });
-               },
-             }))
-           });
-         </script>
-       </div>
-     </div>
-   @endif
-
-   <div class="space-y-6">
-     @if ($attrs)
-       @foreach ($attrs as $key => $attr)
-         <div wire:key="{{ $attr->id }}" x-data="searchAttribute{{ $attr->id }}">
-           <div x-show="filteredAttribute.length >= 1" class="space-y-3">
-             <div class="font-bold">{{ $attr->name }} {{ $attr->items->count() }}</div>
-
-             <div>
-               @if ($attr->items->count() >= 10)
-                 <input x-ref="searchField" x-model="search"
-                   x-on:keydown.window.prevent.slash="$refs.searchField.focus()" placeholder="Поиск" type="search"
-                   class="h-8 text-xs placeholder-gray-400 bg-gray-50 field" />
-               @endif
-             </div>
-
-             <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
-
-               <template x-for="(item, index) in filteredAttribute" :key="item.id" hidden>
-                 <div class="container-checkbox">
-                   <span class="text-sm" x-text="item.name"></span>
-                   <input :value="item.id" type="checkbox" x-model.number.debounce.700="attributeFilter">
-                   <span class="checkmark"></span>
-                 </div>
-               </template>
-
-               <script>
-                 document.addEventListener('alpine:init', () => {
-                   Alpine.data('searchAttribute' + {{ $attr->id }}, () => ({
-                     search: "",
-                     attributeFilter: @entangle('attrsF'),
-                     attributerData: @json($attr->items),
-                     get filteredAttribute() {
-                       if (this.search === "") {
-                         return this.attributerData;
-                       }
-                       return this.attributerData.filter((item) => {
-                         return item.name
-                           .toLowerCase()
-                           .includes(this.search.toLowerCase());
-                       });
-                     },
-                   }))
-                 });
-               </script>
-             </div>
-           </div>
-         </div>
-       @endforeach
-     @endif
    </div>
 
    <div class="space-y-3">
@@ -136,6 +141,5 @@
        </label>
      </div>
    </div>
-
 
  </div>

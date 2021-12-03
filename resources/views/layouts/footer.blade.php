@@ -119,13 +119,12 @@
   <livewire:error-catcher>
   @endproduction
 
-  <livewire:scripts>
+  <livewire:scripts />
+  <livewire:toasts />
+  <script src="{{ mix('js/app.js') }}"></script>
 
-    @stack('footer')
-    <livewire:toasts />
+  @stack('footer')
 
-    <script src="{{ mix('js/app.js') }}"></script>
+  </body>
 
-    </body>
-
-    </html>
+  </html>

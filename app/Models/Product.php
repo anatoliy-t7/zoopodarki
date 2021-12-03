@@ -6,7 +6,6 @@ use App\Traits\Revieweable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Kirschbaum\PowerJoins\PowerJoins;
 // TODO on in production
 //use Laravel\Scout\Searchable;
 use Spatie\Image\Manipulations;
@@ -17,8 +16,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
-
-    use PowerJoins;
 
     use Revieweable;
 
@@ -126,17 +123,17 @@ class Product extends Model implements HasMedia
 
     public function scopeCheckStock($query, $stockF)
     {
-        if ($stockF == 0) {
+        if ($stockF === 0) {
             return $query->whereHas('variations', function ($query) {
                 $query->where('stock', 0);
             });
         }
-        if ($stockF == 1) {
+        if ($stockF === 1) {
             return $query->whereHas('variations', function ($query) {
                 $query->where('stock', '>=', 1);
             });
         }
-        if ($stockF == 0) {
+        if ($stockF === 2) {
             return $query->whereHas('variations', function ($query) {
                 $query->where('stock', '>=', 0);
             });

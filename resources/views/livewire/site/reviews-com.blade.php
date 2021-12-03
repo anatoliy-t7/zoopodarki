@@ -5,7 +5,7 @@
       <div class="flex flex-col items-center justify-between p-5 space-y-6 bg-gray-50 rounded-2xl">
         <div class="flex items-center justify-start space-x-2 cursor-pointer" title="Посмотреть отзывы">
           <div x-data="{
-                rating: '{{ ceil($reviews->avg('rating')) }}',
+                rating: '{{ ceil((int) $reviews->avg('rating')) }}',
                 hoverRating: 0,
                 ratings: [ 1, 2, 3, 4, 5]
                   }" class="flex items-center space-x-1">
@@ -23,7 +23,7 @@
               <input type="number" name="rating" x-model="rating">
             </div>
           </div>
-          <div class="pt-1 font-semibold text-gray-700">{{ ceil($reviews->avg('rating')) }} / 5</div>
+          <div class="pt-1 font-semibold text-gray-700">{{ ceil((int) $reviews->avg('rating')) }} / 5</div>
         </div>
         <div>
           @auth

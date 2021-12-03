@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Kirschbaum\PowerJoins\PowerJoins;
 
 class Catalog extends Model
 {
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
-    use PowerJoins;
 
     protected $table = 'catalogs';
     protected $guarded = [];

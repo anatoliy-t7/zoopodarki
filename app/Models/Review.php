@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\Revieweable;
 use Illuminate\Database\Eloquent\Model;
-use Kirschbaum\PowerJoins\PowerJoins;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -16,7 +15,6 @@ class Review extends Model implements HasMedia
 
     use Revieweable;
 
-    use PowerJoins;
 
     protected $table = 'reviews';
     protected $guarded = [];

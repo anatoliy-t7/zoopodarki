@@ -63,7 +63,7 @@
             title="Посмотреть отзывы">
             <div>
               <div x-cloak x-data="{
-                rating: '{{ ceil($product->reviews->avg('rating')) }}',
+                rating: '{{ ceil((int) $product->reviews->avg('rating')) }}',
                 hoverRating: 0,
                 ratings: [ 1, 2, 3, 4, 5]
                 }" class="flex items-center space-x-1">
@@ -85,7 +85,7 @@
             </div>
             <div class="pt-1 text-xs text-gray-500" itemprop="aggregateRating" itemscope
               itemtype="https://schema.org/AggregateRating"><span
-                itemprop="ratingValue">{{ ceil($product->reviews->avg('rating')) }}</span>/<span>5</span> (<span
+                itemprop="ratingValue">{{ ceil((int) $product->reviews->avg('rating')) }}</span>/<span>5</span> (<span
                 itemprop="reviewCount">{{ $product->reviews_count }}</span>)
             </div>
           </div>

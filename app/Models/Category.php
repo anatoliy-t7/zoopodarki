@@ -5,13 +5,12 @@ namespace App\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Kirschbaum\PowerJoins\PowerJoins;
 
 class Category extends Model
 {
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use Sluggable;
-    use PowerJoins;
+
 
     protected $table = 'categories';
 
@@ -49,7 +48,7 @@ class Category extends Model
 
 
         return Attribute::whereIn('id', $ids)
-            ->with('items', fn ($query) => $query->whereIn('id', $filtredItems)->where('show', true))
+            ->withWhereHas('items', fn ($query) => $query->whereIn('id', $filtredItems)->where('show', true))
             ->orderBy('name', 'asc')
             ->get();
     }
