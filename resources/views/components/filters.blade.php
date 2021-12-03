@@ -37,8 +37,8 @@
 
        <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
 
-         <template x-for="(item, index) in filteredBrands" :key="index" hidden>
-           <div class="container-checkbox">
+         <template x-for="(item, index) in filteredBrands" :key="item.id" hidden>
+           <div class=" container-checkbox">
              <span class="text-sm" x-text="item.name"></span>
              <input :value="item.id" type="checkbox" x-model.number="brandsF">
              <span class="checkmark"></span>
@@ -69,26 +69,23 @@
    @endif
 
    <div class="space-y-6">
-     @forelse ($attrs as $attr)
-       <div>
-         @if ($attr->items->count() !== 0 and $attr->id !== 46)
-
-           <div x-data="searchAttribute{{ $attr->id }}" class="space-y-3">
-             <div class="font-bold">{{ $attr->name }}</div>
+     @if ($attrs)
+       @foreach ($attrs as $key => $attr)
+         <div wire:key="{{ $attr->id }}" x-data="searchAttribute{{ $attr->id }}">
+           <div x-show="filteredAttribute.length >= 1" class="space-y-3">
+             <div class="font-bold">{{ $attr->name }} {{ $attr->items->count() }}</div>
 
              <div>
                @if ($attr->items->count() >= 10)
-
                  <input x-ref="searchField" x-model="search"
                    x-on:keydown.window.prevent.slash="$refs.searchField.focus()" placeholder="Поиск" type="search"
                    class="h-8 text-xs placeholder-gray-400 bg-gray-50 field" />
-
                @endif
              </div>
 
              <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
 
-               <template x-for="(item, index) in filteredAttribute" :key="index" hidden>
+               <template x-for="(item, index) in filteredAttribute" :key="item.id" hidden>
                  <div class="container-checkbox">
                    <span class="text-sm" x-text="item.name"></span>
                    <input :value="item.id" type="checkbox" x-model.number.debounce.700="attributeFilter">
@@ -98,7 +95,7 @@
 
                <script>
                  document.addEventListener('alpine:init', () => {
-                   Alpine.data('searchAttribute{{ $attr->id }}', () => ({
+                   Alpine.data('searchAttribute' + {{ $attr->id }}, () => ({
                      search: "",
                      attributeFilter: @entangle('attrsF'),
                      attributerData: @json($attr->items),
@@ -117,13 +114,10 @@
                </script>
              </div>
            </div>
-
-         @endif
-       </div>
-     @empty
-     @endforelse
+         </div>
+       @endforeach
+     @endif
    </div>
-
 
    <div class="space-y-3">
      <div class="font-bold">Наличие в магазинах</div>

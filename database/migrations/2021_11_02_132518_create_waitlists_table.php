@@ -14,7 +14,7 @@ class CreateWaitlistsTable extends Migration
     public function up()
     {
         Schema::create('waitlists', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id')->index();
 
             $table->string('email')->nullable();
 

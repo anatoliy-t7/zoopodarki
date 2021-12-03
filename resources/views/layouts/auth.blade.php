@@ -2,10 +2,8 @@
 
 <div id="app" class="max-w-5xl mx-auto">
   <div class="flex items-center justify-center w-full min-h-screen px-2 py-4 antialiased divide-x">
-    <div class="flex justify-center w-6/12">
-      <a href="{{ route('site.home') }}">
-        <img loading="lazy" src="/assets/img/favicon.svg" width="200px" height="200px" alt="">
-      </a>
+    <div class="flex justify-center w-6/12 p-12">
+      <x-logo class="w-full" />
     </div>
     <div class="flex justify-center w-6/12">
       @yield ('content')

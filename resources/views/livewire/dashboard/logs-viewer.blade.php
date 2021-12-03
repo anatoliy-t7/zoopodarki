@@ -56,8 +56,8 @@
       <x-slot name="body">
         @if ($logs)
           @foreach ($logs->sortByDesc('timestamp') as $key => $log)
-            <x-dashboard.table.row class="cursor-pointer " x-on:click="openForm"
-              wire:click="openForm('{{ $log['id'] }}')">
+            <x-dashboard.table.row class="cursor-pointer" x-on:click="openForm"
+              wire:click="openForm('{{ $log['id'] }}')" wire:key="$key">
 
               <x-dashboard.table.cell class="w-3/12">
                 {{ $log['timestamp'] }}

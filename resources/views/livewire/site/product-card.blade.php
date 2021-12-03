@@ -2,7 +2,7 @@
 
     <x-breadcrumbs :category="$category" :catalog="$catalog" />
 
-    <div x-cloak x-data="tabs" @tab-reviews.window="tabReviews(event)" class="space-y-6" itemscope
+    <article x-cloak x-data="tabs" @tab-reviews.window="tabReviews(event)" class="space-y-6" itemscope
       itemtype="https://schema.org/Product">
 
       <div class="px-4 py-8 space-y-2 bg-white lg:px-8 lg:rounded-2xl">
@@ -667,7 +667,7 @@
             Alpine.data('variationsToggle', () => ({
               count: 1,
               byWeight: 1000,
-              categoryId: '{{ $category->id }}',
+              catalogId: '{{ $catalog->id }}',
               item: {
                 id: parseInt('{{ $product->variations[0]->id }}'),
                 stock: parseInt('{{ $product->variations[0]->stock }}'),
@@ -712,9 +712,9 @@
                   this.item.stock = 0
                 }
                 if (this.item.unit_value == 'на развес') {
-                  return window.livewire.emit('addToCart', this.item.id, this.count, this.categoryId, this.byWeight);
+                  return window.livewire.emit('addToCart', this.item.id, this.count, this.catalogId, this.byWeight);
                 }
-                return window.livewire.emit('addToCart', this.item.id, this.count, this.categoryId)
+                return window.livewire.emit('addToCart', this.item.id, this.count, this.catalogId)
               },
               preOrder() {
                 window.livewire.emit('preOrder', this.item.id, this.email)
@@ -789,5 +789,5 @@
         @endif
 
       @endpush
-    </div>
+    </article>
   </div>

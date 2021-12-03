@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
 {
-
     public function profile()
     {
         /**
@@ -30,11 +29,12 @@ class AccountController extends Controller
          * @name('account.user.update')
          * @middlewares(web, auth)
          */
+
+
         $request->validate([
             'name' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'unique:users,email,'.auth()->user()->id],
-            'phone' => ['nullable', 'digits:10', 'unique:users,phone'],
-            'address' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'unique:users,email,' . auth()->user()->id],
+            'phone' => ['nullable', 'digits:10', 'unique:users,phone,' . auth()->user()->id],
         ]);
 
         $user = auth()->user();
@@ -43,17 +43,22 @@ class AccountController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'address' => $request->address,
         ]);
 
-        if ($request->has('password')) {
+        if ($request->has('password') && $request->password !== null) {
+            $request->validate([
+                'password' => ['required', 'string', 'min:8'],
+            ]);
+
             $user->update([
                 'password' => Hash::make($request->password),
             ]);
         }
 
-        return redirect()->route('account.profile', compact('user'))
-            ->with('message', 'Данные обновлены.');
-    }
+        toast()
+            ->success('Данные обновлены.')
+            ->pushOnNextPage();
 
+        return redirect()->route('account.profile', compact('user'));
+    }
 }

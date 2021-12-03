@@ -17,8 +17,7 @@ class Brand extends Component
 
     public function mount()
     {
-
-        $this->countries = cache()->remember('categories-menu', 60 * 60 * 24, function () {
+        $this->countries = cache()->remember('brand-country', 60 * 60 * 24, function () {
             return Product::where('brand_id', $this->brand->id)
                 ->withWhereHas('attributes', fn ($q) => $q->where('attribute_item.attribute_id', 64))
                 ->get()
@@ -31,7 +30,7 @@ class Brand extends Component
 
         // TODO cache it
         $this->catalogs = Catalog::whereHas('products', fn ($q) => $q->where('brand_id', $this->brand->id))
-         ->withWhereHas('categories', fn ($q) => $q->whereHas('products', fn ($q) =>  $q->where('brand_id', $this->brand->id)))
+         ->withWhereHas('categories', fn ($q) => $q->whereHas('products', fn ($q) => $q->where('brand_id', $this->brand->id)))
         ->get();
     }
 

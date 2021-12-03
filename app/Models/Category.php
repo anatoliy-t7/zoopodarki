@@ -47,23 +47,9 @@ class Category extends Model
         $attributesId = Str::replace('.', ',', $this->attributes['attributes']);
         $ids = explode(',', $attributesId);
 
-        if (!empty($filtredItems)) {
-            $items = $this->productsAttributes()
-                ->get()
-                ->unique()
-                ->pluck('id')->toArray();
-            $items = array_intersect($items, $filtredItems);
-        } else {
-            $items = $this->productsAttributes()
-                ->get()
-                ->unique()
-                ->pluck('id');
-        }
 
         return Attribute::whereIn('id', $ids)
-            ->withWhereHas('items', fn ($query) => $query->whereIn('id', $items)->where('show', true))
-            ->whereHas('items.products', fn ($q) => $q->isStatusActive())
-            ->whereHas('items.products.variations', fn ($q) => $q->hasStock())
+            ->with('items', fn ($query) => $query->whereIn('id', $filtredItems)->where('show', true))
             ->orderBy('name', 'asc')
             ->get();
     }

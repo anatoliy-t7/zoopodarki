@@ -117,7 +117,7 @@ class ProductCard extends Component
             ->with('unit')
             ->with('variations')
             ->with('media')
-            ->first();
+            ->firstOrFail();
 
         $attributes = collect($this->product->attributes);
 

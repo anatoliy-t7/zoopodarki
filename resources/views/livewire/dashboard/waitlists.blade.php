@@ -45,7 +45,8 @@
 
         <x-slot name="body">
           @forelse ($waitlists as $waitlist)
-            <x-dashboard.table.row @click="openForm" wire:click="openForm({{ $waitlist->id }})" class="cursor-pointer">
+            <x-dashboard.table.row wire:key="{{ $waitlist->id }}" @click="openForm"
+              wire:click="openForm({{ $waitlist->id }})" class="cursor-pointer">
 
               <x-dashboard.table.cell>
                 {{ $waitlist->id }}

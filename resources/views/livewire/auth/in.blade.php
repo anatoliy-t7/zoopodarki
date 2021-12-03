@@ -216,7 +216,8 @@
                 document.getElementById('phone').focus();
             }, 300);
         })"
-  class="flex items-center justify-start px-4 py-2 space-x-2 text-sm rounded-lg hover:text-orange-500 focus:text-orange-500 focus:outline-none ">
+  class="flex items-center justify-start px-4 py-2 space-x-2 text-sm font-semibold border-2 border-orange-400 rounded-lg hover:text-orange-500 focus:text-orange-500 focus:outline-none ">
+  <span>Войти</span>
   <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M10 17l5-5-5-5" />

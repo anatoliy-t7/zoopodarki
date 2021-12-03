@@ -28,16 +28,16 @@
 
         <div class="flex w-full">
           <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
-            <div class="w-full lg:w-3/12">
+            <aside class="w-full lg:w-3/12">
               <div class="relative p-4 pb-6 bg-white lg:rounded-2xl">
                 <!--googleoff: all-->
                 <!--noindex-->
                 @if (Agent::isMobile())
                   <x-mob-sidebar :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges"
-                    :brands="$brands" :attrs="$attrs" :stockF="$stockF" />
+                    :brands="$brands" :attrs="$allAttributes" :stockF="$stockF" />
                 @else
                   <x-filters :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges"
-                    :brands="$brands" :attrs="$attrs" :stockF="$stockF" :showPromoF="$showPromoF" />
+                    :brands="$brands" :attrs="$allAttributes" :stockF="$stockF" :showPromoF="$showPromoF" />
                 @endif
                 <!--/noindex-->
                 <!--googleon: all-->
@@ -52,9 +52,9 @@
                   </button>
                 </div>
               @endif
-            </div>
+            </aside>
 
-            <div id="top" class="w-full">
+            <article id="top" class="w-full">
 
               <div class="relative w-full px-4 pb-6 bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
 
@@ -100,7 +100,7 @@
                 {{ $products->links() }}
               </div>
 
-            </div>
+            </article>
           </div>
 
         </div>

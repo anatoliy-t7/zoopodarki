@@ -38,6 +38,13 @@
 
   </div>
 
+  @push('header-meta')
+    <link rel="dns-prefetch" href="//api-maps.yandex.ru">
+    <link rel="preload"
+      href="https://yastatic.net/s3/front-maps-static/maps-front-jsapi-v2-1/2.1.79-29/build/release/full-d1de67c44ff77d445058e8457ca6578da7094d3a.js"
+      as="script">
+  @endpush
+
   <script>
     var clusterer;
     var myGeoObjects;

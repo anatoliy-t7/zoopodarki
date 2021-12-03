@@ -75,7 +75,7 @@
 
         <x-slot name="body">
           @forelse ($orders as $order)
-            <x-dashboard.table.row wire:key="{{ $loop->index }}" x-on:click="openForm"
+            <x-dashboard.table.row wire:key="{{ $order->id }}" x-on:click="openForm"
               wire:click="openForm({{ $order->id }})" class="cursor-pointer" title="Посмотреть заказ">
 
               <x-dashboard.table.cell>
@@ -292,7 +292,7 @@
                   class="mb-1">
                   Отправить SMS
                 </x-button>
-                {{-- 9215572751 --}}
+                {{-- // TODO test 9215572751 --}}
               </div>
 
               <div class="flex items-end justify-end space-x-6">

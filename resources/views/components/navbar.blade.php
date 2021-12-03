@@ -1,8 +1,8 @@
 <div itemscope itemtype="http://schema.org/WPHeader">
 
   @if (Agent::isDesktop())
-    <div class="relative z-40 block">
-      <header class="text-gray-600 bg-gray-50">
+    <header class="relative z-40 block">
+      <div class="text-gray-600 bg-gray-50">
         <div class="flex items-center justify-between max-w-screen-xl px-4 py-1 mx-auto text-xs">
           <div class="font-bold text-gray-500">Санкт-Петербург</div>
           <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
@@ -20,9 +20,9 @@
             </div>
           </nav>
         </div>
-      </header>
+      </div>
 
-      <header id="navbar" class="z-40 w-screen text-gray-700 bg-white navbar">
+      <div id="navbar" class="z-40 w-screen text-gray-700 bg-white navbar">
         <div class="flex items-center justify-between max-w-screen-xl px-4 mx-auto">
 
           <div class="flex items-center justify-start space-x-12">
@@ -57,8 +57,8 @@
           </div>
 
         </div>
-      </header>
-    </div>
+      </div>
+    </header>
   @endif
 
   @if (Agent::isTablet() || Agent::isMobile())

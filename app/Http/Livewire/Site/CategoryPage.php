@@ -7,6 +7,7 @@ use App\Models\Catalog;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Tag;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -18,19 +19,21 @@ class CategoryPage extends Component
     public $category;
     public $catalog;
     public $brands;
-    public $attrs;
+    public $allAttributes;
     public $attributesRangeOn = false;
     public $attributesRange;
     public $attributesRanges = [];
-    public $attrsF = []; // Собирает выбранные свойства
-    private $attsFilters = []; // Групирует выбранные свойства
-    public $brandsF = [];
-    public $showPromoF = true; // TODO сделать проверку
+    private $attrsGroupFilters = []; // Групирует выбранные свойства
+
     public $promoF = false;
+    public $attrsF = []; // Собирает выбранные свойства
+    public $brandsF = [];
+    public $stockF = 1; // 0 without stock, 1 with stock, 2 all
+
+    public $showPromoF = true; // TODO сделать проверку
     public $maxPrice = 10000;
     public $minPrice = 0;
     public $productsCount = 0;
-    public $stockF = 1; // 0 without stock, 1 with stock, 2 all
     public $sortSelectedName = 'Название: от А до Я';
     public $sortSelectedType = 'name';
     public $sortBy = 'asc';
@@ -70,7 +73,8 @@ class CategoryPage extends Component
         'attrsF' => ['except' => ''],
         'brandsF' => ['except' => ''],
         'page' => ['except' => 1],
-        'stockF',
+        'stockF' => ['except' => ''],
+        'promoF' => ['except' => ''],
     ];
     protected $listeners = ['updateMinPrice', 'updateMaxPrice', 'updateMinRange', 'updateMaxRange'];
 
@@ -80,7 +84,7 @@ class CategoryPage extends Component
             ->with(['tags' => function ($query) {
                 $query->where('show_on_page', true);
             }])
-            ->first();
+            ->firstOrFail();
 
         $this->catalog = Catalog::where('slug', $catalogslug)
             ->first();
@@ -109,12 +113,15 @@ class CategoryPage extends Component
             ->where('price', '>', 0)
             ->min('price');
 
-
-        meta()
-            ->set('title', $this->category->meta_title ? $this->category->meta_title : $this->category->name)
-            ->set('description', $this->category->meta_description ? $this->category->meta_description : $this->category->name);
-
         $this->name = $this->category->name;
+
+        $this->setSeo();
+    }
+
+    public function setSeo()
+    {
+        SEOMeta::setTitle($this->category->meta_title ? $this->category->meta_title : $this->category->name)
+                ->setDescription($this->category->meta_description ? $this->category->meta_description : $this->category->name);
 
         if (!empty($this->tag)) {
             $this->getTagFilters();
@@ -122,29 +129,24 @@ class CategoryPage extends Component
             $metaTitle = '👍 '
             . $this->tag->meta_title
             . ', купите в новом интернет зоомагазине спб с доставкой (цена от '
-            . $this->minPrice . ' рублей), акции и скидки, петшопы в Невском районе и пр. Просвещения';
+            . discount($this->minPrice, 5) . ' рублей), акции и скидки, петшопы в Невском районе и пр. Просвещения';
             // TODO вычесть 5% из $this->minPrice
             $this->name = $this->tag->name;
 
             $metaDescription = '👍 '
             . $this->tag->meta_title .
             ' (в наличии) купите в спб 🚚 с бесплатной доставкой в интернет зоомагазине (цена от '
-            . $this->minPrice .
+            . discount($this->minPrice, 5) .
             ' рублей) ❗ фото, составы, описание, применение, дозировка, акции и скидки 🧡 душевное обслуживание, гарантии, самовывоз из Невского района и с пр. Просвещения';
 
-            meta()
-                ->set('title', $metaTitle)
-                ->set('description', $metaDescription);
+            SEOMeta::setTitle($metaTitle)
+                ->setDescription($metaDescription);
         }
+    }
 
-        $brands_ids = $this->category
-            ->products()
-            ->has('brand')
-            ->has('media')
-            ->isStatusActive()
-            ->whereHas('variations', fn ($q) => $q->whereBetween('price', [$this->minPrice, $this->maxPrice]))
-            ->hasStock()
-            ->get()
+    public function getBrands($products)
+    {
+        $brands_ids = $products
             ->pluck('brand_id')
             ->flatten()
             ->unique()
@@ -155,22 +157,16 @@ class CategoryPage extends Component
             ->whereIn('id', $brands_ids)
             ->orderBy('name', 'asc')
             ->get(['id', 'name']);
-
-
-        $this->updatedAttFilter($this->attrsF);
     }
-
 
     public function getAttributes($items = [])
     {
+        $allAttributes = $this->category->filters($items);
 
-        // $this->reset('attrsF');
-        $attrs = $this->category->filters($items);
-
-        $this->attributesRange = $attrs
+        $this->attributesRange = $allAttributes
             ->where('range', 1)->flatten()->toArray();
 
-        foreach ($attrs->where('range', 1)->pluck('items') as $key => $item) {
+        foreach ($allAttributes->where('range', 1)->pluck('items') as $key => $item) {
             array_push(
                 $this->attributesRanges,
                 [
@@ -182,20 +178,24 @@ class CategoryPage extends Component
             );
         }
 
-        $this->attrs = $attrs->where('range', 0)->all();
+        $this->allAttributes = $allAttributes->where('range', 0)->all();
     }
 
     public function updatedAttFilter($attrsF = [])
     {
         $this->attrsF = array_unique($attrsF);
 
-        // dd($this->attrsF);
         $attFilters = AttributeItem::whereIn('id', $attrsF)
             ->get();
 
-        $this->attsFilters = $attFilters->mapToGroups(function ($item) {
+        $this->attrsGroupFilters = $attFilters->mapToGroups(function ($item) {
             return [$item['attribute_id'] => $item['id']];
         });
+    }
+
+    public function updatedBrandsF()
+    {
+        $this->render();
     }
 
     public function updateMinPrice($minPrice)
@@ -237,14 +237,16 @@ class CategoryPage extends Component
     {
         $this->reset([
             'attrsF',
-            // 'attsFilters',
             'brandsF',
+            'stockF',
+            'promoF',
             'attributesRanges',
+            'allAttributes',
             'maxPrice',
             'minPrice',
         ]);
         $this->resetPage();
-
+        // TODO не работает
         $this->dispatchBrowserEvent('reset-range');
     }
 
@@ -256,40 +258,14 @@ class CategoryPage extends Component
         $this->resetPage();
     }
 
-    public function render()
+    public function getProducts()
     {
-        $products = Product::isStatusActive()
+        return Product::isStatusActive()
             ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
             ->has('media')
+
             ->whereHas('categories', fn ($q) => $q->where('category_id', $this->category->id))
-            ->whereHas('variations', function ($query) {
-                $query->whereBetween('price', [$this->minPrice, $this->maxPrice])
-                ->when($this->stockF == 0, function ($query) {
-                    $query->where('stock', 0);
-                })
-                ->when($this->stockF == 1, function ($query) {
-                    $query->where('stock', '>=', 1);
-                })
-                ->when($this->stockF == 0, function ($query) {
-                    $query->where('stock', 0);
-                })
-                ->when($this->promoF, function ($query) {
-                    $query->where('promotion_type', '>', 0);
-                })
-                ->where('price', '>=', 1);
-            })
-            ->when($this->attrsF, function ($query) {
-                if (count($this->attsFilters) >= 2) {
-                    foreach ($this->attsFilters as $ids) {
-                        $query->whereHas('attributes', fn ($q) => $q->whereIn('attribute_item.id', $ids));
-                    }
-                } else {
-                    $query->whereHas('attributes', fn ($q) => $q->whereIn('attribute_item.id', $this->attrsF));
-                }
-            })
-            ->when($this->brandsF, function ($query) {
-                $query->whereIn('brand_id', $this->brandsF);
-            })
+
             ->when($this->attributesRangeOn, function ($query) {
                 return $query->whereHas('attributes', function ($query1) {
                     $query1->where(function ($subQuery) {
@@ -308,6 +284,33 @@ class CategoryPage extends Component
                     });
                 });
             })
+
+            ->whereHas('variations', function ($query) {
+                $query->whereBetween('price', [$this->minPrice, $this->maxPrice])
+                ->when($this->promoF, function ($query) {
+                    $query->where('promotion_type', '>', 0);
+                });
+            })
+
+            ->when($this->brandsF, function ($query) {
+                $query->whereIn('brand_id', $this->brandsF);
+            })
+
+            ->when($this->attrsF, function ($query) {
+                if (count($this->attrsGroupFilters) >= 2) {
+                    foreach ($this->attrsGroupFilters as $ids) {
+                        $query->whereHas('attributes', fn ($q) => $q->whereIn('attribute_item.id', $ids));
+                    }
+                } else {
+                    $query->whereHas('attributes', fn ($q) => $q->whereIn('attribute_item.id', $this->attrsF));
+                }
+            })
+
+
+
+            ->when($this->stockF, function ($query) {
+                $query->checkStock($this->stockF);
+            })
                 ->with('media')
                 ->with('brand')
                 ->with('unit')
@@ -315,22 +318,25 @@ class CategoryPage extends Component
                 ->with('variations')
                 ->orderBy($this->sortSelectedType, $this->sortBy)
                 ->paginate(32);
+    }
 
-        $this->emit('lozad', '');
+    public function render()
+    {
+        $this->updatedAttFilter($this->attrsF);
+
+        $products = $this->getProducts();
+
+        $this->getAttributes($products->pluck('attributes')->flatten()->pluck('id')->unique()->values()->toArray());
+
+        $this->getBrands($products);
+
 
         $this->productsCount = $products->count();
         if ($this->productsCount < 5) {
-            meta()->noIndex();
+            SEOMeta::setRobots('noindex, nofollow');
         }
 
-
-        // TODO пропадают фильтры
-
-        if (count($this->attrsF) > 0) {
-            $this->getAttributes($products->pluck('attributes')->flatten()->pluck('id')->unique()->values()->toArray());
-        } else {
-            $this->getAttributes();
-        }
+        $this->emit('lozad', '');
 
         return view('livewire.site.category-page', [
             'products' => $products,

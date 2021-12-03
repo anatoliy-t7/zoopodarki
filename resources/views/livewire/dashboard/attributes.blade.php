@@ -41,7 +41,7 @@
 
         <x-slot name="body">
           @forelse($attributes as $key => $attribute)
-            <x-dashboard.table.row>
+            <x-dashboard.table.row wire:key="$attribute->id">
 
               <x-dashboard.table.cell>
                 {{ $attribute->id }}

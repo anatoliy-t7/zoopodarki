@@ -2,11 +2,16 @@
 <html lang="ru" class="h-full">
 
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="format-detection" content="phone=no">
+  <meta name="currency" content="ruble">
 
-  @meta
+  {!! SEOMeta::generate() !!}
+  {!! OpenGraph::generate() !!}
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link rel="icon" href="{{ asset('assets/img/fav.svg') }}" type="image/svg+xml">
+  <link rel="icon" href="{{ asset('assets/img/favicon.svg') }}" type="image/svg+xml">
   @stack('header-meta')
   <style>
     [x-cloak] {

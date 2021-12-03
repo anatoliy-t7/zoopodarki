@@ -20,7 +20,7 @@ class CreateBrandsTable extends Migration
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->text('description')->nullable();
-            $table->string('slug');
+            $table->string('slug')->index();
             $table->string('logo')->nullable();
         });
     }

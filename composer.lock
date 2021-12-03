@@ -4,8 +4,79 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "88dbaeb0e2dbf415fb16b6d3944f98d3",
+    "content-hash": "a08b687b161ae97b4209edf4c3a0b1aa",
     "packages": [
+        {
+            "name": "artesaos/seotools",
+            "version": "v0.20.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/artesaos/seotools.git",
+                "reference": "94fbb3b331dab7433b335a9aafd74a312a5525fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/artesaos/seotools/zipball/94fbb3b331dab7433b335a9aafd74a312a5525fe",
+                "reference": "94fbb3b331dab7433b335a9aafd74a312a5525fe",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "illuminate/config": "5.8.* || ^6.0 || ^7.0 || ^8.0",
+                "illuminate/support": "5.8.* || ^6.0 || ^7.0 || ^8.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.8.4 || ^4.0 || ^5.0",
+                "phpspec/phpspec": "~5.1.1 || ^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Artesaos\\SEOTools\\Providers\\SEOToolsServiceProvider"
+                    ],
+                    "aliases": {
+                        "SEOMeta": "Artesaos\\SEOTools\\Facades\\SEOMeta",
+                        "OpenGraph": "Artesaos\\SEOTools\\Facades\\OpenGraph",
+                        "Twitter": "Artesaos\\SEOTools\\Facades\\TwitterCard",
+                        "JsonLd": "Artesaos\\SEOTools\\Facades\\JsonLd",
+                        "SEO": "Artesaos\\SEOTools\\Facades\\SEOTools"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Artesaos\\SEOTools\\": "src/SEOTools/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vinicius",
+                    "email": "luiz.vinicius73@gmail.com"
+                }
+            ],
+            "description": "SEO Tools for Laravel and Lumen",
+            "keywords": [
+                "JSON-LD",
+                "laravel",
+                "lumen",
+                "metatags",
+                "opengraph",
+                "seo",
+                "seotools",
+                "webmaster"
+            ],
+            "support": {
+                "issues": "https://github.com/artesaos/seotools/issues",
+                "source": "https://github.com/artesaos/seotools"
+            },
+            "time": "2021-09-29T14:39:51+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.0.3",
@@ -1044,78 +1115,6 @@
                 "source": "https://github.com/ezyang/htmlpurifier/tree/master"
             },
             "time": "2020-06-29T00:56:53+00:00"
-        },
-        {
-            "name": "f9webltd/laravel-meta",
-            "version": "1.7.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/f9webltd/laravel-meta.git",
-                "reference": "f832a479517b6334740a77cfb85fc25fd6b5ebea"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/f9webltd/laravel-meta/zipball/f832a479517b6334740a77cfb85fc25fd6b5ebea",
-                "reference": "f832a479517b6334740a77cfb85fc25fd6b5ebea",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/config": "5.8.* || ^6.0 || ^7.0 || ^8.0",
-                "illuminate/support": "5.8.* || ^6.0 || ^7.0 || ^8.0",
-                "php": "^7.2 | ^8.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": ">=3.8",
-                "phpunit/phpunit": "^7.0|^8.0|^9.3"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "F9Web\\Meta\\MetaServiceProvider"
-                    ],
-                    "aliases": {
-                        "Meta": "F9Web\\Meta\\MetaFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "F9Web\\Meta\\": "src"
-                },
-                "files": [
-                    "src/helpers.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rob Allport",
-                    "email": "rob@f9web.co.uk",
-                    "homepage": "https://www.f9web.co.uk",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Render meta tags in your Laravel application",
-            "homepage": "https://github.com/f9webltd/laravel-meta",
-            "keywords": [
-                "laravel",
-                "laravel header meta tags",
-                "laravel meta",
-                "laravel meta tags",
-                "laravel open graph tags",
-                "laravel seo",
-                "meta",
-                "meta tags"
-            ],
-            "support": {
-                "issues": "https://github.com/f9webltd/laravel-meta/issues",
-                "source": "https://github.com/f9webltd/laravel-meta/tree/1.7.2"
-            },
-            "time": "2021-01-20T10:34:57+00:00"
         },
         {
             "name": "fideloper/proxy",
@@ -4378,6 +4377,63 @@
             "time": "2020-10-15T08:29:30+00:00"
         },
         {
+            "name": "philo/artisan-remote",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PhiloNL/artisan-remote.git",
+                "reference": "bca5bb63784abb19c9b31cf2a1b2625a4377374f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PhiloNL/artisan-remote/zipball/bca5bb63784abb19c9b31cf2a1b2625a4377374f",
+                "reference": "bca5bb63784abb19c9b31cf2a1b2625a4377374f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3.0|^8.0",
+                "sensiolabs/ansi-to-html": "^1.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^v5.14.0|^v6.9.0",
+                "phpunit/phpunit": "^9.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Philo\\ArtisanRemote\\ArtisanRemoteServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Philo\\ArtisanRemote\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philo Hermans",
+                    "email": "me@philohermans.com"
+                }
+            ],
+            "description": "An HTTP API to interact with Laravel Artisan commands.",
+            "keywords": [
+                "api",
+                "artisan",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/PhiloNL/artisan-remote/issues",
+                "source": "https://github.com/PhiloNL/artisan-remote/tree/v1.0.2"
+            },
+            "time": "2021-01-24T10:41:06+00:00"
+        },
+        {
             "name": "php-http/client-common",
             "version": "2.5.0",
             "source": {
@@ -5821,6 +5877,60 @@
                 "source": "https://github.com/ryangjchandler/blade-tabler-icons/tree/v1.1.0"
             },
             "time": "2021-05-10T14:50:09+00:00"
+        },
+        {
+            "name": "sensiolabs/ansi-to-html",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sensiolabs/ansi-to-html.git",
+                "reference": "94a3145aae4733ff933c8910263ef56d1ae317a9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sensiolabs/ansi-to-html/zipball/94a3145aae4733ff933c8910263ef56d1ae317a9",
+                "reference": "94a3145aae4733ff933c8910263ef56d1ae317a9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5"
+            },
+            "conflict": {
+                "twig/twig": "< 2.4.0"
+            },
+            "require-dev": {
+                "twig/twig": "^2.4 || ^3.0"
+            },
+            "suggest": {
+                "twig/twig": "Provides nice templating features"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SensioLabs\\AnsiConverter\\": "SensioLabs/AnsiConverter"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "A library to convert a text with ANSI codes to HTML",
+            "support": {
+                "issues": "https://github.com/sensiolabs/ansi-to-html/issues",
+                "source": "https://github.com/sensiolabs/ansi-to-html/tree/v1.2.1"
+            },
+            "time": "2020-10-06T05:48:55+00:00"
         },
         {
             "name": "seshac/otp-generator",

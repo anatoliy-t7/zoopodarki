@@ -48,33 +48,31 @@ class ShopCart extends Component
         $this->getCart();
     }
 
-    public function addToCart(int $itemId, int $quantity, $categoryId = 0, int $byWeight = 0)
+    public function addToCart(int $itemId, int $quantity, $catalogId = 0, int $byWeight = 0)
     {
-
-        $cart = $this->checkShelterCategory((int) $categoryId);
+        $cart = $this->checkShelterCategory((int) $catalogId);
 
         if ($cart->isEmpty()) {
-            $this->add($itemId, $quantity, (int) $categoryId, $byWeight);
+            $this->add($itemId, $quantity, (int) $catalogId, $byWeight);
         } else {
             if ($cart->get($itemId) !== null) {
                 if ($cart->get($itemId)->attributes->unit_value == 'на развес') {
-                    $this->add($itemId, $quantity, (int) $categoryId, $byWeight);
+                    $this->add($itemId, $quantity, (int) $catalogId, $byWeight);
                 } else {
-                    $this->increment($itemId, (int) $categoryId, $byWeight);
+                    $this->increment($itemId, (int) $catalogId, $byWeight);
                 }
             } else {
-                $this->add($itemId, $quantity, (int) $categoryId, $byWeight);
+                $this->add($itemId, $quantity, (int) $catalogId, $byWeight);
             }
         }
 
         $this->getCart();
     }
 
-    public function add(int $itemId, int $quantity, int $categoryId = 0, int $byWeight = 0)
+    public function add(int $itemId, int $quantity, int $catalogId = 0, int $byWeight = 0)
     {
-
         DB::transaction(
-            function () use ($itemId, $quantity, $categoryId, $byWeight) {
+            function () use ($itemId, $quantity, $catalogId, $byWeight) {
                 $product_1c = Product1C::with('product', 'product.categories', 'product.categories.catalog')
                   ->find($itemId);
 
@@ -89,17 +87,12 @@ class ShopCart extends Component
                     ->info('Извините, товара больше нет в наличии')
                     ->push();
                 } else {
-                    $cart = $this->checkShelterCategory($categoryId);
-
-                    if ($categoryId === 0) {
-                        $categoryId = $product_1c->product->categories[0]->id;
-                    }
+                    $cart = $this->checkShelterCategory($catalogId);
 
                     $associatedModel = [
                         'stock' => $product_1c->stock,
                         'unit_value' => $product_1c->unit_value,
                         'image' => $product_1c->product->getFirstMediaUrl('product-images', 'thumb'),
-                        'category_id' => $categoryId,
                         'promotion_type' => $product_1c->promotion_type,
                         'promotion_price' => $product_1c->promotion_price,
                         'discount_weight' => $product_1c->product->discount_weight,
@@ -151,10 +144,9 @@ class ShopCart extends Component
         );
     }
 
-    public function increment(int $itemId, int $categoryId = 0): void
+    public function increment(int $itemId, int $catalogId = 0): void
     {
-
-        $cart = $this->checkShelterCategory($categoryId);
+        $cart = $this->checkShelterCategory($catalogId);
         $item = $cart->get($itemId);
 
         if ($item->associatedModel['vendorcode'] === 'DISCOUNT_CARD') {
@@ -166,12 +158,12 @@ class ShopCart extends Component
             ]);
         } else {
             if ($item->associatedModel['stock'] < $item->quantity + 1) {
-            toast()
+                toast()
             ->info('Извините, товара больше нет в наличии')
             ->push();
 
-            $this->getCart();
-            $this->emitTo('product-card', 'render');
+                $this->getCart();
+                $this->emitTo('product-card', 'render');
             } else {
                 $cart->update(
                     $itemId,
@@ -184,16 +176,14 @@ class ShopCart extends Component
                 ->success('Товар добавлен в корзину')
                 ->push();
             }
-
         }
 
         $this->reloadCartCheckout();
     }
 
-    public function decrement(int $itemId, int $categoryId = 0): void
+    public function decrement(int $itemId, int $catalogId = 0): void
     {
-
-        $cart = $this->checkShelterCategory($categoryId);
+        $cart = $this->checkShelterCategory($catalogId);
 
         $cart->update(
             $itemId,
@@ -206,10 +196,10 @@ class ShopCart extends Component
         $this->reloadCartCheckout();
     }
 
-    public function delete($itemId, $categoryId = 0): void
+    public function delete($itemId, $catalogId = 0): void
     {
         if ($itemId) {
-            $cart = $this->checkShelterCategory($categoryId);
+            $cart = $this->checkShelterCategory($catalogId);
             $cart->remove($itemId);
             $this->getCart();
             $this->emitTo('product-card', 'render');
@@ -220,14 +210,14 @@ class ShopCart extends Component
     public function generateId(): void
     {
         if (request()->session()->missing('cart_id')) {
-            $this->cartId = 'cart_id'.Str::random(10);
+            $this->cartId = 'cart_id' . Str::random(10);
             session(['cart_id' => $this->cartId]);
         } else {
             $this->cartId = session('cart_id');
         }
 
         if (request()->session()->missing('shelter_cart')) {
-            $this->shelterCartId = 'shelter_cart'.Str::random(10);
+            $this->shelterCartId = 'shelter_cart' . Str::random(10);
             session(['shelter_cart' => $this->shelterCartId]);
         } else {
             $this->shelterCartId = session('shelter_cart');
@@ -277,9 +267,9 @@ class ShopCart extends Component
         $this->totalWeight = $this->totalWeight->sum();
     }
 
-    public function checkShelterCategory($categoryId)
+    public function checkShelterCategory($catalogId)
     {
-        if ($categoryId === 82) { // Помоги приюту
+        if ($catalogId === 14) { // Помоги приюту
             return $cart = app('shelter')->session($this->shelterCartId);
         } else {
             return $cart = \Cart::session($this->cartId);
