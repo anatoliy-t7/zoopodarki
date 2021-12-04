@@ -28,13 +28,14 @@ class CategoryPage extends Component
     public $promoF = false;
     public $attrsF = []; // Собирает выбранные свойства
     public $brandsF = [];
+    public $stockF = 3;
 
     public $showPromoF = true; // TODO сделать проверку
     public $maxPrice = 10000;
     public $minPrice = 0;
-    public $sortSelectedName = 'Название: от А до Я';
-    public $sortSelectedType = 'name';
-    public $sortBy = 'asc';
+    public $sortSelectedName = 'По популярности';
+    public $sortSelectedType = 'popularity';
+    public $sortBy = 'desc';
     public $tag = [];
     public $metaTitle = 'ZooPodarki';
     public $metaDescription = 'ZooPodarki';
@@ -44,7 +45,7 @@ class CategoryPage extends Component
         '0' => [
             'name' => 'По популярности',
             'type' => 'popularity',
-            'sort' => 'asc',
+            'sort' => 'desc',
         ],
         '1' => [
             'name' => 'Название: от А до Я',
@@ -72,6 +73,7 @@ class CategoryPage extends Component
         'brandsF' => ['except' => ''],
         'page' => ['except' => 1],
         'promoF' => ['except' => ''],
+        'stockF' => ['except' => ''],
     ];
     protected $listeners = ['updateMinPrice', 'updateMaxPrice', 'updateMinRange', 'updateMaxRange'];
 
@@ -244,6 +246,7 @@ class CategoryPage extends Component
             'attrsF',
             'brandsF',
             'promoF',
+            'stockF',
             'attributesRanges',
             'allAttributes',
         ]);
@@ -305,6 +308,11 @@ class CategoryPage extends Component
                     $query->whereHas('attributes', fn ($q) => $q->whereIn('attribute_item.id', $ids));
                 }
             })
+
+            ->when($this->stockF, function ($query) {
+                $query->checkStock((int) $this->stockF);
+            })
+
                 ->with('media')
                 ->with('brand')
                 ->with('unit')

@@ -61,8 +61,7 @@ if (document.getElementById('megaMenu')) {
 		const currentScroll = window.pageYOffset;
 		if (currentScroll <= 0) {
 			body.classList.remove('scroll-up');
-			megaMenu.classList.remove('mt-16');
-			megaMenu.classList.add('mt-20');
+			megaMenu.classList.add('mt-2');
 			return;
 		}
 
@@ -70,6 +69,7 @@ if (document.getElementById('megaMenu')) {
 			// down
 			body.classList.remove('scroll-up');
 			body.classList.add('scroll-down');
+			megaMenu.classList.remove('mt-2');
 		} else if (
 			currentScroll < lastScroll &&
 			body.classList.contains('scroll-down')
@@ -77,9 +77,7 @@ if (document.getElementById('megaMenu')) {
 			// up
 			body.classList.remove('scroll-down');
 			body.classList.add('scroll-up');
-
-			megaMenu.classList.remove('mt-20');
-			megaMenu.classList.add('mt-16');
+			megaMenu.classList.remove('mt-2');
 		}
 		lastScroll = currentScroll;
 	});

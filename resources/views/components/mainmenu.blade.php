@@ -18,7 +18,7 @@
   </div>
 
   <div x-cloak x-show="open" x-transition.opacity @click.outside="open = false" id="megaMenu"
-    class="absolute left-0 z-40 w-full h-auto mt-16 overflow-x-hidden bg-gray-100 top-2 scrollbar">
+    class="absolute left-0 z-40 w-full h-auto overflow-x-hidden bg-gray-100 top-16 scrollbar">
     <div
       class="relative z-50 flex items-start w-full h-auto mx-auto overflow-y-auto text-gray-700 max-w-screen overscroll-contain pb-28 sm:pb-0">
       <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="w-3/12 py-6">

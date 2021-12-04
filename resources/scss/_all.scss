@@ -95,7 +95,7 @@ input:checked ~ label > svg {
 
 .link-hover:after {
 	content: '';
-	@apply absolute z-0 bottom-0 top-0 m-auto opacity-0 rounded-full bg-gray-50;
+	@apply absolute z-0 bottom-0 top-0 m-auto opacity-0 rounded-full bg-orange-200;
 	left: -11px;
 	right: -11px;
 	z-index: -1;

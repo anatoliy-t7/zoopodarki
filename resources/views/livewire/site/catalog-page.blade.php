@@ -23,7 +23,7 @@
             @forelse ($catalog->categories as $category)
 
               <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}"
-                class="block px-3 py-1 text-sm font-semibold leading-tight hover:underline">
+                class="block px-3 py-1 font-semibold leading-tight hover:underline">
                 {{ $category->name }}
               </a>
 

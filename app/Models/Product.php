@@ -165,4 +165,23 @@ class Product extends Model implements HasMedia
     {
         return $this->morphMany('App\Models\Favorite', 'favoritable');
     }
+
+    public function scopeCheckStock($query, $stockF)
+    {
+        if ($stockF == 1) {
+            return $query->whereHas('variations', function ($query) {
+                $query->where('stock', '=', 0);
+            });
+        }
+        if ($stockF == 2) {
+            return $query->whereHas('variations', function ($query) {
+                $query->where('stock', '>=', 1);
+            });
+        }
+        if ($stockF == 3) {
+            return $query->whereHas('variations', function ($query) {
+                $query->where('stock', '>=', 0);
+            });
+        }
+    }
 }

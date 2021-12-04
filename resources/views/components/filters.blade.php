@@ -125,4 +125,22 @@
        });
      </script>
    </div>
+
+   <div class="space-y-3">
+     <div class="font-bold">Наличие в магазинах</div>
+     <div class="flex flex-col space-y-3">
+       <label class="inline-flex items-center space-x-2">
+         <input type="radio" wire:model="stockF" value="3" name="stockF" class="w-5 h-5 text-orange-400 form-radio"
+           checked><span class="text-sm text-gray-700 ">Все товары</span>
+       </label>
+       <label class="inline-flex items-center space-x-2">
+         <input type="radio" wire:model="stockF" value="2" name="stockF"
+           class="w-5 h-5 text-orange-400 form-radio"><span class="text-sm text-gray-700 ">В наличии</span>
+       </label>
+       <label class="inline-flex items-center space-x-2">
+         <input type="radio" wire:model="stockF" value="1" name="stockF"
+           class="w-5 h-5 text-orange-400 form-radio"><span class="text-sm text-gray-700">Под заказ</span>
+       </label>
+     </div>
+   </div>
  </div>

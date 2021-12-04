@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div id="navbar" class="z-40 w-screen text-gray-700 bg-white navbar">
+      <div class="z-40 w-screen text-gray-700 bg-white navbar">
         <div class="flex items-center justify-between max-w-screen-xl px-4 mx-auto">
 
           <div class="flex items-center justify-start space-x-12">

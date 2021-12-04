@@ -69,6 +69,14 @@ input[type='range']::-webkit-slider-thumb {
 	@apply mt-0;
 }
 
+// .scroll-down .megaMenu {
+// 	@apply mt-2;
+// }
+
+// .scroll-up .megaMenu {
+// 	@apply mt-0;
+// }
+
 .scroll-up .navbar {
 	@apply py-2 mt-0 h-16;
 	transform: none;
