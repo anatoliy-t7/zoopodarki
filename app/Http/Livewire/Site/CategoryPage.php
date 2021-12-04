@@ -166,7 +166,6 @@ class CategoryPage extends Component
 
     public function getAttributes($productAttributes = [])
     {
-        //  dd($productAttributes);
         $allAttributes = $this->category->filters($productAttributes);
 
         $this->attributesRange = $allAttributes
@@ -184,9 +183,7 @@ class CategoryPage extends Component
             );
         }
 
-        $this->allAttributes = $allAttributes->where('range', 0)->all();
-
-        //  dd($this->allAttributes);
+        $this->allAttributes = $allAttributes->where('range', 0)->toArray();
     }
 
     public function setAttFilter($attrsF = [])

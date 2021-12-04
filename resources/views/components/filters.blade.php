@@ -4,9 +4,9 @@
      class="absolute top-0 bottom-0 left-0 right-0 z-30 w-full h-full bg-gray-100 bg-opacity-75 rounded-2xl">
    </div>
 
-    <div wire:ignore>
-      <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
-    </div>
+   <div wire:ignore>
+     <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
+   </div>
 
    <div>
      @forelse ($attributesRanges as $key => $attrRange)
@@ -74,16 +74,55 @@
      @endif
    </div>
 
-   <div x-data="{attributeFilter: @entangle('attrsF')}" class="space-y-6">
-     @foreach ($allAttributes as $attr)
-       <div wire:key="{{ $attr->id }}">
-         @if ($attr->items->count() > 0)
-              <div class="space-y-3">
-                <div class="font-bold">{{ $attr->name }}</div>
-                <x-filter :items="$attr->items"  :idf="$attr->id"/>
-              </div>
-         @endif
-       </div>
-     @endforeach
+   <div wire:ignore x-data="listAttributes">
+
+     <div class="space-y-6">
+       <template x-for="(attribute, index) in allAttributes" :key="attribute.id" hidden>
+         <div class="space-y-3">
+           <div class="font-bold" x-text="attribute.name"></div>
+
+           <div x-data="{
+                  items: attribute.items,
+                   search: '',
+                   get filteredAttribute() {
+                     if (this.search === '') {
+                       return this.items;
+                     }
+                     return this.items.filter((item) => {
+                       return item.name
+                         .toLowerCase()
+                         .includes(this.search.toLowerCase());
+                     })
+                   },
+                }">
+             <div x-show="attribute.items.length >= 10" class="pb-2">
+               <input x-ref="searchField" x-model="search" x-on:keydown.window.prevent.slash="$refs.searchField.focus()"
+                 placeholder="Поиск" type="search" class="h-8 text-xs placeholder-gray-400 bg-gray-50 field" />
+             </div>
+
+             <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
+               <template x-for="(item, index) in filteredAttribute" :key="item.id" hidden>
+                 <label for="item.id" class="container-checkbox">
+                   <span class="text-sm" x-text="item.name"></span>
+                   <input id="item.id" :value="item.id" type="checkbox" x-model.number.debounce.700="attributeFilter">
+                   <span class="checkmark"></span>
+                 </label>
+               </template>
+             </div>
+
+           </div>
+
+         </div>
+       </template>
+     </div>
+
+     <script>
+       document.addEventListener('alpine:init', () => {
+         Alpine.data('listAttributes', () => ({
+           attributeFilter: @entangle('attrsF'),
+           allAttributes: @entangle('allAttributes'),
+         }))
+       });
+     </script>
    </div>
  </div>
