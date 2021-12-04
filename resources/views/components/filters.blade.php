@@ -4,7 +4,9 @@
      class="absolute top-0 bottom-0 left-0 right-0 z-30 w-full h-full bg-gray-100 bg-opacity-75 rounded-2xl">
    </div>
 
-   <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
+    <div wire:ignore>
+      <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
+    </div>
 
    <div>
      @forelse ($attributesRanges as $key => $attrRange)
@@ -73,73 +75,15 @@
    </div>
 
    <div x-data="{attributeFilter: @entangle('attrsF')}" class="space-y-6">
-     @foreach ($attrs as $attr)
+     @foreach ($allAttributes as $attr)
        <div wire:key="{{ $attr->id }}">
          @if ($attr->items->count() > 0)
-           <div wire:ignore x-data="searchAttribute{{ $attr->id }}">
-             <div class="space-y-3">
-               <div class="font-bold">{{ $attr->name }}</div>
-
-               <div>
-                 @if ($attr->items->count() >= 10)
-                   <input x-ref="searchField" x-model="search"
-                     x-on:keydown.window.prevent.slash="$refs.searchField.focus()" placeholder="Поиск" type="search"
-                     class="h-8 text-xs placeholder-gray-400 bg-gray-50 field" />
-                 @endif
-               </div>
-
-               <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
-                 <template x-for="(item, index) in filteredAttribute" :key="index" hidden>
-                   <label for="item.id" class="container-checkbox">
-                     <span class="text-sm" x-text="item.name"></span>
-                     <input id="item.id" :value="item.id" type="checkbox" x-model.number.debounce.700="attributeFilter">
-                     <span class="checkmark"></span>
-                   </label>
-                 </template>
-               </div>
-             </div>
-
-             <script>
-               document.addEventListener('alpine:init', () => {
-                 Alpine.data('searchAttribute{{ $attr->id }}', () => ({
-                   search: "",
-                   attributerData: @json($attr->items),
-                   get filteredAttribute() {
-                     if (this.search === "") {
-                       return this.attributerData;
-                     }
-                     return this.attributerData.filter((item) => {
-                       return item.name
-                         .toLowerCase()
-                         .includes(this.search.toLowerCase());
-                     });
-                   },
-                 }))
-               });
-             </script>
-           </div>
+              <div class="space-y-3">
+                <div class="font-bold">{{ $attr->name }}</div>
+                <x-filter :items="$attr->items"  :idf="$attr->id"/>
+              </div>
          @endif
        </div>
      @endforeach
-
    </div>
-
-   <div class="space-y-3">
-     <div class="font-bold">Наличие в магазинах</div>
-     <div class="flex flex-col space-y-3">
-       <label class="inline-flex items-center space-x-2">
-         <input type="radio" wire:model="stockF" value="2" name="stockF" class="w-5 h-5 text-orange-400 form-radio"
-           checked><span class="text-sm text-gray-700 ">Все товары</span>
-       </label>
-       <label class="inline-flex items-center space-x-2">
-         <input type="radio" wire:model="stockF" value="1" name="stockF"
-           class="w-5 h-5 text-orange-400 form-radio"><span class="text-sm text-gray-700 ">В наличии</span>
-       </label>
-       <label class="inline-flex items-center space-x-2">
-         <input type="radio" wire:model="stockF" value="0" name="stockF"
-           class="w-5 h-5 text-orange-400 form-radio"><span class="text-sm text-gray-700">Под заказ</span>
-       </label>
-     </div>
-   </div>
-
  </div>

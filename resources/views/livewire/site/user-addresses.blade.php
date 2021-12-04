@@ -11,43 +11,40 @@
     <x-slot name="content">
       <div>
 
-        <h4 class="text-xl font-bold text-center ">Адреса</h4>
+        <h4 class="text-xl font-bold text-center">Мои адреса
+        </h4>
 
         <div class="space-y-4">
 
-          <div x-cloak x-data="{ newAddress: false }" x-on:close-form.window="newAddress = false"
+          <div x-cloak x-data="{ newAddress: false }" x-on:close-modal.window="newAddress = false"
             x-on:edit-address.window="newAddress = true">
 
             <div x-show="newAddress === false" x-transition>
 
+              <div>
               @if ($addresses)
                 <div class="space-y-4">
                   @foreach ($addresses as $addressItem)
                     <div wire:key="{{ $loop->index }}"
-                      class="relative block px-4 py-3 mt-4 bg-white border border-gray-200 hover:border-green-400 rounded-xl ">
+                      class="relative block px-4 py-3 mt-4 bg-white border border-gray-200 hover:border-green-400 rounded-xl">
 
                       <div>
-                        @if ($addressItem->id === $address['id'])
-                          <div class="absolute z-40 -top-2 -left-2">
-                            <x-tabler-circle-check class="w-6 h-6 text-green-400 bg-white stroke-current" />
-                          </div>
-                        @endif
 
-                        <div x-cloak x-data="{ open: false }" class="absolute top-0 right-0 z-40 p-2 rounded-r-xl"
-                          :class="open ? 'h-full bg-gray-100' : ''">
-                          <div x-show="open === false" x-transition class="cursor-pointer" x-on:click="open = true"
-                            x-on:click.outside="open = false">
-                            <x-tabler-dots-vertical class="w-5 h-5 text-gray-300 stroke-current hover:text-gray-500" />
+                        <div x-cloak x-data="{ openEdit: false }" class="absolute top-0 right-0 z-40 p-2 rounded-r-xl"
+                          :class="openEdit ? 'h-full bg-gray-100 opacity-50' : ''">
+                          <div x-show="openEdit === false" x-transition class="cursor-pointer" x-on:click="openEdit = true"
+                            x-on:click.outside="openEdit = false">
+                            <x-tabler-dots-vertical class="w-5 h-5 text-gray-400 stroke-current hover:text-gray-500" />
                           </div>
-                          <div x-show="open" x-transition
+                          <div x-show="openEdit" x-transition
                             class="flex flex-col items-center justify-around h-full space-y-2">
 
-                            <div wire:click="editAddress({{ $addressItem->id }})" class="cursor-pointer">
-                              <x-tabler-edit class="w-5 h-5 text-gray-300 stroke-current hover:text-blue-400" />
+                            <div x-on:click="openEdit = false" wire:click="editAddress({{ $addressItem->id }})" class="cursor-pointer">
+                              <x-tabler-edit class="w-5 h-5 text-gray-400 stroke-current hover:text-blue-400" />
                             </div>
                             @if ($addressItem->id !== $address['id'])
-                              <div wire:click="removeAddress({{ $addressItem->id }})" class="cursor-pointer">
-                                <x-tabler-trash class="w-5 h-5 text-gray-300 stroke-current hover:text-red-400" />
+                              <div x-on:click="openEdit = false" wire:click="removeAddress({{ $addressItem->id }})" class="cursor-pointer">
+                                <x-tabler-trash class="w-5 h-5 text-gray-400 stroke-current hover:text-red-400" />
                               </div>
                             @endif
                           </div>
@@ -57,7 +54,10 @@
 
                       <div wire:click="setAddress({{ $addressItem->id }})" class="cursor-pointer">
                         <div>
-                          {{ $addressItem->address }},
+                          {{ $addressItem->address }} {{ $addressItem->building }}
+                          @if (Arr::has($address, 'apartment'))
+                            , кв. {{ $address['apartment'] }}
+                          @endif
                         </div>
                         <div class="text-xs text-gray-400">
                           {{ $addressItem->extra }}
@@ -68,7 +68,9 @@
                   @endforeach
                 </div>
               @endif
+              </div>
 
+              <div>
               @if (empty($addresses) || $addresses->count() <= 4)
                 <div x-on:click="newAddress = true"
                   class="flex items-center justify-center py-3 mt-4 space-x-1 border border-gray-200 border-dashed cursor-pointer hover:border-gray-200 rounded-xl hover:bg-gray-50">
@@ -76,6 +78,7 @@
                   <div>Добавить</div>
                 </div>
               @endif
+              </div>
 
             </div>
 
@@ -86,6 +89,9 @@
               </div>
 
               <div class="block w-full space-y-4">
+                    <span class="block text-xs font-normal text-center text-gray-400">
+                    Адрес Санкт-Петербурга
+                    </span>
 
                 <div class="block space-y-4">
 

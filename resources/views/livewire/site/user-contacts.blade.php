@@ -11,14 +11,14 @@
     <x-slot name="content">
       <x-loader />
       <div wire:loading.remove>
-        <h4 class="text-xl font-bold text-center ">Контакты</h4>
+        <h4 class="text-xl font-bold text-center ">Мои контакты</h4>
 
         <div class="space-y-4">
 
           <div x-cloak x-data="{ newContact: false }" x-on:close-form.window="newContact = false"
             x-on:edit-contact.window="newContact = true">
 
-            <div x-show="newContact === false" x-transition.opacity>
+            <div :class="newContact === false ? 'block' : 'hidden'" >
 
               @if ($contacts)
                 <div class="space-y-4">
@@ -27,12 +27,6 @@
                       class="relative block px-4 py-3 mt-4 bg-white border border-gray-200 hover:border-green-400 rounded-xl ">
 
                       <div>
-
-                        @if ($contactItem->id === $contact['id'])
-                          <div class="absolute z-40 -top-2 -left-2">
-                            <x-tabler-circle-check class="w-6 h-6 text-green-400 bg-white stroke-current" />
-                          </div>
-                        @endif
 
                         <div x-cloak x-data="{ open: false }" class="absolute top-0 right-0 z-40 p-2 rounded-r-xl"
                           :class="open ? 'h-full bg-gray-100' : ''">
@@ -56,7 +50,7 @@
 
                       </div>
 
-                      <div wire:click="setContact({{ $contactItem->id }})" class="space-y-1 cursor-pointer">
+                      <div wire:click="setContact({{ $contactItem->id }}), $render" class="space-y-1 cursor-pointer">
                         <div>{{ $contactItem->name }}</div>
                         <div>{{ $contactItem->phone }}</div>
                         <div class="text-sm text-gray-400">{{ $contactItem->email }}</div>
@@ -77,7 +71,7 @@
 
             </div>
 
-            <div x-show="newContact" x-transition.opacity>
+            <div :class="newContact === true ? 'block' : 'hidden'" x-transition.opacity>
 
               <div class="absolute top-4 left-4" x-on:click="newContact = false">
                 <x-tabler-chevron-left class="w-6 h-6 text-gray-500 cursor-pointer stroke-current" />
@@ -118,7 +112,7 @@
                 </div>
 
                 <div>
-                  <button wire:click="addNewContact()" class="font-bold text-white bg-green-500 btn hover:bg-green-600">
+                  <button wire:click="addNewContact(), $render" class="font-bold text-white bg-green-500 btn hover:bg-green-600">
                     <div wire:loading wire:target="addNewContact">
                       <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 24 24">

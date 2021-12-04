@@ -12,7 +12,7 @@
 
           <div class="text-lg text-gray-400" title="Найдено товаров">{{ $products->total() }}</div>
         </div>
-        @if ($category->tags->isNotEmpty())
+
           <div class="flex flex-wrap items-center justify-start lg:px-0">
             @forelse ($category->tags as $tagItem)
               <div class="p-1">
@@ -24,7 +24,6 @@
             @empty
             @endforelse
           </div>
-        @endif
 
         <div class="flex w-full">
           <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
@@ -34,10 +33,10 @@
                 <!--noindex-->
                 @if (Agent::isMobile())
                   <x-mob-sidebar :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges"
-                    :brands="$brands" :attrs="$allAttributes" :stockF="$stockF" />
+                    :brands="$brands" :allAttributes="$allAttributes"  />
                 @else
                   <x-filters :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges"
-                    :brands="$brands" :attrs="$allAttributes" :stockF="$stockF" :showPromoF="$showPromoF"
+                    :brands="$brands" :allAttributes="$allAttributes"  :showPromoF="$showPromoF"
                     :attrsF="$attrsF" />
                 @endif
                 <!--/noindex-->
@@ -48,7 +47,7 @@
                 <div class="px-4 pt-4 lg:py-4">
                   <button
                     class="inline-block w-full px-3 py-2 text-sm text-gray-600 bg-gray-200 border border-gray-200 rounded-2xl hover:text-gray-900 hover:bg-gray-400"
-                    wire:click.debounce.1000="resetFilters" wire:loading.attr="disabled">
+                    wire:click.debounce.1000="resetFilters(), $render" wire:loading.attr="disabled">
                     Сбросить фильтры
                   </button>
                 </div>

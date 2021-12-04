@@ -1,15 +1,13 @@
-@props(['minPrice', 'maxPrice'])
-<div x-data="range" @reset-range.window="reset()">
-
+<div  x-data="range" @reset-range.window="reset()">
   <div class="pb-5 text-sm font-bold">Цена, руб.</div>
-  <div class="flex flex-col items-center w-full max-w-xl px-1">
+  <div wire:ignore class="flex flex-col items-center w-full max-w-xl px-1">
     <input class="absolute opacity-0 pointer-events-none" type="range" name="min" min="10" max="100" :value="min">
     <input class="absolute opacity-0 pointer-events-none" type="range" name="max" min="10" max="100" :value="max">
 
     <div class="flex items-center justify-between w-full">
-      <div class="-ml-2" x-text=" min">
+      <div class="-ml-2" x-text="min">
       </div>
-      <div class="-mr-2" x-text=" max">
+      <div class="-mr-2" x-text="max">
       </div>
     </div>
 
@@ -20,12 +18,12 @@
         :style="`left: ${(min - rangeMin) * 100 / range}%; right: ${100 - (max - rangeMin) * 100 / range}%`"></div>
 
       <div class="absolute z-30 w-5 h-5 -ml-2 bg-yellow-400 rounded-full cursor-pointer"
-        x-on:pointerdown.stop="dragLeft = true" x-on:mouseup="$wire.emit('updateMinPrice', min)"
+        x-on:pointerdown.stop="dragLeft = true" x-on:mouseup="$wire.set('minPrice', min)"
         :style="`left: ${(min - rangeMin) * 100 / range}%`" x-ref="minThumb">
       </div>
 
       <div class="absolute z-30 w-5 h-5 -ml-2 bg-yellow-400 rounded-full cursor-pointer"
-        x-on:pointerdown.stop="dragRight = true" x-on:mouseup="$wire.emit('updateMaxPrice', max)"
+        x-on:pointerdown.stop="dragRight = true" x-on:mouseup="$wire.set('maxPrice', max)"
         :style="`left: ${(max - rangeMin) * 100 / range}%`" x-ref="maxThumb">
       </div>
 

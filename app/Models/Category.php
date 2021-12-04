@@ -37,7 +37,7 @@ class Category extends Model
     }
 
     // Берет свойста из категории и виды свойств из товаров
-    public function filters($filtredItems = [])
+    public function filters($productAttributes = [])
     {
         if (Str::of($this->attributes['attributes'])->trim()->isEmpty()) {
             return collect(); // return empty collection
@@ -46,16 +46,15 @@ class Category extends Model
         $attributesId = Str::replace('.', ',', $this->attributes['attributes']);
         $ids = explode(',', $attributesId);
 
-
         return Attribute::whereIn('id', $ids)
-            ->withWhereHas('items', fn ($query) => $query->whereIn('id', $filtredItems)->where('show', true))
+            ->withWhereHas('items', fn ($query) => $query->whereIn('id', $productAttributes)->where('show', true))
             ->orderBy('name', 'asc')
             ->get();
     }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_category', 'category_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'product_category', 'category_id', 'product_id')->has('media');
     }
 
     public function productsAttributes()

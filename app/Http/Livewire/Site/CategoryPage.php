@@ -28,12 +28,10 @@ class CategoryPage extends Component
     public $promoF = false;
     public $attrsF = []; // Собирает выбранные свойства
     public $brandsF = [];
-    public $stockF = 1; // 0 without stock, 1 with stock, 2 all
 
     public $showPromoF = true; // TODO сделать проверку
     public $maxPrice = 10000;
     public $minPrice = 0;
-    public $productsCount = 0;
     public $sortSelectedName = 'Название: от А до Я';
     public $sortSelectedType = 'name';
     public $sortBy = 'asc';
@@ -73,7 +71,6 @@ class CategoryPage extends Component
         'attrsF' => ['except' => ''],
         'brandsF' => ['except' => ''],
         'page' => ['except' => 1],
-        'stockF' => ['except' => ''],
         'promoF' => ['except' => ''],
     ];
     protected $listeners = ['updateMinPrice', 'updateMaxPrice', 'updateMinRange', 'updateMaxRange'];
@@ -87,12 +84,24 @@ class CategoryPage extends Component
             ->firstOrFail();
 
         $this->catalog = Catalog::where('slug', $catalogslug)
+            ->select('id', 'slug', 'name')
             ->first();
 
         if ($tagslug !== null) {
             $this->tag = Tag::where('slug', $tagslug)->first();
         }
 
+        $this->setMaxAndMinPrices();
+
+        $this->getBrands($this->category->products);
+
+        $this->name = $this->category->name;
+
+        $this->setSeo();
+    }
+
+    public function setMaxAndMinPrices()
+    {
         $variationsId = $this->category->products()
             ->isStatusActive()
             ->has('media')
@@ -112,10 +121,6 @@ class CategoryPage extends Component
             ->whereIn('id', $variationsId)
             ->where('price', '>', 0)
             ->min('price');
-
-        $this->name = $this->category->name;
-
-        $this->setSeo();
     }
 
     public function setSeo()
@@ -159,9 +164,10 @@ class CategoryPage extends Component
             ->get(['id', 'name']);
     }
 
-    public function getAttributes($items = [])
+    public function getAttributes($productAttributes = [])
     {
-        $allAttributes = $this->category->filters($items);
+        //  dd($productAttributes);
+        $allAttributes = $this->category->filters($productAttributes);
 
         $this->attributesRange = $allAttributes
             ->where('range', 1)->flatten()->toArray();
@@ -180,10 +186,10 @@ class CategoryPage extends Component
 
         $this->allAttributes = $allAttributes->where('range', 0)->all();
 
-        dd($this->allAttributes);
+        //  dd($this->allAttributes);
     }
 
-    public function updatedAttFilter($attrsF = [])
+    public function setAttFilter($attrsF = [])
     {
         $this->attrsF = array_unique($attrsF);
 
@@ -193,23 +199,23 @@ class CategoryPage extends Component
         $this->attrsGroupFilters = $attFilters->mapToGroups(function ($item) {
             return [$item['attribute_id'] => $item['id']];
         });
+
+        $this->attrsGroupFilters = $this->attrsGroupFilters->toArray();
+        //dd($this->attrsGroupFilters);
     }
 
     public function updatedBrandsF()
     {
-        $this->render();
-    }
-
-    public function updateMinPrice($minPrice)
-    {
-        $this->minPrice = $minPrice;
-
         $this->resetPage();
     }
 
-    public function updateMaxPrice($maxPrice)
+    public function updatedMinPrice()
     {
-        $this->maxPrice = $maxPrice;
+        $this->resetPage();
+    }
+
+    public function updatedMaxPrice()
+    {
         $this->resetPage();
     }
 
@@ -240,15 +246,13 @@ class CategoryPage extends Component
         $this->reset([
             'attrsF',
             'brandsF',
-            'stockF',
             'promoF',
             'attributesRanges',
             'allAttributes',
-            'maxPrice',
-            'minPrice',
         ]);
+        $this->setMaxAndMinPrices();
         $this->resetPage();
-        // TODO не работает
+
         $this->dispatchBrowserEvent('reset-range');
     }
 
@@ -264,9 +268,14 @@ class CategoryPage extends Component
     {
         return Product::isStatusActive()
             ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
+
             ->has('media')
 
             ->whereHas('categories', fn ($q) => $q->where('category_id', $this->category->id))
+
+            ->when($this->brandsF, function ($query) {
+                $query->whereIn('brand_id', $this->brandsF);
+            })
 
             ->when($this->attributesRangeOn, function ($query) {
                 return $query->whereHas('attributes', function ($query1) {
@@ -294,22 +303,10 @@ class CategoryPage extends Component
                 });
             })
 
-            ->when($this->brandsF, function ($query) {
-                $query->whereIn('brand_id', $this->brandsF);
-            })
-
             ->when($this->attrsF, function ($query) {
-                if (count($this->attrsGroupFilters) >= 2) {
-                    foreach ($this->attrsGroupFilters as $ids) {
-                        $query->whereHas('attributes', fn ($q) => $q->whereIn('attribute_item.id', $ids));
-                    }
-                } else {
-                    $query->whereHas('attributes', fn ($q) => $q->whereIn('attribute_item.id', $this->attrsF));
+                foreach ($this->attrsGroupFilters as $ids) {
+                    $query->whereHas('attributes', fn ($q) => $q->whereIn('attribute_item.id', $ids));
                 }
-            })
-
-            ->when($this->stockF, function ($query) {
-                $query->checkStock($this->stockF);
             })
                 ->with('media')
                 ->with('brand')
@@ -322,17 +319,13 @@ class CategoryPage extends Component
 
     public function render()
     {
-        $this->updatedAttFilter($this->attrsF);
+        $this->setAttFilter($this->attrsF);
 
         $products = $this->getProducts();
 
         $this->getAttributes($products->pluck('attributes')->flatten()->pluck('id')->unique()->values()->toArray());
 
-        $this->getBrands($products);
-
-
-        $this->productsCount = $products->count();
-        if ($this->productsCount < 5) {
+        if ($products->total() < 5) {
             SEOMeta::setRobots('noindex, nofollow');
         }
 

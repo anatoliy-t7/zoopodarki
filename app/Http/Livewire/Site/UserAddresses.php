@@ -82,13 +82,13 @@ class UserAddresses extends Component
         $defaultCity = 'Санкт-Петербург+';
         $response = Http::get(
             'https://autocomplete.search.hereapi.com/v1/autocomplete?q='
-            .$defaultCity
-            .$this->query
-            .'&at=59.934261%2C30.334933'
-            .'&limit=20'
-            .'&lang=ru-RU'
-            .'&in=countryCode%3ARUS'
-            .'&apiKey='.config('constants.here_com_token')
+            . $defaultCity
+            . $this->query
+            . '&at=59.934261%2C30.334933'
+            . '&limit=20'
+            . '&lang=ru-RU'
+            . '&in=countryCode%3ARUS'
+            . '&apiKey=' . config('constants.here_com_token')
         );
 
         if ($response->successful()) {
@@ -146,7 +146,7 @@ class UserAddresses extends Component
                 $this->address->save();
             }
 
-            $addressData = $this->getCustomerLocation($this->address['address'].$this->address['building']);
+            $addressData = $this->getCustomerLocation($this->address['address'] . $this->address['building']);
 
             if ($addressData === false) {
                 $this->address->zip = null;
@@ -180,6 +180,7 @@ class UserAddresses extends Component
             $this->addresses = $user->addresses;
 
             $this->emitUp('getAddressesforCheckout');
+            $this->dispatchBrowserEvent('close-modal');
         }
     }
 
@@ -188,20 +189,24 @@ class UserAddresses extends Component
         User::where('id', auth()->user()->id)->update([
             'pref_address' => $addressId,
         ]);
-        $this->dispatchBrowserEvent('close-modal');
+
         $this->getAddresses();
+    }
+
+    public function updatedAddress()
+    {
+        $this->render();
     }
 
     public function getCustomerLocation(string $address = '')
     {
-
         $defaultCity = '%2C+Санкт-Петербург%2C+Россия';
 
         $response = Http::retry(3, 100)->get(
             'https://geocode.search.hereapi.com/v1/geocode?q='
-            .$address
-            .$defaultCity
-            .'&apiKey='.config('constants.here_com_token')
+            . $address
+            . $defaultCity
+            . '&apiKey=' . config('constants.here_com_token')
         );
 
         if ($response->successful()) {

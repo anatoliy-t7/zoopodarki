@@ -140,9 +140,9 @@
 
       <x-dashboard.modal class="overflow-y-auto">
 
-        <x-loader wire:target="openForm, save" />
+        <x-loader wire:target="openForm, save, setSms" />
 
-        <div wire:loading.remove class="flex flex-col w-full space-y-4 ">
+        <div class="flex flex-col w-full space-y-4 ">
 
           @if ($orderSelected)
 
@@ -292,7 +292,6 @@
                   class="mb-1">
                   Отправить SMS
                 </x-button>
-                {{-- // TODO test 9215572751 --}}
               </div>
 
               <div class="flex items-end justify-end space-x-6">

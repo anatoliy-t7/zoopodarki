@@ -177,8 +177,6 @@ class ShopCart extends Component
                 ->push();
             }
         }
-
-        $this->reloadCartCheckout();
     }
 
     public function decrement(int $itemId, int $catalogId = 0): void
@@ -192,8 +190,6 @@ class ShopCart extends Component
 
         $this->getCart();
         $this->emitTo('product-card', 'render');
-
-        $this->reloadCartCheckout();
     }
 
     public function delete($itemId, $catalogId = 0): void
@@ -203,7 +199,6 @@ class ShopCart extends Component
             $cart->remove($itemId);
             $this->getCart();
             $this->emitTo('product-card', 'render');
-            $this->reloadCartCheckout();
         }
     }
 
@@ -273,13 +268,6 @@ class ShopCart extends Component
             return $cart = app('shelter')->session($this->shelterCartId);
         } else {
             return $cart = \Cart::session($this->cartId);
-        }
-    }
-
-    public function reloadCartCheckout(): void
-    {
-        if ($this->currentUrl === 'checkout') {
-            $this->emit('getCartCheckout');
         }
     }
 

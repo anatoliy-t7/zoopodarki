@@ -18,6 +18,9 @@
               Применение
             </span>
             <span itemprop="name">{{ $product->name }}</span>
+            @if ($category->id !== $product->categories[0]->id)
+               <span class="pl-0.5">{{ $catalog->extra_title }}</span>
+            @endif
           </h1>
           <div class="flex items-center justify-between space-x-6">
             <div>
@@ -621,7 +624,6 @@
         </div>
       </div>
 
-      @push('footer')
         <script>
           document.addEventListener('alpine:initializing', () => {
             Alpine.data('tabs', () => ({
@@ -787,7 +789,5 @@
             });
           </script>
         @endif
-
-      @endpush
     </article>
   </div>

@@ -61,17 +61,17 @@
               </div>
             @endif
             <div class="flex flex-wrap w-full max-w-screen-lg">
-              @foreach ($catalog->categories as $key => $category)
+              @foreach ($catalog->categories as $menuCategory)
                 <div class="py-2 pl-12 w-80">
-                  <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}"
+                  <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug]) }}"
                     class="block p-2 text-lg font-bold text-gray-900 hover:text-orange-500">
-                    {{ $category->name }}
+                    {{ $menuCategory->name }}
                   </a>
-                  @if ($category->tags->count() > 0)
+                  @if ($menuCategory->tags->count() > 0)
                     <div class="px-2 space-y-2">
-                      @foreach ($category->tags as $key => $tag)
+                      @foreach ($menuCategory->tags as $tag)
                         <a href="
-                      {{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug, 'tagslug' => $tag->slug]) }}"
+                      {{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug, 'tagslug' => $tag->slug]) }}"
                           class="block text-base text-gray-800 hover:text-orange-500">
                           {{ $tag->name }}
                         </a>

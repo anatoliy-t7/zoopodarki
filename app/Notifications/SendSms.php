@@ -22,6 +22,8 @@ class SendSms extends Notification
 
     public function toSmscRu()
     {
-        return SmscRuMessage::create($this->smsText . "\n" . 'Zoo_Podarki');
+
+        // . "\n" . 'Zoo_Podarki'
+        return SmscRuMessage::create($this->smsText);
     }
 }

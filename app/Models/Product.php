@@ -121,25 +121,6 @@ class Product extends Model implements HasMedia
         });
     }
 
-    public function scopeCheckStock($query, $stockF)
-    {
-        if ($stockF === 0) {
-            return $query->whereHas('variations', function ($query) {
-                $query->where('stock', 0);
-            });
-        }
-        if ($stockF === 1) {
-            return $query->whereHas('variations', function ($query) {
-                $query->where('stock', '>=', 1);
-            });
-        }
-        if ($stockF === 2) {
-            return $query->whereHas('variations', function ($query) {
-                $query->where('stock', '>=', 0);
-            });
-        }
-    }
-
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
