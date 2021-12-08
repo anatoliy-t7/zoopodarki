@@ -35,7 +35,7 @@
               <div class="w-full px-6 py-5 space-y-2 bg-white lg:rounded-2xl">
                 @foreach ($catalog->categories->sortBy('name') as $category)
                   <a class="block p-1 font-semibold cursor-pointer hover:underline"
-                    href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}?brandFilter[0]={{ $brand->id }}">
+                    href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}?brandsF[0]={{ $brand->id }}">
                     {{ $category->name }}
                   </a>
                 @endforeach

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8a27d519508e4ca5c76fdeb28d95623b",
+    "content-hash": "b057699f5dc67d19d5e1b115d6e67664",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -132,65 +132,6 @@
                 "source": "https://github.com/asm89/stack-cors/tree/v2.0.3"
             },
             "time": "2021-03-11T06:42:03+00:00"
-        },
-        {
-            "name": "bkwld/cloner",
-            "version": "3.9.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/BKWLD/cloner.git",
-                "reference": "825ad2cb237660bdef4d4aad3c539efb9a7db0a8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/BKWLD/cloner/zipball/825ad2cb237660bdef4d4aad3c539efb9a7db0a8",
-                "reference": "825ad2cb237660bdef4d4aad3c539efb9a7db0a8",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "^5.5|^6.0|^7.0|^8.0",
-                "php": ">=7.0"
-            },
-            "require-dev": {
-                "bkwld/upchuck": "^2.6@dev",
-                "illuminate/database": "^5.5|^6.0",
-                "league/flysystem-vfs": "^1.0",
-                "mockery/mockery": "^1.2.3",
-                "phpunit/phpunit": "~6.0|~8.0",
-                "satooshi/php-coveralls": "^1.0"
-            },
-            "suggest": {
-                "bkwld/upchuck": "Required for replicating of files."
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Bkwld\\Cloner\\ServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Bkwld\\Cloner\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Robert Reinhard",
-                    "email": "info@bkwld.com"
-                }
-            ],
-            "description": "A trait for Laravel Eloquent models that lets you clone of a model and it's relationships, including files.",
-            "support": {
-                "issues": "https://github.com/BKWLD/cloner/issues",
-                "source": "https://github.com/BKWLD/cloner/tree/3.9.2"
-            },
-            "time": "2020-12-23T18:24:13+00:00"
         },
         {
             "name": "blade-ui-kit/blade-icons",
@@ -2095,6 +2036,68 @@
                 }
             ],
             "time": "2020-06-13T08:05:20+00:00"
+        },
+        {
+            "name": "kirschbaum-development/eloquent-power-joins",
+            "version": "2.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kirschbaum-development/eloquent-power-joins.git",
+                "reference": "91544558a8e3a824bf45c24c12a1c1efb036c933"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kirschbaum-development/eloquent-power-joins/zipball/91544558a8e3a824bf45c24c12a1c1efb036c933",
+                "reference": "91544558a8e3a824bf45c24c12a1c1efb036c933",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^6.0|^7.0|^8.0",
+                "illuminate/support": "^6.0|^7.0|^8.0",
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "laravel/legacy-factories": "^1.0@dev",
+                "orchestra/testbench": "4.*|5.*|6.*",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Kirschbaum\\PowerJoins\\PowerJoinsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kirschbaum\\PowerJoins\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Luis Dalmolin",
+                    "email": "luis.nh@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The Laravel magic applied to joins.",
+            "homepage": "https://github.com/kirschbaum-development/eloquent-power-joins",
+            "keywords": [
+                "eloquent",
+                "join",
+                "laravel",
+                "mysql"
+            ],
+            "support": {
+                "issues": "https://github.com/kirschbaum-development/eloquent-power-joins/issues",
+                "source": "https://github.com/kirschbaum-development/eloquent-power-joins/tree/2.5.1"
+            },
+            "time": "2021-11-18T17:09:00+00:00"
         },
         {
             "name": "laravel-at/laravel-image-sanitize",
@@ -4697,16 +4700,16 @@
         },
         {
             "name": "phpoption/phpoption",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/php-option.git",
-                "reference": "5455cb38aed4523f99977c4a12ef19da4bfe2a28"
+                "reference": "eab7a0df01fe2344d172bff4cd6dbd3f8b84ad15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/5455cb38aed4523f99977c4a12ef19da4bfe2a28",
-                "reference": "5455cb38aed4523f99977c4a12ef19da4bfe2a28",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/eab7a0df01fe2344d172bff4cd6dbd3f8b84ad15",
+                "reference": "eab7a0df01fe2344d172bff4cd6dbd3f8b84ad15",
                 "shasum": ""
             },
             "require": {
@@ -4714,7 +4717,7 @@
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.4.1",
-                "phpunit/phpunit": "^6.5.14 || ^7.0.20 || ^8.5.19 || ^9.5.8"
+                "phpunit/phpunit": "^6.5.14 || ^7.5.20 || ^8.5.19 || ^9.5.8"
             },
             "type": "library",
             "extra": {
@@ -4734,11 +4737,13 @@
             "authors": [
                 {
                     "name": "Johannes M. Schmitt",
-                    "email": "schmittjoh@gmail.com"
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh"
                 },
                 {
                     "name": "Graham Campbell",
-                    "email": "hello@gjcampbell.co.uk"
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
                 }
             ],
             "description": "Option Type for PHP",
@@ -4750,7 +4755,7 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/php-option/issues",
-                "source": "https://github.com/schmittjoh/php-option/tree/1.8.0"
+                "source": "https://github.com/schmittjoh/php-option/tree/1.8.1"
             },
             "funding": [
                 {
@@ -4762,7 +4767,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-28T21:27:29+00:00"
+            "time": "2021-12-04T23:24:31+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -6289,31 +6294,33 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "9.9.0",
+            "version": "9.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "71ce715b5be60fe73bbcd6b8dba23ac9b78c9b62"
+                "reference": "cd9626c2f522d6e833afe3d8be0364202cbd165e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/71ce715b5be60fe73bbcd6b8dba23ac9b78c9b62",
-                "reference": "71ce715b5be60fe73bbcd6b8dba23ac9b78c9b62",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/cd9626c2f522d6e833afe3d8be0364202cbd165e",
+                "reference": "cd9626c2f522d6e833afe3d8be0364202cbd165e",
                 "shasum": ""
             },
             "require": {
                 "ext-exif": "*",
                 "ext-fileinfo": "*",
                 "ext-json": "*",
-                "illuminate/bus": "^7.0|^8.0",
-                "illuminate/console": "^7.0|^8.0",
-                "illuminate/database": "^7.0|^8.0",
-                "illuminate/pipeline": "^7.0|^8.0",
-                "illuminate/support": "^7.0|^8.0",
+                "illuminate/bus": "^8.71",
+                "illuminate/console": "^8.71",
+                "illuminate/database": "^8.71",
+                "illuminate/pipeline": "^8.71",
+                "illuminate/support": "^8.71",
+                "intervention/image": "^2.7",
                 "league/flysystem": "^1.0.64",
+                "league/glide": "^1.7",
                 "maennchen/zipstream-php": "^1.0|^2.0",
                 "php": "^7.4|^8.0",
-                "spatie/image": "^1.4",
+                "spatie/image": "^1.10.5",
                 "spatie/temporary-directory": "^1.1|^2.0",
                 "symfony/console": "^4.4|^5.0"
             },
@@ -6328,10 +6335,10 @@
                 "guzzlehttp/guzzle": "^7.0",
                 "league/flysystem-aws-s3-v3": "^1.0.23",
                 "mockery/mockery": "^1.4",
-                "orchestra/testbench": "^5.0|^6.0",
+                "orchestra/testbench": "^5.20|^6.23",
                 "phpunit/phpunit": "^9.3",
                 "spatie/laravel-ray": "^1.24",
-                "spatie/pdf-to-image": "^2.0",
+                "spatie/pdf-to-image": "^2.1",
                 "spatie/phpunit-snapshot-assertions": "^4.0"
             },
             "suggest": {
@@ -6378,7 +6385,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-medialibrary/issues",
-                "source": "https://github.com/spatie/laravel-medialibrary/tree/9.9.0"
+                "source": "https://github.com/spatie/laravel-medialibrary/tree/9.9.1"
             },
             "funding": [
                 {
@@ -6390,7 +6397,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-17T09:36:26+00:00"
+            "time": "2021-12-03T19:56:58+00:00"
         },
         {
             "name": "spatie/laravel-package-tools",
@@ -13022,16 +13029,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.9",
+            "version": "9.2.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "f301eb1453c9e7a1bc912ee8b0ea9db22c60223b"
+                "reference": "d5850aaf931743067f4bfc1ae4cbd06468400687"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/f301eb1453c9e7a1bc912ee8b0ea9db22c60223b",
-                "reference": "f301eb1453c9e7a1bc912ee8b0ea9db22c60223b",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d5850aaf931743067f4bfc1ae4cbd06468400687",
+                "reference": "d5850aaf931743067f4bfc1ae4cbd06468400687",
                 "shasum": ""
             },
             "require": {
@@ -13087,7 +13094,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.9"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.10"
             },
             "funding": [
                 {
@@ -13095,7 +13102,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-19T15:21:02+00:00"
+            "time": "2021-12-05T09:12:13+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -15464,16 +15471,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "4.13.1",
+            "version": "v4.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "5cf660f63b548ccd4a56f62d916ee4d6028e01a3"
+                "reference": "14dcbc908ab2625cd7a74258ee6c740cbecc6140"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/5cf660f63b548ccd4a56f62d916ee4d6028e01a3",
-                "reference": "5cf660f63b548ccd4a56f62d916ee4d6028e01a3",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/14dcbc908ab2625cd7a74258ee6c740cbecc6140",
+                "reference": "14dcbc908ab2625cd7a74258ee6c740cbecc6140",
                 "shasum": ""
             },
             "require": {
@@ -15564,9 +15571,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vimeo/psalm/issues",
-                "source": "https://github.com/vimeo/psalm/tree/4.13.1"
+                "source": "https://github.com/vimeo/psalm/tree/v4.14.0"
             },
-            "time": "2021-11-23T23:52:49+00:00"
+            "time": "2021-12-04T17:49:24+00:00"
         },
         {
             "name": "webmozart/path-util",

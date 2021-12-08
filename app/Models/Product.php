@@ -16,22 +16,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
-
     use Revieweable;
-
     use Sluggable;
-
     use SoftDeletes;
-
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
-
-    use \Bkwld\Cloner\Cloneable;
 
     //use Searchable;
 
     protected $table = 'products';
     protected $guarded = [];
-    protected $cloneable_relations = ['attributes', 'reviews', 'unit', 'brand', 'serie'];
 
     public function registerMediaConversions(Media $media = null): void
     {

@@ -14,7 +14,7 @@
         </div>
 
         <div class="flex flex-wrap items-center justify-start lg:px-0">
-          @forelse ($category->tags as $tagItem)
+          @forelse ($tags as $tagItem)
             <div class="p-1">
               <a href="{{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug, 'tagslug' => $tagItem->slug]) }}"
                 class="block px-3 py-2 text-xs border rounded-full hover:bg-blue-500 hover:border-blue-500 hover:text-white {{ request()->is('pet/' . $catalog->slug . '/' . $category->slug . '/tag/' . $tagItem->slug) ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-blue-500 border-blue-200' }}">

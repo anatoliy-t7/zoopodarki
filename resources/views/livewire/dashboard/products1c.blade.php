@@ -24,10 +24,9 @@
           <x-dashboard.table.head sortable wire:click="sortBy('name')"
             :direction="$sortField === 'name' ? $sortDirection : null">
             Название</x-dashboard.table.head>
-          @if ($onlyPromotions)
-            <x-dashboard.table.head sortable wire:click="sortBy('promotion_type')"
-              :direction="$sortField === 'promotion_type' ? $sortDirection : null">Вид акции</x-dashboard.table.head>
-          @endif
+
+          <x-dashboard.table.head sortable wire:click="sortBy('promotion_type')"
+            :direction="$sortField === 'promotion_type' ? $sortDirection : null">Вид акции</x-dashboard.table.head>
 
           <x-dashboard.table.head sortable wire:click="sortBy('price')"
             :direction="$sortField === 'price' ? $sortDirection : null">Цена</x-dashboard.table.head>
@@ -44,45 +43,42 @@
         </x-slot>
 
         <x-slot name="body">
-          @forelse ($products1c as $product1c)
-            <x-dashboard.table.row wire:key="{{ $product1c->id }}">
+          @forelse ($products1c as $key => $product1c)
+            <x-dashboard.table.row wire:key="{{ $key }}">
 
               <x-dashboard.table.cell>
                 {{ $product1c->id }}
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-
                 <div class="flex items-center justify-start max-w-sm space-x-2">
 
-                  @if ($product1c->product)
-                    <a class="font-semibold text-orange-500 hover:text-orange-600" target="_blank"
-                      href="/dashboard/products/edit?id={{ $product1c->product->id }}">
-                      <x-tabler-external-link class="w-5 h-5" />
-                    </a>
-                  @endif
+                  <div>
+                    @if ($product1c->product)
+                      <a class="font-semibold text-orange-500 hover:text-orange-600" target="_blank"
+                        href="/dashboard/products/edit?id={{ $product1c->product->id }}">
+                        <x-tabler-external-link class="w-5 h-5" />
+                      </a>
+                    @endif
+                  </div>
 
                   <button wire:click="openForm({{ $product1c->id }})" title="{{ $product1c->name }}"
                     class="max-w-md truncate hover:text-blue-500">
                     {{ $product1c->name }}
                   </button>
-
-
               </x-dashboard.table.cell>
 
-              @if ($onlyPromotions)
-                <x-dashboard.table.cell>
-                  @if ($product1c->promotion_type === 1)
-                    {{ $promotions['1'] }}
-                  @elseif ($product1c->promotion_type === 2)
-                    {{ $promotions['2'] }}
-                  @elseif ($product1c->promotion_type === 3)
-                    {{ $promotions['3'] }}
-                  @elseif ($product1c->promotion_type === 4)
-                    {{ $promotions['4'] }}
-                  @endif
-                </x-dashboard.table.cell>
-              @endif
+              <x-dashboard.table.cell>
+                @if ($product1c->promotion_type === 1)
+                  {{ $promotions['1'] }}
+                @elseif ($product1c->promotion_type === 2)
+                  {{ $promotions['2'] }}
+                @elseif ($product1c->promotion_type === 3)
+                  {{ $promotions['3'] }}
+                @elseif ($product1c->promotion_type === 4)
+                  {{ $promotions['4'] }}
+                @endif
+              </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
                 @if ($product1c->promotion_type === 0 or $product1c->promotion_type === 2)
@@ -123,7 +119,6 @@
 
               <x-dashboard.table.cell class="flex items-center justify-end invisible group-hover:visible">
                 <div class="flex justify-end space-x-3">
-
                   <button wire:click="openForm({{ $product1c->id }})" title="Edit">
                     <svg class="fill-current w-7 h-7 hover:text-blue-500" xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 32 32" title="edit">
@@ -132,7 +127,6 @@
                       </path>
                     </svg>
                   </button>
-
                 </div>
               </x-dashboard.table.cell>
 
@@ -156,105 +150,107 @@
     <x-dashboard.modal class="overflow-y-auto">
 
       <x-loader wire:target="openForm" />
+      <div>
+        @if ($product1c)
+          <div class="block space-y-4">
 
-      @if ($product1c)
-        <div class="block space-y-4">
-
-          <div class="space-y-1">
-            <div class="font-bold">Название товара</div>
-            <div>{{ $product1c['name'] }}</div>
-          </div>
-
-          <div class="block space-y-6">
-
-            @if ($product1c['promotion_type'] === 0)
-
-              <div class="block space-y-1 w-60 ">
-                <label for="promotion" class="block font-bold">Вид акции</label>
-                <select wire:model="promotion.type" name="promotion" id="promotion" class="w-full">
-                  <option selected value="">Выберите акцию</option>
-                  @foreach ($promotions as $key => $promo)
-                    <option value="{{ $key }}">{{ $promo }}</option>
-                  @endforeach
-                </select>
-              </div>
-
-              <div class="flex space-x-8">
-
-                @if ($promotion['type'] === '2')
-                  <div class="w-6/12 space-y-1">
-                    <label for="stock" class="font-bold">Количество товара <span class="font-normal ">(максимум:
-                        {{ $product1c['stock'] }})</span></label>
-                    <div class="w-20">
-                      <input wire:model.defer="promotion.stock" type="number" min="1" max="{{ $product1c['stock'] }}"
-                        id="stock">
-                    </div>
-                    @error('promotion.stock') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
-                  </div>
-                @endif
-
-                @if ($promotion['type'] === '2' or $promotion['type'] === '4')
-                  <div class="w-6/12 space-y-1">
-                    <label for="date" class="font-bold">Дата завершения</label>
-                    <input type="date" id="date" wire:model.defer="promotion.date">
-                    @error('promotion.date') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
-                  </div>
-                @endif
-
-                @if ($promotion['type'] === '3' or $promotion['type'] === '4')
-                  <div class="w-6/12 space-y-1">
-                    <label for="percent" class="font-bold">Процент скидки
-                      <span class="font-normal ">(указать без знака %)</span>
-                    </label>
-                    <div class="w-20">
-                      <input type="number" id="percent" wire:model.defer="promotion.percent">
-                    </div>
-                    @error('promotion.percent') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
-                  </div>
-                @endif
-
-              </div>
-
-            @else
-
-              <div class="block w-6/12 space-y-1">
-                <div>Цена товара: <b>{{ $product1c['price'] }}</b></div>
-                @if ($product1c['promotion_price'] !== null)
-                  <div>Цена акции: <b>{{ $product1c['promotion_price'] }}</b></div>
-                @endif
-              </div>
-
-              <div class="w-6/12 space-y-1">
-                <div>Количество товара: <b>{{ $product1c['stock'] }}</b></div>
-                @if ($product1c['promotion_percent'] !== null)
-                  <div>Процент акции: <b>{{ $product1c['promotion_percent'] }}</b></div>
-                @endif
-                @if ($product1c['promotion_date'] !== null)
-                  <div>Окончание акции: <b>{{ $product1c['promotion_date'] }}</b></div>
-                @endif
-              </div>
-
-            @endif
-
-
-          </div>
-          <div class="py-2 font-bold text-gray-600">
-            <div class="pt-6">
-              @if ($product1c['promotion_type'] === 0)
-                <button wire:click="save" class="text-white bg-green-500 btn hover:bg-green-600">
-                  Сохранить
-                </button>
-              @else
-                <button wire:click="stop" class="text-white bg-red-500 btn hover:bg-red-600">
-                  Прекратить акцию
-                </button>
-              @endif
+            <div class="space-y-1">
+              <div class="font-bold">Название товара</div>
+              <div>{{ $product1c['name'] }}</div>
             </div>
+
+            <div class="block space-y-6">
+
+              @if ($product1c['promotion_type'] === 0)
+
+                <div class="block space-y-1 w-60 ">
+                  <label for="promotion" class="block font-bold">Вид акции</label>
+                  <select wire:model="promotion.type" name="promotion" id="promotion" class="w-full">
+                    <option selected value="">Выберите акцию</option>
+                    @foreach ($promotions as $key => $promo)
+                      <option value="{{ $key }}">{{ $promo }}</option>
+                    @endforeach
+                  </select>
+                </div>
+
+                <div class="flex space-x-8">
+
+                  @if ($promotion['type'] === '2')
+                    <div class="w-6/12 space-y-1">
+                      <label for="stock" class="font-bold">Количество товара <span
+                          class="font-normal ">(максимум:
+                          {{ $product1c['stock'] }})</span></label>
+                      <div class="w-20">
+                        <input wire:model.defer="promotion.stock" type="number" min="1"
+                          max="{{ $product1c['stock'] }}" id="stock">
+                      </div>
+                      @error('promotion.stock') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                    </div>
+                  @endif
+
+                  @if ($promotion['type'] === '2' or $promotion['type'] === '4')
+                    <div class="w-6/12 space-y-1">
+                      <label for="date" class="font-bold">Дата завершения</label>
+                      <input type="date" id="date" wire:model.defer="promotion.date">
+                      @error('promotion.date') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                    </div>
+                  @endif
+
+                  @if ($promotion['type'] === '3' or $promotion['type'] === '4')
+                    <div class="w-6/12 space-y-1">
+                      <label for="percent" class="font-bold">Процент скидки
+                        <span class="font-normal ">(указать без знака %)</span>
+                      </label>
+                      <div class="w-20">
+                        <input type="number" id="percent" wire:model.defer="promotion.percent">
+                      </div>
+                      @error('promotion.percent') <span class="text-sm text-red-500">{{ $message }}</span>
+                      @enderror
+                    </div>
+                  @endif
+
+                </div>
+
+              @else
+
+                <div class="block w-6/12 space-y-1">
+                  <div>Цена товара: <b>{{ $product1c['price'] }}</b></div>
+                  @if ($product1c['promotion_price'] !== null)
+                    <div>Цена акции: <b>{{ $product1c['promotion_price'] }}</b></div>
+                  @endif
+                </div>
+
+                <div class="w-6/12 space-y-1">
+                  <div>Количество товара: <b>{{ $product1c['stock'] }}</b></div>
+                  @if ($product1c['promotion_percent'] !== null)
+                    <div>Процент акции: <b>{{ $product1c['promotion_percent'] }}</b></div>
+                  @endif
+                  @if ($product1c['promotion_date'] !== null)
+                    <div>Окончание акции: <b>{{ $product1c['promotion_date'] }}</b></div>
+                  @endif
+                </div>
+
+              @endif
+
+
+            </div>
+            <div class="py-2 font-bold text-gray-600">
+              <div class="pt-6">
+                @if ($product1c['promotion_type'] === 0)
+                  <button wire:click="save" class="text-white bg-green-500 btn hover:bg-green-600">
+                    Сохранить
+                  </button>
+                @else
+                  <button wire:click="stop" class="text-white bg-red-500 btn hover:bg-red-600">
+                    Прекратить акцию
+                  </button>
+                @endif
+              </div>
+            </div>
+
           </div>
-
-        </div>
-      @endif
-
+        @endif
+      </div>
     </x-dashboard.modal>
 
     <div class="flex items-center px-4">

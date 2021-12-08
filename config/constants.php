@@ -51,4 +51,32 @@ return [
     'lat_departure' => env('LAT_DEPARTURE', '59.91954757368843'),
     'lng_departure' => env('LNG_DEPARTURE', '30.467041076550657'),
 
+    'sort_type' => [
+        '0' => [
+            'name' => 'По популярности',
+            'type' => 'popularity',
+            'sort' => 'desc',
+        ],
+        '1' => [
+            'name' => 'Название: от А до Я',
+            'type' => 'name',
+            'sort' => 'asc',
+        ],
+        '2' => [
+            'name' => 'Название: от Я до А',
+            'type' => 'name',
+            'sort' => 'desc',
+        ],
+        '3' => [
+            'name' => 'Цена по возрастанию',
+            'type' => 'price_avg',
+            'sort' => 'asc',
+        ],
+        '4' => [
+            'name' => 'Цена по убыванию',
+            'type' => 'price_avg',
+            'sort' => 'desc',
+        ],
+    ],
+
 ];

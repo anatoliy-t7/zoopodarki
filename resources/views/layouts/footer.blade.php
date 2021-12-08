@@ -1,7 +1,7 @@
 <footer class="text-white bg-gray-100" itemscope itemtype="http://schema.org/WPFooter">
 
   <div class="max-w-screen-xl px-24 py-24 mx-auto md:px-4">
-    <div
+    <nav aria-label="Secondary"
       class="flex flex-col flex-wrap justify-between order-first space-y-4 text-left md:space-x-8 md:flex-row md:space-y-0">
       <div class="">
         <h2 class="mb-4 text-sm font-medium tracking-widest text-gray-300 uppercase title-font">Каталог</h2>
@@ -99,7 +99,7 @@
 
         </span>
       </div>
-    </div>
+    </nav>
   </div>
 
   <div class="text-gray-500 border-t border-gray-200">
@@ -114,6 +114,11 @@
   </div>
 
 </footer>
+
+@guest
+  <livewire:auth.in />
+@endguest
+
 
 @production
   <livewire:error-catcher>

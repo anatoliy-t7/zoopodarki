@@ -19,7 +19,7 @@
             </span>
             <span itemprop="name">{{ $product->name }}</span>
             @if ($category->id !== $product->categories[0]->id)
-               <span class="pl-0.5">{{ $catalog->extra_title }}</span>
+              <span class="pl-0.5">{{ $catalog->extra_title }}</span>
             @endif
           </h1>
           <div class="flex items-center justify-between space-x-6">
@@ -331,7 +331,7 @@
                         {{ $loop->first ? '' : ', ' }}
                         <div class="relative z-10 pl-1 my-1 bg-white whitespace-nowrap"><a
                             class="text-blue-500 hover:underline"
-                            href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) . '?attFilter%5B0%5D=' . $item['id'] }}">{{ $item['name'] }}</a>
+                            href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) . '?attrsF[0]=' . $item['id'] }}">{{ $item['name'] }}</a>
                         </div>
                       @endforeach
                     </div>
@@ -567,8 +567,8 @@
           </div>
         </div>
 
-        <div class="w-full pb-6 content">
-          <div x-cloak x-show="tab == 1" x-transition.opacity class="pt-4 leading-normal" itemprop="description">
+        <div x-cloak class="w-full pb-6 content">
+          <div :class="tab == 1 ? 'block' : 'hidden'" class="pt-4 leading-normal" itemprop="description">
             @if ($product->description)
               {!! $product->description !!}
             @else
@@ -577,13 +577,13 @@
           </div>
 
           @if ($product->consist)
-            <div x-cloak x-show="tab == 2" x-transition.opacity class="pt-4 leading-normal">
+            <div :class="tab == 2 ? 'block' : 'hidden'" x-transition.opacity class="pt-4 leading-normal">
               {!! $product->consist !!}
             </div>
           @endif
 
           @if ($product->applying)
-            <div x-cloak x-show="tab == 3" x-transition.opacity class="pt-4 leading-normal">
+            <div :class="tab == 3 ? 'block' : 'hidden'" x-transition.opacity class="pt-4 leading-normal">
               {!! $product->applying !!}
             </div>
           @endif
@@ -624,170 +624,170 @@
         </div>
       </div>
 
-        <script>
-          document.addEventListener('alpine:initializing', () => {
-            Alpine.data('tabs', () => ({
-              tab: {{ $tab }},
-              url: window.location.pathname,
-              title: '',
-              tabUrl: '',
-              tabDescription() {
-                this.tab = 1;
-                this.tabUrl = ''
-                this.openTab();
-              },
+      <script>
+        document.addEventListener('alpine:initializing', () => {
+          Alpine.data('tabs', () => ({
+            tab: {{ $tab }},
+            url: window.location.pathname,
+            title: '',
+            tabUrl: '',
+            tabDescription() {
+              this.tab = 1;
+              this.tabUrl = ''
+              this.openTab();
+            },
 
-              tabСonsist() {
-                this.tab = 2;
-                this.tabUrl = '/consist'
-                this.openTab();
-              },
+            tabСonsist() {
+              this.tab = 2;
+              this.tabUrl = '/consist'
+              this.openTab();
+            },
 
-              tabApplying() {
-                this.tab = 3;
-                this.tabUrl = '/applying'
-                this.openTab();
-              },
+            tabApplying() {
+              this.tab = 3;
+              this.tabUrl = '/applying'
+              this.openTab();
+            },
 
-              openTab() {
-                const state = {};
-                this.url = '/pet/{{ $catalog->slug }}/{{ $category->slug }}/{{ $product->slug }}' + this
-                  .tabUrl;
-                history.pushState(state, this.title, this.url)
-              }
-            }))
+            openTab() {
+              const state = {};
+              this.url = '/pet/{{ $catalog->slug }}/{{ $category->slug }}/{{ $product->slug }}' + this
+                .tabUrl;
+              history.pushState(state, this.title, this.url)
+            }
+          }))
+        });
+
+        function reviews() {
+          document.getElementById('reviews').scrollIntoView({
+            behavior: 'smooth'
           });
+        }
+      </script>
+      <script>
+        document.addEventListener('alpine:initializing', () => {
+          Alpine.data('variationsToggle', () => ({
+            count: 1,
+            byWeight: 1000,
+            catalogId: '{{ $catalog->id }}',
+            item: {
+              id: parseInt('{{ $product->variations[0]->id }}'),
+              stock: parseInt('{{ $product->variations[0]->stock }}'),
+              unit_value: '{{ $product->variations[0]->unit_value }}',
+            },
+            openModal: false,
+            formatedPhone: null,
+            phone: null,
+            valid: false,
+            orderOneClick: {},
+            email: @entangle('email').defer,
+            decrement() {
+              if (this.count >= 2) {
+                this.count--;
+              }
+            },
+            validate() {
+              if (this.count >= 32) {
+                this.count = 32;
+                var callToaster = new CustomEvent('toast', {
+                  detail: {
 
-          function reviews() {
-            document.getElementById('reviews').scrollIntoView({
-              behavior: 'smooth'
-            });
-          }
-        </script>
+                    // TODO променять и проверить
+
+                    message: 'Если вы хотите купить оптом, свяжитесь с нами по телефону'.config(
+                      'constants.phone'),
+                    timeout: '7000',
+                  }
+                });
+                // TODO test
+                callToaster.cancelable
+                window.dispatchEvent(callToaster);
+              }
+
+              if (this.count === '' || this.count == 0) {
+                this.count = 1;
+              }
+            },
+            addToCart() {
+              this.item.stock = this.item.stock - this.count;
+              if (this.item.stock < 0) {
+                this.item.stock = 0
+              }
+              if (this.item.unit_value == 'на развес') {
+                return window.livewire.emit('addToCart', this.item.id, this.count, this.catalogId, this.byWeight);
+              }
+              return window.livewire.emit('addToCart', this.item.id, this.count, this.catalogId)
+            },
+            preOrder() {
+              window.livewire.emit('preOrder', this.item.id, this.email)
+              this.showModal = false;
+            },
+            open() {
+              this.openModal = true
+              document.body.classList.add('overflow-hidden', 'pr-4');
+            },
+            close() {
+              this.openModal = false
+              document.body.classList.remove('overflow-hidden', 'pr-4');
+            },
+            validatePhone() {
+              if (this.orderOneClick.phone && this.orderOneClick.phone !== null) {
+                let formatedPhone = this.orderOneClick.phone.replace(/[^0-9]/g, '')
+                this.orderOneClick.phone = formatedPhone.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '($1)-$2-$3-$4');
+                this.phone = this.orderOneClick.phone.replace(/[^\w\s]/gi, '');
+
+                if (this.phone.length < 10) {
+                  this.valid = false;
+                } else {
+                  this.valid = true;
+                }
+              }
+            },
+          }))
+        })
+      </script>
+
+      @if ($product->media()->exists())
+        <script src="{{ mix('js/splide.min.js') }}"></script>
         <script>
-          document.addEventListener('alpine:initializing', () => {
-            Alpine.data('variationsToggle', () => ({
-              count: 1,
-              byWeight: 1000,
-              catalogId: '{{ $catalog->id }}',
-              item: {
-                id: parseInt('{{ $product->variations[0]->id }}'),
-                stock: parseInt('{{ $product->variations[0]->stock }}'),
-                unit_value: '{{ $product->variations[0]->unit_value }}',
-              },
-              openModal: false,
-              formatedPhone: null,
-              phone: null,
-              valid: false,
-              orderOneClick: {},
-              email: @entangle('email').defer,
-              decrement() {
-                if (this.count >= 2) {
-                  this.count--;
+          document.addEventListener('DOMContentLoaded', function() {
+
+            var thumbSlider = new Splide('#thumbSlider', {
+              type: 'slide',
+              rewind: true,
+              height: 300,
+              fixedWidth: 56,
+              fixedHeight: 56,
+              perMove: 1,
+              perPage: 4,
+              isNavigation: true,
+              focus: 'center',
+              pagination: false,
+              direction: 'ttb',
+              cover: true,
+              lazyLoad: 'nearby',
+              breakpoints: {
+                768: {
+                  height: 1,
                 }
-              },
-              validate() {
-                if (this.count >= 32) {
-                  this.count = 32;
-                  var callToaster = new CustomEvent('toast', {
-                    detail: {
+              }
+            }).mount();
 
-                      // TODO променять и проверить
-
-                      message: 'Если вы хотите купить оптом, свяжитесь с нами по телефону'.config(
-                        'constants.phone'),
-                      timeout: '7000',
-                    }
-                  });
-                  // TODO test
-                  callToaster.cancelable
-                  window.dispatchEvent(callToaster);
-                }
-
-                if (this.count === '' || this.count == 0) {
-                  this.count = 1;
-                }
-              },
-              addToCart() {
-                this.item.stock = this.item.stock - this.count;
-                if (this.item.stock < 0) {
-                  this.item.stock = 0
-                }
-                if (this.item.unit_value == 'на развес') {
-                  return window.livewire.emit('addToCart', this.item.id, this.count, this.catalogId, this.byWeight);
-                }
-                return window.livewire.emit('addToCart', this.item.id, this.count, this.catalogId)
-              },
-              preOrder() {
-                window.livewire.emit('preOrder', this.item.id, this.email)
-                this.showModal = false;
-              },
-              open() {
-                this.openModal = true
-                document.body.classList.add('overflow-hidden', 'pr-4');
-              },
-              close() {
-                this.openModal = false
-                document.body.classList.remove('overflow-hidden', 'pr-4');
-              },
-              validatePhone() {
-                if (this.orderOneClick.phone && this.orderOneClick.phone !== null) {
-                  let formatedPhone = this.orderOneClick.phone.replace(/[^0-9]/g, '')
-                  this.orderOneClick.phone = formatedPhone.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '($1)-$2-$3-$4');
-                  this.phone = this.orderOneClick.phone.replace(/[^\w\s]/gi, '');
-
-                  if (this.phone.length < 10) {
-                    this.valid = false;
-                  } else {
-                    this.valid = true;
-                  }
-                }
-              },
-            }))
-          })
-        </script>
-
-        @if ($product->media()->exists())
-          <script src="{{ mix('js/splide.min.js') }}"></script>
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-
-              var thumbSlider = new Splide('#thumbSlider', {
-                type: 'slide',
-                rewind: true,
-                height: 300,
-                fixedWidth: 56,
-                fixedHeight: 56,
-                perMove: 1,
-                perPage: 4,
-                isNavigation: true,
-                focus: 'center',
-                pagination: false,
-                direction: 'ttb',
-                cover: true,
-                lazyLoad: 'nearby',
-                breakpoints: {
-                  768: {
-                    height: 1,
-                  }
-                }
-              }).mount();
-
-              var slider = new Splide('#slider', {
-                type: 'fade',
-                fixedHeight: 320,
-                padding: '3em',
-                heightRatio: 0.5,
-                pagination: false,
-                arrows: false,
-                cover: false,
-                lazyLoad: 'nearby',
-              });
-
-              // Set the thumbnails slider as a sync target and then call mount.
-              slider.sync(thumbSlider).mount();
+            var slider = new Splide('#slider', {
+              type: 'fade',
+              fixedHeight: 320,
+              padding: '3em',
+              heightRatio: 0.5,
+              pagination: false,
+              arrows: false,
+              cover: false,
+              lazyLoad: 'nearby',
             });
-          </script>
-        @endif
+
+            // Set the thumbnails slider as a sync target and then call mount.
+            slider.sync(thumbSlider).mount();
+          });
+        </script>
+      @endif
     </article>
   </div>

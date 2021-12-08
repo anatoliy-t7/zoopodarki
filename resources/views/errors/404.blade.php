@@ -26,6 +26,7 @@
         background-color: #F97316;
         left: calc(50% - 1px);
         bottom: 20rem;
+        position: relative;
       }
 
       .yarn {
@@ -214,6 +215,14 @@
         background-image: radial-gradient(circle at 10px 10px, white, white 40%, #D5E8F8 65%, #8B9BD9);
         border-radius: 50%;
         top: calc(100% - 45px);
+      }
+
+      .cat-head,
+      .cat-head:before,
+      .cat-head:after,
+      .cat-face:before,
+      .cat-face:after {
+        position: relative;
       }
 
       .cat-face {
@@ -953,13 +962,10 @@
         }
       }
 
-
-
       *,
       *:before,
       *:after {
         box-sizing: border-box;
-        position: relative;
         -webkit-animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
         animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
         -webkit-animation-fill-mode: both;
@@ -977,7 +983,7 @@
   <div class="flex items-center pb-72">
     <div class="container py-8 md:mx-auto ">
       <div class="w-full text-center">
-        <div class="relative">
+        <div class="relative page404">
           <div class="all-wrap">
             <div class="all">
               <div class="yarn"></div>
@@ -1104,8 +1110,8 @@
             </div>
           </div>
         </div>
-        <h1 class="py-8 font-black text-gray-400 text-9xl">404</h1>
-        <p>
+        <h1 class="py-8 font-black text-gray-400  text-9xl">404</h1>
+        <p class="relative z-20">
           Страницы не существует, попробуйте воспользоваться поиском.
         </p>
       </div>

@@ -42,8 +42,8 @@
         <div x-cloak x-data class="py-4 text-sm text-center text-gray-600">Пожалуйста,
           авторизуйтесь или зарегистрируйтесь для продолжения оформления заказа.
         </div>
-        <div class="relative flex items-center justify-center">
-          <div class="max-w-xs">
+        <div class="relative flex items-center justify-center w-full">
+          <div class="max-w-xs mx-auto">
             <livewire:auth.in>
           </div>
         </div>

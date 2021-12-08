@@ -25,4 +25,4 @@
     @stack('header-script')
 </head>
 
-<body class="grid min-h-full antialiased leading-none text-gray-800 bg-gray-50">
+<body class="relative grid min-h-full antialiased leading-none text-gray-800 bg-gray-50">

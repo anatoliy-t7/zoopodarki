@@ -1,14 +1,13 @@
 <div x-cloak x-data="login"
   x-init="$watch('phone', value => validatePhone()), $watch('enteredOtp', value => checkUser())"
-  x-on:auth.window="open()">
+  x-on:auth.window="open()" class="{{ $currentUrl !== 'checkout' ? 'fixed z-40' : '' }}">
 
   @if ($currentUrl !== 'checkout')
     <div x-show="openAuthModal" x-transition.opacity
-      class="fixed top-0 left-0 z-40 flex items-center justify-center w-screen h-screen bg-gray-500 bg-opacity-50"
+      class="fixed left-0 z-40 flex items-center justify-center w-screen h-full min-h-screen bg-gray-500 bg-opacity-50"
       role="dialog" aria-modal="true">
-
       <div x-on:click.outside="close()" @keydown.window.escape="openAuthModal = false"
-        class="absolute z-50 flex flex-col bg-white shadow-xl rounded-2xl w-80">
+        class="absolute z-50 flex flex-col justify-center bg-white shadow-xl rounded-2xl w-80">
   @endif
 
   <div class="max-w-xs">
@@ -209,21 +208,6 @@
   @if ($currentUrl !== 'checkout')
 </div>
 </div>
-
-
-<button x-on:click="open(), $nextTick(() => {
-            setTimeout(() => {
-                document.getElementById('phone').focus();
-            }, 300);
-        })"
-  class="flex items-center justify-start px-4 py-2 space-x-2 text-sm font-semibold border-2 border-orange-400 rounded-lg hover:text-orange-500 focus:text-orange-500 focus:outline-none ">
-  <span>Войти</span>
-  <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M10 17l5-5-5-5" />
-    <path d="M13.8 12H3m9 10a10 10 0 1 0 0-20" />
-  </svg>
-</button>
 
 @endif
 

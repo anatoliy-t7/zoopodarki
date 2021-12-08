@@ -59,25 +59,29 @@ if (document.getElementById('megaMenu')) {
 
 	window.addEventListener('scroll', () => {
 		const currentScroll = window.pageYOffset;
+
 		if (currentScroll <= 0) {
 			body.classList.remove('scroll-up');
 			megaMenu.classList.add('mt-2');
 			return;
 		}
 
-		if (currentScroll > lastScroll && !body.classList.contains('scroll-down')) {
+		if (currentScroll > lastScroll) {
 			// down
-			body.classList.remove('scroll-up');
-			body.classList.add('scroll-down');
 			megaMenu.classList.remove('mt-2');
-		} else if (
-			currentScroll < lastScroll &&
-			body.classList.contains('scroll-down')
-		) {
+			if (body.classList.contains('scroll-up')) {
+				body.classList.remove('scroll-up');
+			}
+			if (!body.classList.contains('scroll-down')) {
+				body.classList.add('scroll-down');
+			}
+		} else if (currentScroll < lastScroll) {
 			// up
-			body.classList.remove('scroll-down');
 			body.classList.add('scroll-up');
 			megaMenu.classList.remove('mt-2');
+			if (body.classList.contains('scroll-down')) {
+				body.classList.remove('scroll-down');
+			}
 		}
 		lastScroll = currentScroll;
 	});

@@ -19,6 +19,7 @@ class CategoryPage extends Component
     public $category;
     public $catalog;
     public $brands;
+    public $tags;
     public $allAttributes;
     public $attributesRangeOn = false;
     public $attributesRange;
@@ -29,6 +30,7 @@ class CategoryPage extends Component
     public $attrsF = []; // Собирает выбранные свойства
     public $brandsF = [];
     public $stockF = 3;
+
 
     public $showPromoF = true; // TODO сделать проверку
     public $maxPrice = 10000;
@@ -85,12 +87,14 @@ class CategoryPage extends Component
             }])
             ->firstOrFail();
 
+        $this->tags = $this->category->tags;
+
         $this->catalog = Catalog::where('slug', $catalogslug)
             ->select('id', 'slug', 'name')
-            ->first();
+            ->firstOrFail();
 
         if ($tagslug !== null) {
-            $this->tag = Tag::where('slug', $tagslug)->first();
+            $this->tag = Tag::where('slug', $tagslug)->firstOrFail();
         }
 
         $this->setMaxAndMinPrices();
@@ -327,6 +331,7 @@ class CategoryPage extends Component
         $this->setAttFilter($this->attrsF);
 
         $products = $this->getProducts();
+
 
         $this->getAttributes($products->pluck('attributes')->flatten()->pluck('id')->unique()->values()->toArray());
 

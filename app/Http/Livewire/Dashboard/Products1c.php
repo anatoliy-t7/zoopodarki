@@ -49,7 +49,9 @@ class Products1c extends Component
 
     public function openForm($product1cId)
     {
-        $this->product1c = Product1C::where('id', $product1cId)->firstOrFail()->toArray();
+        $this->product1c = Product1C::where('id', $product1cId)
+        ->first()
+        ->toArray();
 
         $this->dispatchBrowserEvent('open-form');
     }
@@ -91,14 +93,12 @@ class Products1c extends Component
         }
 
         $this->closeForm();
-        $this->dispatchBrowserEvent('close');
     }
 
     public function stop()
     {
         $this->stopPromotion($this->product1c['id']);
         $this->closeForm();
-        $this->dispatchBrowserEvent('close');
         toast()
             ->success('Акция прекращена')
             ->push();
@@ -106,7 +106,8 @@ class Products1c extends Component
 
     public function closeForm()
     {
-        $this->reset(['product1c', 'promotions', 'promotion']);
+        $this->reset('product1c', 'promotion');
+        $this->dispatchBrowserEvent('close');
     }
 
     public function sortBy($field)
@@ -130,6 +131,7 @@ class Products1c extends Component
                     $query->where('promotion_type', '!=', 0);
                 })
                 ->with('product')
+                ->with('product.unit')
                 ->orderBy($this->sortField, $this->sortDirection)
                 ->paginate($this->itemsPerPage),
         ])

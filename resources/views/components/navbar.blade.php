@@ -5,17 +5,17 @@
       <div class="text-gray-600 bg-gray-50">
         <div class="flex items-center justify-between max-w-screen-xl px-4 py-1 mx-auto text-xs">
           <div class="font-bold text-gray-500">Санкт-Петербург</div>
-          <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+          <nav itemscope itemtype="http://schema.org/SiteNavigationElement" aria-label="Primary">
             <div itemprop="about" itemscope itemtype="http://schema.org/ItemList"
               class="flex items-center justify-end space-x-2">
               <a itemprop="itemListElement" href="#" class="px-3 py-2 hover:underline">
-                Акции и Скидки
+                Доставка
+              </a>
+              <a itemprop="itemListElement" href="#" class="px-3 py-2 hover:underline">
+                Самовывоз
               </a>
               <a itemprop="itemListElement" href="{{ route('site.contact') }}" class="px-3 py-2 hover:underline">
                 Адреса и контакты
-              </a>
-              <a itemprop="itemListElement" href="#" class="px-3 py-2 hover:underline">
-                Помощь
               </a>
             </div>
           </nav>

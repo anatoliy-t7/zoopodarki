@@ -33,7 +33,7 @@
     itemtype="https://schema.org/Offer">
     @foreach ($product->variations->sortBy('price') as $key => $item)
 
-      @if ($item->promotion_type != 0 and $item->promotion_type != 1)
+      @if ($item->promotion_type != 0)
         <div class="absolute top-0 left-0">
           <x-tabler-discount-2 class="w-8 h-8 text-orange-500 stroke-current" />
         </div>

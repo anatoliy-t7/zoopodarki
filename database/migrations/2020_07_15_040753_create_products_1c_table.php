@@ -27,7 +27,7 @@ class CreateProducts1cTable extends Migration
             $table->integer('price')->default(0);
             $table->integer('stock')->default(0);
 
-            $table->integer('promotion_type')->default(0);
+            $table->integer('promotion_type')->default(0)->index();
             $table->integer('promotion_price')->nullable();
             $table->string('promotion_percent')->nullable();
             $table->date('promotion_date')->nullable();

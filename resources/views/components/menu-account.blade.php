@@ -1,8 +1,20 @@
 <div class="flex items-center justify-between space-x-4">
   @guest
-
-    <livewire:auth.in />
-
+    <div x-data>
+      <button x-on:click="$dispatch('auth'), $nextTick(() => {
+                setTimeout(() => {
+                    document.getElementById('phone').focus();
+                }, 300);
+            })"
+        class="flex items-center justify-start px-4 py-2 space-x-2 text-sm font-semibold border-2 border-orange-400 rounded-lg hover:text-orange-500 focus:text-orange-500 focus:outline-none ">
+        <span>Войти</span>
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 17l5-5-5-5" />
+          <path d="M13.8 12H3m9 10a10 10 0 1 0 0-20" />
+        </svg>
+      </button>
+    </div>
   @else
     <div x-data="{ open: false }" @click.outside="open = false" class="relative">
 

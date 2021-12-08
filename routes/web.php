@@ -9,13 +9,15 @@ Route::middleware(['throttle:1000,60', 'web', 'auth'])
     ->name('site.')
     ->group(
         function () {
-            Route::get('/', 'App\Http\Controllers\Site\HomeController@index')->name('home');
+            Route::get('/', 'App\Http\Controllers\Site\HomeController@page')->name('home');
 
             Route::get('/pet/{catalogslug}/{categoryslug}/tag/{tagslug}', \App\Http\Livewire\Site\CategoryPage::class)->name('tag');
 
             Route::get('/pet/{catalogslug}/{categoryslug}', \App\Http\Livewire\Site\CategoryPage::class)->name('category');
 
             Route::get('/pet/{catalogslug}', \App\Http\Livewire\Site\CatalogPage::class)->name('catalog');
+
+            Route::get('/discounts', \App\Http\Livewire\Site\DiscountPage::class)->name('discounts');
 
             Route::get('/search', \App\Http\Livewire\Site\Search\SearchPage::class)->name('search');
 
