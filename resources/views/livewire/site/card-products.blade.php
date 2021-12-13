@@ -66,7 +66,7 @@
           <div class="flex items-center justify-end w-2/12">
             @if ($item->stock > 0)
               <button title="В корзину" wire:click="$emit('addToCart', {{ $item->id }}, 1, 0, 1000)"
-                class="z-10 transition ease-in-out transform cursor-pointer focus:outline-none active:scale-95 link-hover group">
+                class="z-10 transition ease-in-out cursor-pointer focus:outline-none active:scale-95 link-hover group">
                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <path class="text-blue-400 stroke-current group-hover:text-blue-500" stroke-linecap="round"
                     stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"

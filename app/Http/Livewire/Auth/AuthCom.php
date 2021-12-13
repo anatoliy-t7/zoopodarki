@@ -14,7 +14,7 @@ use Livewire\Component;
 use Seshac\Otp\Otp;
 use Usernotnull\Toast\Concerns\WireToast;
 
-class In extends Component
+class AuthCom extends Component
 {
     use WireToast;
 
@@ -41,9 +41,9 @@ class In extends Component
         if ($phone !== null) {
             $this->phone = (int) $phone;
 
-             $this->validate([
-                 'phone' => 'required|digits:10',
-             ]);
+            $this->validate([
+                'phone' => 'required|digits:10',
+            ]);
         }
 
         $functionOtp = Otp::generate($this->phone);
@@ -77,7 +77,6 @@ class In extends Component
 
     public function authUser()
     {
-
         $functionUser = User::where('phone', $this->phone)->first();
 
         Auth::login($functionUser, $remember = true);
@@ -136,7 +135,7 @@ class In extends Component
     {
         try {
             (new AnonymousNotifiable())
-                ->route('smscru', '+7'.$this->phone)
+                ->route('smscru', '+7' . $this->phone)
                 ->notify(new SendOTP($this->token));
 
             toast()
@@ -153,13 +152,12 @@ class In extends Component
 
     public function loginByEmail()
     {
-
         $this->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (! User::where('email', $this->email)->first()) {
+        if (!User::where('email', $this->email)->first()) {
             return toast()
                 ->warning('Этот email не зарегистрирован')
                 ->push();
@@ -180,7 +178,6 @@ class In extends Component
 
     public function render()
     {
-
-        return view('livewire.auth.in');
+        return view('livewire.auth.auth-com');
     }
 }

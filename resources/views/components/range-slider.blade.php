@@ -1,6 +1,6 @@
-<div  x-data="range" @reset-range.window="reset()">
+<div x-data="range" @reset-range.window="reset()">
   <div class="pb-5 text-sm font-bold">Цена, руб.</div>
-  <div wire:ignore class="flex flex-col items-center w-full max-w-xl px-1">
+  <div class="flex flex-col items-center w-full max-w-xl px-2">
     <input class="absolute opacity-0 pointer-events-none" type="range" name="min" min="10" max="100" :value="min">
     <input class="absolute opacity-0 pointer-events-none" type="range" name="max" min="10" max="100" :value="max">
 

@@ -116,7 +116,7 @@
 </footer>
 
 @guest
-  <livewire:auth.in />
+  <livewire:auth.auth-com />
 @endguest
 
 

@@ -1,5 +1,5 @@
 @section('title')
-Главная страница
+  Главная страница
 @endsection
 <div>
 
@@ -24,22 +24,6 @@
         </div>
       </div>
 
-      <div class="max-w-xl space-y-2 ">
-        <div class="font-semibold">Блок товаров</div>
-        <input wire:model.defer="homePageBlockOneTitle" type="text" name="homePageBlockOneTitle" class="field"
-          placeholder="Загаловок">
-        <input wire:model.defer="homePageBlockOneProducts" type="text" name="homePageBlockOneProducts" class="field"
-          placeholder="ID товаров через запятую">
-      </div>
-
-      <div class="max-w-xl space-y-2 ">
-        <div class="font-semibold">Блок товаров 2</div>
-        <input wire:model.defer="homePageBlockTwoTitle" type="text" name="homePageBlockTwoTitle" class="field"
-          placeholder="Загаловок">
-        <input wire:model.defer="homePageBlockTwoProducts" type="text" name="homePageBlockTwoProducts" class="field"
-          placeholder="ID товаров через запятую">
-      </div>
-
     </div>
     <div class="flex justify-end pt-4">
       <div>
@@ -51,93 +35,93 @@
       document.addEventListener('alpine:initializing', () => {
         Alpine.data('handler', () => ({
           brands: null,
-            tagifyBrands: null,
-            homePageBrands: null,
-            maxTags: 7,
+          tagifyBrands: null,
+          homePageBrands: null,
+          maxTags: 7,
 
-            setHomePageBrandFromServer(homePageBrands) {
-                this.homePageBrands = null;
-               
-                this.homePageBrands = homePageBrands.detail;
-                this.homePageBrands = this.homePageBrands.map(({
-                    id: id,
-                    name: value
-                }) => ({
-                    id,
-                    value
-                }));
-              
-            },
+          setHomePageBrandFromServer(homePageBrands) {
+            this.homePageBrands = null;
 
-            setBrandsFromServer(brands) {
-                this.brands = [];
-                this.brands = brands.detail;
-                this.brands = this.brands.map(({
-                    id: id,
-                    name: value
-                }) => ({
-                    id,
-                    value
-                }));
+            this.homePageBrands = homePageBrands.detail;
+            this.homePageBrands = this.homePageBrands.map(({
+              id: id,
+              name: value
+            }) => ({
+              id,
+              value
+            }));
 
-                this.initBrands();
-            },
+          },
 
-            initBrands() {
-                var inputElm = document.querySelector('input[name=brands]');
-                this.tagifyBrands = new Tagify(inputElm, {
-                    whitelist: this.brands,
-                    dropdown: {
-                        classname: "w-full",
-                        enabled: 0,
-                        maxItems: 100,
-                        position: "all",
-                        closeOnSelect: true,
-                        highlightFirst: true,
-                        searchKeys: ["value"],
-                        fuzzySearch: false,
-                    },
-                    addTagOnBlur: false,
-                    editTags: false,
-                    maxTags: this.maxTags,
-                    skipInvalid: true,
-                    enforceWhitelist: true,
-                    delimiters: "`",
-                });
-                this.tagifyBrands.addTags(this.homePageBrands)
+          setBrandsFromServer(brands) {
+            this.brands = [];
+            this.brands = brands.detail;
+            this.brands = this.brands.map(({
+              id: id,
+              name: value
+            }) => ({
+              id,
+              value
+            }));
 
-                this.tagifyBrands.on('change', e => {
+            this.initBrands();
+          },
 
-                        if (e.detail.value) {
-                            this.homePageBrands = JSON.parse(e.detail.value)
-                        } else {
-                            this.homePageBrands = []
-                        }
-                       
-                    })
-            },
+          initBrands() {
+            var inputElm = document.querySelector('input[name=brands]');
+            this.tagifyBrands = new Tagify(inputElm, {
+              whitelist: this.brands,
+              dropdown: {
+                classname: "w-full",
+                enabled: 0,
+                maxItems: 100,
+                position: "all",
+                closeOnSelect: true,
+                highlightFirst: true,
+                searchKeys: ["value"],
+                fuzzySearch: false,
+              },
+              addTagOnBlur: false,
+              editTags: false,
+              maxTags: this.maxTags,
+              skipInvalid: true,
+              enforceWhitelist: true,
+              delimiters: "`",
+            });
+            this.tagifyBrands.addTags(this.homePageBrands)
 
-            saveIt() { 
-              homePageBrands = this.mapItBack();
-               window.livewire.emit('save', homePageBrands)
-            },
-            
-            mapItBack() {
-              if (this.homePageBrands !== null){
-                homePageBrands = this.homePageBrands.map(({
-                    id: id,
-                    value: name
-                }) => ({
-                    id,
-                    name
-                }));
+            this.tagifyBrands.on('change', e => {
+
+              if (e.detail.value) {
+                this.homePageBrands = JSON.parse(e.detail.value)
               } else {
-                homePageBrands = [];
+                this.homePageBrands = []
               }
-              return homePageBrands;
+
+            })
+          },
+
+          saveIt() {
+            homePageBrands = this.mapItBack();
+            window.livewire.emit('save', homePageBrands)
+          },
+
+          mapItBack() {
+            if (this.homePageBrands !== null) {
+              homePageBrands = this.homePageBrands.map(({
+                id: id,
+                value: name
+              }) => ({
+                id,
+                name
+              }));
+            } else {
+              homePageBrands = [];
             }
+            return homePageBrands;
+          }
         }))
-    })
+      })
     </script>
 
     <script>
@@ -152,10 +136,10 @@
 
 
     @push('header-css')
-    <link href="{{ mix('css/tagify.css') }}" rel="stylesheet">
+      <link href="{{ mix('css/tagify.css') }}" rel="stylesheet">
     @endpush
     @push('header-script')
-    <script src="{{ mix('js/tagify.min.js') }}"></script>
+      <script src="{{ mix('js/tagify.min.js') }}"></script>
     @endpush
 
   </div>

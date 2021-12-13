@@ -11,24 +11,14 @@ class Mainmenu extends Component
 
     public function __construct()
     {
-
-        if (config('app.env') === 'local') {
-            $this->menuCatalogs = Catalog::where('menu', true)
-                ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
-                ->with('categories.tags', fn ($query) => $query->where('show_in_menu', true))
-                ->with('brandsById')
-                ->orderBy('sort', 'asc')
-                ->get();
-        } else {
-            $this->menuCatalogs = cache()->remember('categories-menu', 60 * 60 * 24, function () {
-                return Catalog::where('menu', true)
+        $this->menuCatalogs = cache()->remember('categories-menu', 60 * 60 * 24, function () {
+            return Catalog::where('menu', true)
                         ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
                         ->with('categories.tags', fn ($query) => $query->where('show_in_menu', true))
                         ->with('brandsById')
                         ->orderBy('sort', 'asc')
                         ->get();
-            });
-        }
+        });
     }
 
     public function render()

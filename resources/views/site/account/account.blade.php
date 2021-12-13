@@ -27,12 +27,14 @@
             <p class="mb-4 text-gray-500">Ваши личные данные</p>
           </a>
         </div>
+
         <div class="flex w-4/12 h-40">
           <a href="{{ route('account.favorites') }}" class="block w-full p-6 border rounded-lg hover:bg-gray-50">
             <h3 class="mb-2 text-lg font-semibold md:text-xl">Избранные товары</h3>
             <p class="mb-4 text-gray-500">Ваши любимые товары</p>
           </a>
         </div>
+
         <div class="flex w-4/12 h-40">
           <a href="{{ route('account.orders') }}" class="block w-full p-6 border rounded-lg hover:bg-gray-50">
             <h3 class="mb-2 text-lg font-semibold md:text-xl">Заказы</h3>

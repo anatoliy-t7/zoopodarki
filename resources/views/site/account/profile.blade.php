@@ -3,6 +3,7 @@
 
 @section('content')
   <div class="space-y-2">
+
     <div class="flex justify-start px-4 py-1 text-xs font-semibold text-gray-400 xl:px-0">
       <div class="flex items-center justify-between">
         <a class="py-1 pr-1 hover:underline" href="{{ route('account.account') }}">
@@ -21,18 +22,17 @@
 
     <div class="p-8 space-y-8 bg-white rounded-2xl">
 
-      <div>
-        <h1 class="text-2xl font-bold">
-          Профайл
-        </h1>
-      </div>
+      <h1 class="text-2xl font-bold">
+        Профайл
+      </h1>
+
 
       <div class="flex items-center">
-        <div class="md:w-8/12 md:mx-auto">
+        <div class="md:w-6/12 md:mx-auto">
           <form method="POST" action="{{ route('account.user.update', $user->id) }}">
             @method ('PATCH')
             @csrf
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 sm:grid-cols-2">
               <label class="block">
                 <span class="block pb-1 font-bold text-gray-700">Имя</span>
                 <input class="block w-full mt-1 field" name="name" value="{{ old('name', $user->name) }}">
@@ -84,7 +84,6 @@
                   </span>
                 @enderror
               </label>
-
             </div>
 
             @if ($user->discount)
@@ -93,17 +92,15 @@
               </div>
             @endif
 
-
-            <div class="flex justify-end pt-6">
-              <button type="submit" class="text-white bg-blue-500 btn hover:bg-blue-600">
+            <div class="flex justify-end pt-8">
+              <button type="submit" class="text-white bg-blue-400 btn hover:shadow-blue-400/50 hover:shadow-lg ">
                 Сохранить
               </button>
             </div>
 
-
           </form>
-
         </div>
       </div>
     </div>
-  @endsection
+  </div>
+@endsection

@@ -120,32 +120,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between max-w-screen-lg py-12 mx-auto">
-          <div class="flex items-center justify-center space-x-4 text-lg">
-            <svg class="w-8 h-8 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <path class="stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M12 14h1l2-2V2H6L3 4" />
-              <path class="stroke-current" stroke-linecap=" round" stroke-linejoin="round" stroke-width="1.5"
-                d="M2 17c0 2 1 3 3 3h1l2-2 2 2h4l2-2 2 2h1c2 0 3-1 3-3v-3h-3l-1-1v-3l1-1h1l-1-3-2-1h-2v7l-2 2h-1" />
-              <path class="stroke-current" stroke-linecap=" round" stroke-linejoin="round" stroke-width="1.5"
-                d="M8 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-10v2h-3l-1-1v-3l1-1h1l2 3zM2 8h6m-6 3h4m-4 3h2" />
-            </svg>
-            <span>Бесплатная доставка</span>
-          </div>
 
-          <div class="flex items-center justify-center space-x-4 text-lg">
-            <x-tabler-shield-check class="w-8 h-8 text-gray-600" />
-            <span>Гарантия качества</span>
-          </div>
-
-          <div class="flex items-center justify-center space-x-4 text-lg">
-            <svg class="w-8 h-8 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <path class="stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M13 21h-2c-3-1-9-5-9-12 0-3 2-6 6-6l4 2a6 6 0 0 1 10 4c0 7-6 11-9 12Z" />
-            </svg>
-            <span>Душевное обслуживание</span>
-          </div>
-        </div>
 
         <div class="space-y-4">
           <div class="flex items-center justify-between">
@@ -303,6 +278,33 @@
             </div>
           </div>
 
+        </div>
+
+        <div class="flex items-center justify-between max-w-screen-lg py-12 mx-auto">
+          <div class="flex items-center justify-center space-x-4 text-lg">
+            <svg class="w-8 h-8 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path class="stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M12 14h1l2-2V2H6L3 4" />
+              <path class="stroke-current" stroke-linecap=" round" stroke-linejoin="round" stroke-width="1.5"
+                d="M2 17c0 2 1 3 3 3h1l2-2 2 2h4l2-2 2 2h1c2 0 3-1 3-3v-3h-3l-1-1v-3l1-1h1l-1-3-2-1h-2v7l-2 2h-1" />
+              <path class="stroke-current" stroke-linecap=" round" stroke-linejoin="round" stroke-width="1.5"
+                d="M8 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-10v2h-3l-1-1v-3l1-1h1l2 3zM2 8h6m-6 3h4m-4 3h2" />
+            </svg>
+            <span>Бесплатная доставка</span>
+          </div>
+
+          <div class="flex items-center justify-center space-x-4 text-lg">
+            <x-tabler-shield-check class="w-8 h-8 text-gray-600" />
+            <span>Гарантия качества</span>
+          </div>
+
+          <div class="flex items-center justify-center space-x-4 text-lg">
+            <svg class="w-8 h-8 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path class="stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M13 21h-2c-3-1-9-5-9-12 0-3 2-6 6-6l4 2a6 6 0 0 1 10 4c0 7-6 11-9 12Z" />
+            </svg>
+            <span>Душевное обслуживание</span>
+          </div>
         </div>
 
         <div class="space-y-4">

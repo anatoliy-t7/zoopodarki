@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Dashboard;
 
+use App\Models\Order;
+use App\Models\Product1C;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\Waitlist;
@@ -9,30 +11,28 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
+    public $newProducts1C;
+    public $orders;
     public $pendingReviews;
     public $pendingWaitlist;
-    public $productsGotDescription = 7741;
-    public $productsHaveDescription = 0;
-    public $productsDoneDescription = 0;
+
     public $productsDoesNotHaveDescription = 0;
-    public $productsGotImage = 8307;
-    public $productsHaveImage = 0;
-    public $productsDoneImage = 0;
     public $productsDoesNotHaveImage = 0;
 
     public function mount()
     {
+        $this->orders = Order::whereIn('status', ['pending_confirm', 'pending_payment', 'processing', 'hold'])->get(['id', 'status']);
+
+        $this->newProducts1C = Product1C::whereNull('product_id')
+        ->where('stock', '>', 0)
+        ->where('price', '>', 0)
+        ->get();
+
         $this->pendingReviews = Review::where('status', 'pending')->get();
         $this->pendingWaitlist = Waitlist::where('status', 'pending')->get();
 
-        // TODO удалить в production
-        $this->productsHaveDescription = Product::whereNotNull('description')->count();
-        $this->productsDoesNotHaveDescription = Product::count() - $this->productsHaveDescription;
-        $this->productsDoneDescription = $this->productsHaveDescription - $this->productsGotDescription;
-
-        $this->productsHaveImage = Product::has('media')->count();
-        $this->productsDoesNotHaveImage = Product::count() - $this->productsHaveImage;
-        $this->productsDoneImage = $this->productsHaveImage - $this->productsGotImage;
+        $this->productsDoesNotHaveDescription = Product::whereNull('description')->count();
+        $this->productsDoesNotHaveImage = Product::doesntHave('media')->count();
     }
 
     public function render()

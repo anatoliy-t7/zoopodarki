@@ -12,7 +12,7 @@
     </button>
   @else
     <button wire:click="setFavorite()" title="В избранные"
-      class="inline-flex items-center justify-center p-0 text-gray-500 transition ease-in-out transform link-hover hover:text-red-500 active:scale-95">
+      class="inline-flex items-center justify-center p-0 text-gray-500 transition ease-in-out link-hover hover:text-red-500 active:scale-95">
 
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
         class="w-6 h-6 fill-current" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">

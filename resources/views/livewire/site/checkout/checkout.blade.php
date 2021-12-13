@@ -44,7 +44,7 @@
         </div>
         <div class="relative flex items-center justify-center w-full">
           <div class="max-w-xs mx-auto">
-            <livewire:auth.in>
+            <livewire:auth.auth-com>
           </div>
         </div>
       @else

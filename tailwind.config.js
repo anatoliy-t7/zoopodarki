@@ -2,8 +2,6 @@ const colors = require('tailwindcss/colors');
 
 module.exports = {
 	plugins: [require('@tailwindcss/line-clamp')],
-	mode: 'jit',
-	darkMode: false,
 	theme: {
 		extend: {
 			ringWidth: ['hover'],
@@ -28,7 +26,7 @@ module.exports = {
 			},
 		},
 		fontFamily: {
-			sans: ['Open Sans', 'sans-serif'],
+			nunito: ['nunito', 'sans-serif'],
 		},
 		colors: {
 			transparent: 'transparent',
@@ -36,7 +34,7 @@ module.exports = {
 			black: colors.black,
 			white: colors.white,
 			green: colors.lime,
-			gray: colors.coolGray,
+			gray: colors.slate,
 			red: colors.red,
 			orange: colors.orange,
 			yellow: colors.amber,
@@ -44,20 +42,10 @@ module.exports = {
 			blue: colors.sky,
 			indigo: colors.indigo,
 			pink: colors.rose,
-			purple: colors.purple,
+			purple: colors.violet,
 		},
 	},
-	variants: {
-		opacity: ['responsive', 'hover', 'focus', 'disabled'],
-		scale: ['responsive', 'hover', 'focus', 'active', 'disabled'],
-		cursor: ['disabled'],
-		extend: {
-			opacity: ['disabled', 'group-hover'],
-			backgroundColor: ['checked'],
-			display: ['group-hover'],
-		},
-	},
-	purge: [
+	content: [
 		'./resources/**/*.blade.php',
 		'./resources/**/**/*.blade.php',
 		'./resources/**/**/**/*.blade.php',

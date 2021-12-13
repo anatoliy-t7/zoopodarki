@@ -17,15 +17,15 @@
 		"postcss-loader": "^6.2.1",
 		"prop-types": "^15.7.2",
 		"resolve-url-loader": "^4.0.0",
-		"sass": "^1.44.0",
-		"sass-loader": "^12.3.0",
-		"tailwindcss": "^2"
+		"sass": "^1.45.0",
+		"sass-loader": "^12.4.0",
+		"tailwindcss": "^3"
 	},
 	"dependencies": {
 		"@alpinejs/persist": "^3.7.0",
-		"@splidejs/splide": "^3.6.8",
-		"@tailwindcss/line-clamp": "^0.2.2",
-		"@yaireo/tagify": "^4.9.2",
+		"@splidejs/splide": "^3.6.9",
+		"@tailwindcss/line-clamp": "^0.3.0",
+		"@yaireo/tagify": "^4.9.4",
 		"alpinejs": "^3.7.0",
 		"bigpicture": "^2.5.3",
 		"lozad": "^1.16.0",

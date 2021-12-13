@@ -1,13 +1,27 @@
   <div class="space-y-2">
 
-    {{-- <x-breadcrumbs :category="$category" :catalog="$catalog" /> --}}
+    <div class="flex justify-start px-4 py-1 text-xs font-semibold text-gray-400 xl:px-0">
+      <div class="flex items-center justify-between">
+        <div class="py-1 pr-1">
+          Выгодные предложения
+        </div>
+        <x-tabler-chevron-right class="w-5 h-5" />
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between">
+          <a class="p-1 hover:underline" href="{{ route('site.discounts') }}">
+            <span>Скидки</span>
+          </a>
+        </div>
+      </div>
+    </div>
 
     <div>
       <div class="space-y-6">
 
         <div class="flex items-center justify-start space-x-4 text-2xl ">
           <h1 class="font-bold first-letter">
-            //
+            Скидки
           </h1>
 
           <div class="text-lg text-gray-400" title="Найдено товаров">{{ $products->total() }}</div>
@@ -30,63 +44,95 @@
                       class="absolute top-0 bottom-0 left-0 right-0 z-30 w-full h-full bg-gray-100 bg-opacity-75 rounded-2xl">
                     </div>
 
-                    <div wire:ignore>
+                    <div class="">
                       <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
                     </div>
 
-                    <div>
+                    <div class="space-y-4">
+                      <div class="font-bold">Питомец</div>
 
-                      <div x-data="discountType" class="space-y-4">
-                        <div class="font-bold">Питомец</div>
+                      <div class="py-1 space-y-3">
 
+                        <label class="container-checkbox">
+                          <span for="cats" class="text-sm">Кошки</span>
+                          <input value="1" wire:model="petF" id="cats" type="checkbox">
+                          <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container-checkbox">
+                          <span for="dogs" class="text-sm">Собаки</span>
+                          <input value="2" wire:model="petF" id="dogs" type="checkbox">
+                          <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container-checkbox">
+                          <span for="rodents" class="text-sm">Грызуны и хорьки</span>
+                          <input value="3" wire:model="petF" id="rodents" type="checkbox">
+                          <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container-checkbox">
+                          <span for="birds" class="text-sm">Птицы</span>
+                          <input value="4" wire:model="petF" id="birds" type="checkbox">
+                          <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container-checkbox">
+                          <span for="fish" class="text-sm">Рыбки, раки и улитки</span>
+                          <input value="5" wire:model="petF" id="fish" type="checkbox">
+                          <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container-checkbox">
+                          <span for="rabbits" class="text-sm">Кролики</span>
+                          <input value="6" wire:model="petF" id="rabbits" type="checkbox">
+                          <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container-checkbox">
+                          <span for="reptiles" class="text-sm">Рептилии, черепахи и ежи</span>
+                          <input value="9" wire:model="petF" id="reptiles" type="checkbox">
+                          <span class="checkmark"></span>
+                        </label>
+
+                      </div>
+                    </div>
+
+                    @if ($categories)
+                      <div class="space-y-4">
+                        <div class="font-bold">Категории</div>
                         <div class="py-1 space-y-3">
-
-                          <label class="container-checkbox">
-                            <span for="cats" class="text-sm">Кошки</span>
-                            <input value="1" wire:model="petF" id="cats" type="checkbox">
-                            <span class="checkmark"></span>
-                          </label>
-
-                          <label class="container-checkbox">
-                            <span for="dogs" class="text-sm">Собаки</span>
-                            <input value="2" wire:model="petF" id="dogs" type="checkbox">
-                            <span class="checkmark"></span>
-                          </label>
-
-                          <label class="container-checkbox">
-                            <span for="rodents" class="text-sm">Грызуны и хорьки</span>
-                            <input value="3" wire:model="petF" id="rodents" type="checkbox">
-                            <span class="checkmark"></span>
-                          </label>
-
-                          <label class="container-checkbox">
-                            <span for="birds" class="text-sm">Птицы</span>
-                            <input value="4" wire:model="petF" id="birds" type="checkbox">
-                            <span class="checkmark"></span>
-                          </label>
-
-                          <label class="container-checkbox">
-                            <span for="fish" class="text-sm">Рыбки, раки и улитки</span>
-                            <input value="5" wire:model="petF" id="fish" type="checkbox">
-                            <span class="checkmark"></span>
-                          </label>
-
-                          <label class="container-checkbox">
-                            <span for="rabbits" class="text-sm">Кролики</span>
-                            <input value="6" wire:model="petF" id="rabbits" type="checkbox">
-                            <span class="checkmark"></span>
-                          </label>
-
-                          <label class="container-checkbox">
-                            <span for="reptiles" class="text-sm">Рептилии, черепахи и ежи</span>
-                            <input value="9" wire:model="petF" id="reptiles" type="checkbox">
-                            <span class="checkmark"></span>
-                          </label>
-
+                          @foreach ($categories as $category)
+                            <label class="container-checkbox">
+                              <span for="category-{{ $category['id'] }}"
+                                class="text-sm">{{ $category['name'] }}</span>
+                              <input value="{{ $category['id'] }}" wire:model="catF"
+                                id="category-{{ $category['id'] }}" type="checkbox">
+                              <span class="checkmark"></span>
+                            </label>
+                          @endforeach
                         </div>
                       </div>
+                    @endif
 
-                      {{-- <div x-data="searchBrand" class="space-y-4">
+                    @if ($brands)
+                      <div class="space-y-4">
+                        <div class="font-bold">Бренды</div>
+                        <div class="py-1 space-y-3">
+                          @foreach ($brands as $brand)
+                            <label class="container-checkbox">
+                              <span for="brand-{{ $brand['id'] }}"
+                                class="text-sm">{{ $brand['name'] }}</span>
+                              <input value="{{ $brand['id'] }}" wire:model="brandF" id="brand-{{ $brand['id'] }}"
+                                type="checkbox">
+                              <span class="checkmark"></span>
+                            </label>
+                          @endforeach
+                        </div>
+                      </div>
+                    @endif
+
+                    {{-- <div x-data="searchBrand" class="space-y-4">
                         <div class="font-bold">Бренд</div>
 
                         <div>
@@ -129,7 +175,7 @@
                         </div>
                       </div> --}}
 
-                    </div>
+
 
                   </div>
 

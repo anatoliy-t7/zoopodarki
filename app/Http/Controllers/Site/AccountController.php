@@ -30,7 +30,6 @@ class AccountController extends Controller
          * @middlewares(web, auth)
          */
 
-
         $request->validate([
             'name' => ['required', 'string', 'max:50'],
             'email' => ['required', 'unique:users,email,' . auth()->user()->id],
