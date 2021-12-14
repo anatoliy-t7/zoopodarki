@@ -2,10 +2,10 @@
   @guest
     <div x-data>
       <button x-on:click="$dispatch('auth'), $nextTick(() => {
-                setTimeout(() => {
-                    document.getElementById('phone').focus();
-                }, 300);
-            })"
+                  setTimeout(() => {
+                      document.getElementById('phone').focus();
+                  }, 300);
+              })"
         class="flex items-center justify-start px-4 py-2 space-x-2 text-sm font-semibold border-2 border-orange-400 rounded-lg hover:text-orange-500 focus:text-orange-500 focus:outline-none ">
         <span>Войти</span>
         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -18,8 +18,7 @@
   @else
     <div x-data="{ open: false }" @click.outside="open = false" class="relative">
 
-      <button @mouseenter="open = true" @click="open = !open"
-        class="flex items-center w-auto p-1 text-xs rounded-lg group focus:outline-none">
+      <button @mouseenter="open = true" class="flex items-center w-auto p-1 text-xs rounded-lg group focus:outline-none">
 
         <svg class="text-gray-600 w-7 h-7 focus:text-orange-500 focus:outline-none" xmlns="http://www.w3.org/2000/svg"
           fill="none" viewBox="0 0 24 24">

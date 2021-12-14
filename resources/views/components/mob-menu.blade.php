@@ -43,7 +43,7 @@
       <div class="relative w-full min-h-screen mx-auto text-gray-700">
 
         <div class="relative z-40 h-screen px-6 pt-4 pb-32 overflow-y-auto bg-gray-50">
-          @foreach ($catalogs as $catalog)
+          @foreach ($menuCatalogs as $catalog)
             <div @click="tab = {{ $catalog->id }}"
               class="flex items-center px-4 py-3 space-x-2 text-lg font-semibold cursor-pointer rounded-l-xl">
               <div>{{ $catalog->name }}</div>
@@ -52,8 +52,8 @@
           @endforeach
         </div>
 
-        @foreach ($catalogs as $catalog)
-          <div x-cloak x-show="tab == {{ $catalog->id }}" x-transition
+        @foreach ($menuCatalogs as $menuCatalog)
+          <div x-cloak x-show="tab == {{ $menuCatalog->id }}" x-transition
             class="fixed left-0 z-50 block w-full transition duration-300 transform top-2 bg-gray-50">
 
             <div
@@ -61,19 +61,32 @@
               <div @click="tab = null">
                 <x-tabler-chevron-left class="w-6 h-6 stroke-current" />
               </div>
-              <a @mouseover="tab = {{ $catalog->id }}" :class="{ 'bg-gray-50': tab === {{ $catalog->id }} }"
-                href="{{ route('site.catalog', ['catalogslug' => $catalog->slug]) }}"
-                class="block px-4 py-4 font-semibold cursor-pointer">{{ $catalog->name }}
+              <a @mouseover="tab = {{ $menuCatalog->id }}" :class="{ 'bg-gray-50': tab === {{ $menuCatalog->id }} }"
+                href="{{ route('site.catalog', ['catalogslug' => $menuCatalog->slug]) }}"
+                class="block px-4 py-4 font-semibold cursor-pointer">{{ $menuCatalog->name }}
               </a>
             </div>
 
             <div class="relative z-40 flex-col justify-between h-screen px-6 pt-16 space-y-2 overflow-y-auto pb-36">
 
-              @foreach ($catalog->categories as $category)
-                <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}"
-                  class="block p-1 text-lg font-semibold text-gray-800">
-                  {{ $category->name }}
-                </a>
+              @foreach ($menuCatalog->categories as $menuCategory)
+                <div>
+                  <a href="{{ route('site.category', ['catalogslug' => $menuCatalog->slug, 'categoryslug' => $menuCategory->slug]) }}"
+                    class="block p-1 text-lg font-semibold text-gray-800">
+                    {{ $menuCategory->name }}
+                  </a>
+                  @if ($menuCategory->tags->count() > 0)
+                    <div class="px-2 space-y-2">
+                      @foreach ($menuCategory->tags as $tag)
+                        <a href="
+                      {{ route('site.tag', ['catalogslug' => $menuCatalog->slug, 'categoryslug' => $menuCategory->slug, 'tagslug' => $tag->slug]) }}"
+                          class="block text-base text-gray-800 hover:text-orange-500">
+                          {{ $tag->name }}
+                        </a>
+                      @endforeach
+                    </div>
+                  @endif
+                </div>
               @endforeach
 
             </div>
@@ -81,8 +94,6 @@
           </div>
 
         @endforeach
-
-
       </div>
 
     </div>

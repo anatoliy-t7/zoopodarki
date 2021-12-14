@@ -75,7 +75,7 @@ Route::prefix('account')->name('account.')->middleware(['throttle:1000,60', 'aut
     function () {
         Route::view('/account', 'site.account.account')->name('account');
 
-        Route::get('/profile', 'App\Http\Controllers\Site\AccountController@profile')->name('profile');
+        Route::get('/profile', \App\Http\Livewire\Site\Account\ProfilePage::class)->name('profile');
 
         Route::PATCH('/profile/{id}', 'App\Http\Controllers\Site\AccountController@profileUpdate')
         ->name('user.update');
