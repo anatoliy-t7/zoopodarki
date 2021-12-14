@@ -1,6 +1,6 @@
 <div>
   @if ($unit)
-    <div class="text-xs text-gray-500">
+    <div class="text-base text-gray-500 md:text-xs">
       <span>
         @if ($unit->name === 'гр')
           {{ kg($value) }}

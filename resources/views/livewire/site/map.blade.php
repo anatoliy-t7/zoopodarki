@@ -111,7 +111,7 @@
                 }
               }, {
                 iconLayout: 'default#image',
-                iconImageHref: '/assets/img/favicon.svg',
+                iconImageHref: '/assets/img/marker.svg',
                 iconImageSize: [24, 24],
                 iconImageOffset: [-12, -12]
               });
@@ -121,7 +121,7 @@
             clusterer = new ymaps.Clusterer({
               preset: 'islands#invertedVioletClusterIcons',
               clusterIcons: [{
-                href: '/assets/img/favicon.svg',
+                href: '/assets/img/marker.svg',
                 size: [36, 36],
                 offset: [-18, -18]
               }],

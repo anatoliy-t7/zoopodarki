@@ -19,28 +19,38 @@
         </h1>
       </div>
 
-      <div class="flex items-center justify-between w-full gap-6 ">
+      <div class="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
 
-        <div class="flex w-4/12 h-40">
+        <div class="flex h-full">
           <a href="{{ route('account.profile') }}" class="block w-full p-6 border rounded-lg hover:bg-gray-50">
             <h3 class="mb-2 text-lg font-semibold md:text-xl">Профайл</h3>
             <p class="mb-4 text-gray-500">Ваши личные данные</p>
           </a>
         </div>
 
-        <div class="flex w-4/12 h-40">
+        <div class="flex h-full">
           <a href="{{ route('account.favorites') }}" class="block w-full p-6 border rounded-lg hover:bg-gray-50">
             <h3 class="mb-2 text-lg font-semibold md:text-xl">Избранные товары</h3>
             <p class="mb-4 text-gray-500">Ваши любимые товары</p>
           </a>
         </div>
 
-        <div class="flex w-4/12 h-40">
+        <div class="flex h-full">
           <a href="{{ route('account.orders') }}" class="block w-full p-6 border rounded-lg hover:bg-gray-50">
             <h3 class="mb-2 text-lg font-semibold md:text-xl">Заказы</h3>
             <p class="mb-4 text-gray-500">Ваша история заказов</p>
           </a>
         </div>
+
+        @can('dashboard')
+          <div class="flex h-full">
+            <a href="{{ route('dashboard.dashboard') }}" class="block w-full p-6 border rounded-lg hover:bg-gray-50">
+              <h3 class="mb-2 text-lg font-semibold md:text-xl">Панель</h3>
+              <p class="mb-4 text-gray-500">Панель управления</p>
+            </a>
+          </div>
+        @endcan
+
       </div>
 
     </div>

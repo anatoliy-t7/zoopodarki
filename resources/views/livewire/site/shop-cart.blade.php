@@ -38,7 +38,8 @@
 
     <div class="flex flex-col justify-between h-screen ">
 
-      <div class="flex items-center justify-between w-full px-6 pt-6 bg-white ">
+      <div
+        class="flex items-center justify-between w-full px-6 py-3 bg-white border-b border-gray-100 md:border-transparent md:py-5 ">
         <div class="flex justify-between space-x-2">
           <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <path class="text-gray-500 stroke-current " stroke-linecap="round" stroke-linejoin="round"
@@ -59,7 +60,7 @@
         </div>
       </div>
 
-      <div class="relative z-50 h-full px-4 py-4 overflow-y-auto bg-white md:px-6">
+      <div class="relative z-50 h-full px-4 py-4 overflow-y-auto bg-white md:px-6 scrollbar">
 
         <div>
           @if ($items)
@@ -258,7 +259,7 @@
       </div>
 
       @if ($items)
-        <div class="w-full bg-white h-80 md:h-auto">
+        <div class="w-full bg-white border-t border-gray-100 h-96 md:h-auto md:border-transparent">
 
           <div class="px-6 py-3 space-y-2 bg-gray-50">
 
@@ -283,11 +284,11 @@
 
             </div>
 
-            <div class="text-xs">Дополнительные скидки рассчитываются при оформлении заказа.</div>
+            <div class="text-xs leading-tight text-gray-500">Доп. скидки рассчитываются при оформлении заказа.</div>
 
           </div>
 
-          <div class="px-6 py-4">
+          <div class="px-6 py-2 md:py-4">
             <a href="{{ route('checkout') }}"
               class="w-full px-4 py-3 font-bold leading-snug text-center text-white uppercase bg-orange-400 rounded-lg btn hover:bg-orange-500">
               Оформить заказ

@@ -4,7 +4,7 @@
 
 <div class="py-6 space-y-4">
 
-  <div class="flex items-start justify-start max-w-3xl px-4 space-x-12">
+  <div class="flex flex-col items-center justify-start max-w-3xl gap-12 px-4 md:items-start md:flex-row">
 
     <x-logo />
 
@@ -107,25 +107,24 @@
                 class="inline-flex w-full leading-none text-gray-400 bg-gray-200 border-2 border-gray-200 rounded-2xl md:w-6/12 h-14">
 
                 <button wire:click="getOrderType(0)" x-on:click="toggle = 0"
-                  :class="{ 'bg-white text-green-500': toggle === 0 }"
-                  class="inline-flex items-center w-6/12 px-4 py-2 transition-colors duration-300 ease-in rounded-2xl focus:outline-none hover:text-green-400">
-                  <svg :class="{ 'text-green-500': toggle === 0 }" class="w-8 h-6 pr-2 fill-current"
+                  :class="{ 'bg-white text-green-600': toggle === 0 }"
+                  class="inline-flex items-center w-6/12 px-4 py-2 transition-colors duration-300 ease-in rounded-2xl focus:outline-none hover:text-green-600">
+                  <svg :class="{ 'text-green-600': toggle === 0 }" class="w-8 h-6 pr-2 fill-current"
                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path
                       d="M1,12.5v5a1,1,0,0,0,1,1H3a3,3,0,0,0,6,0h6a3,3,0,0,0,6,0h1a1,1,0,0,0,1-1V5.5a3,3,0,0,0-3-3H11a3,3,0,0,0-3,3v2H6A3,3,0,0,0,3.6,8.7L1.2,11.9a.61.61,0,0,0-.07.14l-.06.11A1,1,0,0,0,1,12.5Zm16,6a1,1,0,1,1,1,1A1,1,0,0,1,17,18.5Zm-7-13a1,1,0,0,1,1-1h9a1,1,0,0,1,1,1v11h-.78a3,3,0,0,0-4.44,0H10Zm-2,6H4L5.2,9.9A1,1,0,0,1,6,9.5H8Zm-3,7a1,1,0,1,1,1,1A1,1,0,0,1,5,18.5Zm-2-5H8v2.78a3,3,0,0,0-4.22.22H3Z" />
                   </svg>
-                  <span>Доставка</span>
+                  <span class="font-semibold">Доставка</span>
                 </button>
                 <button wire:click="getOrderType(1)" x-on:click="toggle = 1"
-                  :class="{ 'bg-white text-green-500': toggle === 1 }"
-                  class="inline-flex items-center w-6/12 px-4 py-2 transition-colors duration-300 ease-in rounded-2xl focus:outline-none hover:text-green-400">
-
-                  <svg :class="{ 'text-green-500': toggle === 1 }" class="w-8 h-8 pr-2 fill-current"
+                  :class="{ 'bg-white text-green-600': toggle === 1 }"
+                  class="inline-flex items-center w-6/12 px-4 py-2 transition-colors duration-300 ease-in rounded-2xl focus:outline-none hover:text-green-600">
+                  <svg :class="{ 'text-green-600': toggle === 1 }" class="w-8 h-8 pr-2 fill-current"
                     xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24">
                     <path
                       d="M22,16H19.82A3,3,0,0,0,20,15V10a3,3,0,0,0-3-3H11a3,3,0,0,0-3,3v5a3,3,0,0,0,.18,1H7a1,1,0,0,1-1-1V5A3,3,0,0,0,3,2H2A1,1,0,0,0,2,4H3A1,1,0,0,1,4,5V15a3,3,0,0,0,2.22,2.88,3,3,0,1,0,5.6.12h3.36a3,3,0,1,0,5.64,0H22a1,1,0,0,0,0-2ZM9,20a1,1,0,1,1,1-1A1,1,0,0,1,9,20Zm2-4a1,1,0,0,1-1-1V10a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1v5a1,1,0,0,1-1,1Zm7,4a1,1,0,1,1,1-1A1,1,0,0,1,18,20Z" />
                   </svg>
-                  <span>Самовывоз</span>
+                  <span class="font-semibold">Самовывоз</span>
                 </button>
               </div>
 
@@ -142,7 +141,7 @@
             <div class="w-full">
 
               <div :class="{ 'flex': toggle == 0, 'hidden': toggle == 1}"
-                class="flex flex-col items-center justify-start space-y-6 md:space-y-0 md:space-x-6 md:flex-row">
+                class="flex flex-col items-center justify-start gap-6 md:flex-row">
                 @if (is_array($address) && !empty($address))
                   <div class="flex-col items-start justify-start w-full px-4 py-3 space-y-1 md:w-9/12 h-14">
                     <div>
@@ -162,8 +161,8 @@
                     @endif
                   </div>
                 @else
-                  <div class="w-9/12 pl-4">
-                    Добавьте адрес
+                  <div class="w-full md:w-9/12 md:pl-4">
+                    Добавьте адрес доставки
                     @error('address')
                       <div class="pt-1 text-sm text-red-500">
                         Вам необходимо добавить адрес
@@ -198,16 +197,15 @@
 
                     </div>
                   </div>
-                  <div class="items-center justify-start block space-y-6 md:space-y-0 md:space-x-6 md:flex">
+                  <div class="items-center justify-start block gap-6 md:flex">
 
-                    <div class="items-center justify-start block w-full px-4 md:flex md:w-9/12 h-14">
+                    <div class="items-center justify-start block w-full pb-2 md:px-4 md:flex md:w-9/12">
                       <div>
                         @if ($pickupStore)
                           {{ $pickupStore }}
                         @else
-
-                          <div x-on:click="open(), $dispatch('init-map')" class="py-2 cursor-pointer">Выберите пункт
-                            выдачи
+                          <div x-on:click="open(), $dispatch('init-map')" class="py-2 cursor-pointer">
+                            Выберите пункт выдачи
                           </div>
                         @endif
                         @error('pickupStore')
@@ -219,7 +217,7 @@
                     </div>
 
                     <div x-on:click="open(), $dispatch('init-map')"
-                      class="flex items-center justify-center w-full px-4 space-x-1 bg-gray-100 border border-gray-100 cursor-pointer md:w-3/12 hover:border-gray-300 h-14 rounded-xl">
+                      class="flex items-center justify-center w-full px-4 space-x-1 bg-gray-100 border border-gray-300 cursor-pointer md:w-3/12 hover:border-gray-400 h-14 rounded-xl">
                       <div>Пункты выдачи</div>
                       <x-tabler-chevron-right class="w-6 h-6 text-gray-400 stroke-current" />
                     </div>
@@ -270,15 +268,16 @@
                     <div class="w-full max-w-xs md:max-w-md splide__track">
                       <ul class="splide__list">
                         @foreach ($dates as $item)
-                          <li class="relative cursor-pointer splide__slide bg-gray-50 hover:bg-gray-100"
-                            :class="{ 'text-green-500': date == '{{ $item['date'] }}'}">
+                          <li class="relative cursor-pointer splide__slide hover:bg-white"
+                            :class=" date == '{{ $item['date'] }}' ? 'text-green-600 bg-white' : 'text-gray-500 bg-gray-50'">
                             <div x-on:click="$wire.set('date', '{{ $item['date'] }}')"
-                              class="block px-2 py-3 text-center border-r-2 border-white">
+                              class="block px-2 py-3 text-center "
+                              :class=" date == '{{ $item['date'] }}' ? 'border-2 border-green-500' : 'border-r-2 border-y-2 border-white'">
                               <div class="pb-1 font-semibold">
                                 {{ $item['number'] }}
                               </div>
                               <div class="text-xs capitalize truncate"
-                                :class="{ 'text-green-500' : date === '{{ $item['date'] }}' , 'text-gray-500' : date !== '{{ $item['date'] }}'}">
+                                :class=" date == '{{ $item['date'] }}' ? 'text-green-600 ' : 'text-gray-500 '">
                                 {{ $item['name'] }}
                               </div>
                             </div>
@@ -336,18 +335,18 @@
             <div
               class="inline-flex w-full leading-none text-gray-400 bg-gray-200 border-2 border-gray-200 md:h-14 rounded-2xl md:w-6/12">
               <button wire:click="paymentType(0)" x-on:click="payment = 'online'"
-                :class="{ 'bg-white text-green-500': payment == 'online' }"
-                class="inline-flex items-center w-6/12 px-4 py-2 transition-colors duration-300 ease-in rounded-2xl focus:outline-none hover:text-green-400">
+                :class="{ 'bg-white text-green-600': payment == 'online' }"
+                class="inline-flex items-center w-6/12 px-4 py-2 transition-colors duration-300 ease-in rounded-2xl focus:outline-none hover:text-green-600">
 
-                <x-tabler-credit-card :class="{ 'text-green-400': payment == 'online' }"
+                <x-tabler-credit-card :class="{ 'text-green-600': payment == 'online' }"
                   class="inline mr-2 stroke-current w-7 h-7" />
 
                 <span>Оплата онлайн</span>
               </button>
               <button wire:click="paymentType(1)" x-on:click="payment = 'cash'"
-                :class="{ 'bg-white text-green-500': payment == 'cash' }"
-                class="flex items-center justify-center w-6/12 px-4 py-2 space-x-4 transition-colors duration-300 ease-in rounded-2xl focus:outline-none hover:text-green-400">
-                <svg :class="{ 'text-green-400': payment == 'cash' }" class="w-8 h-8 fill-current"
+                :class="{ 'bg-white text-green-600': payment == 'cash' }"
+                class="flex items-center justify-center w-6/12 px-4 py-2 space-x-4 transition-colors duration-300 ease-in rounded-2xl focus:outline-none hover:text-green-600">
+                <svg :class="{ 'text-green-600': payment == 'cash' }" class="w-8 h-8 fill-current"
                   xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 24 24">
                   <g fill="none">
                     <path

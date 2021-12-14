@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Site;
 
+use App\Models\Brand;
 use App\Models\Catalog;
 use App\Models\Product;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Brand extends Component
+class BrandPage extends Component
 {
     use WithPagination;
 
@@ -15,8 +16,10 @@ class Brand extends Component
     public $brand;
     public $catalogs;
 
-    public function mount()
+    public function mount($brandslug)
     {
+        $this->brand = Brand::where('slug', $brandslug)->firstOrFail();
+
         $this->countries = cache()->remember('brand-country', 60 * 60 * 24, function () {
             return Product::where('brand_id', $this->brand->id)
                 ->withWhereHas('attributes', fn ($q) => $q->where('attribute_item.attribute_id', 64))
@@ -36,6 +39,8 @@ class Brand extends Component
 
     public function render()
     {
-        return view('livewire.site.brand');
+        return view('livewire.site.brand-page')
+            ->extends('layouts.app')
+            ->section('content');
     }
 }

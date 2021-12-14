@@ -38,9 +38,9 @@ Route::middleware(['throttle:1000,60', 'web', 'auth'])
             )->name('product.applying');
 
             // Brands
-            Route::get('/brands', 'App\Http\Controllers\Site\BrandController@index')->name('brands');
+            Route::get('/brands', \App\Http\Livewire\Site\BrandsPage::class)->name('brands');
 
-            Route::get('/brands/{brand}', 'App\Http\Controllers\Site\BrandController@show')->name('brand');
+            Route::get('/brands/{brandslug}', \App\Http\Livewire\Site\BrandPage::class)->name('brand');
 
             // Pages
             Route::view('/contact', 'site.pages.contact')->name('contact');

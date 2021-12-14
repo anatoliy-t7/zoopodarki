@@ -1,4 +1,5 @@
-<div class="fixed bottom-0 left-0 z-50 w-full max-w-sm p-4 space-y-3 pointer-events-none toasts-container sm:p-6"
+<div
+  class="fixed top-0 left-0 z-50 w-full max-w-sm p-4 space-y-3 pointer-events-none md:top-auto md:bottom-0 toasts-container sm:p-6"
   x-data='ToastComponent($wire)' @mouseleave="scheduleRemovalWithOlder()">
   <template x-for="toast in toasts.filter((a)=>a)" :key="toast.index">
     <div @mouseenter="cancelRemovalWithNewer(toast.index)" @mouseleave="scheduleRemovalWithOlder(toast.index)"

@@ -87,7 +87,7 @@ class CheckoutConfirm extends Component
             'confirmation' => [
                 'type' => 'redirect',
                 'locale' => 'ru_RU',
-                'return_url' => route('checkout.callback'),
+                'return_url' => route('site.checkout.callback'),
             ],
             'capture' => true,
             'metadata' => [

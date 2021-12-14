@@ -59,23 +59,20 @@ input[type='range']::-webkit-slider-thumb {
 
 .mobmenu {
 	transition: all 0.4s;
-	@apply py-2 fixed top-0 left-0 h-14;
+	@apply py-2 fixed bottom-0 left-0 h-14;
 }
 
-.scroll-down .navbar,
-.scroll-down .mobmenu {
+.scroll-down .navbar {
 	transform: translate3d(0, -100%, 0);
 	transition: all 0.4s;
 	@apply mt-0;
 }
 
-// .scroll-down .megaMenu {
-// 	@apply mt-2;
-// }
-
-// .scroll-up .megaMenu {
-// 	@apply mt-0;
-// }
+.scroll-down .mobmenu {
+	transform: translate3d(0, 100%, 0);
+	transition: all 0.4s;
+	@apply mt-0;
+}
 
 .scroll-up .navbar {
 	@apply py-2 mt-0 h-16;

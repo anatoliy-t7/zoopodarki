@@ -24,7 +24,6 @@
         </svg>
 
       </div>
-
     </div>
   </div>
   <div x-show="openResult">

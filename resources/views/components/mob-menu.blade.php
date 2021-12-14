@@ -1,5 +1,5 @@
 <div id="mobmenu" x-data="mobmenu"
-  class="z-30 block w-full text-gray-600 bg-white border-b border-gray-200 max-w-screen mobmenu">
+  class="z-30 block w-full text-gray-600 bg-white border-t border-gray-200 max-w-screen mobmenu">
 
   <div class="flex items-center justify-between px-5 space-x-4">
 
@@ -37,12 +37,12 @@
 
 
   <div x-cloak :class="menu ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
-    class="fixed left-0 z-20 w-full h-screen max-w-full overflow-hidden text-gray-700 transition duration-300 transform bg-gray-50 top-14">
+    class="fixed left-0 z-20 w-full h-screen max-w-full overflow-hidden text-gray-700 transition duration-300 transform bg-gray-50 bottom-14">
     <div>
 
       <div class="relative w-full min-h-screen mx-auto text-gray-700">
 
-        <div class="relative z-40 h-screen px-6 pt-4 pb-32 overflow-y-auto bg-gray-50">
+        <div class="relative z-40 h-screen px-6 pb-8 overflow-y-auto pt-36 bg-gray-50">
           @foreach ($menuCatalogs as $catalog)
             <div @click="tab = {{ $catalog->id }}"
               class="flex items-center px-4 py-3 space-x-2 text-lg font-semibold cursor-pointer rounded-l-xl">
@@ -54,10 +54,10 @@
 
         @foreach ($menuCatalogs as $menuCatalog)
           <div x-cloak x-show="tab == {{ $menuCatalog->id }}" x-transition
-            class="fixed left-0 z-50 block w-full transition duration-300 transform top-2 bg-gray-50">
+            class="fixed bottom-0 left-0 z-50 block w-full transition duration-300 transform bg-gray-50">
 
             <div
-              class="fixed top-0 left-0 z-50 flex items-center justify-between w-full px-8 pb-2 space-x-4 border-b bg-gray-50">
+              class="fixed bottom-0 left-0 z-50 flex items-center justify-between w-full px-8 space-x-4 border-t bg-gray-50">
               <div @click="tab = null">
                 <x-tabler-chevron-left class="w-6 h-6 stroke-current" />
               </div>
@@ -67,7 +67,7 @@
               </a>
             </div>
 
-            <div class="relative z-40 flex-col justify-between h-screen px-6 pt-16 space-y-2 overflow-y-auto pb-36">
+            <div class="relative z-40 flex-col justify-between h-screen px-6 pb-16 space-y-2 overflow-y-auto pt-36">
 
               @foreach ($menuCatalog->categories as $menuCategory)
                 <div>

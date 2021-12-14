@@ -4,7 +4,7 @@
 
 <div class="py-6 space-y-4">
 
-  <div class="flex items-start justify-start max-w-3xl px-4 space-x-12">
+  <div class="flex flex-col items-center justify-start max-w-3xl gap-12 px-4 md:items-start md:flex-row">
     <x-logo />
     <div class="flex items-center justify-between w-full pt-3">
       <div class="relative block w-full max-w-2xl">

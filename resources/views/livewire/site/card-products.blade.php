@@ -1,5 +1,5 @@
 <div
-  class="relative flex flex-col justify-between h-full border border-gray-100 lg:border-white hover:border-green-300 rounded-2xl">
+  class="relative flex flex-col justify-between h-full p-2 bg-white border border-gray-100 md:p-0 lg:border-white hover:border-green-300 rounded-2xl">
 
   <div class="p-2">
     <a itemprop="url"
@@ -11,7 +11,7 @@
     </a>
 
     @if ($product->brand)
-      <div class="py-2 text-center text-green-600">
+      <div class="py-4 text-center text-green-600 md:py-2">
         <a itemprop="url"
           href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product->slug]) }}"
           title="{{ $product->brand->name }}">
@@ -20,7 +20,7 @@
       </div>
     @endif
 
-    <div itemprop="name" class="text-sm text-center text-gray-800 line-clamp-2">
+    <div itemprop="name" class="text-base text-center text-gray-800 md:text-sm line-clamp-2">
       <a itemprop="url"
         href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product->slug]) }}"
         title="{{ $product->name }}">
@@ -50,24 +50,24 @@
 
           <div class="flex items-center justify-end w-5/12 space-x-2 whitespace-nowrap">
             @if ($item->promotion_type === 0)
-              <div class="text-sm font-semibold text-gray-800" itemprop="price">
+              <div class="text-base font-semibold text-gray-800 md:text-sm" itemprop="price">
                 {{ RUB($item->price) }}</div>
             @elseif ($item->promotion_type === 1 || $item->promotion_type === 3)
               <div class="text-xs text-gray-500 line-through">{{ RUB($item->promotion_price) }}</div>
-              <div class="text-sm font-semibold text-orange-500" itemprop="price">
+              <div class="text-base font-semibold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB($item->price) }}</div>
             @elseif ($item->promotion_type === 2 || $item->promotion_type === 4)
               <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
-              <div class="text-sm font-semibold text-orange-500" itemprop="price">
+              <div class="text-base font-semibold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB(discount($item->price, $item->promotion_percent)) }}</div>
             @endif
           </div>
 
-          <div class="flex items-center justify-end w-2/12">
+          <div class="flex items-start justify-end w-2/12 -mt-1">
             @if ($item->stock > 0)
               <button title="В корзину" wire:click="$emit('addToCart', {{ $item->id }}, 1, 0, 1000)"
                 class="z-10 transition ease-in-out cursor-pointer focus:outline-none active:scale-95 link-hover group">
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg class="w-7 h-7 md:w-5 md:h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <path class="text-blue-400 stroke-current group-hover:text-blue-500" stroke-linecap="round"
                     stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"
                     d="M8.5 14.25c0 1.92 1.58 3.5 3.5 3.5s3.5-1.58 3.5-3.5M8.81 2 5.19 5.63m10-3.63 3.62 3.63" />

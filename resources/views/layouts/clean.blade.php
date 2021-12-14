@@ -5,7 +5,7 @@
     title="Вернуться">
     <x-tabler-chevron-left class="w-8 h-8" />
   </a>
-  <div class="block w-full max-w-screen-xl px-4 pt-4 pb-6 mx-auto antialiased ">
+  <div class="block w-full max-w-screen-xl pt-4 mx-auto antialiased md:pb-6 md:px-4 ">
     @yield ('content')
   </div>
 </div>

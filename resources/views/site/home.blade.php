@@ -101,26 +101,24 @@
           </div>
         </div>
 
-        <div x-data class="grid grid-cols-4 gap-12">
+        <div x-data class="grid gap-12 sm:grid-cols-2 md:grid-cols-4">
           <div @click="$dispatch('auth')"
-            class="flex items-center justify-center px-6 py-4 text-lg bg-white border border-transparent cursor-pointer lg:rounded-2xl hover:border-gray-200">
+            class="flex items-center justify-center px-6 py-4 text-lg leading-snug text-center bg-white border border-transparent cursor-pointer rounded-2xl hover:border-gray-200">
             Скидка за первый заказ
           </div>
           <div @click="$dispatch('auth')"
-            class="flex items-center justify-center px-6 py-4 text-lg leading-snug text-center bg-white border border-transparent cursor-pointer lg:rounded-2xl hover:border-gray-200">
+            class="flex items-center justify-center px-6 py-4 text-lg leading-snug text-center bg-white border border-transparent cursor-pointer rounded-2xl hover:border-gray-200">
             Постоянная скидка<br>по карте
           </div>
           <div @click="$dispatch('auth')"
-            class="flex items-center justify-center px-6 py-4 text-lg bg-white border border-transparent cursor-pointer lg:rounded-2xl hover:border-gray-200">
+            class="flex items-center justify-center px-6 py-4 text-lg leading-snug text-center bg-white border border-transparent cursor-pointer rounded-2xl hover:border-gray-200">
             Скидка от 5 кг корма
           </div>
           <div @click="$dispatch('auth')"
-            class="flex items-center justify-center px-6 py-4 text-lg bg-white border border-transparent cursor-pointer lg:rounded-2xl hover:border-gray-200">
+            class="flex items-center justify-center px-6 py-4 text-lg leading-snug text-center bg-white border border-transparent cursor-pointer rounded-2xl hover:border-gray-200">
             Сумируем скидка
           </div>
         </div>
-
-
 
         <div class="space-y-4">
           <div class="flex items-center justify-between">

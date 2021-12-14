@@ -1,26 +1,28 @@
- <div class="flex-col px-1 space-y-6">
+ <div class="flex-col px-1 space-y-6 ">
 
    <div wire:loading
      class="absolute top-0 bottom-0 left-0 right-0 z-30 w-full h-full bg-gray-100 bg-opacity-75 rounded-2xl">
    </div>
 
-   <div wire:ignore>
-     <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
-   </div>
+   @if (Agent::isDesktop())
+     <div wire:ignore>
+       <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
+     </div>
 
-   <div>
-     @forelse ($attributesRanges as $key => $attrRange)
-       <div class="pt-6 pb-5 text-sm font-bold">{{ $attrRange['name'] }}</div>
-       <x-range-slider-attr :minRange="$attrRange['min']" :maxRange="$attrRange['max']" :idRange="$key" />
-     @empty
-     @endforelse
-   </div>
+     <div>
+       @forelse ($attributesRanges as $key => $attrRange)
+         <div class="pt-6 pb-5 text-sm font-bold">{{ $attrRange['name'] }}</div>
+         <x-range-slider-attr :minRange="$attrRange['min']" :maxRange="$attrRange['max']" :idRange="$key" />
+       @empty
+       @endforelse
+     </div>
+   @endif
 
    <div>
      @if ($showPromoF)
        <div class="pt-4">
          <div class="container-checkbox">
-           <label>Акции</label>
+           <label class="text-base sm:text-sm">Акции</label>
            <input wire:model="promoF" type="checkbox">
            <span class="checkmark"></span>
          </div>
@@ -44,7 +46,7 @@
 
            <template x-for="(item, index) in filteredBrands" :key="item.id" hidden>
              <div class=" container-checkbox">
-               <span class="text-sm" x-text="item.name"></span>
+               <span class="text-base sm:text-sm" x-text="item.name"></span>
                <input :value="item.id" type="checkbox" x-model.number="brandsF">
                <span class="checkmark"></span>
              </div>
@@ -103,7 +105,7 @@
              <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
                <template x-for="(item, index) in filteredAttribute" :key="item.id" hidden>
                  <label for="item.id" class="container-checkbox">
-                   <span class="text-sm" x-text="item.name"></span>
+                   <span class="text-base sm:text-sm" x-text="item.name"></span>
                    <input id="item.id" :value="item.id" type="checkbox" x-model.number.debounce.700="attributeFilter">
                    <span class="checkmark"></span>
                  </label>
@@ -131,15 +133,15 @@
      <div class="flex flex-col space-y-3">
        <label class="inline-flex items-center space-x-2">
          <input type="radio" wire:model="stockF" value="3" name="stockF" class="w-5 h-5 text-orange-400 form-radio"
-           checked><span class="text-sm text-gray-700 ">Все товары</span>
+           checked><span class="text-base text-gray-700 sm:text-sm">Все товары</span>
        </label>
        <label class="inline-flex items-center space-x-2">
          <input type="radio" wire:model="stockF" value="2" name="stockF"
-           class="w-5 h-5 text-orange-400 form-radio"><span class="text-sm text-gray-700 ">В наличии</span>
+           class="w-5 h-5 text-orange-400 form-radio"><span class="text-base text-gray-700 sm:text-sm ">В наличии</span>
        </label>
        <label class="inline-flex items-center space-x-2">
          <input type="radio" wire:model="stockF" value="1" name="stockF"
-           class="w-5 h-5 text-orange-400 form-radio"><span class="text-sm text-gray-700">Под заказ</span>
+           class="w-5 h-5 text-orange-400 form-radio"><span class="text-base text-gray-700 sm:text-sm">Под заказ</span>
        </label>
      </div>
    </div>
