@@ -28,7 +28,7 @@ trait Discounts
                 'name' => 'Скидочная карта',
                 'type' => 'discount_card',
                 'target' => 'subtotal',
-                'value' => '-'.$userHasDiscount.'%',
+                'value' => '-' . $userHasDiscount . '%',
             ]);
         }
 
@@ -48,7 +48,6 @@ trait Discounts
 
     public function getDiscountByCard($items, $cartId, $userHasDiscount = 0)
     {
-
         $cartDiscountByCard = $this->checkDiscountByCard($userHasDiscount);
 
         if ($cartDiscountByCard === false) {
@@ -58,7 +57,7 @@ trait Discounts
                     'name' => 'Скидочная карта',
                     'type' => 'discount_card',
                     'target' => 'subtotal',
-                    'value' => '-'.$checked.'%',
+                    'value' => '-' . $checked . '%',
                 ]);
             }
         }
@@ -66,12 +65,12 @@ trait Discounts
         if ($cartDiscountByCard) {
             foreach ($items as $item) {
                 if ($item->getConditionByType('discount_card')) {
-                        \Cart::session($cartId)->removeItemCondition($item['id'], 'discount_card');
+                    \Cart::session($cartId)->removeItemCondition($item['id'], 'discount_card');
                 }
 
                 if ($item->associatedModel['vendorcode'] !== 'DISCOUNT_CARD'
                     && $item->associatedModel['promotion_type'] !== 4
-                    && ! $item->getConditionByType('weight')) {
+                    && !$item->getConditionByType('weight')) {
                     \Cart::session($cartId)->addItemCondition($item['id'], $cartDiscountByCard);
                 }
             }
@@ -95,11 +94,11 @@ trait Discounts
         } elseif (floor($subTotal) < 2000 && auth()->user()->extra_discount !== 'first') {
             \Cart::session($cartId)->removeCartCondition('Первый заказ');
 
-             return false;
+            return false;
         } else {
             \Cart::session($cartId)->removeCartCondition('Первый заказ');
 
-             return false;
+            return false;
         }
     }
 
@@ -160,7 +159,7 @@ trait Discounts
 
         foreach ($items as $item) {
             if ($item->getConditionByType('weight')) {
-                   \Cart::session($cartId)->removeItemCondition($item['id'], 'weight');
+                \Cart::session($cartId)->removeItemCondition($item['id'], 'weight');
             }
             if ($item->getConditionByType('discount_card')) {
                 \Cart::session($cartId)->removeItemCondition($item['id'], 'discount_card');
@@ -182,7 +181,7 @@ trait Discounts
         return new CartCondition([
             'name' => 'Уценка',
             'type' => 'price_down',
-            'value' => '-'.$discount,
+            'value' => '-' . $discount,
         ]);
     }
 
@@ -219,10 +218,9 @@ trait Discounts
                 $itemDiscount = new CartCondition([
                     'name' => '1 + 1',
                     'type' => 'discountPlus',
-                    'value' => '-'.$cheapestItem['price'] * $count.' ',
+                    'value' => '-' . $cheapestItem['price'] * $count . ' ',
                 ]);
 
-                // TODO все время показывает 0
                 \Cart::session($cartId)->clearItemConditions($cheapestItem['id']);
 
                 \Cart::session($cartId)->addItemCondition($cheapestItem['id'], $itemDiscount);
@@ -238,7 +236,7 @@ trait Discounts
             return new CartCondition([
                 'name' => 'Праздничные',
                 'type' => 'holiday',
-                'value' => '-'.$discount.'%',
+                'value' => '-' . $discount . '%',
             ]);
         }
 
@@ -249,7 +247,7 @@ trait Discounts
     {
         foreach ($items as $item) {
             if ($item->getConditionByType('weight')) {
-                    \Cart::session($cartId)->removeItemCondition($item['id'], 'weight');
+                \Cart::session($cartId)->removeItemCondition($item['id'], 'weight');
             }
 
             if ($item->getConditionByType('discount_card')) {

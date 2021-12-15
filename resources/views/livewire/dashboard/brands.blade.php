@@ -212,7 +212,7 @@
                          )" wire:ignore class="space-y-2">
                   <label class="font-bold">Описание</label>
                   <input id="description" name="description" x-model="description" type="hidden" />
-                  <div wire:ignore x-on:trix-change.debounce.1000ms="description = $refs.trix.value"
+                  <div wire:ignore x-on:trix-blur="description = $refs.trix.value"
                     class="w-auto p-4 bg-white rounded-xl">
                     <trix-editor x-ref="trix" input="description" class="h-48 overflow-y-scroll">
                     </trix-editor>

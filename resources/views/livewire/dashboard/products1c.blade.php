@@ -182,7 +182,7 @@
                           {{ $product1c['stock'] }})</span></label>
                       <div class="w-20">
                         <input wire:model.defer="promotion.stock" type="number" min="1"
-                          max="{{ $product1c['stock'] }}" id="stock">
+                          max="{{ $product1c['stock'] }}" id="stock" class="field">
                       </div>
                       @error('promotion.stock') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
                     </div>
@@ -202,7 +202,7 @@
                         <span class="font-normal ">(указать без знака %)</span>
                       </label>
                       <div class="w-20">
-                        <input type="number" id="percent" wire:model.defer="promotion.percent">
+                        <input type="number" id="percent" wire:model.defer="promotion.percent" class="field">
                       </div>
                       @error('promotion.percent') <span class="text-sm text-red-500">{{ $message }}</span>
                       @enderror

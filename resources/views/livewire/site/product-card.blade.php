@@ -687,21 +687,8 @@
               }
             },
             validate() {
-              if (this.count >= 32) {
-                this.count = 32;
-                var callToaster = new CustomEvent('toast', {
-                  detail: {
-
-                    // TODO променять и проверить
-
-                    message: 'Если вы хотите купить оптом, свяжитесь с нами по телефону'.config(
-                      'constants.phone'),
-                    timeout: '7000',
-                  }
-                });
-                // TODO test
-                callToaster.cancelable
-                window.dispatchEvent(callToaster);
+              if (this.count > 64) {
+                this.count = 64;
               }
 
               if (this.count === '' || this.count == 0) {

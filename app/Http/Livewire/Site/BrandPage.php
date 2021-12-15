@@ -31,10 +31,11 @@ class BrandPage extends Component
                 ->all();
         });
 
-        // TODO cache it
-        $this->catalogs = Catalog::whereHas('products', fn ($q) => $q->where('brand_id', $this->brand->id))
-         ->withWhereHas('categories', fn ($q) => $q->whereHas('products', fn ($q) => $q->where('brand_id', $this->brand->id)))
-        ->get();
+        $this->catalogs = cache()->remember('brand-catalogs', 60 * 60 * 24, function () {
+            return Catalog::whereHas('products', fn ($q) => $q->where('brand_id', $this->brand->id))
+                    ->withWhereHas('categories', fn ($q) => $q->whereHas('products', fn ($q) => $q->where('brand_id', $this->brand->id)))
+                    ->get();
+        });
     }
 
     public function render()

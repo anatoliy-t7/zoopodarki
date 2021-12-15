@@ -52,7 +52,7 @@
             <div>По этому запросу ничего не найдено</div>
           @endforelse
           <div class="pt-6 text-center">
-            <a href="{{ route('site.search', ['q' => $this->search]) }}" class="text-xs text-white bg-orange-400 btn">
+            <a href="{{ route('site.search', ['q' => $this->search]) }}" class="text-sm text-white bg-orange-400 btn">
               Посмотреть остальные результаты
             </a>
           </div>

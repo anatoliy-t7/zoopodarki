@@ -2,11 +2,6 @@
 
 <div class="space-y-6">
 
-  <div>
-    // TODO remove
-    DB: {{ env('DB_DATABASE') }}
-  </div>
-
   <div class="space-y-2">
     <div class="block">Export</div>
     <div class="flex items-start justify-start gap-6">

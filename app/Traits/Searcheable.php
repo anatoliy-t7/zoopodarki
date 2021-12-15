@@ -10,7 +10,7 @@ trait Searcheable
 {
     use WireToast;
 
-    public function searchForPage($q)
+    public function searchForPage($q, $sortSelectedType, $sortBy)
     {
         try {
             return $result = Product::search($q)
@@ -20,15 +20,15 @@ trait Searcheable
                         ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
                         ->has('categories')
                         ->with('media')
-                        ->with('categories')
-                        ->with('categories.catalog')
+                        ->with('categories:id,slug,catalog_id')
+                        ->with('categories.catalog:id,slug')
                         ->with('brand')
                         ->with('unit')
                         ->with('attributes')
                         ->with('variations');
                 })
             // TODO orderBy не работает
-                ->orderBy($this->sortSelectedType, $this->sortBy)
+                ->orderBy($sortSelectedType, $sortBy)
                 ->paginate(32);
         } catch (\Throwable$th) {
             \Log::error('Ошибка поиска');
@@ -37,7 +37,6 @@ trait Searcheable
             toast()
                 ->warning('Поиск временно не работает, мы уже работаем над этим')
                 ->push();
-
         }
     }
 
@@ -52,20 +51,20 @@ trait Searcheable
             ->raw();
     }
 
-    public function searchThis($q, $instant = false)
+    public function searchThis($q, $instant = false, $sortSelectedType = 'popularity', $sortBy = 'desc')
     {
-        if (! $instant) {
-            $result = $this->searchForPage($q);
-            // TODO if search server not runing
+        if (!$instant) {
+            $result = $this->searchForPage($q, $sortSelectedType, $sortBy);
+
             if ($result->total() == 0) {
                 $q = switcher_ru($q);
 
-                $result = $this->searchForPage($q);
+                $result = $this->searchForPage($q, $sortSelectedType, $sortBy);
             }
 
             if ($result->total() == 0) {
                 $q = switcher_en($q);
-                $result = $this->searchForPage($q);
+                $result = $this->searchForPage($q, $sortSelectedType, $sortBy);
             }
         } else {
             $result = $this->searchInstant($q);

@@ -23,7 +23,6 @@ class OrderController extends Controller
         if ($request->has('order_id')) {
             $orderId = $request->input('order_id');
 
-            // TODO get data only needs
             $order = Order::where('id', $orderId)->getOrderData()->first();
 
             $comment = '';

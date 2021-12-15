@@ -32,7 +32,6 @@ class Checkout extends Component
     public $shelterItems;
     public $subTotal;
     public $deliveryCost = 0;
-    public $deliveryCostToShelter = 0; // TODO высчитать доставку
     public $totalAmount;
     public $totalWeight = 200;
     public $userId;
@@ -102,7 +101,6 @@ class Checkout extends Component
                     $this->address['lat'],
                     $this->address['lng']
                 );
-                // TODO $this->deliveryCostToShelter ?
             }
         }
     }
@@ -131,10 +129,6 @@ class Checkout extends Component
         } else {
             $this->totalAmount = \Cart::session($this->cartId)->getTotal()
                 + app('shelter')->session($this->shelterCartId)->getTotal();
-        }
-
-        if (count($this->shelterItems) > 0) {
-            $this->totalAmount = $this->totalAmount + $this->deliveryCostToShelter;
         }
     }
 
@@ -296,10 +290,6 @@ class Checkout extends Component
 
         $this->getCartCheckout();
 
-        if (count($this->shelterItems) > 0) {
-            $this->deliveryCost = $this->deliveryCost + $this->deliveryCostToShelter;
-        }
-
         $orderComment = $this->orderComment;
 
         if (0 !== $this->firstOrder) {
@@ -364,7 +354,6 @@ class Checkout extends Component
                     $discountComment = 'Акция "Уценка"';
                 }
                 if (2 == $item->associatedModel['promotion_type']) {
-                    //TODO 'Акция "1+1"'
                     $discountComment = 'Акция "1+1"';
                 }
                 if (3 == $item->associatedModel['promotion_type']) {

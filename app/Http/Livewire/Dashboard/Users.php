@@ -53,7 +53,6 @@ class Users extends Component
 
     public function sortBy($field)
     {
-
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'desc' ? 'asc' : 'desc';
         } else {
@@ -83,17 +82,16 @@ class Users extends Component
         ]);
 
         $this->validate([
-            'email' => 'required|between:5,64|email|unique:users,email,'.$this->userId,
+            'email' => 'required|between:5,64|email|unique:users,email,' . $this->userId,
         ]);
 
         if ($this->phone) {
             $this->validate([
-                'phone' => 'required|digits:10|unique:users,phone,'.$this->userId,
+                'phone' => 'required|digits:10|unique:users,phone,' . $this->userId,
             ]);
         }
 
         DB::transaction(function () {
-
             $user = User::updateOrCreate(
                 ['id' => $this->userId],
                 [
@@ -116,7 +114,7 @@ class Users extends Component
             $user->syncRoles($this->userRoles);
 
             toast()
-                ->success($this->name.' сохранен')
+                ->success($this->name . ' сохранен')
                 ->push();
 
             $this->closeForm();
@@ -138,7 +136,7 @@ class Users extends Component
             $this->reset();
 
             toast()
-                ->success('Пользователь "'.$user_name.'" удален.')
+                ->success('Пользователь "' . $user_name . '" удален.')
                 ->push();
         }
     }
@@ -150,7 +148,6 @@ class Users extends Component
 
     public function render()
     {
-
         return view('livewire.dashboard.users', [
             'users' => User::when($this->search, function ($query) {
                 $query->whereLike(['name', 'id', 'phone', 'email'], $this->search);

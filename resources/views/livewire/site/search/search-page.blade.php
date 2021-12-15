@@ -20,7 +20,7 @@
         <div class="w-full px-4 pb-6 bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
 
           <div class="relative ">
-            <div class="flex items-center justify-end py-3">
+            {{-- <div class="flex items-center justify-end py-3">
               <x-dropdown>
                 <x-slot name="title">
                   {{ $sortSelectedName }}
@@ -32,7 +32,7 @@
                   </div>
                 @endforeach
               </x-dropdown>
-            </div>
+            </div> --}}
 
             <x-loader />
             <div itemscope itemtype="https://schema.org/ItemList">

@@ -34,13 +34,6 @@ class ShopCart extends Component
     {
         if (request()->session()->has('cart_id')) {
             $cart_id = session('cart_id');
-
-            // TODO
-            // foreach ($cart as $item) {
-            //     if ($item['quantity'] > 21) {
-            //         session()->flush();
-            //     }
-            // }
         }
 
         $this->generateId();
@@ -59,7 +52,7 @@ class ShopCart extends Component
                 if ($cart->get($itemId)->attributes->unit_value == 'на развес') {
                     $this->add($itemId, $quantity, (int) $catalogId, $byWeight);
                 } else {
-                    $this->increment($itemId, (int) $catalogId, $byWeight);
+                    $this->increment($itemId, $quantity, (int) $catalogId, $byWeight);
                 }
             } else {
                 $this->add($itemId, $quantity, (int) $catalogId, $byWeight);
@@ -144,7 +137,7 @@ class ShopCart extends Component
         );
     }
 
-    public function increment(int $itemId, int $catalogId = 0): void
+    public function increment(int $itemId, int $quantity = 1, int $catalogId = 0): void
     {
         $cart = $this->checkShelterCategory($catalogId);
         $item = $cart->get($itemId);
@@ -165,10 +158,15 @@ class ShopCart extends Component
                 $this->getCart();
                 $this->emitTo('product-card', 'render');
             } else {
-                $cart->update(
-                    $itemId,
-                    ['quantity' => 1]
-                );
+                $quantity = $this->checkQuantity($item->quantity, $quantity);
+
+                $cart->update($item->id, [
+                    'quantity' => [
+                        'relative' => false,
+                        'value' => $quantity,
+                    ],
+                ]);
+
                 $this->getCart();
                 $this->emitTo('product-card', 'render');
 
@@ -269,6 +267,19 @@ class ShopCart extends Component
         } else {
             return $cart = \Cart::session($this->cartId);
         }
+    }
+
+    public function checkQuantity($itemQuantity, $quantity)
+    {
+        if ($itemQuantity + $quantity > 64) {
+            toast()
+                ->info('Если вы хотите купить оптом, свяжитесь с нами по телефону ' . config('constants.phone'))
+                ->push();
+
+            return 64;
+        }
+
+        return $itemQuantity + $quantity;
     }
 
     public function render()

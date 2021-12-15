@@ -18,9 +18,9 @@ class SearchPage extends Component
     public String $metaTitle = 'ZooPodarki';
     public String $metaDescription = 'ZooPodarki';
     public String $name = 'ZooPodarki';
-    public String $sortSelectedName = 'Название: от А до Я';
-    public String $sortSelectedType = 'name';
-    public String $sortBy = 'asc';
+    public String $sortSelectedName = 'По популярности';
+    public String $sortSelectedType = 'popularity';
+    public String $sortBy = 'desc';
     public $sortType = [
         '0' => [
             'name' => 'По популярности',
@@ -72,16 +72,15 @@ class SearchPage extends Component
         $this->sortSelectedType = $type;
         $this->sortSelectedName = $name;
         $this->sortBy = $sort;
+        $this->resetPage();
     }
 
     public function render()
     {
-        $this->resetPage();
+        $resultArray = $this->searchThis($this->q, false, $this->sortSelectedType, $this->sortBy);
+        $this->q = $resultArray['search'];
 
         $this->emit('lozad', '');
-
-        $resultArray = $this->searchThis($this->q);
-        $this->q = $resultArray['search'];
 
         return view('livewire.site.search.search-page', [
             'products' => $resultArray['result'],

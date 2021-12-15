@@ -74,7 +74,7 @@
 
               <x-dashboard.table.cell>
                 @foreach ($user->roles as $role)
-                  <div class="p-2">{{ $role->name }}</div>
+                  <span class="px-2 py-1 bg-gray-100 rounded-xl">{{ $role->name }}</span>
                 @endforeach
               </x-dashboard.table.cell>
 
@@ -157,9 +157,9 @@
             </div>
 
             <div class="flex items-center justify-between space-x-4">
-              <div class="font-bold">Скидка по карте (0 или 5%)</div>
-              <div class="w-12">
-                <input wire:model.defer="discount" type="text">
+              <div class="font-bold">Скидка по карте % (число)</div>
+              <div class="w-16">
+                <input wire:model.defer="discount" type="number" class="field">
               </div>
               @error('discount')
                 <span class="text-sm text-red-500">{{ $message }}</span>

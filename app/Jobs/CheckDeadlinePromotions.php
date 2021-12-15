@@ -38,7 +38,7 @@ class CheckDeadlinePromotions implements ShouldQueue
         $products1cPromotionsWithDate = Product1C::where('promotion_date', '<=', now()->toDateString())->get();
 
         foreach ($products1cPromotionsWithDate as $product1c) {
-            $this->checkIfPromotionFinished($product1c);
+            $this->setPromotionFinished($product1c);
         }
 
         $products1cPromotionsWithNoStock = Product1C::where('promotion_type', '!=', 0)
@@ -46,28 +46,24 @@ class CheckDeadlinePromotions implements ShouldQueue
             ->get();
 
         foreach ($products1cPromotionsWithNoStock as $product1c) {
-            $this->checkIfPromotionFinished($product1c);
+            $this->setPromotionFinished($product1c);
         }
     }
 
-    public function checkIfPromotionFinished(Product1C $product1c)
+    public function setPromotionFinished(Product1C $product1c)
     {
         DB::transaction(
             function () use ($product1c) {
-                $name = $product1c->name;
+                logger($product1c->id);
 
-                if ($product1c->promotion_type === 1) {
-                    $product1c->delete();
-                } else {
-                    $product1c->update([
-                        'promotion_type' => 0,
-                        'promotion_price' => null,
-                        'promotion_percent' => null,
-                        'promotion_date' => null,
-                    ]);
-                }
+                $product1c->update([
+                    'promotion_type' => 0,
+                    'promotion_price' => null,
+                    'promotion_percent' => null,
+                    'promotion_date' => null,
+                ]);
 
-                $this->NotifyPromotionFinished($name);
+                $this->NotifyPromotionFinished($product1c->name);
             }
         );
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Jobs\CheckDeadlinePromotions;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -79,8 +80,10 @@ class Kernel extends HttpKernel
     {
         $schedule->command('backup:run --only-db')->timezone('Europe/Moscow')->dailyAt('03:00');
 
-        $schedule->command('backup:clean')->timezone('Europe/Moscow')->dailyAt('03:00');
+        $schedule->command('backup:clean')->timezone('Europe/Moscow')->dailyAt('03:02');
 
         $schedule->command('sitemap:generate')->timezone('Europe/Moscow')->weeklyAt('04:00');
+
+        $schedule->job(new CheckDeadlinePromotions())->timezone('Europe/Moscow')->dailyAt('00:01');
     }
 }
