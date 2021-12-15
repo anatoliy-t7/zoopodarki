@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Catalog;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Tag;
 use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\SitemapIndex;
@@ -25,8 +26,14 @@ class GenerateSitemap extends Command
     {
         $sitemapIndex = SitemapIndex::create();
 
+        if (!file_exists(public_path('sitemap'))) {
+            mkdir(public_path('sitemap'), 0777, true);
+        }
+
         $productChunks = Product::select(['id', 'slug', 'updated_at'])
             ->isStatusActive()
+            ->has('media')
+            ->has('categories')
             ->whereHas('variations', function ($query) {
                 $query->where('price', '>', 0);
             })
@@ -41,17 +48,20 @@ class GenerateSitemap extends Command
                             ->setLastModificationDate($product->updated_at));
                 }
 
-                $sitemap->writeToFile(public_path($sitemapName));
-                $sitemapIndex->add($sitemapName);
+                $sitemap->writeToFile(public_path('sitemap/' . $sitemapName));
+                $sitemapIndex->add('sitemap/' . $sitemapName);
             });
 
         $catalogs = $this->catalogs();
-        $sitemapIndex->add($catalogs);
+        $sitemapIndex->add('sitemap/' . $catalogs);
 
         $categories = $this->categories();
-        $sitemapIndex->add($categories);
+        $sitemapIndex->add('sitemap/' . $categories);
 
-        $sitemapIndex->writeToFile(public_path('sitemap.xml'));
+        $tags = $this->tags();
+        $sitemapIndex->add('sitemap/' . $tags);
+
+        $sitemapIndex->writeToFile(public_path('sitemap/sitemap.xml'));
     }
 
     public function catalogs()
@@ -63,7 +73,7 @@ class GenerateSitemap extends Command
             $sitemap->add(Url::create('/pet' . '/' . $catalog->slug)
                     ->setLastModificationDate(now()));
         }
-        $sitemap->writeToFile(public_path($sitemapName));
+        $sitemap->writeToFile(public_path('sitemap/' . $sitemapName));
 
         return $sitemapName;
     }
@@ -78,7 +88,22 @@ class GenerateSitemap extends Command
             $sitemap->add(Url::create($url)
                     ->setLastModificationDate(now()));
         }
-        $sitemap->writeToFile(public_path($sitemapName));
+        $sitemap->writeToFile(public_path('sitemap/' . $sitemapName));
+
+        return $sitemapName;
+    }
+
+    public function tags()
+    {
+        $tags = Tag::with('category')->with('category.catalog')->get();
+        $sitemapName = 'tags.xml';
+        $sitemap = Sitemap::create();
+        foreach ($tags as $key => $tag) {
+            $url = '/pet' . '/' . $tag->category->catalog->slug . '/' . $tag->category->slug . '/tag/' . $tag->slug;
+            $sitemap->add(Url::create($url)
+                    ->setLastModificationDate(now()));
+        }
+        $sitemap->writeToFile(public_path('sitemap/' . $sitemapName));
 
         return $sitemapName;
     }
