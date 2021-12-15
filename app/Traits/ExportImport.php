@@ -14,12 +14,12 @@ trait ExportImport
 {
     public function importFromFile($filePath)
     {
-        $collection = (new FastExcel)->import($filePath);
+        $collection = (new FastExcel())->import($filePath);
 
         try {
-            $this->setData($collection);
+            $this->setData2($collection);
 
-             return true;
+            return true;
         } catch (\Throwable $th) {
             logger($th);
 
@@ -27,12 +27,10 @@ trait ExportImport
         }
 
         unlink($filePath);
-
     }
 
     public function importData($collection)
     {
-
         foreach ($collection->toArray() as $key => $row) {
             if (Product::where('id', $row['id'])->first()) {
                 $product = Product::where('id', $row['id'])
@@ -54,9 +52,7 @@ trait ExportImport
                     logger('Done');
                 }
 
-                unset($product);
-                unset($row);
-                unset($categories);
+                unset($product, $row, $categories);
             }
         }
     }
@@ -81,7 +77,7 @@ trait ExportImport
                     if ($attr->items()->where('name', $value)->first()) {
                         $attribute_item = $attr->items()->where('name', $value)->first();
 
-                        if (! $product->attributes()
+                        if (!$product->attributes()
                         ->where('attribute_item.attribute_id', $attr->id)
                         ->where('attribute_item.id', $attribute_item->id)
                         ->first()) {
@@ -106,7 +102,6 @@ trait ExportImport
 
     public function setSpecialAttrs(Product $product, $row)
     {
-
         $attrs = ['морепродукты', 'птица', 'рыба', 'без курицы', 'без птицы', 'молочные продукты', 'крупы', 'потрошки', 'без риса'];
 
         $ingredients = Attribute::where('id', 26) // Ингредиенты
@@ -118,7 +113,7 @@ trait ExportImport
                 if ($ingredients->items()->where('name', $attr)->first()) {
                     $attribute_item = $ingredients->items()->where('name', $attr)->first();
 
-                    if (! $product->attributes()->where('attribute_item.id', $attribute_item->id)->first()) {
+                    if (!$product->attributes()->where('attribute_item.id', $attribute_item->id)->first()) {
                         $product->attributes()->attach($attribute_item->id);
                     }
                 } else {
@@ -137,7 +132,7 @@ trait ExportImport
 
     public function setBrand(Product $product, $brand)
     {
-        if (! empty($brand) && Brand::where('name', $brand)->first()) {
+        if (!empty($brand) && Brand::where('name', $brand)->first()) {
             $brand = Brand::where('name', $brand)->first();
             $product->brand()->associate($brand->id)->save();
             unset($brand);
@@ -174,46 +169,103 @@ trait ExportImport
                 // $unitName => $product->unit_value,
             ]);
 
-           // $arrayAttributes = [];
+            // $arrayAttributes = [];
             // $arrayCategories = [];
         }
 
         $path = storage_path('app/excel');
-        $filePath = (new FastExcel($collection))->export($path.'/products.xlsx');
+        $filePath = (new FastExcel($collection))->export($path . '/products.xlsx');
 
         return $filePath;
     }
 
     public function setData2($collection)
     {
-
-        foreach ($collection->toArray() as $key => $row) {
-            if (Product1C::where('id', $row['id'])->first()) {
-                $product1c = Product1C::where('id', $row['id'])
-                ->with('product')
+        foreach ($collection->toArray() as $row) {
+            if (Product::where('id', $row['id'])->first()) {
+                $product = Product::where('id', $row['id'])
+                // ->withWhereHas('attributes', fn ($q) => $q->where('attribute_item.attribute_id', 64))
                 ->first();
 
-                foreach ([1, 2, 3, 5, 6] as $unitId) {
-                    if ($row[$unitId] !== '') {
-                        $unitValue = Str::replace(',', '.', $row[$unitId]);
-                        $product1c->unit_value = trim($unitValue);
-                        $product1c->save();
+                $product->name = $row['name'];
+                $product->meta_title = $row['name'];
+                $product->save();
+                // foreach ($product->attributes as $attribute) {
+                //     if ($attribute->attribute_id === 64) {
+                //         $product->attributes()->detach($attribute->id);
+                //     }
+                // }
 
-                        if ($product1c->product !== null) {
-                            $product1c->product->unit_id = $unitId;
-                            $product1c->push();
-                        }
+                // $product->attributes()->attach(2540);
 
-                        unset($unitValue);
-
-                        break;
-                    }
-                }
-
-                unset($product1c);
+                unset($product);
             }
+
+            // if (Product1C::where('id', $row['id'])->first()) {
+            //     $product1c = Product1C::where('id', $row['id'])
+            //     ->with('product', 'product.unit')
+            //     ->first();
+
+
+            //     if ($row['гр'] !== '') {
+            //         $product1c->unit_value = trim($row['гр']);
+            //         $product1c->save();
+
+            //         if ($product1c->product()->exists()) {
+            //             $product1c->product->unit()->associate(1);
+            //             $product1c->push();
+            //         }
+            //     }
+
+            // if ($row['мл'] !== '') {
+            //     $product1c->unit_value = trim($row['мл']);
+            //     $product1c->save();
+
+            //     if ($product1c->product()->exists()) {
+            //         $product1c->product->unit()->associate(2);
+            //         $product1c->push();
+            //     }
+            // }
+
+            // if ($row['см'] !== '') {
+            //     $product1c->unit_value = trim($row['см']);
+            //     $product1c->save();
+
+            //     if ($product1c->product()->exists()) {
+            //         $product1c->product->unit()->associate(3);
+            //         $product1c->push();
+            //     }
+            // }
+
+            // if ($row['размер'] !== '') {
+            //     logger($row['размер']);
+            //     $product1c->unit_value = trim($row['размер']);
+            //     $product1c->save();
+
+            //     if ($product1c->product()->exists()) {
+            //         $product1c->product->unit()->associate(5);
+            //         $product1c->push();
+            //     }
+            // }
+
+            // if ($row['шт'] !== '') {
+            //     $product1c->unit_value = trim($row['шт']);
+            //     $product1c->save();
+
+            //     if ($product1c->product()->exists()) {
+            //         $product1c->product->unit()->associate(6);
+            //         $product1c->push();
+            //     }
+            // }
+
+
+
+            //     unset($product1c);
+            // }
             unset($row);
         }
+
+        // logger($this->count);
     }
 
     public function setData($collection)
@@ -236,8 +288,7 @@ trait ExportImport
                     $product1c->push();
                 }
 
-                unset($unitValue);
-                unset($product1c);
+                unset($unitValue, $product1c);
             }
             unset($row);
         }

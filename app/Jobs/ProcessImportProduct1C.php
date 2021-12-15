@@ -59,16 +59,16 @@ class ProcessImportProduct1C implements ShouldQueue
         }
 
         if ($this->count > 0) {
-            Log::info('Product deleted: '.$this->count);
+            Log::info('Product deleted: ' . $this->count);
         }
 
         if ($this->forDelete > 0) {
-            Log::info('Product1C deleted: '.$this->forDelete);
+            Log::info('Product1C deleted: ' . $this->forDelete);
         }
 
         Log::info('import.xml processed successed');
 
-        unlink($this->file);
+        // unlink($this->file);
     }
 
     public function getProducts($product1c)
@@ -120,7 +120,7 @@ class ProcessImportProduct1C implements ShouldQueue
         $oldProduct = Product1C::where('uuid', $product1c['Ид'])->with('product')->first();
 
         if (Arr::exists($product1c, 'Описание')
-            && ! empty($product1c['Описание'])
+            && !empty($product1c['Описание'])
             && $oldProduct->product()->exists()
             && $oldProduct->product->consist === null) {
             $oldProduct->product->consist = $product1c['Описание'];
@@ -128,14 +128,14 @@ class ProcessImportProduct1C implements ShouldQueue
         }
 
         if (Arr::exists($product1c, 'Артикул')
-            && ! empty($product1c['Артикул'])
+            && !empty($product1c['Артикул'])
             && $product1c['Артикул'] !== $oldProduct->vendorcode) {
             $oldProduct->vendorcode = $product1c['Артикул'];
             $oldProduct->save();
         }
 
         if (Arr::exists($product1c, 'Штрихкод')
-            && ! empty($product1c['Штрихкод'])
+            && !empty($product1c['Штрихкод'])
             && $product1c['Штрихкод'] !== $oldProduct->barcode) {
             $oldProduct->barcode = $product1c['Штрихкод'];
             $oldProduct->save();
@@ -181,11 +181,11 @@ class ProcessImportProduct1C implements ShouldQueue
 
     public function createProduct($product1c)
     {
-        if (Arr::exists($product1c, 'Штрихкод') && ! empty($product1c['Штрихкод'])) {
+        if (Arr::exists($product1c, 'Штрихкод') && !empty($product1c['Штрихкод'])) {
             $this->barcode = $product1c['Штрихкод'];
         }
 
-        if (Arr::exists($product1c, 'Артикул') && ! empty($product1c['Артикул'])) {
+        if (Arr::exists($product1c, 'Артикул') && !empty($product1c['Артикул'])) {
             $this->vendorcode = $product1c['Артикул'];
         }
 

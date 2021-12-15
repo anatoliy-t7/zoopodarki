@@ -10,6 +10,7 @@
         alt="{{ $product->name }}">
     </a>
 
+
     @if ($product->brand)
       <div class="py-4 text-center text-green-600 md:py-2">
         <a itemprop="url"

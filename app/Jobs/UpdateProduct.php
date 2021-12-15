@@ -34,23 +34,26 @@ class UpdateProduct implements ShouldQueue
      */
     public function handle()
     {
-        $products = Product::with('attributes')->get();
+        // $attribute = AttributeItem::find(1809);
 
-        foreach ($products as $product) {
-            $this->addAttributeItem($product);
-            // $this->updateProduct($product);
-        }
+        // $attribute->products()->detach();
+
+        // $products = Product::with('attributes')->get();
+
+        // foreach ($products as $product) {
+        //     $this->addAttributeItem($product);
+        //     // $this->updateProduct($product);
+        // }
     }
 
     public function updateProduct($product)
     {
-
         $prodAttrs = [];
         // $prodAttrsUnique = [];
 
         foreach ($product->attributes as $attr) {
             if ($attr->name === '') {
-                 array_push($prodAttrs, $attr->id);
+                array_push($prodAttrs, $attr->id);
             }
         }
 
@@ -67,7 +70,7 @@ class UpdateProduct implements ShouldQueue
             if ($attribute->items()
                 ->where('name', trim($product->country))
                 ->first()) {
-                 $attributeItem = AttributeItem::where('name', trim($product->country))->first();
+                $attributeItem = AttributeItem::where('name', trim($product->country))->first();
             } else {
                 $attributeItem = AttributeItem::create([
                     'name' => trim($product->country),
@@ -75,7 +78,7 @@ class UpdateProduct implements ShouldQueue
                 ]);
             }
 
-            if (! $product->attributes()
+            if (!$product->attributes()
                 ->where('attribute_item.name', trim($product->country))
                 ->first()) {
                 $product->attributes()->attach($attributeItem->id);

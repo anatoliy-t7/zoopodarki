@@ -315,7 +315,7 @@ class CategoryPage extends Component
             ->when($this->stockF, function ($query) {
                 $query->checkStock((int) $this->stockF);
             })
-
+              //  ->with(['media' => function ($query) { $query->unique('model_id'); }])
                 ->with('media')
                 ->with('brand')
                 ->with('unit')

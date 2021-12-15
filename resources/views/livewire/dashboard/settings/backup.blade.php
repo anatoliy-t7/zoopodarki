@@ -62,7 +62,7 @@
           Run queue
         </div>
       </button>
-      {{-- <button wire:click='updateProduct'
+      <button wire:click='updateProduct'
         class="flex items-center justify-between px-3 py-2 text-white bg-red-500 rounded-xl hover:bg-red-700">
         <div wire:loading wire:target="UpdateProduct">
           <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -76,7 +76,7 @@
         <div>
           UpdateProduct
         </div>
-      </button> --}}
+      </button>
 
 
     </div>

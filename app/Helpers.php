@@ -83,25 +83,14 @@ if (!function_exists('kg')) {
                 $value = Str::replace('гр', '', $value);
                 $value = trim($value);
             }
-            $value = intval($value) / 1000;
 
-            if (Str::of($value)->before('.') == '0') {
-                $value = Str::of($value)->after('.');
 
-                if (Str::of($value)->startsWith('0')) {
-                    $value = Str::replaceFirst('0', '', $value);
-                    $value = $value . '0 гр';
-                } else {
-                    if (strlen((string) $value) == 2) {
-                        $value = $value . '0 гр';
-                    } elseif (strlen((string) $value) == 1) {
-                        $value = $value . '00 гр';
-                    } else {
-                        $value .= ' гр';
-                    }
-                }
-            } else {
+            if (strlen((string) $value) > 3) {
+                $value = intval($value) / 1000;
+                $value = round($value, 1);
                 $value .= ' кг';
+            } else {
+                $value .= ' гр';
             }
         }
 
