@@ -9,7 +9,7 @@
        <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
      </div>
 
-     <div>
+     <div wire:ignore>
        @forelse ($attributesRanges as $key => $attrRange)
          <div class="pt-6 pb-5 text-sm font-bold">{{ $attrRange['name'] }}</div>
          <x-range-slider-attr :minRange="$attrRange['min']" :maxRange="$attrRange['max']" :idRange="$key" />

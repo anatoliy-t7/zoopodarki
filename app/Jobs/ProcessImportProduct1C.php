@@ -68,7 +68,7 @@ class ProcessImportProduct1C implements ShouldQueue
 
         Log::info('import.xml processed successed');
 
-        // unlink($this->file);
+        unlink($this->file);
     }
 
     public function getProducts($product1c)
@@ -141,18 +141,18 @@ class ProcessImportProduct1C implements ShouldQueue
             $oldProduct->save();
         }
 
-        if (Arr::exists($product1c, 'ЗначенияРеквизитов')
-            && Arr::has($product1c['ЗначенияРеквизитов']['ЗначениеРеквизита'], 'ВесНоменклатуры')) {
-            $weight = $product1c['ЗначенияРеквизитов']['ЗначениеРеквизита']['Значение'] * 1000;
+        if (Arr::exists($product1c, 'ЗначенияРеквизитов')) {
+            foreach ($product1c['ЗначенияРеквизитов']['ЗначениеРеквизита'] as  $requisite) {
+                if ($requisite['Наименование'] == 'ВесНоменклатуры') {
+                    $weight = $requisite['Значение'] * 1000;
 
-            $oldProduct->weight = $weight;
-
-            if ($oldProduct->product->unit->id === 1) {
-                $oldProduct->unit_value = $weight;
-                $oldProduct->push();
+                    $oldProduct->weight = $weight;
+                    if ($oldProduct->product()->exists() && $oldProduct->product->unit()->exists() && $oldProduct->product->unit->id === 1) {
+                        $oldProduct->unit_value = $weight;
+                    }
+                    $oldProduct->save();
+                }
             }
-
-            $oldProduct->save();
         }
 
         //Update description
@@ -199,18 +199,18 @@ class ProcessImportProduct1C implements ShouldQueue
         $this->barcode = null;
         $this->vendorcode = null;
 
-        if (Arr::exists($product1c, 'ЗначенияРеквизитов')
-            && Arr::has($product1c['ЗначенияРеквизитов']['ЗначениеРеквизита'], 'ВесНоменклатуры')) {
-            $weight = $product1c['ЗначенияРеквизитов']['ЗначениеРеквизита']['Значение'] * 1000;
+        if (Arr::exists($product1c, 'ЗначенияРеквизитов')) {
+            foreach ($product1c['ЗначенияРеквизитов']['ЗначениеРеквизита'] as  $requisite) {
+                if ($requisite['Наименование'] == 'ВесНоменклатуры') {
+                    $weight = $requisite['Значение'] * 1000;
 
-            $oldProduct->weight = $weight;
-
-            if ($oldProduct->product->unit->id === 1) {
-                $oldProduct->unit_value = $weight;
-                $oldProduct->push();
+                    $newProduct->weight = $weight;
+                    if ($newProduct->product()->exists() && $newProduct->product->unit()->exists() && $newProduct->product->unit->id === 1) {
+                        $newProduct->unit_value = $weight;
+                    }
+                    $newProduct->save();
+                }
             }
-
-            $oldProduct->save();
         }
 
         if (Arr::exists($product1c, 'ЗначенияСвойств')) {

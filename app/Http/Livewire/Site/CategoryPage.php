@@ -281,18 +281,18 @@ class CategoryPage extends Component
             })
 
             ->when($this->attributesRangeOn, function ($query) {
-                return $query->whereHas('attributes', function ($query1) {
-                    $query1->where(function ($subQuery) {
+                return $query->whereHas('attributes', function ($querySub) {
+                    $querySub->where(function ($querySubSub) {
                         if ($this->attributesRanges > 0) {
                             foreach ($this->attributesRanges as $key => $range) {
-                                return $subQuery->where(
+                                $querySubSub->where(
                                     'attribute_item.attribute_id',
                                     $this->attributesRanges[$key]['id']
                                 )
-                                        ->whereBetween('name', [
-                                            $this->attributesRanges[$key]['min'],
-                                            $this->attributesRanges[$key]['max'],
-                                        ]);
+                                ->whereBetween('attribute_item.name', [
+                                    $this->attributesRanges[$key]['min'],
+                                    $this->attributesRanges[$key]['max'],
+                                ]);
                             }
                         }
                     });

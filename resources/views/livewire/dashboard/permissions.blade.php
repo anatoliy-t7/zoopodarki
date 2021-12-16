@@ -30,7 +30,7 @@
 
         <x-slot name="body">
           @forelse($permissions as $key => $permission)
-            <x-dashboard.table.row wire:key="{{ $permission->id }}">
+            <x-dashboard.table.row wire:key="{{ $loop->index }}">
 
               <x-dashboard.table.cell>
                 {{ $permission->id }}

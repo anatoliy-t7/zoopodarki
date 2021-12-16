@@ -17,7 +17,7 @@ trait ExportImport
         $collection = (new FastExcel())->import($filePath);
 
         try {
-            $this->setData2($collection);
+            $this->importData($collection);
 
             return true;
         } catch (\Throwable $th) {
@@ -32,36 +32,36 @@ trait ExportImport
     public function importData($collection)
     {
         foreach ($collection->toArray() as $key => $row) {
-            if (Product::where('id', $row['id'])->first()) {
-                $product = Product::where('id', $row['id'])
-                ->with('attributes', 'attributes.attribute', 'categories', 'brand')
+            if (Product1C::where('id', $row['id'])->first()) {
+                $product1c = Product1C::where('id', $row['id'])
+                ->with('product', 'product.attributes', 'product.attributes.attribute')
                 ->first();
 
-                $categories = explode(',', $row['categories']);
+                // $categories = explode(',', $row['categories']);
 
-                if (count($categories) !== 0) {
-                    $product->categories()->detach();
-                    $product->categories()->attach($categories);
-                }
+                // if (count($categories) !== 0) {
+                //     $product->categories()->detach();
+                //     $product->categories()->attach($categories);
+                // }
 
-                $this->setAttributes($product, $row);
-                $this->setSpecialAttrs($product, $row);
-                $this->setBrand($product, $row['brand']);
+                $this->setAttributes($product1c, $row);
+                // $this->setSpecialAttrs($product, $row);
+                // $this->setBrand($product, $row['brand']);
 
-                if ($product->id === 17231) {
-                    logger('Done');
-                }
+                // if ($product->id === 17231) {
+                //     logger('Done');
+                // }
 
-                unset($product, $row, $categories);
+                unset($product, $row);
             }
         }
     }
 
-    public function setAttributes(Product $product, $row)
+    public function setAttributes(Product1C $product1c, $row)
     {
-        $attrsId = [2, 3, 6, 7, 8, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 26, 28, 30, 31, 32, 33, 34, 35, 36, 38, 39, 40, 41, 42, 43, 44, 45];
+        $attrsId = [46, 47, 48, 34, 4, 52];
 
-        $product->attributes()->detach();
+        //  $product->attributes()->detach();
 
         foreach ($attrsId as $itemId) {
             if (data_get($row, $itemId) !== '') {
@@ -69,29 +69,31 @@ trait ExportImport
                 ->with('items')
                 ->first();
 
-                $attributeItems = explode(',', $row[$itemId]);
+                $attributeItems = explode(';', $row[$itemId]);
 
                 foreach ($attributeItems as $value) {
                     $value = trim($value);
 
-                    if ($attr->items()->where('name', $value)->first()) {
-                        $attribute_item = $attr->items()->where('name', $value)->first();
+                    if (!empty($value)) {
+                        if ($attr->items()->exists() && $attr->items()->where('name', $value)->first()) {
+                            $attribute_item = $attr->items()->where('name', $value)->first();
 
-                        if (!$product->attributes()
-                        ->where('attribute_item.attribute_id', $attr->id)
-                        ->where('attribute_item.id', $attribute_item->id)
-                        ->first()) {
-                            $product->attributes()->attach($attribute_item->id);
+                            if (!$product1c->product->attributes()
+                                    ->where('attribute_item.attribute_id', $attr->id)
+                                    ->where('attribute_item.id', $attribute_item->id)
+                                    ->first()) {
+                                $product1c->product->attributes()->attach($attribute_item->id);
+                            }
+                        } else {
+                            $attribute_item = AttributeItem::create([
+                                'name' => $value,
+                                'attribute_id' => $attr->id,
+                            ]);
+
+                            $product1c->product->attributes()->attach($attribute_item->id);
+
+                            unset($attribute_item);
                         }
-                    } else {
-                        $attribute_item = AttributeItem::create([
-                            'name' => $value,
-                            'attribute_id' => $attr->id,
-                        ]);
-
-                        $product->attributes()->attach($attribute_item->id);
-
-                        unset($attribute_item);
                     }
                 }
                 unset($attr);
@@ -143,9 +145,8 @@ trait ExportImport
     {
         $collection = collect();
 
-        $products = Product::whereHas('categories', function ($query) {
-            $query->where('product_category.category_id', 44);
-        })->get();
+        $products = Product1C::where('weight', 0)
+        ->get();
 
         foreach ($products as $key => $product) {
             // $arrayCategories = [];
@@ -173,8 +174,11 @@ trait ExportImport
             // $arrayCategories = [];
         }
 
+        if (!file_exists(storage_path('app/excel'))) {
+            mkdir(storage_path('app/excel'), 0777, true);
+        }
         $path = storage_path('app/excel');
-        $filePath = (new FastExcel($collection))->export($path . '/products.xlsx');
+        $filePath = (new FastExcel($collection))->export($path . '/products1с.xlsx');
 
         return $filePath;
     }

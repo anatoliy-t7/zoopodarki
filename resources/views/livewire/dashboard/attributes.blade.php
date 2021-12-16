@@ -41,7 +41,7 @@
 
         <x-slot name="body">
           @forelse($attributes as $key => $attribute)
-            <x-dashboard.table.row wire:key="$attribute->id">
+            <x-dashboard.table.row wire:key="$loop->index">
 
               <x-dashboard.table.cell>
                 {{ $attribute->id }}
@@ -238,7 +238,7 @@
           items: [{
             name: '',
             id: '',
-            show: 0,
+            show: 1,
           }],
           attrName: '',
           form: false,
@@ -248,7 +248,7 @@
             this.items.push({
               name: '',
               id: '',
-              show: 0,
+              show: 1,
             });
             setTimeout(function() {
               var div = document.getElementById('bottom');

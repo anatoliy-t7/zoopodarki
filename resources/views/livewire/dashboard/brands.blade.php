@@ -58,7 +58,7 @@
 
         <x-slot name="body">
           @forelse($brands as $key => $brand)
-            <x-dashboard.table.row wire:key="$brand->id">
+            <x-dashboard.table.row wire:key="$loop->index">
 
               <x-dashboard.table.cell>
                 {{ $brand->id }}
@@ -75,7 +75,7 @@
                   @forelse($brand->items as $key => $item)
                     <div class="p-1">
                       <div class="px-2 py-1 text-xs text-white bg-blue-500 rounded-full ">
-                        {{ $item->name }}</div>
+                        {{ $item->id }} | {{ $item->name }}</div>
                     </div>
                   @empty
 

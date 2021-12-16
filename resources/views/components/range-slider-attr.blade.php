@@ -39,11 +39,11 @@
         dragLeft: false,
         dragRight: false,
         reset() {
-          this.range = {{ $maxPrice }} - {{ $minPrice }};
-          this.min = {{ $minPrice }};
-          this.max = {{ $maxPrice }};
-          this.rangeMin = {{ $minPrice }};
-          this.rangeMax = {{ $maxPrice }};
+          this.range = {{ $maxRange }} - {{ $minRange }};
+          this.min = {{ $minRange }};
+          this.max = {{ $maxRange }};
+          this.rangeMin = {{ $minRange }};
+          this.rangeMax = {{ $maxRange }};
         },
         handleThumbMouseMove: function(e) {
           if (!this.dragLeft && !this.dragRight) return;

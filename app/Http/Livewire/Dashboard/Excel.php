@@ -21,7 +21,6 @@ class Excel extends Component
 
     public function getFile()
     {
-
         $this->validate([
             'excel' => 'file|mimes:xlsx',
         ]);
@@ -31,19 +30,19 @@ class Excel extends Component
         $this->excel->storeAs('', $fileName, 'excel');
 
         if (Storage::disk('excel')->exists($fileName)) {
-            $filePath = storage_path('app/excel').'/'.$fileName;
+            $filePath = storage_path('app/excel') . '/' . $fileName;
 
             if ($this->importFromFile($filePath)) {
-                 return toast()
+                return toast()
                 ->warning('Done')
                 ->push();
             }
 
-             return toast()
+            return toast()
                 ->warning('Not done')
                 ->push();
 
-            // ini_set('max_execution_time', 500);
+        // ini_set('max_execution_time', 500);
 
             // $this->importData($collection);
             //ImportProductsFromExcel::dispatch($filePath);
@@ -56,8 +55,8 @@ class Excel extends Component
 
     public function importProducts1Cimport()
     {
-        if (is_file(storage_path('app/sync').'/import.xml')) {
-            $file = storage_path('app/sync').'/import.xml';
+        if (is_file(storage_path('app/sync') . '/import0_1.xml')) {
+            $file = storage_path('app/sync') . '/import0_1.xml';
 
             ProcessImportProduct1C::dispatch($file);
 
@@ -73,8 +72,8 @@ class Excel extends Component
 
     public function importProducts1Coffers()
     {
-        if (is_file(storage_path('app/sync').'/offers.xml')) {
-            $file = storage_path('app/sync').'/offers.xml';
+        if (is_file(storage_path('app/sync') . '/offers0_1.xml')) {
+            $file = storage_path('app/sync') . '/offers0_1.xml';
 
             ProcessOffersProduct1C::dispatch($file);
 
@@ -90,7 +89,6 @@ class Excel extends Component
 
     public function exportProduct1c()
     {
-
         $filePath = $this->exportToFile();
 
         toast()
