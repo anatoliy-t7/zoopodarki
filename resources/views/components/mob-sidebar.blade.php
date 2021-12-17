@@ -1,6 +1,6 @@
 <div x-cloak x-data="{ filter: false}"
   x-effect="document.body.classList.toggle('overflow-hidden', filter), document.body.classList.toggle('pr-4', filter)">
-  <button x-on:click="filter = true" class="absolute z-20 top-8 left-4">
+  <button x-on:click="filter = true" class="absolute z-20 top-8 md:top-1 left-4">
     <x-tabler-adjustments class="text-gray-500 stroke-current w-7 h-7" />
   </button>
 

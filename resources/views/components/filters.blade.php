@@ -4,19 +4,19 @@
      class="absolute top-0 bottom-0 left-0 right-0 z-30 w-full h-full bg-gray-100 bg-opacity-75 rounded-2xl">
    </div>
 
-   @if (Agent::isDesktop())
-     <div wire:ignore>
-       <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
-     </div>
 
-     <div wire:ignore>
-       @forelse ($attributesRanges as $key => $attrRange)
-         <div class="pt-6 pb-5 text-sm font-bold">{{ $attrRange['name'] }}</div>
-         <x-range-slider-attr :minRange="$attrRange['min']" :maxRange="$attrRange['max']" :idRange="$key" />
-       @empty
-       @endforelse
-     </div>
-   @endif
+   <div wire:ignore>
+     <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
+   </div>
+
+   <div wire:ignore>
+     @forelse ($attributesRanges as $key => $attrRange)
+       <div class="pt-4 pb-3 font-bold">{{ $attrRange['name'] }}</div>
+       <x-range-slider-attr :minRange="$attrRange['min']" :maxRange="$attrRange['max']" :idRange="$key" />
+     @empty
+     @endforelse
+   </div>
+
 
    <div>
      @if ($showPromoF)

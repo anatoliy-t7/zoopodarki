@@ -1,7 +1,7 @@
 @props(['minRange', 'maxRange', 'idRange'])
 <div x-data="rangeAttr{{ $idRange }}" @reset-range.window="reset()">
 
-  <div class="flex flex-col items-center w-full max-w-xl px-1">
+  <div class="flex flex-col items-center w-full max-w-xl px-2">
     <input class="absolute opacity-0 pointer-events-none" type="range" name="min" min="10" max="100" :value="min">
     <input class="absolute opacity-0 pointer-events-none" type="range" name="max" min="10" max="100" :value="max">
 

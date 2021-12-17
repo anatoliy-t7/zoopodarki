@@ -7,7 +7,6 @@ use App\Models\AttributeItem;
 use App\Models\Product1C;
 use App\Models\Product;
 use App\Models\ProductUnit;
-use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
 
 trait ExportImport
@@ -17,7 +16,7 @@ trait ExportImport
         $collection = (new FastExcel())->import($filePath);
 
         try {
-            $this->importData($collection);
+            $this->setData($collection);
 
             return true;
         } catch (\Throwable $th) {
@@ -274,25 +273,44 @@ trait ExportImport
 
     public function setData($collection)
     {
-        $unit = ProductUnit::find(1);
+        // $unit = ProductUnit::find(1);
 
         foreach ($collection->toArray() as $key => $row) {
-            if (Product1C::where('id', $row['id'])->first()) {
-                $product1c = Product1C::where('id', $row['id'])
-                    ->with('product', 'product.unit')
+            if (Product::where('id', $row['id'])->first()) {
+                $product = Product::where('id', $row['id'])
+                    ->with('attributes')
                     ->first();
 
-                $unitValue = Str::replace(',', '.', $row['unit_value']);
-                $product1c->unit_value = trim($unitValue);
 
-                $product1c->save();
+                // if ($product->categories()) {
+                //     # code...
+                // }
+                // $product->categories()->detach();
 
-                if ($product1c->product !== null) {
-                    $product1c->product->unit_id = 1;
-                    $product1c->push();
-                }
+                $product->attributes()->attach(2553);
 
-                unset($unitValue, $product1c);
+
+                // unset($unitValue, $product1c);
+            }
+            unset($row);
+        }
+    }
+
+    public function hide($collection)
+    {
+        // $unit = ProductUnit::find(1);
+
+        foreach ($collection->toArray() as $key => $row) {
+            if (Product::where('id', $row['id'])->first()) {
+                $product = Product::where('id', $row['id'])
+                    ->first();
+
+                $product->status = 'inactive';
+
+                $product->save();
+
+
+                // unset($unitValue, $product1c);
             }
             unset($row);
         }

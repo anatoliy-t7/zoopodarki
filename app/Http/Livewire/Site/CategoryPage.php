@@ -279,23 +279,19 @@ class CategoryPage extends Component
             ->when($this->brandsF, function ($query) {
                 $query->whereIn('brand_id', $this->brandsF);
             })
-
+            ->with('attributes')
             ->when($this->attributesRangeOn, function ($query) {
-                return $query->whereHas('attributes', function ($querySub) {
-                    $querySub->where(function ($querySubSub) {
-                        if ($this->attributesRanges > 0) {
-                            foreach ($this->attributesRanges as $key => $range) {
-                                $querySubSub->where(
-                                    'attribute_item.attribute_id',
-                                    $this->attributesRanges[$key]['id']
-                                )
-                                ->whereBetween('attribute_item.name', [
-                                    $this->attributesRanges[$key]['min'],
-                                    $this->attributesRanges[$key]['max'],
-                                ]);
-                            }
-                        }
-                    });
+                $query->whereHas('attributes', function ($query) {
+                    foreach ($this->attributesRanges as $range) {
+                        $query->where(
+                            'attribute_item.attribute_id',
+                            $range['id']
+                        )
+                        ->whereBetween('attribute_item.name', [
+                            $range['min'],
+                            $range['max'],
+                        ]);
+                    }
                 });
             })
 
@@ -319,7 +315,7 @@ class CategoryPage extends Component
                 ->with('media')
                 ->with('brand')
                 ->with('unit')
-                ->with('attributes')
+
                 ->with('variations')
                 ->orderBy($this->sortSelectedType, $this->sortBy)
                 ->paginate(32);
