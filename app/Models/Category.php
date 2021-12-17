@@ -47,7 +47,8 @@ class Category extends Model
         $ids = explode(',', $attributesId);
 
         return Attribute::whereIn('id', $ids)
-            ->withWhereHas('items', fn ($query) => $query->whereIn('id', $productAttributes)->where('show', true))
+            ->withWhereHas('items', fn ($query) => $query->whereIn('id', $productAttributes)
+            ->where('show', true))
             ->orderBy('name', 'asc')
             ->get();
     }

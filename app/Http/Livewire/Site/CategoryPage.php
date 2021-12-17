@@ -77,7 +77,7 @@ class CategoryPage extends Component
         'promoF' => ['except' => ''],
         'stockF' => ['except' => ''],
     ];
-    protected $listeners = ['updateMinPrice', 'updateMaxPrice', 'updateMinRange', 'updateMaxRange'];
+    protected $listeners = ['updatedMinMaxPrice', 'updatedMinMaxRange', ];
 
     public function mount($catalogslug, $categoryslug, $tagslug = null)
     {
@@ -211,29 +211,22 @@ class CategoryPage extends Component
         $this->resetPage();
     }
 
-    public function updatedMinPrice()
+    public function updatedMinMaxPrice($minPrice, $maxPrice)
     {
+        $this->minPrice = (int)$minPrice;
+        $this->maxPrice = (int)$maxPrice;
         $this->resetPage();
     }
 
-    public function updatedMaxPrice()
-    {
-        $this->resetPage();
-    }
 
-    public function updateMinRange($minRange, $key)
+    public function updatedMinMaxRange($minRange, $maxRange, $key)
     {
         $this->attributesRanges[$key]['min'] = $minRange;
-        $this->resetPage();
-        $this->attributesRangeOn = true;
-    }
-
-    public function updateMaxRange($maxRange, $key)
-    {
         $this->attributesRanges[$key]['max'] = $maxRange;
         $this->resetPage();
         $this->attributesRangeOn = true;
     }
+
 
     public function sortIt($type, $sort, $name)
     {
@@ -257,6 +250,7 @@ class CategoryPage extends Component
         $this->resetPage();
 
         $this->dispatchBrowserEvent('reset-range');
+        $this->dispatchBrowserEvent('reset-range-attr');
     }
 
     public function getTagFilters()
