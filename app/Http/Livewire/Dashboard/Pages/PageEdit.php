@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Dashboard\Pages;
 use App\Models\Page;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Usernotnull\Toast\Concerns\WireToast;
@@ -26,7 +25,6 @@ class PageEdit extends Component
     public $newFiles = [];
     protected $listeners = [
         'save',
-        'editorjs-save:editorId' => 'saveEditorState',
     ];
     protected $queryString = ['pageId'];
 
@@ -42,12 +40,6 @@ class PageEdit extends Component
             $this->content = json_decode($page->content);
             $this->isActive = $page->isActive;
         }
-    }
-
-    public function saveEditorState($editorJsonData)
-    {
-        dd($editorJsonData);
-        $this->content = $editorJsonData;
     }
 
     public function addBlock()
@@ -89,15 +81,10 @@ class PageEdit extends Component
 
     public function save()
     {
-        dd($this->content);
         $this->validate([
             'title' => 'required|unique:pages,title,' . $this->pageId,
             'slug' => 'required',
         ]);
-
-        // if (Str::of($this->content)->exactly('<p><br></p>')) {
-        //     $this->content = null;
-        // }
 
         DB::transaction(function () {
             $page = Page::updateOrCreate(

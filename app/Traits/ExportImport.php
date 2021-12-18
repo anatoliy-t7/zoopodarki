@@ -18,7 +18,7 @@ trait ExportImport
         $collection = (new FastExcel())->import($filePath);
 
         try {
-            $this->importData($collection);
+            $this->setData($collection);
 
             return true;
         } catch (\Throwable $th) {
@@ -33,25 +33,22 @@ trait ExportImport
     public function importData($collection)
     {
         foreach ($collection->toArray() as $key => $row) {
-            if (Product1C::where('id', $row['id'])->first()) {
-                $product = Product1C::where('id', $row['id'])
-                ->with('product')
+            if (Product::where('id', $row['id'])->first()) {
+                $product1c = Product::where('id', $row['id'])
                 ->first();
 
 
-                $this->setAttributes($product, $row);
+                $this->setAttributes($product1c, $row);
 
 
-                unset($product, $row);
+                unset($product1c, $row);
             }
         }
     }
 
-    public function setAttributes(Product1C $product1c, $row)
+    public function setAttributes(Product $product, $row)
     {
-        $attrsId = [46, 47, 48, 34, 4, 52];
-
-        //  $product->attributes()->detach();
+        $attrsId = [4, 52, 66];
 
         foreach ($attrsId as $itemId) {
             if (data_get($row, $itemId) !== '') {
@@ -59,33 +56,35 @@ trait ExportImport
                 ->with('items')
                 ->first();
 
-                $attributeItems = explode(';', $row[$itemId]);
 
-                foreach ($attributeItems as $value) {
-                    $value = trim($value);
+                $product->unit()->associate(5);
 
-                    if (!empty($value)) {
-                        if ($attr->items()->exists() && $attr->items()->where('name', $value)->first()) {
-                            $attribute_item = $attr->items()->where('name', $value)->first();
 
-                            if (!$product1c->product->attributes()
+                $value = trim($row[$itemId]);
+
+
+
+                if (!empty($value)) {
+                    if ($attr->items()->exists() && $attr->items()->where('name', $value)->first()) {
+                        $attribute_item = $attr->items()->where('name', $value)->first();
+                        // dd($attribute_item);
+                        if (!$product->attributes()
                                     ->where('attribute_item.attribute_id', $attr->id)
                                     ->where('attribute_item.id', $attribute_item->id)
                                     ->first()) {
-                                $product1c->product->attributes()->attach($attribute_item->id);
-                            }
-                        } else {
-                            $attribute_item = AttributeItem::create([
-                                'name' => $value,
-                                'attribute_id' => $attr->id,
-                            ]);
-
-                            $product1c->product->attributes()->attach($attribute_item->id);
-
-                            unset($attribute_item);
+                            $product->attributes()->attach($attribute_item->id);
                         }
+                    } else {
+                        $attribute_item = AttributeItem::create([
+                            'name' => $value,
+                            'attribute_id' => $attr->id,
+                        ]);
+
+                        $product->attributes()->attach($attribute_item->id);
                     }
+                    unset($attribute_item);
                 }
+
                 unset($attr);
             }
         }
@@ -227,16 +226,37 @@ trait ExportImport
         foreach ($collection->toArray() as $key => $row) {
             if (Product::where('id', $row['id'])->first()) {
                 $product = Product::where('id', $row['id'])
-                    ->with('attributes')
+                    ->with('categories')
                     ->first();
 
+                if (!$product->categories()
+                                    ->where('product_category.category_id', $row['category'])
+                                    ->first()) {
+                    $product->categories()->attach($row['category']);
+                }
 
-                // if ($product->categories()) {
-                //     # code...
-                // }
-                $product->categories()->detach(4);
+
 
                 // $product->attributes()->attach(2553);
+
+                // unset($unitValue, $product1c);
+            }
+            unset($row);
+        }
+    }
+
+    public function hide($collection)
+    {
+        // $unit = ProductUnit::find(1);
+
+        foreach ($collection->toArray() as $key => $row) {
+            if (Product::where('id', $row['id'])->first()) {
+                $product = Product::where('id', $row['id'])
+                    ->first();
+
+                $product->status = 'inactive';
+
+                $product->save();
 
 
                 // unset($unitValue, $product1c);

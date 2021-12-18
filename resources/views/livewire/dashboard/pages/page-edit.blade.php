@@ -36,15 +36,17 @@
 
     </div>
 
-    @push('header-js')
-      <script src="{{ mix('js/editorjs.js') }}"></script>
-    @endpush
-
     <div class="space-y-6">
       @foreach ($content as $key => $block)
-
-        <livewire:editorjs editor-id="myEditor{{ $key }}" :value="$content[$key]" placeholder="Контент" />
-
+        <input id="content{{ $key }}" name="content{{ $key }}" value="{!! $block !!}"
+          type="hidden" />
+        <div wire:ignore
+          x-on:trix-blur="@this.set('content.{{ $key }}', $refs.contentInput{{ $key }}.value)"
+          x-on:trix-attachment-add="uploadFileAttachment($event.attachment)"
+          x-on:trix-attachment-remove="removeFileAttachment($event.attachment)">
+          <trix-editor x-ref="contentInput{{ $key }}" input="content{{ $key }}">
+          </trix-editor>
+        </div>
       @endforeach
     </div>
 
