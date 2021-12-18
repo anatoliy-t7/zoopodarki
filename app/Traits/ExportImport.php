@@ -4,9 +4,11 @@ namespace App\Traits;
 
 use App\Models\Attribute;
 use App\Models\AttributeItem;
+use App\Models\Category;
 use App\Models\Product1C;
 use App\Models\Product;
 use App\Models\ProductUnit;
+use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
 
 trait ExportImport
@@ -16,7 +18,7 @@ trait ExportImport
         $collection = (new FastExcel())->import($filePath);
 
         try {
-            $this->setData($collection);
+            $this->importData($collection);
 
             return true;
         } catch (\Throwable $th) {
@@ -31,9 +33,9 @@ trait ExportImport
     public function importData($collection)
     {
         foreach ($collection->toArray() as $key => $row) {
-            if (Product1C::where('id', $row['id'])->first()) {
-                $product1c = Product1C::where('id', $row['id'])
-                ->with('product', 'product.attributes', 'product.attributes.attribute')
+            if (Product::where('id', $row['id'])->first()) {
+                $product = Product::where('id', $row['id'])
+                ->with('attributes')
                 ->first();
 
                 // $categories = explode(',', $row['categories']);
@@ -43,7 +45,7 @@ trait ExportImport
                 //     $product->categories()->attach($categories);
                 // }
 
-                $this->setAttributes($product1c, $row);
+                $this->setAttributes($product, $row);
                 // $this->setSpecialAttrs($product, $row);
                 // $this->setBrand($product, $row['brand']);
 
@@ -56,49 +58,21 @@ trait ExportImport
         }
     }
 
-    public function setAttributes(Product1C $product1c, $row)
+    public function setAttributes(Product $product, $row)
     {
-        $attrsId = [46, 47, 48, 34, 4, 52];
+        $attributeItems = [2729, 959, 513, 2735];
 
-        //  $product->attributes()->detach();
 
-        foreach ($attrsId as $itemId) {
-            if (data_get($row, $itemId) !== '') {
-                $attr = Attribute::where('id', $itemId)
-                ->with('items')
-                ->first();
+        foreach ($attributeItems as $itemId) {
+            $value = trim($row[$itemId]);
 
-                $attributeItems = explode(';', $row[$itemId]);
-
-                foreach ($attributeItems as $value) {
-                    $value = trim($value);
-
-                    if (!empty($value)) {
-                        if ($attr->items()->exists() && $attr->items()->where('name', $value)->first()) {
-                            $attribute_item = $attr->items()->where('name', $value)->first();
-
-                            if (!$product1c->product->attributes()
-                                    ->where('attribute_item.attribute_id', $attr->id)
-                                    ->where('attribute_item.id', $attribute_item->id)
-                                    ->first()) {
-                                $product1c->product->attributes()->attach($attribute_item->id);
-                            }
-                        } else {
-                            $attribute_item = AttributeItem::create([
-                                'name' => $value,
-                                'attribute_id' => $attr->id,
-                            ]);
-
-                            $product1c->product->attributes()->attach($attribute_item->id);
-
-                            unset($attribute_item);
-                        }
-                    }
+            if ($value === '1') {
+                // dd($value);
+                if (!$product->attributes()->where('attribute_item.id', $itemId)->first()) {
+                    $product->attributes()->attach($itemId);
                 }
-                unset($attr);
             }
         }
-        unset($attrsId);
     }
 
     public function setSpecialAttrs(Product $product, $row)
@@ -144,40 +118,37 @@ trait ExportImport
     {
         $collection = collect();
 
-        $products = Product1C::where('weight', 0)
+        $categories = Category::with('catalog', )
         ->get();
 
-        foreach ($products as $key => $product) {
-            // $arrayCategories = [];
-            // foreach ($product->product->categories as $key => $cat) {
-            //     array_push($arrayCategories, $cat->name);
-            // }
+        // dd($categories);
+        foreach ($categories as $key => $category) {
+            $attributesId = Str::replace('.', ',', $category->attributes);
+            $ids = explode(',', $attributesId);
 
-            // $arrayAttributes = [];
-            // foreach ($product->unit_value as $key => $cat) {
-            //     array_push($arrayAttributes, $cat->name . PHP_EOL);
-            // }
-            // $unitName = '';
-            // if ($product->product->unit !== null) {
-            //      $unitName = $product->product->unit->name;
-            // }
+            $attributes = Attribute::whereIn('id', $ids)
+                    ->with('items')
+                    ->orderBy('name', 'asc')
+                    ->get();
 
-            $collection->push([
-                'id' => $product->id,
-                'name' => $product->name,
-                // 'categories' => implode(", ", $arrayCategories),
-                // $unitName => $product->unit_value,
-            ]);
-
-            // $arrayAttributes = [];
-            // $arrayCategories = [];
+            foreach ($attributes as $attribute) {
+                foreach ($attribute->items as $item) {
+                    $collection->push([
+                        'catalog_name' => $category->catalog->name,
+                        'category_name' => $category->name,
+                        'attribute_name' => $attribute->name,
+                        'item_id' => $item->id,
+                        'item_name' => $item->name,
+                    ]);
+                }
+            }
         }
 
         if (!file_exists(storage_path('app/excel'))) {
             mkdir(storage_path('app/excel'), 0777, true);
         }
         $path = storage_path('app/excel');
-        $filePath = (new FastExcel($collection))->export($path . '/products1с.xlsx');
+        $filePath = (new FastExcel($collection))->export($path . '/attributes.xlsx');
 
         return $filePath;
     }

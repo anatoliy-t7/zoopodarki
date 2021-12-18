@@ -138,7 +138,7 @@
     @push('header-css')
       <link href="{{ mix('css/tagify.css') }}" rel="stylesheet">
     @endpush
-    @push('header-script')
+    @push('header-js')
       <script src="{{ mix('js/tagify.min.js') }}"></script>
     @endpush
 

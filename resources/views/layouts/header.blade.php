@@ -22,7 +22,7 @@
   @stack('header-css')
   <link href="{{ mix('css/app.css') }}" rel="stylesheet">
   <livewire:styles>
-    @stack('header-script')
+    @stack('header-js')
 </head>
 
 <body class="relative grid min-h-full antialiased leading-none text-gray-800 bg-gray-50">

@@ -23,7 +23,7 @@
   <livewire:styles>
 
     <script src="{{ mix('js/dashboard.js') }}" defer></script>
-    @stack('header-script')
+    @stack('header-js')
 
 </head>
 
