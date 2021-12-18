@@ -33,10 +33,14 @@ class Excel extends Component
             $filePath = storage_path('app/excel') . '/' . $fileName;
 
             if ($this->importFromFile($filePath)) {
+                unlink($filePath);
+
                 return toast()
                 ->warning('Done')
                 ->push();
             }
+
+            unlink($filePath);
 
             return toast()
                 ->warning('Not done')

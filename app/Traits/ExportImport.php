@@ -33,85 +33,63 @@ trait ExportImport
     public function importData($collection)
     {
         foreach ($collection->toArray() as $key => $row) {
-            if (Product::where('id', $row['id'])->first()) {
-                $product = Product::where('id', $row['id'])
-                ->with('attributes')
+            if (Product1C::where('id', $row['id'])->first()) {
+                $product = Product1C::where('id', $row['id'])
+                ->with('product')
                 ->first();
 
-                // $categories = explode(',', $row['categories']);
-
-                // if (count($categories) !== 0) {
-                //     $product->categories()->detach();
-                //     $product->categories()->attach($categories);
-                // }
 
                 $this->setAttributes($product, $row);
-                // $this->setSpecialAttrs($product, $row);
-                // $this->setBrand($product, $row['brand']);
 
-                // if ($product->id === 17231) {
-                //     logger('Done');
-                // }
 
                 unset($product, $row);
             }
         }
     }
 
-    public function setAttributes(Product $product, $row)
+    public function setAttributes(Product1C $product1c, $row)
     {
-        $attributeItems = [2729, 959, 513, 2735];
+        $attrsId = [46, 47, 48, 34, 4, 52];
 
+        //  $product->attributes()->detach();
 
-        foreach ($attributeItems as $itemId) {
-            $value = trim($row[$itemId]);
+        foreach ($attrsId as $itemId) {
+            if (data_get($row, $itemId) !== '') {
+                $attr = Attribute::where('id', $itemId)
+                ->with('items')
+                ->first();
 
-            if ($value === '1') {
-                // dd($value);
-                if (!$product->attributes()->where('attribute_item.id', $itemId)->first()) {
-                    $product->attributes()->attach($itemId);
-                }
-            }
-        }
-    }
+                $attributeItems = explode(';', $row[$itemId]);
 
-    public function setSpecialAttrs(Product $product, $row)
-    {
-        $attrs = ['морепродукты', 'птица', 'рыба', 'без курицы', 'без птицы', 'молочные продукты', 'крупы', 'потрошки', 'без риса'];
+                foreach ($attributeItems as $value) {
+                    $value = trim($value);
 
-        $ingredients = Attribute::where('id', 26) // Ингредиенты
-        ->with('items')
-        ->first();
+                    if (!empty($value)) {
+                        if ($attr->items()->exists() && $attr->items()->where('name', $value)->first()) {
+                            $attribute_item = $attr->items()->where('name', $value)->first();
 
-        foreach ($attrs as $key => $attr) {
-            if ($attr === $row[$attr]) {
-                if ($ingredients->items()->where('name', $attr)->first()) {
-                    $attribute_item = $ingredients->items()->where('name', $attr)->first();
+                            if (!$product1c->product->attributes()
+                                    ->where('attribute_item.attribute_id', $attr->id)
+                                    ->where('attribute_item.id', $attribute_item->id)
+                                    ->first()) {
+                                $product1c->product->attributes()->attach($attribute_item->id);
+                            }
+                        } else {
+                            $attribute_item = AttributeItem::create([
+                                'name' => $value,
+                                'attribute_id' => $attr->id,
+                            ]);
 
-                    if (!$product->attributes()->where('attribute_item.id', $attribute_item->id)->first()) {
-                        $product->attributes()->attach($attribute_item->id);
+                            $product1c->product->attributes()->attach($attribute_item->id);
+
+                            unset($attribute_item);
+                        }
                     }
-                } else {
-                    $attribute_item = AttributeItem::create([
-                        'name' => $attr,
-                        'attribute_id' => 26,
-                    ]);
-
-                    $product->attributes()->attach($attribute_item->id);
                 }
+                unset($attr);
             }
         }
-
-        unset($ingredients);
-    }
-
-    public function setBrand(Product $product, $brand)
-    {
-        if (!empty($brand) && Brand::where('name', $brand)->first()) {
-            $brand = Brand::where('name', $brand)->first();
-            $product->brand()->associate($brand->id)->save();
-            unset($brand);
-        }
+        unset($attrsId);
     }
 
     public function exportToFile()
@@ -256,29 +234,9 @@ trait ExportImport
                 // if ($product->categories()) {
                 //     # code...
                 // }
-                // $product->categories()->detach();
+                $product->categories()->detach(4);
 
-                $product->attributes()->attach(2553);
-
-
-                // unset($unitValue, $product1c);
-            }
-            unset($row);
-        }
-    }
-
-    public function hide($collection)
-    {
-        // $unit = ProductUnit::find(1);
-
-        foreach ($collection->toArray() as $key => $row) {
-            if (Product::where('id', $row['id'])->first()) {
-                $product = Product::where('id', $row['id'])
-                    ->first();
-
-                $product->status = 'inactive';
-
-                $product->save();
+                // $product->attributes()->attach(2553);
 
 
                 // unset($unitValue, $product1c);

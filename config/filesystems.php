@@ -62,6 +62,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'content' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/content'),
+            'url' => '/assets/content',
+            'visibility' => 'public',
+        ],
+
         'sync' => [
             'driver' => 'local',
             'root' => storage_path('app/sync'),

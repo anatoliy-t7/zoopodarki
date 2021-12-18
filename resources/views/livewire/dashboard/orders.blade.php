@@ -75,8 +75,8 @@
 
         <x-slot name="body">
           @forelse ($orders as $order)
-            <x-dashboard.table.row wire:key="{{ $loop->index }}" x-on:click="openForm"
-              wire:click="openForm({{ $order->id }})" class="cursor-pointer" title="Посмотреть заказ">
+            <x-dashboard.table.row x-on:click="openForm" wire:click="openForm({{ $order->id }})"
+              class="cursor-pointer" title="Посмотреть заказ">
 
               <x-dashboard.table.cell>
                 {{ $order->order_number }}

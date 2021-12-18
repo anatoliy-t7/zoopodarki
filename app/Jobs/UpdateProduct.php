@@ -34,7 +34,7 @@ class UpdateProduct implements ShouldQueue
      */
     public function handle()
     {
-        // $attribute = AttributeItem::find(1809);
+        // $attribute = AttributeItem::where('id', 4)->with('products')->first();
 
         // $attribute->products()->detach();
 

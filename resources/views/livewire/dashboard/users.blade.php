@@ -54,7 +54,7 @@
 
         <x-slot name="body">
           @forelse($users as $key => $user)
-            <x-dashboard.table.row wire:key="{{ $loop->index }}">
+            <x-dashboard.table.row>
 
               <x-dashboard.table.cell>
                 {{ $user->id }}

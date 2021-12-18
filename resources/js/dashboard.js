@@ -2,10 +2,6 @@ require('./bootstrap');
 
 import BigPicture from 'bigpicture';
 
-const Trix = require('trix');
-Trix.config.blockAttributes.heading1.tagName = 'h4';
-Trix.config.blockAttributes.default.tagName = 'p';
-
 const buttons = document.querySelectorAll('.initGallery');
 for (const button of buttons) {
 	button.addEventListener('click', function () {

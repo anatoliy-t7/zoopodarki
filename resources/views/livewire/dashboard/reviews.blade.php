@@ -52,8 +52,7 @@
 
         <x-slot name="body">
           @forelse ($reviews as $review)
-            <x-dashboard.table.row wire:key="{{ $loop->index }}" @click="openForm"
-              wire:click="openForm({{ $review->id }})" class="cursor-pointer">
+            <x-dashboard.table.row @click="openForm" wire:click="openForm({{ $review->id }})" class="cursor-pointer">
 
               <x-dashboard.table.cell>
                 {{ $review->id }}

@@ -267,6 +267,7 @@ class CategoryPage extends Component
             ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
 
             ->has('media')
+            ->has('variations')
 
             ->whereHas('categories', fn ($q) => $q->where('category_id', $this->category->id))
 

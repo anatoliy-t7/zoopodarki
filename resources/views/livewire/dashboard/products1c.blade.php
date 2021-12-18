@@ -44,7 +44,7 @@
 
         <x-slot name="body">
           @forelse ($products1c as $key => $product1c)
-            <x-dashboard.table.row wire:key="{{ $loop->index }}">
+            <x-dashboard.table.row>
 
               <x-dashboard.table.cell>
                 {{ $product1c->id }}

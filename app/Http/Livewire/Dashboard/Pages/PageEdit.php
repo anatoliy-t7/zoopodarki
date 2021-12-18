@@ -24,7 +24,10 @@ class PageEdit extends Component
     public $content = [''];
     public $isActive = false;
     public $newFiles = [];
-    protected $listeners = ['save'];
+    protected $listeners = [
+        'save',
+        'editorjs-save:editorId' => 'saveEditorState',
+    ];
     protected $queryString = ['pageId'];
 
     public function mount()
@@ -39,6 +42,12 @@ class PageEdit extends Component
             $this->content = json_decode($page->content);
             $this->isActive = $page->isActive;
         }
+    }
+
+    public function saveEditorState($editorJsonData)
+    {
+        dd($editorJsonData);
+        $this->content = $editorJsonData;
     }
 
     public function addBlock()
@@ -80,7 +89,7 @@ class PageEdit extends Component
 
     public function save()
     {
-        // dd($this->content);
+        dd($this->content);
         $this->validate([
             'title' => 'required|unique:pages,title,' . $this->pageId,
             'slug' => 'required',
