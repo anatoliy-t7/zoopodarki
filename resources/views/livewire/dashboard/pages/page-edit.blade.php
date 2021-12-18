@@ -36,21 +36,31 @@
 
     </div>
 
-    <div>
-      <input id="content" name="content" value='{!! $content !!}' type="hidden" />
-      <div wire:ignore x-on:trix-blur="@this.set('content', $refs.contentInput.value)"
-        x-on:trix-attachment-add="uploadFileAttachment($event.attachment)"
-        x-on:trix-attachment-remove="removeFileAttachment($event.attachment)">
-        <trix-editor x-ref="contentInput" input="content">
-        </trix-editor>
-      </div>
+    <div class="space-y-6">
+      @foreach ($content as $key => $block)
+        <input id="content{{ $key }}" name="content{{ $key }}" value="{!! $block !!}"
+          type="hidden" />
+        <div wire:ignore
+          x-on:trix-blur="@this.set('content.{{ $key }}', $refs.contentInput{{ $key }}.value)"
+          x-on:trix-attachment-add="uploadFileAttachment($event.attachment)"
+          x-on:trix-attachment-remove="removeFileAttachment($event.attachment)">
+          <trix-editor x-ref="contentInput{{ $key }}" input="content{{ $key }}">
+          </trix-editor>
+        </div>
+      @endforeach
     </div>
 
     <div class="flex items-center justify-between space-x-6">
 
-      <x-toggle wire:model="isActive" :property="$isActive" :lable="'Опубликована'" />
+      <div>
+        <button class="text-white bg-blue-400 btn hover:bg-blue-500 hover:shadow-blue-200 hover:shadow-md"
+          wire:click="addBlock()">Добавить
+          блок</button>
+      </div>
 
       <div class="flex items-center justify-end space-x-6">
+
+        <x-toggle wire:model="isActive" :property="$isActive" :lable="'Опубликована'" />
 
 
         @if ($pageId)

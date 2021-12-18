@@ -20,7 +20,8 @@ class PageEdit extends Component
     public $meta_title;
     public $meta_description;
     public $slug;
-    public $content;
+    public $template = 'plain';
+    public $content = [''];
     public $isActive = false;
     public $newFiles = [];
     protected $listeners = ['save'];
@@ -35,9 +36,14 @@ class PageEdit extends Component
             $this->meta_title = $page->meta_title;
             $this->meta_description = $page->meta_description;
             $this->slug = $page->slug;
-            $this->content = $page->content;
+            $this->content = json_decode($page->content);
             $this->isActive = $page->isActive;
         }
+    }
+
+    public function addBlock()
+    {
+        array_push($this->content, '');
     }
 
     public function completeUpload($uploadedUrl, $eventName)
@@ -65,7 +71,6 @@ class PageEdit extends Component
             toast()
                 ->success('Изображение удалено')
                 ->push();
-
         } catch (\Throwable$th) {
             toast()
                 ->warning('Изображение не удалено')
@@ -75,14 +80,15 @@ class PageEdit extends Component
 
     public function save()
     {
+        // dd($this->content);
         $this->validate([
-            'title' => 'required|unique:pages,title,'.$this->pageId,
+            'title' => 'required|unique:pages,title,' . $this->pageId,
             'slug' => 'required',
         ]);
 
-        if (Str::of($this->content)->exactly('<p><br></p>')) {
-            $this->content = null;
-        }
+        // if (Str::of($this->content)->exactly('<p><br></p>')) {
+        //     $this->content = null;
+        // }
 
         DB::transaction(function () {
             $page = Page::updateOrCreate(
@@ -92,16 +98,15 @@ class PageEdit extends Component
                     'meta_title' => trim($this->meta_title),
                     'meta_description' => trim($this->meta_description),
                     'slug' => $this->slug,
-                    'content' => $this->content,
+                    'content' => json_encode($this->content),
                     'isActive' => $this->isActive,
                 ]
             );
 
             $this->pageId = $page->id;
             toast()
-                ->success($page->title.' сохранена.')
+                ->success($page->title . ' сохранена.')
                 ->push();
-
         });
     }
 
