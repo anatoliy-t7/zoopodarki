@@ -163,9 +163,9 @@ class Edit extends Component
     {
         foreach ($this->newFiles as $file) {
             if ($file->getFilename() === $uploadedUrl) {
-                $newFileName = $file->store('/', 'public');
+                $newFileName = $file->store('public/content');
 
-                $url = Storage::disk('public')->url($newFileName);
+                $url = Storage::disk('local')->url($newFileName);
                 $this->dispatchBrowserEvent($eventName, [
                     'url' => $url,
                     'href' => $url,
@@ -179,7 +179,7 @@ class Edit extends Component
     public function removeFileAttachment($url)
     {
         try {
-            Storage::disk('public')->delete($url);
+            Storage::disk('public')->delete('content/' . $url);
 
             toast()
                 ->info('Изображение удалено')

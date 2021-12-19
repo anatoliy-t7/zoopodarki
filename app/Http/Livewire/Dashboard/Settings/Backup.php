@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Dashboard\Settings;
 
 use App\Jobs\UpdateProduct;
+use App\Models\Product;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
 
@@ -13,6 +14,17 @@ class Backup extends Component
     public function updateProduct()
     {
         UpdateProduct::dispatch();
+
+        // $products = Product::with('attributes')->get();
+
+        // foreach ($products as $product) {
+        //     $attributes = $product->attributes()->get();
+
+        //     dd($attributes);
+        //     // $this->updateProduct($product);
+        // }
+
+
 
         toast()
             ->info('Job UpdateProduct added')

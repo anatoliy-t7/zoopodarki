@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Dashboard\Pages;
 use App\Models\Page;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Usernotnull\Toast\Concerns\WireToast;
@@ -20,7 +21,7 @@ class PageEdit extends Component
     public $meta_description;
     public $slug;
     public $template = 'plain';
-    public $content = [''];
+    public $content = '[]';
     public $isActive = false;
     public $newFiles = [];
     protected $listeners = [
@@ -37,23 +38,21 @@ class PageEdit extends Component
             $this->meta_title = $page->meta_title;
             $this->meta_description = $page->meta_description;
             $this->slug = $page->slug;
-            $this->content = json_decode($page->content);
+            if (!empty($page->content) || $page->content != '') {
+                $this->content = $page->content;
+            }
+
             $this->isActive = $page->isActive;
         }
-    }
-
-    public function addBlock()
-    {
-        array_push($this->content, '');
     }
 
     public function completeUpload($uploadedUrl, $eventName)
     {
         foreach ($this->newFiles as $file) {
             if ($file->getFilename() === $uploadedUrl) {
-                $newFileName = $file->store('/', 'public');
+                $newFileName = $file->store('public/content');
 
-                $url = Storage::disk('public')->url($newFileName);
+                $url = Storage::disk('local')->url($newFileName);
                 $this->dispatchBrowserEvent($eventName, [
                     'url' => $url,
                     'href' => $url,
@@ -67,7 +66,7 @@ class PageEdit extends Component
     public function removeFileAttachment($url)
     {
         try {
-            Storage::disk('public')->delete($url);
+            Storage::disk('public')->delete('content/' . $url);
 
             toast()
                 ->success('Изображение удалено')
@@ -79,8 +78,13 @@ class PageEdit extends Component
         }
     }
 
-    public function save()
+    public function save($content)
     {
+        $content = Str::replace('\"', "'", $content);
+
+        $this->content = $content;
+        // dd($this->content);
+
         $this->validate([
             'title' => 'required|unique:pages,title,' . $this->pageId,
             'slug' => 'required',
@@ -94,7 +98,7 @@ class PageEdit extends Component
                     'meta_title' => trim($this->meta_title),
                     'meta_description' => trim($this->meta_description),
                     'slug' => $this->slug,
-                    'content' => json_encode($this->content),
+                    'content' => $this->content,
                     'isActive' => $this->isActive,
                 ]
             );

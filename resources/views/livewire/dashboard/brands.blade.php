@@ -172,6 +172,8 @@
 
             <div class="flex space-x-6">
 
+
+
               <div class="w-3/12 space-y-2">
                 <div class="font-bold text-gray-600 ">Лого бренда</div>
                 <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
@@ -185,13 +187,43 @@
                       <img loading="lazy" class="object-contain object-center w-full h-32 pb-1"
                         src="{{ $logo->temporaryUrl() }}">
                     @elseif($logoName)
-                      <img loading="lazy" class="object-contain object-center w-full h-32 pb-1"
-                        src="/brands/{{ $logoName }}">
+                      <div x-data="{ confirm: false}" class="">
+
+                        <div class="relative">
+                          <img loading="lazy" class="object-contain object-center w-full h-32 pb-1"
+                            src="/brands/{{ $logoName }}">
+
+                          <div class="absolute z-40 -top-8 -right-1">
+                            <button x-on:click="confirm = true" type="button" title="remove"
+                              class="p-1 text-sm text-red-500 rounded-full hover:text-white focus:outline-none focus:ring hover:bg-red-500">
+                              <x-tabler-circle-x class="w-6 h-6" />
+                            </button>
+                          </div>
+
+                          <div x-show="confirm == true" x-transition.opacity
+                            class="absolute top-0 z-40 w-40 px-4 py-3 bg-white shadow-xl left-4 rounded-2xl">
+                            <h3 class="text-sm">Вы уверены?</h3>
+                            <div class="flex justify-around">
+                              <button x-on:click="confirm = false"
+                                class="px-3 py-2 text-red-500 rounded-lg hover:text-red-600 focus:outline-none focus:ring hover:bg-gray-200"
+                                type="button">
+                                Нет
+                              </button>
+                              <button x-on:click="confirm = false" wire:click="removeImage()"
+                                class="px-3 py-2 text-green-500 rounded-lg hover:text-green-600 focus:outline-none focus:ring hover:bg-gray-200"
+                                type="button">
+                                Удалить
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
                     @else
                       <div class="pt-8 text-sm text-center">Скиньте сюда изображение или кликните для загрузки</div>
                     @endif
                     <input type="file" wire:model="logo" ondragover="drag()" ondrop="drop()" id="uploadFile"
-                      class="absolute top-0 left-0 z-50 w-full h-full opacity-0 cursor-pointer">
+                      class="absolute top-0 left-0 z-30 w-full h-full opacity-0 cursor-pointer">
                   </div>
 
                   @error('logo') <span class="text-sm text-red-500">{{ $message }}</span> @enderror

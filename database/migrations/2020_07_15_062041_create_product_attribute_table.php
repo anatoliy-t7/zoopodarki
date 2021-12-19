@@ -19,12 +19,14 @@ class CreateProductAttributeTable extends Migration
             $table->unsignedBigInteger('attribute_id');
             $table->foreign('attribute_id')
                 ->references('id')
-                ->on('attribute_item');
+                ->on('attribute_item')
+                ->onDelete('cascade');
 
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')
                 ->references('id')
-                ->on('products');
+                ->on('products')
+                ->onDelete('cascade');
         });
     }
 

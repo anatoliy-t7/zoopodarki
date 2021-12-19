@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Attribute;
 use App\Models\AttributeItem;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
@@ -17,14 +16,18 @@ class UpdateProduct implements ShouldQueue
     public $timeout = 300;
 
     public $count = 0;
+    public $tries = 2;
+
+    public $product;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($product)
     {
+        $this->product = $product;
     }
 
     /**
@@ -34,59 +37,55 @@ class UpdateProduct implements ShouldQueue
      */
     public function handle()
     {
-        // $attribute = AttributeItem::where('id', 4)->with('products')->first();
+        // $attribute = AttributeItem::all();
 
         // $attribute->products()->detach();
+        $attributs = AttributeItem::all();
+        foreach ($attributs as $attribute) {
+            if (!$attribute->products->where('product_attribute.product_id', $this->product->id)) {
+                $attribute->products()->detach($this->product->id);
+                $this->count = $this->count + 1;
+            }
+        }
 
-        // $products = Product::with('attributes')->get();
 
-        // foreach ($products as $product) {
-        //     $this->addAttributeItem($product);
-        //     // $this->updateProduct($product);
+        if ($this->count > 0) {
+            logger('DONE : ' . $this->count);
+        }
+    }
+
+    public function addAttributeItem($attribute)
+    {
+        $products = Product::has('attributes')->get();
+
+        foreach ($products as $key => $product) {
+            if (!$attribute->where('product_attribute.product_id', $product->id)) {
+                $attribute->products()->detach($product->id);
+                $this->count = $this->count + 1;
+            }
+        }
+
+        unset($products, $attribute);
+
+        // if ($product->country !== null) {
+        //     if ($attribute->items()
+        //         ->where('name', trim($product->country))
+        //         ->first()) {
+        //         $attributeItem = AttributeItem::where('name', trim($product->country))->first();
+        //     } else {
+        //         $attributeItem = AttributeItem::create([
+        //             'name' => trim($product->country),
+        //             'attribute_id' => $attribute->id,
+        //         ]);
+        //     }
+
+        //     if (!$product->attributes()
+        //         ->where('attribute_item.name', trim($product->country))
+        //         ->first()) {
+        //         $product->attributes()->attach($attributeItem->id);
+        //     }
+
+        //     unset($attributeItem);
         // }
-    }
-
-    public function updateProduct($product)
-    {
-        $prodAttrs = [];
-        // $prodAttrsUnique = [];
-
-        foreach ($product->attributes as $attr) {
-            if ($attr->name === '') {
-                array_push($prodAttrs, $attr->id);
-            }
-        }
-
-        // $prodAttrsUnique = $prodAttrs->unique()->values()->all();
-
-        $product->attributes()->detach($prodAttrs);
-    }
-
-    public function addAttributeItem($product)
-    {
-        $attribute = Attribute::where('id', 64)->with('items')->first();
-
-        if ($product->country !== null) {
-            if ($attribute->items()
-                ->where('name', trim($product->country))
-                ->first()) {
-                $attributeItem = AttributeItem::where('name', trim($product->country))->first();
-            } else {
-                $attributeItem = AttributeItem::create([
-                    'name' => trim($product->country),
-                    'attribute_id' => $attribute->id,
-                ]);
-            }
-
-            if (!$product->attributes()
-                ->where('attribute_item.name', trim($product->country))
-                ->first()) {
-                $product->attributes()->attach($attributeItem->id);
-            }
-
-            unset($attributeItem);
-        }
-
-        unset($attribute);
     }
 }
