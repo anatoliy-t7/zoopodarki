@@ -70,7 +70,7 @@ return [
 
     'temporary_file_upload' => [
         'disk' => 'local', // Example: 'local', 's3'              Default: 'default'
-        'rules' => 'file|mimes:jpeg,png,jpg,gif,xlsx|max:12288', // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
+        'rules' => 'file|mimes:jpeg,png,jpg,gif,xlsx,webp|max:12288', // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
         //'rules' => ['required', 'file'],
         'preview_mimes' => [
             // Supported file types for temporary pre-signed file URLs.
@@ -78,6 +78,7 @@ return [
             'gif',
             'jpg',
             'jpeg',
+            'webp',
         ],
         'directory' => null, // Example: 'tmp'                      Default  'livewire-tmp'
         'middleware' => 'image-sanitize', // Example: 'throttle:5,1'             Default: 'throttle:60,1'

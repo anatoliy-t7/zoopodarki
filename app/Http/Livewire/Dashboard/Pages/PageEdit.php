@@ -31,7 +31,7 @@ class PageEdit extends Component
     public function mount()
     {
         if (request()->has('pageId')) {
-            $page = Page::where('id', request()->pageId)->first();
+            $page = Page::where('id', request()->pageId)->firstOrFail();
             $this->pageId = $page->id;
             $this->title = $page->title;
             $this->meta_title = $page->meta_title;

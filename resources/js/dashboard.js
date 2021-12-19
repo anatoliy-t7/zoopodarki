@@ -25,4 +25,24 @@ for (const button of buttons) {
 	});
 }
 
+import suneditor from 'suneditor';
+import plugins from 'suneditor/src/plugins';
+import lang from 'suneditor/src/lang';
+
+const Editor = suneditor.init({
+	plugins: plugins,
+	buttonList: [
+		['undo', 'redo'],
+		['formatBlock'],
+		['bold', 'italic', 'outdent', 'indent', 'align', 'list'],
+		['table', 'link', 'image', 'video'],
+		['fullScreen', 'showBlocks', 'codeView'],
+		['removeFormat'],
+	],
+	height: 'auto',
+	lang: lang.ru,
+});
+
+window.Editor = Editor;
+
 window.Alpine.start();
