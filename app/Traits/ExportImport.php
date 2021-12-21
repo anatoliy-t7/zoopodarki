@@ -4,10 +4,10 @@ namespace App\Traits;
 
 use App\Models\Attribute;
 use App\Models\AttributeItem;
-use App\Models\Category;
 use App\Models\Product1C;
 use App\Models\Product;
 use App\Models\ProductUnit;
+use App\Models\Tag;
 use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -18,7 +18,7 @@ trait ExportImport
         $collection = (new FastExcel())->import($filePath);
 
         try {
-            $this->setData($collection);
+            $this->createTagsFromCollection($collection);
 
             return true;
         } catch (\Throwable $th) {
@@ -219,29 +219,39 @@ trait ExportImport
         // logger($this->count);
     }
 
-    public function setData($collection)
+    public function createTagsFromCollection($collection)
     {
-        // $unit = ProductUnit::find(1);
-
         foreach ($collection->toArray() as $key => $row) {
-            if (Product::where('id', $row['id'])->first()) {
-                $product = Product::where('id', $row['id'])
-                    ->with('categories')
-                    ->first();
+            $attributesId = explode(';', $row['filter']);
 
-                if (!$product->categories()
-                                    ->where('product_category.category_id', $row['category'])
-                                    ->first()) {
-                    $product->categories()->attach($row['category']);
+            $tagAttributesId = [];
+
+            foreach ($attributesId as $attrId) {
+                $attrId = trim($attrId);
+
+                if (!empty($attrId) && AttributeItem::where('id', $attrId)->first()) {
+                    $item = AttributeItem::where('id', $attrId)->with('attribute')->first()->toArray();
+
+                    $filter = [
+                        'id' => $item['id'],
+                        'name' => $item['name'],
+                        'attribute_id' => $item['attribute_id'],
+                        'attribute_name' => $item['attribute']['name'],
+                    ];
+
+                    array_push($tagAttributesId, $filter);
                 }
-
-
-
-                // $product->attributes()->attach(2553);
-
-                // unset($unitValue, $product1c);
             }
-            unset($row);
+
+            Tag::create([
+                'name' => $row['name'],
+                'title' => $row['title'],
+                'meta_title' => $row['meta_title'],
+                'category_id' => $row['category'],
+                'filter' => $tagAttributesId,
+            ]);
+
+            unset($tagAttributesId, $row);
         }
     }
 

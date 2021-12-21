@@ -120,7 +120,7 @@
 
             <x-dashboard.table.cell>
               @if ($onlyTrashed)
-                <div class="max-w-sm truncate">
+                <div class="max-w-xs truncate">
                   {{ $product->name }}
                 </div>
               @else
@@ -133,7 +133,7 @@
 
             <x-dashboard.table.cell>
               @foreach ($product->variations as $item)
-                <div title="{{ $item->name }}" class="block max-w-xs py-1 text-xs font-thin text-gray-500 truncate">
+                <div title="{{ $item->name }}" class="block py-1 text-xs font-thin text-gray-500 truncate w-60">
                   @if ($item->vendorcode)
                     <span class="font-semibold">{{ $item->vendorcode }}</span> |
                   @endif

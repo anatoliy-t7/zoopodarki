@@ -41,12 +41,12 @@
 
 
       <div class="flex space-x-8">
-        <div class="flex space-x-2">
+        <div class="flex items-center space-x-2">
           <x-toggle wire:model="onlyOnPage" :property="$onlyOnPage" :lable="'В категории'" />
           <x-tabler-eye class="w-6 h-6 stroke-current {{ $onlyOnPage ? 'text-green-500' : 'text-gray-400' }}" />
         </div>
 
-        <div class="flex space-x-2">
+        <div class="flex items-center space-x-2">
           <x-toggle wire:model="onlyInMenu" :property="$onlyInMenu" :lable="'В меню'" />
           <x-tabler-eye class="w-6 h-6 stroke-current {{ $onlyInMenu ? 'text-green-500' : 'text-gray-400' }}" />
         </div>
@@ -69,6 +69,9 @@
           <x-dashboard.table.head>Свойство | Вид свойства</x-dashboard.table.head>
           <x-dashboard.table.head sortable wire:click="sortBy('show_on_page')"
             :direction="$sortField === 'show_on_page' ? $sortDirection : null">В категории
+          </x-dashboard.table.head>
+          <x-dashboard.table.head sortable wire:click="sortBy('show_in_menu')"
+            :direction="$sortField === 'show_in_menu' ? $sortDirection : null">В меню
           </x-dashboard.table.head>
           <x-dashboard.table.head></x-dashboard.table.head>
         </x-slot>
@@ -115,6 +118,14 @@
 
               <x-dashboard.table.cell>
                 @if ($tag->show_on_page)
+                  <x-tabler-eye class="w-6 h-6 text-green-500 stroke-current" />
+                @else
+                  <x-tabler-eye-off class="w-6 h-6 text-gray-400 stroke-current" />
+                @endif
+              </x-dashboard.table.cell>
+
+              <x-dashboard.table.cell>
+                @if ($tag->show_in_menu)
                   <x-tabler-eye class="w-6 h-6 text-green-500 stroke-current" />
                 @else
                   <x-tabler-eye-off class="w-6 h-6 text-gray-400 stroke-current" />

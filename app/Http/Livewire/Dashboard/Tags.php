@@ -158,7 +158,7 @@ class Tags extends Component
             );
 
             toast()
-                ->success('Тег "'.$tag->name.'" сохранен.')
+                ->success('Тег "' . $tag->name . '" сохранен.')
                 ->push();
 
             $this->closeForm();
@@ -177,7 +177,7 @@ class Tags extends Component
         $tag->delete();
 
         toast()
-            ->success('Тег "'.$tag_name.'" удален.')
+            ->success('Тег "' . $tag_name . '" удален.')
             ->push();
     }
 
@@ -212,7 +212,7 @@ class Tags extends Component
                     $query->where('show_on_page', true);
                 })
                  ->when($this->onlyInMenu, function ($query) {
-                    $query->where('show_in_menu', true);
+                     $query->where('show_in_menu', true);
                  })
                 ->with('category', 'category.catalog')
                 ->orderBy($this->sortField, $this->sortDirection)

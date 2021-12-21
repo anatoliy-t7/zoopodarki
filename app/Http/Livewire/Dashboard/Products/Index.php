@@ -82,7 +82,7 @@ class Index extends Component
     public function showTrashed()
     {
         $this->resetPage();
-        $this->onlyTrashed = ! $this->onlyTrashed;
+        $this->onlyTrashed = !$this->onlyTrashed;
     }
 
     public function forceDelete($id)
@@ -162,16 +162,16 @@ class Index extends Component
         return Product::onlyTrashed()
             ->with('categories', 'variations', 'attributes', 'attributes.attribute')
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%'.$this->search.'%')
-                    ->orWhere('id', 'like', '%'.$this->search.'%')
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('id', 'like', '%' . $this->search . '%')
                     ->orWhereHas('attributes', function ($query) {
-                        $query->where('name', 'like', '%'.$this->search.'%');
+                        $query->where('name', 'like', '%' . $this->search . '%');
                     })
                     ->orWhereHas('categories', function ($query) {
-                        $query->where('name', 'like', '%'.$this->search.'%');
+                        $query->where('name', 'like', '%' . $this->search . '%');
                     })
                     ->orWhereHas('variations', function ($query) {
-                        $query->where('name', 'like', '%'.$this->search.'%');
+                        $query->where('name', 'like', '%' . $this->search . '%');
                     });
             })
             ->orderBy($this->sortField, $this->sortDirection)
@@ -182,15 +182,9 @@ class Index extends Component
     {
         return Product::when($this->search, function ($query) {
             if ($this->filteredByAttribute && $this->attrId) {
-                $query->whereHas('attributes', function ($query) {
+                $query->withWhereHas('attributes', function ($query) {
                     $query->where([
-                        ['attribute_item.name', 'LIKE', '%'.$this->search.'%'],
-                        ['attribute_item.attribute_id', $this->attrId],
-                    ]);
-                });
-                $query->with('attributes', function ($query) {
-                    $query->where([
-                        ['attribute_item.name', 'LIKE', '%'.$this->search.'%'],
+                        ['attribute_item.name', 'LIKE', '%' . $this->search . '%'],
                         ['attribute_item.attribute_id', $this->attrId],
                     ]);
                 });
@@ -214,7 +208,7 @@ class Index extends Component
             })
             ->when($this->available, function ($query) {
                 $query->whereHas('variations', function ($query) {
-                     $query->hasStock();
+                    $query->hasStock();
                 });
             })
             ->when($this->productsWithoutDescription, function ($query) {

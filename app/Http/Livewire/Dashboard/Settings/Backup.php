@@ -24,8 +24,6 @@ class Backup extends Component
         //     // $this->updateProduct($product);
         // }
 
-
-
         toast()
             ->info('Job UpdateProduct added')
             ->push();
