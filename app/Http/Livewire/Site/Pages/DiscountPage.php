@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Livewire\Site;
+namespace App\Http\Livewire\Site\Pages;
 
 use App\Models\Product;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -10,6 +11,7 @@ class DiscountPage extends Component
 {
     use WithPagination;
 
+    public $typeF = 0;
     public $petF = [];
     public $catF = [];
     public $brandF = [];
@@ -19,25 +21,34 @@ class DiscountPage extends Component
     public $sortBy = 'desc';
     public $maxPrice = 10000;
     public $minPrice = 0;
+    public $catalogs;
     public $categories;
     public $brands;
 
     protected $queryString = [
+        'typeF' => ['except' => ''],
         'petF' => ['except' => ''],
         'catF' => ['except' => ''],
         'brandF' => ['except' => ''],
         'page' => ['except' => 1],
     ];
 
-    protected $listeners = ['updateMinPrice', 'updateMaxPrice'];
+    protected $listeners = ['updatedMinMaxPrice'];
 
     public function mount()
     {
         $this->sortType = config('constants.sort_type');
 
-        $this->getCategoriesForFilter();
         $this->getBrandsForFilter();
         $this->setMaxAndMinPrices();
+        $this->getCatalogsForFilter();
+        $this->setSeo();
+    }
+    public function updatedMinMaxPrice($minPrice, $maxPrice)
+    {
+        $this->minPrice = (int)$minPrice;
+        $this->maxPrice = (int)$maxPrice;
+        $this->resetPage();
     }
 
     public function setMaxAndMinPrices()
@@ -62,16 +73,22 @@ class DiscountPage extends Component
             ->min('price');
     }
 
-
-    public function updatedMinPrice()
+    public function setSeo()
     {
-        $this->resetPage();
+
+        //SEO TITLE
+        // Акции на сухие и влажные корма, распродажи и скидки на одежду для собак + в новом интернет зоомагазине товаров для животных в спб с бесплатной доставкой по городу + (цена  от ...) + *петшопы в Невском районе, метро пр. Большевиков, метро Ладожская и метро Гражданский проспект
+
+        $metaTitle = 'Акции на сухие и влажные корма, распродажи и скидки на одежду для собак в новом интернет зоомагазине товаров для животных в спб с бесплатной доставкой по городу (цена  от ' . $this->minPrice . ' ₽). Петшопы в Невском районе, метро пр. Большевиков, метро Ладожская и метро Гражданский проспект';
+
+        // SEO description
+        // *доллар* Акции на сухие и влажные корма, распродажи и скидки на одежду для собак + в спб *самолетик* с бесплатной доставкой по городу в новом интернет зоомагазине товаров для животных (цена  от ...) *like* душевное обслуживание, гарантии, большой выбор, фото, составы *петшопы в Невском районе, метро пр. Большевиков, метро Ладожская и метро Гражданский проспект
+
+        $metaDescription = '₽ Акции на сухие и влажные корма, распродажи и скидки на одежду для собак в спб 🚚  с бесплатной доставкой по городу в новом интернет зоомагазине товаров для животных (цена  от ' . $this->minPrice . ' ₽) 👍 душевное обслуживание, гарантии, большой выбор, фото, составы. Петшопы в Невском районе, метро пр. Большевиков, метро Ладожская и метро Гражданский проспект';
+
+        SEOMeta::setTitle($metaTitle)->setDescription($metaDescription);
     }
 
-    public function updatedMaxPrice()
-    {
-        $this->resetPage();
-    }
     public function sortIt($type, $sort, $name)
     {
         $this->sortSelectedType = $type;
@@ -80,13 +97,36 @@ class DiscountPage extends Component
         $this->resetPage();
     }
 
+
+    public function getCatalogsForFilter(): void
+    {
+        $this->catalogs = Product::isStatusActive()
+            ->has('media')
+            ->has('categories')
+            ->has('variations')
+            ->whereHas('variations', function ($query) {
+                $query->where('promotion_type', '>', 0);
+            })
+            ->with('categories')
+            ->with('categories.catalog')
+                ->get()
+                ->pluck('categories')
+                ->flatten()
+                ->unique('id')
+                ->pluck('catalog')
+                ->unique('id')
+                ->toArray();
+    }
+
     public function getCategoriesForFilter(): void
     {
         $this->categories = Product::isStatusActive()
             ->whereHas('variations', function ($query) {
                 $query->where('promotion_type', '>', 0);
             })
-                ->with('categories')
+            ->withWhereHas('categories', function ($query) {
+                $query->whereIn('catalog_id', $this->petF);
+            })
                 ->get()
                 ->pluck('categories')
                 ->flatten()
@@ -112,11 +152,13 @@ class DiscountPage extends Component
     {
         return Product::isStatusActive()
             //->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
+            ->has('media')
+            ->has('categories')
+            ->has('variations')
             ->whereHas('variations', function ($query) {
                 $query->whereBetween('price', [$this->minPrice, $this->maxPrice])
-                ->where('promotion_type', '>', 0);
+                ->getTypeOfDiscount($this->typeF);
             })
-            ->has('media')
             ->when($this->petF, function ($query) {
                 $query->withWhereHas('categories', function ($query) {
                     $query->whereIn('catalog_id', $this->petF);
@@ -139,13 +181,19 @@ class DiscountPage extends Component
                 ->with('variations')
                 ->with('categories')
                 ->with('categories.catalog')
-                // ->orderBy($this->sortSelectedType, $this->sortBy)
+                ->orderBy($this->sortSelectedType, $this->sortBy)
                 ->paginate(32);
+    }
+
+    public function updated()
+    {
+        $this->resetPage();
     }
 
     public function resetFilters()
     {
         $this->reset([
+            'typeF',
             'petF',
             'brandF',
             'catF',
@@ -157,12 +205,14 @@ class DiscountPage extends Component
 
     public function render()
     {
+        if ($this->petF) {
+            $this->getCategoriesForFilter();
+        }
         $products = $this->getProducts();
 
-        // dd($this->categories);
         $this->emit('lozad', '');
 
-        return view('livewire.site.discount-page', [
+        return view('livewire.site.pages.discount-page', [
             'products' => $products,
         ])
             ->extends('layouts.app')

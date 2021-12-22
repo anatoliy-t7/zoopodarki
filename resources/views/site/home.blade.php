@@ -51,7 +51,7 @@
                 <div x-cloak :class="tab == 1 ? 'block' : 'hidden'"
                   class="flex items-start justify-between pt-6 space-x-4 leading-normal ">
                   @foreach ($discountsCats as $discountsCat)
-                    <div class="w-full">
+                    <div class="w-full max-w-xs">
                       <livewire:site.card-products :product="$discountsCat"
                         :catalog="$discountsCat->categories[0]->catalog->slug"
                         :category="$discountsCat->categories[0]->slug" :wire:key="'product-'.$discountsCat->id" />
@@ -63,7 +63,7 @@
                 <div x-cloak :class="tab == 2 ? 'block' : 'hidden'"
                   class="flex items-start justify-between pt-6 space-x-4 leading-normal ">
                   @foreach ($discountsDogs as $discountsDog)
-                    <div class="w-full">
+                    <div class="w-full max-w-xs">
                       <livewire:site.card-products :product="$discountsDog"
                         :catalog="$discountsDog->categories[0]->catalog->slug"
                         :category="$discountsDog->categories[0]->slug" :wire:key="'product-'.$discountsDog->id" />
@@ -76,7 +76,7 @@
                 <div x-cloak :class="tab == 3 ? 'block' : 'hidden'"
                   class="flex items-start justify-between pt-6 space-x-4 leading-normal ">
                   @foreach ($discountsBirds as $discountsBird)
-                    <div class="w-full">
+                    <div class="w-full max-w-xs">
                       <livewire:site.card-products :product="$discountsBird"
                         :catalog="$discountsBird->categories[0]->catalog->slug"
                         :category="$discountsBird->categories[0]->slug" :wire:key="'product-'.$discountsBird->id" />
@@ -88,7 +88,7 @@
                 <div x-cloak :class="tab == 4 ? 'block' : 'hidden'"
                   class="flex items-start justify-between pt-6 space-x-4 leading-normal ">
                   @foreach ($discountsRodents as $discountsRodent)
-                    <div class="w-full">
+                    <div class="w-full max-w-xs">
                       <livewire:site.card-products :product="$discountsRodent"
                         :catalog="$discountsRodent->categories[0]->catalog->slug"
                         :category="$discountsRodent->categories[0]->slug" :wire:key="'product-'.$discountsRodent->id" />
@@ -192,7 +192,7 @@
                 <div x-cloak :class="tab == 1 ? 'block' : 'hidden'" class="pt-6 space-y-8">
                   <div class="flex items-start justify-between pt-6 space-x-4 leading-normal ">
                     @foreach ($popular1 as $popular1Product)
-                      <div class="w-full">
+                      <div class="w-full max-w-xs">
                         <livewire:site.card-products :product="$popular1Product"
                           :catalog="$popular1Product->categories[0]->catalog->slug"
                           :category="$popular1Product->categories[0]->slug" :wire:key="'product-'.$popular1Product->id" />
@@ -214,7 +214,7 @@
                 <div x-cloak :class="tab == 2 ? 'block' : 'hidden'" class="pt-6 space-y-8">
                   <div class="flex items-start justify-between pt-6 space-x-4 leading-normal ">
                     @foreach ($popular2 as $popular2Product)
-                      <div class="w-full">
+                      <div class="w-full max-w-xs">
                         <livewire:site.card-products :product="$popular2Product"
                           :catalog="$popular2Product->categories[0]->catalog->slug"
                           :category="$popular2Product->categories[0]->slug" :wire:key="'product-'.$popular2Product->id" />
@@ -235,7 +235,7 @@
                 <div x-cloak :class="tab == 3 ? 'block' : 'hidden'" class="pt-6 space-y-8">
                   <div class="flex items-start justify-between pt-6 space-x-4 leading-normal ">
                     @foreach ($popular3 as $popular3Product)
-                      <div class="w-full">
+                      <div class="w-full max-w-xs">
                         <livewire:site.card-products :product="$popular3Product"
                           :catalog="$popular3Product->categories[0]->catalog->slug"
                           :category="$popular3Product->categories[0]->slug" :wire:key="'product-'.$popular3Product->id" />
@@ -256,7 +256,7 @@
                 <div x-cloak :class="tab == 4 ? 'block' : 'hidden'" class="pt-6 space-y-8">
                   <div class="flex items-start justify-between pt-6 space-x-4 leading-normal ">
                     @foreach ($popular4 as $popular4Product)
-                      <div class="w-full">
+                      <div class="w-full max-w-xs">
                         <livewire:site.card-products :product="$popular4Product"
                           :catalog="$popular4Product->categories[0]->catalog->slug"
                           :category="$popular4Product->categories[0]->slug" :wire:key="'product-'.$popular4Product->id" />

@@ -11,13 +11,13 @@ Route::middleware(['throttle:1000,60', 'web', 'auth'])
         function () {
             Route::get('/', 'App\Http\Controllers\Site\HomeController@page')->name('home');
 
-            Route::get('/pet/{catalogslug}/{categoryslug}/tag/{tagslug}', \App\Http\Livewire\Site\CategoryPage::class)->name('tag');
+            Route::get('/pet/{catalogslug}/{categoryslug}/tag/{tagslug}', \App\Http\Livewire\Site\Pages\CategoryPage::class)->name('tag');
 
-            Route::get('/pet/{catalogslug}/{categoryslug}', \App\Http\Livewire\Site\CategoryPage::class)->name('category');
+            Route::get('/pet/{catalogslug}/{categoryslug}', \App\Http\Livewire\Site\Pages\CategoryPage::class)->name('category');
 
-            Route::get('/pet/{catalogslug}', \App\Http\Livewire\Site\CatalogPage::class)->name('catalog');
+            Route::get('/pet/{catalogslug}', \App\Http\Livewire\Site\Pages\CatalogPage::class)->name('catalog');
 
-            Route::get('/discounts', \App\Http\Livewire\Site\DiscountPage::class)->name('discounts');
+            Route::get('/discounts', \App\Http\Livewire\Site\Pages\DiscountPage::class)->name('discounts');
 
             Route::get('/search', \App\Http\Livewire\Site\Search\SearchPage::class)->name('search');
 
@@ -38,12 +38,12 @@ Route::middleware(['throttle:1000,60', 'web', 'auth'])
             )->name('product.applying');
 
             // Brands
-            Route::get('/brands', \App\Http\Livewire\Site\BrandsPage::class)->name('brands');
+            Route::get('/brands', \App\Http\Livewire\Site\Pages\BrandsPage::class)->name('brands');
 
-            Route::get('/brands/{brandslug}', \App\Http\Livewire\Site\BrandPage::class)->name('brand');
+            Route::get('/brands/{brandslug}', \App\Http\Livewire\Site\Pages\BrandPage::class)->name('brand');
 
             // Pages
-            Route::view('/contact', 'site.pages.contact')->name('contact');
+            Route::get('/contact', \App\Http\Livewire\Site\Pages\ContactPage::class)->name('contact');
 
             Route::get('/page/{slug}', 'App\Http\Controllers\Site\PageController@show')->name('page');
 

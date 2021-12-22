@@ -1,5 +1,5 @@
 @section('title')
-Страницы
+  Страницы
 @endsection
 <div>
 
@@ -7,12 +7,12 @@
 
     <h3 class="text-2xl">Страницы</h3>
 
-    @can ('create')
-    <a id="add" title="Создать новую страницу" class="flex space-x-2 text-white bg-green-500 btn hover:bg-green-700"
-      href="{{ route('dashboard.page.edit',['pageId' => null] ) }}">
-      <x-tabler-file-plus class="w-6 h-6 text-white" />
-      <div>Создать</div>
-    </a>
+    @can('create')
+      <a id="add" title="Создать новую страницу" class="flex space-x-2 text-white bg-green-500 btn hover:bg-green-700"
+        href="{{ route('dashboard.page.edit', ['pageId' => null]) }}">
+        <x-tabler-file-plus class="w-6 h-6 text-white" />
+        <div>Создать</div>
+      </a>
     @endcan
 
   </div>
@@ -46,64 +46,74 @@
 
             </x-dashboard.table.cell>
             <x-dashboard.table.cell>
-              <a class="text-gray-400 hover:text-indigo-500" href="{{ route('dashboard.home.edit') }}">
-                <x-tabler-edit class="w-6 h-6 stroke-current" />
-              </a>
+              <div class="opacity-0 group-hover:opacity-100">
+                <a class="text-gray-400 hover:text-orange-400 " href="{{ route('dashboard.home.edit') }}">
+                  <x-tabler-edit class="w-6 h-6 stroke-current" />
+                </a>
+              </div>
             </x-dashboard.table.cell>
           </x-dashboard.table.row>
 
           @forelse($pages as $key => $page)
-          <x-dashboard.table.row>
+            <x-dashboard.table.row>
 
-            <x-dashboard.table.cell>
-              {{ $page->id }}
-            </x-dashboard.table.cell>
+              <x-dashboard.table.cell>
+                {{ $page->id }}
+              </x-dashboard.table.cell>
 
-            <x-dashboard.table.cell>
-              {{ $page->title }}
-            </x-dashboard.table.cell>
+              <x-dashboard.table.cell>
+                {{ $page->title }}
+              </x-dashboard.table.cell>
 
-            <x-dashboard.table.cell>
-              <div class="flex items-center justify-start">
-                @if ($page->isActive === 1)
-                <div class="flex items-center py-1 space-x-2 text-sm">
-                  <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span>Опубликован</span>
+              <x-dashboard.table.cell>
+                <div class="flex items-center justify-start">
+                  @if ($page->isActive === 1)
+                    <div class="flex items-center py-1 space-x-2 text-sm">
+                      <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span>Опубликован</span>
+                    </div>
+                  @else
+                    <div class="flex items-center py-1 space-x-2 text-sm ">
+                      <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                      <span>Не опубликован</span>
+                    </div>
+                  @endif
                 </div>
-                @else
-                <div class="flex items-center py-1 space-x-2 text-sm ">
-                  <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  <span>Не опубликован</span>
+              </x-dashboard.table.cell>
+
+              <x-dashboard.table.cell>
+
+                <div class="flex items-center gap-4 opacity-0 group-hover:opacity-100">
+
+                  <a id="add" title="Редактировать" class="text-gray-400 hover:text-orange-400"
+                    href="{{ route('dashboard.page.edit', ['pageId' => $page->id]) }}">
+                    <x-tabler-edit class="w-6 h-6 stroke-current" />
+                  </a>
+
+                  <a class="text-gray-400 hover:text-orange-400"
+                    href="{{ route('site.page', ['slug' => $page->slug]) }}" target="_blank">
+                    <x-tabler-external-link class="w-6 h-6 stroke-current" />
+                  </a>
                 </div>
-                @endif
-              </div>
-            </x-dashboard.table.cell>
 
-            <x-dashboard.table.cell class="relative flex justify-end w-32">
+              </x-dashboard.table.cell>
 
-              <a id="add" title="Редактировать" class="text-gray-400 hover:text-indigo-500"
-                href="{{ route('dashboard.page.edit',['pageId' => $page->id] ) }}">
-                <x-tabler-edit class="w-6 h-6 stroke-current" />
-              </a>
-
-            </x-dashboard.table.cell>
-
-          </x-dashboard.table.row>
+            </x-dashboard.table.row>
           @empty
-          <x-dashboard.table.row>
-            <x-dashboard.table.cell>
+            <x-dashboard.table.row>
+              <x-dashboard.table.cell>
 
-            </x-dashboard.table.cell>
-            <x-dashboard.table.cell>
+              </x-dashboard.table.cell>
+              <x-dashboard.table.cell>
 
-            </x-dashboard.table.cell>
-            <x-dashboard.table.cell>
+              </x-dashboard.table.cell>
+              <x-dashboard.table.cell>
 
-            </x-dashboard.table.cell>
-            <x-dashboard.table.cell>
+              </x-dashboard.table.cell>
+              <x-dashboard.table.cell>
 
-            </x-dashboard.table.cell>
-          </x-dashboard.table.row>
+              </x-dashboard.table.cell>
+            </x-dashboard.table.row>
           @endforelse
         </x-slot>
 
@@ -125,7 +135,6 @@
         }
 
       }, false);
-
     </script>
 
 

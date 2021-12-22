@@ -24,6 +24,7 @@ class PageEdit extends Component
     public $content = '[]';
     public $isActive = false;
     public $newFiles = [];
+    public $templates = [];
     protected $listeners = [
         'save',
     ];
@@ -37,12 +38,22 @@ class PageEdit extends Component
             $this->title = $page->title;
             $this->meta_title = $page->meta_title;
             $this->meta_description = $page->meta_description;
+            $this->template = $page->template;
             $this->slug = $page->slug;
+            $this->isActive = $page->isActive;
             if (!empty($page->content) || $page->content != '') {
                 $this->content = $page->content;
             }
+        }
+        $this->getListOfTemplates();
+    }
 
-            $this->isActive = $page->isActive;
+    public function getListOfTemplates()
+    {
+        $this->templates = array_diff(scandir('../resources/views/site/pages/templates/'), ['..', '.']);
+
+        foreach ($this->templates as $key => $template) {
+            $this->templates[$key] = Str::before($template, '.');
         }
     }
 

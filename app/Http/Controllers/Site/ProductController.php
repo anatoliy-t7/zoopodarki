@@ -19,9 +19,6 @@ class ProductController extends Controller
         $this->category = Category::where('slug', $request->categoryslug)->first();
 
         $this->productslug = $request->productslug;
-
-
-        // dd($this->catalog);
     }
 
     public function show()

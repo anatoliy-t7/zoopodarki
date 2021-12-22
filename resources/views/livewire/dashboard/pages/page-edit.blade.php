@@ -5,7 +5,7 @@
     Новая страница
   @endif
 @endsection
-<div x-data="editor">
+<div x-data="editor" @save.window="save(event)">
 
   <div class="flex items-center justify-between w-full pb-4 space-x-6">
 
@@ -21,19 +21,49 @@
 
   <div class="block max-w-5xl p-6 space-y-6 bg-white rounded-2xl">
 
-    <div class="flex items-center justify-between w-full space-x-6">
-      <div class="w-8/12 space-y-1">
-        <div class="font-bold">Заголовок</div>
-        <input wire:model.defer="title" type="text">
-        @error('title') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
-      </div>
-      <div class="w-4/12 space-y-1">
-        <div class="font-bold">URL (slug)</div>
-        <input wire:model.defer="slug" type="text">
-        @error('slug') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
-      </div>
+    <div class="flex items-start justify-between w-full gap-6">
+      <div class="flex flex-col w-8/12 gap-4">
+        <div class="flex flex-col gap-1">
+          <div class="font-bold">Заголовок</div>
+          <input wire:model.defer="title" type="text">
+          @error('title') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+        </div>
+        <div class="flex flex-col gap-1">
+          <div class="font-bold">Meta загаловок</div>
+          <input wire:model.defer="meta_title" type="text">
+          @error('meta_title') <span class="text-sm text-red-500">{{ $message }}</span>
+          @enderror
+        </div>
 
+        <div class="flex flex-col gap-1">
+          <div class="font-bold">Meta описание</div>
+          <textarea rows="2" wire:model.defer="meta_description"></textarea>
+          @error('meta_description') <span class="text-sm text-red-500">{{ $message }}</span>
+          @enderror
+        </div>
+      </div>
+      <div class="flex flex-col w-4/12 gap-4">
+        <div class="flex flex-col gap-1">
+          <div class="font-bold">URL (slug)</div>
+          <input wire:model.defer="slug" type="text">
+          @error('slug') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-bold">Дизайн страницы</label>
+          <div class="relative">
+            <select wire:model.defer="template" name="template" class="field">
+              @foreach ($templates as $template)
+                <option value="{{ $template }}">{{ $template }}</option>
+              @endforeach
+            </select>
+          </div>
+          @error('template')
+            <span class="text-sm text-red-500">{{ $message }}</span>
+          @enderror
+        </div>
+      </div>
     </div>
+
     <div class="space-y-6">
       <div class="space-y-6">
         <div x-cloak class="space-y-6">
@@ -149,10 +179,12 @@
       function removeFileAttachment(attachment) {
         @this.call('removeFileAttachment', attachment.attachment.attributes.values.url.split("/").pop());
       }
+
       document.addEventListener("keydown", function(e) {
         if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.keyCode == 83) {
           e.preventDefault();
-          window.livewire.emit('save');
+          var event = new CustomEvent('save');
+          window.dispatchEvent(event);
         }
 
       }, false);

@@ -9,13 +9,10 @@
         <div class="flex flex-col justify-between space-y-2 lg:space-y-0 lg:space-x-4 lg:items-start lg:flex-row">
           <h1 class="w-9/12 font-semibold text-left text-md lg:text-xl">
             <span class="pr-1" x-show="tab == 2" x-transition>
-              Состав
-            </span>
-            <span class="pr-1" x-show="tab == 4" x-transition>
-              Отзывы
+              Состав:
             </span>
             <span class="pr-1" x-show="tab == 3" x-transition>
-              Применение
+              Применение:
             </span>
             <span itemprop="name">{{ $product->name }}</span>
             @if ($category->id !== $product->categories[0]->id)

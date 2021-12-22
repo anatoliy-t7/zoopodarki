@@ -27,7 +27,6 @@
           <div class="text-lg text-gray-400" title="Найдено товаров">{{ $products->total() }}</div>
         </div>
 
-
         <div class="flex w-full">
           <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
             <aside class="w-full lg:w-3/12">
@@ -35,70 +34,57 @@
                 <!--googleoff: all-->
                 <!--noindex-->
                 @if (Agent::isMobile())
-                  {{-- <x-mob-sidebar :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges"
-                    :brands="$brands" /> --}}
+                  // TODO
                 @else
                   <div class="flex-col px-1 space-y-6">
 
-                    <div wire:loading
-                      class="absolute top-0 bottom-0 left-0 right-0 z-30 w-full h-full bg-gray-100 bg-opacity-75 rounded-2xl">
-                    </div>
+                    @if ($maxPrice > 100)
+                      <div class="pb-2">
+                        <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
+                      </div>
+                    @endif
 
-                    <div class="">
-                      <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
-                    </div>
-
-                    <div class="space-y-4">
-                      <div class="font-bold">Питомец</div>
-
-                      <div class="py-1 space-y-3">
-
-                        <label class="container-checkbox">
-                          <span for="cats" class="text-sm">Кошки</span>
-                          <input value="1" wire:model="petF" id="cats" type="checkbox">
-                          <span class="checkmark"></span>
+                    <div class="space-y-3">
+                      <div class="font-bold">Виды скидок</div>
+                      <div class="flex flex-col space-y-3">
+                        <label class="inline-flex items-center space-x-2">
+                          <input type="radio" wire:model="typeF" value="0" name="stockF"
+                            class="w-5 h-5 text-orange-400 form-radio" checked><span
+                            class="text-base text-gray-700 sm:text-sm">Все виды</span>
                         </label>
-
-                        <label class="container-checkbox">
-                          <span for="dogs" class="text-sm">Собаки</span>
-                          <input value="2" wire:model="petF" id="dogs" type="checkbox">
-                          <span class="checkmark"></span>
+                        <label class="inline-flex items-center space-x-2">
+                          <input type="radio" wire:model="typeF" value="2" name="stockF"
+                            class="w-5 h-5 text-orange-400 form-radio"><span
+                            class="text-base text-gray-700 sm:text-sm ">Акции</span>
                         </label>
-
-                        <label class="container-checkbox">
-                          <span for="rodents" class="text-sm">Грызуны и хорьки</span>
-                          <input value="3" wire:model="petF" id="rodents" type="checkbox">
-                          <span class="checkmark"></span>
+                        <label class="inline-flex items-center space-x-2">
+                          <input type="radio" wire:model="typeF" value="1" name="stockF"
+                            class="w-5 h-5 text-orange-400 form-radio"><span
+                            class="text-base text-gray-700 sm:text-sm">Уценка</span>
                         </label>
-
-                        <label class="container-checkbox">
-                          <span for="birds" class="text-sm">Птицы</span>
-                          <input value="4" wire:model="petF" id="birds" type="checkbox">
-                          <span class="checkmark"></span>
-                        </label>
-
-                        <label class="container-checkbox">
-                          <span for="fish" class="text-sm">Рыбки, раки и улитки</span>
-                          <input value="5" wire:model="petF" id="fish" type="checkbox">
-                          <span class="checkmark"></span>
-                        </label>
-
-                        <label class="container-checkbox">
-                          <span for="rabbits" class="text-sm">Кролики</span>
-                          <input value="6" wire:model="petF" id="rabbits" type="checkbox">
-                          <span class="checkmark"></span>
-                        </label>
-
-                        <label class="container-checkbox">
-                          <span for="reptiles" class="text-sm">Рептилии, черепахи и ежи</span>
-                          <input value="9" wire:model="petF" id="reptiles" type="checkbox">
-                          <span class="checkmark"></span>
-                        </label>
-
                       </div>
                     </div>
 
-                    @if ($categories)
+                    @if ($catalogs)
+                      <div class="space-y-4">
+                        <div class="font-bold">Питомец</div>
+
+                        <div class="py-1 space-y-3">
+
+                          @foreach ($catalogs as $catalog)
+                            <label class="container-checkbox">
+                              <span for="cats" class="text-sm">{{ $catalog['name'] }}</span>
+                              <input value="{{ $catalog['id'] }}" wire:model="petF" id="{{ $catalog['slug'] }}"
+                                type="checkbox">
+                              <span class="checkmark"></span>
+                            </label>
+                          @endforeach
+
+                        </div>
+                      </div>
+                    @endif
+
+                    @if ($petF && $categories)
                       <div class="space-y-4">
                         <div class="font-bold">Категории</div>
                         <div class="py-1 space-y-3">
@@ -131,55 +117,12 @@
                         </div>
                       </div>
                     @endif
-
-                    {{-- <div x-data="searchBrand" class="space-y-4">
-                        <div class="font-bold">Бренд</div>
-
-                        <div>
-                          @if ($brands->count() > 10)
-                            <input x-ref="searchField" x-model="search"
-                              x-on:keydown.window.prevent.slash="$refs.searchField.focus()" placeholder="Поиск"
-                              type="search" class="h-8 text-xs placeholder-gray-400 bg-gray-50 field" />
-                          @endif
-                        </div>
-
-                        <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
-
-                          <template x-for="(item, index) in filteredBrands" :key="item.id" hidden>
-                            <div class=" container-checkbox">
-                              <span class="text-sm" x-text="item.name"></span>
-                              <input :value="item.id" type="checkbox" x-model.number="brandsF">
-                              <span class="checkmark"></span>
-                            </div>
-                          </template>
-
-                          <script>
-                            document.addEventListener('alpine:init', () => {
-                              Alpine.data('searchBrand', () => ({
-                                search: "",
-                                brandsF: @entangle('brandsF'),
-                                brandsData: @json($brands),
-                                get filteredBrands() {
-                                  if (this.search === "") {
-                                    return this.brandsData;
-                                  }
-                                  return this.brandsData.filter((item) => {
-                                    return item.name
-                                      .toLowerCase()
-                                      .includes(this.search.toLowerCase());
-                                  });
-                                },
-                              }))
-                            });
-                          </script>
-                        </div>
-                      </div> --}}
-
-
-
                   </div>
 
                 @endif
+                <div wire:loading
+                  class="absolute top-0 bottom-0 left-0 right-0 z-30 w-full h-full bg-gray-100 bg-opacity-75 rounded-2xl">
+                </div>
                 <!--/noindex-->
                 <!--googleon: all-->
               </div>

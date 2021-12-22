@@ -18,4 +18,18 @@ class Product1C extends Model
     {
         return $query->where('stock', '>=', 1)->where('price', '>=', 1);
     }
+
+
+    public function scopeGetTypeOfDiscount($query, $typeF)
+    {
+        if ($typeF == 0) {
+            return $query->where('promotion_type', '>', 0);
+        }
+        if ($typeF == 1) {
+            return $query->where('promotion_type', 1);
+        }
+        if ($typeF == 2) {
+            return $query->where('promotion_type', '>=', 2);
+        }
+    }
 }

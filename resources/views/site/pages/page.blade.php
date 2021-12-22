@@ -9,8 +9,8 @@
 
 @section('content')
   @if ($page->temaplate == 'delivery')
-    @include ('site.pages.template.delivery')
+    @include ('site.pages.templates.delivery')
   @else
-    @include ('site.pages.template.plain')
+    @include ('site.pages.templates.plain')
   @endif
 @endsection
