@@ -2,7 +2,6 @@
   Свойства
 @endsection
 <div>
-
   <div x-data="handler" @get-items.window="getItems(event)" @new.window="openForm(event)" @save.window="saveForm(event)"
     @close.window="closeForm(event)" @close-confirm.window="closeConfirm(event)" class="space-y-2">
 

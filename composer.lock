@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b057699f5dc67d19d5e1b115d6e67664",
+    "content-hash": "09ee98753d304bf83f3e1188b8e9a843",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -1255,16 +1255,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.225.0",
+            "version": "v0.226.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "0e2387a7c082fc05d62555952391791db8c55435"
+                "reference": "c67839c96bc821b202c6737c9ae1ba6fd4626653"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/0e2387a7c082fc05d62555952391791db8c55435",
-                "reference": "0e2387a7c082fc05d62555952391791db8c55435",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/c67839c96bc821b202c6737c9ae1ba6fd4626653",
+                "reference": "c67839c96bc821b202c6737c9ae1ba6fd4626653",
                 "shasum": ""
             },
             "require": {
@@ -1293,9 +1293,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.225.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.226.0"
             },
-            "time": "2021-12-12T12:24:34+00:00"
+            "time": "2021-12-18T12:26:19+00:00"
         },
         {
             "name": "google/auth",
@@ -2246,16 +2246,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.76.2",
+            "version": "v8.77.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "c67acfdc968f487b6235435080eef62a7e2ed055"
+                "reference": "994dbac5c6da856c77c81a411cff5b7d31519ca8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/c67acfdc968f487b6235435080eef62a7e2ed055",
-                "reference": "c67acfdc968f487b6235435080eef62a7e2ed055",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/994dbac5c6da856c77c81a411cff5b7d31519ca8",
+                "reference": "994dbac5c6da856c77c81a411cff5b7d31519ca8",
                 "shasum": ""
             },
             "require": {
@@ -2273,7 +2273,7 @@
                 "opis/closure": "^3.6",
                 "php": "^7.3|^8.0",
                 "psr/container": "^1.0",
-                "psr/log": "^1.0 || ^2.0",
+                "psr/log": "^1.0|^2.0",
                 "psr/simple-cache": "^1.0",
                 "ramsey/uuid": "^4.2.2",
                 "swiftmailer/swiftmailer": "^6.3",
@@ -2414,7 +2414,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-12-15T14:02:14+00:00"
+            "time": "2021-12-21T20:22:29+00:00"
         },
         {
             "name": "laravel/scout",
@@ -3269,6 +3269,69 @@
                 }
             ],
             "time": "2020-05-30T13:11:16+00:00"
+        },
+        {
+            "name": "maxeckel/livewire-editorjs",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maxeckel/livewire-editorjs.git",
+                "reference": "d9dd765cde6992a427679a56e39b211ba6bf9397"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maxeckel/livewire-editorjs/zipball/d9dd765cde6992a427679a56e39b211ba6bf9397",
+                "reference": "d9dd765cde6992a427679a56e39b211ba6bf9397",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "illuminate/support": "^7.0|^8.0",
+                "livewire/livewire": "^2.3",
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^5.0|^6.0",
+                "phpunit/phpunit": "^9.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Maxeckel\\LivewireEditorjs\\LivewireEditorjsServiceProvider"
+                    ],
+                    "aliases": {
+                        "LivewireEditorjs": "Maxeckel\\LivewireEditorjs\\LivewireEditorjsFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Maxeckel\\LivewireEditorjs\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Max Eckel",
+                    "email": "contact@max-eckel.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This Package aims for an easy integration of Editor.JS with Laravel Livewire",
+            "homepage": "https://github.com/maxeckel/livewire-editorjs",
+            "keywords": [
+                "livewire-editorjs",
+                "maxeckel"
+            ],
+            "support": {
+                "issues": "https://github.com/maxeckel/livewire-editorjs/issues",
+                "source": "https://github.com/maxeckel/livewire-editorjs/tree/v1.3.0"
+            },
+            "time": "2021-11-18T17:28:14+00:00"
         },
         {
             "name": "meilisearch/meilisearch-php",
@@ -6027,21 +6090,21 @@
         },
         {
             "name": "spatie/db-dumper",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/db-dumper.git",
-                "reference": "e5db63ea1605ea5d936cf0cb9f22ca04defd7861"
+                "reference": "6cbd2b89a902f220def445030050f2f09c2c9176"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/db-dumper/zipball/e5db63ea1605ea5d936cf0cb9f22ca04defd7861",
-                "reference": "e5db63ea1605ea5d936cf0cb9f22ca04defd7861",
+                "url": "https://api.github.com/repos/spatie/db-dumper/zipball/6cbd2b89a902f220def445030050f2f09c2c9176",
+                "reference": "6cbd2b89a902f220def445030050f2f09c2c9176",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.0",
-                "symfony/process": "^5.0"
+                "symfony/process": "^5.0|^6.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -6075,7 +6138,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/db-dumper/issues",
-                "source": "https://github.com/spatie/db-dumper/tree/3.1.0"
+                "source": "https://github.com/spatie/db-dumper/tree/3.1.1"
             },
             "funding": [
                 {
@@ -6087,20 +6150,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-08T17:30:22+00:00"
+            "time": "2021-12-21T09:44:25+00:00"
         },
         {
             "name": "spatie/image",
-            "version": "1.10.5",
+            "version": "1.10.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/image.git",
-                "reference": "63a963d0200fb26f2564bf7201fc7272d9b22933"
+                "reference": "897e819848096ea8eee8ed4a3531c6166f9a99e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/image/zipball/63a963d0200fb26f2564bf7201fc7272d9b22933",
-                "reference": "63a963d0200fb26f2564bf7201fc7272d9b22933",
+                "url": "https://api.github.com/repos/spatie/image/zipball/897e819848096ea8eee8ed4a3531c6166f9a99e0",
+                "reference": "897e819848096ea8eee8ed4a3531c6166f9a99e0",
                 "shasum": ""
             },
             "require": {
@@ -6111,11 +6174,11 @@
                 "php": "^7.2|^8.0",
                 "spatie/image-optimizer": "^1.1",
                 "spatie/temporary-directory": "^1.0|^2.0",
-                "symfony/process": "^3.0|^4.0|^5.0"
+                "symfony/process": "^3.0|^4.0|^5.0|^6.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.0|^9.0",
-                "symfony/var-dumper": "^4.0|^5.0",
+                "phpunit/phpunit": "^8.5.21|^9.5.4",
+                "symfony/var-dumper": "^4.0|^5.0|^6.0",
                 "vimeo/psalm": "^4.6"
             },
             "type": "library",
@@ -6144,7 +6207,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/image/issues",
-                "source": "https://github.com/spatie/image/tree/1.10.5"
+                "source": "https://github.com/spatie/image/tree/1.10.6"
             },
             "funding": [
                 {
@@ -6156,31 +6219,31 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-07T08:42:24+00:00"
+            "time": "2021-12-21T10:01:09+00:00"
         },
         {
             "name": "spatie/image-optimizer",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/image-optimizer.git",
-                "reference": "8bad7f04fd7d31d021b4752ee89f8a450dad8017"
+                "reference": "6db75529cbf8fa84117046a9d513f277aead90a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/image-optimizer/zipball/8bad7f04fd7d31d021b4752ee89f8a450dad8017",
-                "reference": "8bad7f04fd7d31d021b4752ee89f8a450dad8017",
+                "url": "https://api.github.com/repos/spatie/image-optimizer/zipball/6db75529cbf8fa84117046a9d513f277aead90a0",
+                "reference": "6db75529cbf8fa84117046a9d513f277aead90a0",
                 "shasum": ""
             },
             "require": {
                 "ext-fileinfo": "*",
                 "php": "^7.3|^8.0",
                 "psr/log": "^1.0 | ^2.0 | ^3.0",
-                "symfony/process": "^4.2|^5.0"
+                "symfony/process": "^4.2|^5.0|^6.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5.21|^9.4.4",
-                "symfony/var-dumper": "^4.2|^5.0"
+                "symfony/var-dumper": "^4.2|^5.0|^6.0"
             },
             "type": "library",
             "autoload": {
@@ -6208,9 +6271,9 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/image-optimizer/issues",
-                "source": "https://github.com/spatie/image-optimizer/tree/1.6.1"
+                "source": "https://github.com/spatie/image-optimizer/tree/1.6.2"
             },
-            "time": "2021-11-17T10:36:45+00:00"
+            "time": "2021-12-21T10:08:05+00:00"
         },
         {
             "name": "spatie/laravel-backup",
@@ -6415,16 +6478,16 @@
         },
         {
             "name": "spatie/laravel-package-tools",
-            "version": "1.9.2",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-package-tools.git",
-                "reference": "f710fe196c126fb9e0aee67eb5af49ad8f13f528"
+                "reference": "97c24d0bc58e04d55e4a6a7b6d6102cb45b75789"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/f710fe196c126fb9e0aee67eb5af49ad8f13f528",
-                "reference": "f710fe196c126fb9e0aee67eb5af49ad8f13f528",
+                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/97c24d0bc58e04d55e4a6a7b6d6102cb45b75789",
+                "reference": "97c24d0bc58e04d55e4a6a7b6d6102cb45b75789",
                 "shasum": ""
             },
             "require": {
@@ -6433,8 +6496,8 @@
             },
             "require-dev": {
                 "mockery/mockery": "^1.4",
-                "orchestra/testbench": "^5.0|^6.0",
-                "phpunit/phpunit": "^9.3",
+                "orchestra/testbench": "^5.0|^6.23",
+                "phpunit/phpunit": "^9.4",
                 "spatie/test-time": "^1.2"
             },
             "type": "library",
@@ -6463,7 +6526,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-package-tools/issues",
-                "source": "https://github.com/spatie/laravel-package-tools/tree/1.9.2"
+                "source": "https://github.com/spatie/laravel-package-tools/tree/1.10.0"
             },
             "funding": [
                 {
@@ -6471,7 +6534,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-21T13:06:51+00:00"
+            "time": "2021-12-18T20:33:51+00:00"
         },
         {
             "name": "spatie/laravel-permission",
@@ -10202,21 +10265,22 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.1.14",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "cd28fc05b0c9d3beaf58b57018725c4dc15a6446"
+                "reference": "e174a4c4324f50a6f2de472aa1055c24a2fe2b2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/cd28fc05b0c9d3beaf58b57018725c4dc15a6446",
-                "reference": "cd28fc05b0c9d3beaf58b57018725c4dc15a6446",
+                "url": "https://api.github.com/repos/composer/composer/zipball/e174a4c4324f50a6f2de472aa1055c24a2fe2b2a",
+                "reference": "e174a4c4324f50a6f2de472aa1055c24a2fe2b2a",
                 "shasum": ""
             },
             "require": {
                 "composer/ca-bundle": "^1.0",
                 "composer/metadata-minifier": "^1.0",
+                "composer/pcre": "^1.0",
                 "composer/semver": "^3.0",
                 "composer/spdx-licenses": "^1.2",
                 "composer/xdebug-handler": "^2.0",
@@ -10246,7 +10310,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.1-dev"
+                    "dev-main": "2.2-dev"
                 }
             },
             "autoload": {
@@ -10280,7 +10344,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
-                "source": "https://github.com/composer/composer/tree/2.1.14"
+                "source": "https://github.com/composer/composer/tree/2.2.0"
             },
             "funding": [
                 {
@@ -10296,7 +10360,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-30T09:51:43+00:00"
+            "time": "2021-12-22T10:03:27+00:00"
         },
         {
             "name": "composer/metadata-minifier",

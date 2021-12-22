@@ -4,6 +4,60 @@ use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
+if (!function_exists('blockToHtml')) {
+    function blockToHtml($blocks)
+    {
+        $content = '';
+        // dd($blocks['blocks']);
+        foreach ($blocks['blocks'] as $block) {
+            if ($block['type'] == 'paragraph') {
+                $content .= '<p>' . $block['data']['text'] . "</p>\n";
+            } elseif ($block['type'] == 'header') {
+                $content .= '<h' . $block['data']['level'] . '>' . $block['data']['text'] . '</h' . $block['data']['level'] . ">\n";
+            } elseif ($block['type'] == 'list') {
+                $listTag = ($block['data']['style'] == 'ordered') ? 'ol' : 'ul';
+                $content .= '<' . $listTag . ">\n";
+
+                foreach ($block['data']['items'] as $itemText) {
+                    $content .= "\t<li>" . $itemText . "</li>\n";
+                }
+                $content .= '</' . $listTag . ">\n";
+            } elseif ($block['type'] == 'checklist') {
+                foreach ($block['data']['items'] as $itemText) {
+                    $content .= "<label>\n";
+                    $content .= '<input ' . ($itemText['checked'] ? 'checked' : '') . " type=\"checkbox\" disabled=\"true\" />\n";
+                    $content .= $itemText['text'] . "</label>\n<br/>";
+                }
+            } elseif ($block['type'] == 'image') {
+                $stretched = ($block['data']['stretched']) ? 'w-full' : 'w-auto';
+                $content .= '<img src=' . $block['data']['file']['url'] . ' class="' . $stretched . '" />' . "\n";
+            } elseif ($block['type'] == 'table') {
+                $rows = '';
+                foreach ($block['data']['content'] as $key => $row) {
+                    $rows .= '<tr>';
+                    if ($block['data']['withHeadings'] === true && $key == 0) {
+                        foreach ($row as $col) {
+                            $rows .= '<td class="border-b font-semibold text-left border-gray-100 text-base p-4 pl-8 text-gray-500">';
+                            $rows .= $col;
+                            $rows .= '</td>';
+                        }
+                    } else {
+                        foreach ($row as $col) {
+                            $rows .= '<td class="border-b text-left border-gray-100 p-4 pl-8 text-gray-500">';
+                            $rows .= $col;
+                            $rows .= '</td>';
+                        }
+                    }
+                    $rows .= '</tr>';
+                }
+                $content .= '<table  class="border-collapse table-fixed w-full text-sm"><tbody class="bg-white dark:bg-gray-800">' . $rows . '</tbody></table>' . "\n";
+            }
+        }
+
+        return $content;
+    }
+}
+
 if (!function_exists('discount')) {
     function discount($price, $procent)
     {

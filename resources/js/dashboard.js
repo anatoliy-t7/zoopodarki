@@ -1,4 +1,5 @@
 require('./bootstrap');
+require('./vendor/livewire-editorjs/editorjs.js');
 
 import BigPicture from 'bigpicture';
 

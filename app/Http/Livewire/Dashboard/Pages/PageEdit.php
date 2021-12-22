@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Dashboard\Pages;
 
 use App\Models\Page;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -20,15 +19,26 @@ class PageEdit extends Component
     public $meta_title;
     public $meta_description;
     public $slug;
-    public $template = 'plain';
-    public $content = '[]';
+    public $pageTemplate = 'plain';
+    public $editor = [
+        [
+            'title' => '',
+            'content' => '',
+        ],
+    ];
     public $isActive = false;
     public $newFiles = [];
     public $templates = [];
     protected $listeners = [
         'save',
+        'editorjs-save' => 'saveDataEditor',
     ];
     protected $queryString = ['pageId'];
+    protected $rules = [
+        'editor.*.title' => 'required|string|min:3',
+        'editor.*.content' => 'required|string',
+        'pageTemplate' => 'required',
+    ];
 
     public function mount()
     {
@@ -38,11 +48,12 @@ class PageEdit extends Component
             $this->title = $page->title;
             $this->meta_title = $page->meta_title;
             $this->meta_description = $page->meta_description;
-            $this->template = $page->template;
+            $this->pageTemplate = $page->template;
             $this->slug = $page->slug;
             $this->isActive = $page->isActive;
             if (!empty($page->content) || $page->content != '') {
-                $this->content = $page->content;
+                $this->editor = json_decode($page->content, true);
+                // dd($this->editor);
             }
         }
         $this->getListOfTemplates();
@@ -57,45 +68,28 @@ class PageEdit extends Component
         }
     }
 
-    public function completeUpload($uploadedUrl, $eventName)
+    public function addBlockOfEditor()
     {
-        foreach ($this->newFiles as $file) {
-            if ($file->getFilename() === $uploadedUrl) {
-                $newFileName = $file->store('public/content');
-
-                $url = Storage::disk('local')->url($newFileName);
-                $this->dispatchBrowserEvent($eventName, [
-                    'url' => $url,
-                    'href' => $url,
-                ]);
-
-                return;
-            }
-        }
+        array_push($this->editor, [
+            'title' => '',
+            'content' => '',
+        ]);
     }
 
-    public function removeFileAttachment($url)
+    public function removeBlockOfEditor($index)
     {
-        try {
-            Storage::disk('public')->delete('content/' . $url);
-
-            toast()
-                ->success('Изображение удалено')
-                ->push();
-        } catch (\Throwable$th) {
-            toast()
-                ->warning('Изображение не удалено')
-                ->push();
-        }
+        unset($this->editor[$index]);
     }
 
-    public function save($content)
+    public function saveDataEditor($editorJsonData)
     {
-        $content = Str::replace('\"', "'", $content);
+        $index = Str::after($editorJsonData['editorId'], 'editor');
+        $this->editor[$index]['content'] = json_encode($editorJsonData['data']);
+    }
 
-        $this->content = $content;
-        // dd($this->content);
-
+    public function save()
+    {
+        // dd($this->editor);
         $this->validate([
             'title' => 'required|unique:pages,title,' . $this->pageId,
             'slug' => 'required',
@@ -109,7 +103,8 @@ class PageEdit extends Component
                     'meta_title' => trim($this->meta_title),
                     'meta_description' => trim($this->meta_description),
                     'slug' => $this->slug,
-                    'content' => $this->content,
+                    'template' => $this->pageTemplate,
+                    'content' => json_encode($this->editor),
                     'isActive' => $this->isActive,
                 ]
             );

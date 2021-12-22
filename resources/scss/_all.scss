@@ -84,14 +84,6 @@ p:not(:last-child) {
 	@apply mb-1;
 }
 
-article h4 {
-	@apply text-xl font-semibold;
-}
-
-article h4:not(:first-of-type) {
-	@apply pt-5 pb-3;
-}
-
 .btn,
 button {
 	@apply transition ease-in-out cursor-pointer;

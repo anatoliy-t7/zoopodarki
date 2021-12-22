@@ -565,7 +565,8 @@
         </div>
 
         <div x-cloak class="w-full pb-6 content">
-          <div :class="tab == 1 ? 'block' : 'hidden'" class="pt-4 leading-normal" itemprop="description">
+          <div :class="tab == 1 ? 'block' : 'hidden'" class="pt-4 leading-normal prose max-w-none"
+            itemprop="description">
             @if ($product->description)
               {!! $product->description !!}
             @else
@@ -574,13 +575,15 @@
           </div>
 
           @if ($product->consist)
-            <div :class="tab == 2 ? 'block' : 'hidden'" x-transition.opacity class="pt-4 leading-normal">
+            <div :class="tab == 2 ? 'block' : 'hidden'" x-transition.opacity
+              class="pt-4 leading-normal prose max-w-none">
               {!! $product->consist !!}
             </div>
           @endif
 
           @if ($product->applying)
-            <div :class="tab == 3 ? 'block' : 'hidden'" x-transition.opacity class="pt-4 leading-normal">
+            <div :class="tab == 3 ? 'block' : 'hidden'" x-transition.opacity
+              class="pt-4 leading-normal prose max-w-none">
               {!! $product->applying !!}
             </div>
           @endif

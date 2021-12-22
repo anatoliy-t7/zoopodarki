@@ -5,7 +5,7 @@
     Новая страница
   @endif
 @endsection
-<div x-data="editor" @save.window="save(event)">
+<div>
 
   <div class="flex items-center justify-between w-full pb-4 space-x-6">
 
@@ -49,76 +49,49 @@
           @error('slug') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
         </div>
         <div class="flex flex-col gap-1">
-          <label class="font-bold">Дизайн страницы</label>
+          <label for="template" class="font-bold">Дизайн страницы</label>
           <div class="relative">
-            <select wire:model.defer="template" name="template" class="field">
+            <select wire:model.defer="pageTemplate" name="template" id="template" class="field">
               @foreach ($templates as $template)
                 <option value="{{ $template }}">{{ $template }}</option>
               @endforeach
             </select>
           </div>
-          @error('template')
+          @error('pageTemplate')
             <span class="text-sm text-red-500">{{ $message }}</span>
           @enderror
         </div>
       </div>
     </div>
 
-    <div class="space-y-6">
-      <div class="space-y-6">
-        <div x-cloak class="space-y-6">
-          <template x-for="(block, index) in content" :key="index" hidden>
-            <div class="flex gap-6">
+    <div class="flex flex-col gap-6">
+      @foreach ($editor as $index => $block)
+        <div class="flex items-start gap-6" wire:key="content-field-{{ $index }}">
+          <div wire:ignore class="flex flex-col w-full max-w-screen-md gap-4">
+            <input type="text" wire:model.defer="editor.{{ $index }}.title" placeholder="Заголовок блока">
 
-              <div wire:ignore x-on:trix-change="content[index] = document.getElementById(`content${index}`).value"
-                x-on:trix-initialize="document.getElementById(`content${index}`).editor.loadHTML(block)"
-                x-on:trix-attachment-add="uploadFileAttachment($event.attachment)"
-                x-on:trix-attachment-remove="removeFileAttachment($event.attachment)" class="w-full">
-
-                <trix-editor :id="'content' + index"></trix-editor>
-
-              </div>
-              <button class="text-gray-500 border border-gray-100 hover:text-red-500 btn hover:border-red-300"
-                x-on:click="removeBlock(index)">
-                <x-tabler-trash class="w-6 h-6" />
-              </button>
-
-            </div>
-          </template>
+            <livewire:editor editor-id="editor{{ $index }}" :value="$editor[$index]['content']"
+              class="prose max-w-none" :wire:key="$loop->index" />
+          </div>
+          <button class="text-gray-500 border border-gray-100 hover:text-red-500 btn hover:border-red-300"
+            wire:click="removeBlockOfEditor({{ $index }})">
+            <x-tabler-trash class="w-6 h-6" />
+          </button>
         </div>
-        <div>
-          <button class="text-white bg-blue-400 btn hover:bg-blue-500 hover:shadow-blue-200 hover:shadow-md"
-            @click="addNewField">Добавить блок</button>
-        </div>
-
-        <script>
-          document.addEventListener('alpine:init', () => {
-            Alpine.data('editor', () => ({
-              content: [' '],
-              init() {
-                this.content = JSON.parse(@json($content));
-              },
-              addNewField() {
-                this.content.push('');
-              },
-              removeBlock(index) {
-
-                this.content.splice(index, 1);
-              },
-              save() {
-                window.livewire.emit('save', JSON.stringify(this.content))
-              },
-            }))
-          })
-        </script>
+      @endforeach
+      <div>
+        <button class="text-white bg-blue-400 btn hover:bg-blue-500 hover:shadow-blue-200 hover:shadow-md"
+          wire:click="addBlockOfEditor">Добавить блок</button>
       </div>
+    </div>
+
+    <div class="space-y-6">
 
       <div class="flex items-center justify-between space-x-6">
 
         <div class="flex items-center justify-end space-x-6">
 
           <x-toggle wire:model="isActive" :property="$isActive" :lable="'Опубликована'" />
-
 
           @if ($pageId)
             <div x-data="{ confirm: false }" class="relative">
@@ -148,8 +121,8 @@
             </div>
           @endif
 
-
-          <button @click="save()" class="p-2 px-3 text-white bg-pink-500 cursor-pointer rounded-2xl hover:bg-pink-700">
+          <button wire:click="save"
+            class="p-2 px-3 text-white bg-pink-500 cursor-pointer rounded-2xl hover:bg-pink-700">
             Сохранить
           </button>
         </div>
@@ -158,35 +131,11 @@
 
     </div>
     <script>
-      function uploadFileAttachment(attachment) {
-        console.log(attachment)
-
-        @this.upload('newFiles', attachment.file, function(uploadedUrl) {
-          const eventName = 'zoo:trix-upload-completed:${btoa(uploadedUrl)}';
-          const listener = function(event) {
-            attachment.setAttributes(event.detail);
-            window.removeEventListener(eventName, listener);
-          }
-          window.addEventListener(eventName, listener)
-          @this.call('completeUpload', uploadedUrl, eventName);
-
-        }, () => {}, function(event) {
-          attachment.setUploadProgress(event.detail.progress)
-        })
-
-      }
-
-      function removeFileAttachment(attachment) {
-        @this.call('removeFileAttachment', attachment.attachment.attributes.values.url.split("/").pop());
-      }
-
       document.addEventListener("keydown", function(e) {
         if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.keyCode == 83) {
           e.preventDefault();
-          var event = new CustomEvent('save');
-          window.dispatchEvent(event);
+          window.livewire.emit('save')
         }
-
       }, false);
     </script>
   </div>

@@ -559,7 +559,7 @@
                       <div class="flex items-center justify-between space-x-4">
 
                         <div class="w-32">
-                          <input wire:model="variations.{{ $key }}.unit_value"
+                          <input wire:model.defer="variations.{{ $key }}.unit_value"
                             value="{{ $item['unit_value'] }}" placeholder="100" type="text">
 
                         </div>
@@ -598,7 +598,7 @@
             <label class="flex items-center justify-end space-x-4">
               <span class="text-gray-700">Статус</span>
               <div class="relative">
-                <select wire:model="status" name="status" class="mt-1 field">
+                <select wire:model.defer="status" name="status" class="mt-1 field">
                   @foreach ($statuses as $item)
                     <option value="{{ $item }}">{{ __('constants.product_status.' . $item) }}</option>
                   @endforeach

@@ -8,6 +8,8 @@
 	},
 	"devDependencies": {
 		"@editorjs/image": "^2.6.2",
+		"@tailwindcss/line-clamp": "^0.3.0",
+		"@tailwindcss/typography": "^0.5.0",
 		"autoprefixer": "^10",
 		"browser-sync": "^2.27.7",
 		"browser-sync-webpack-plugin": "^2.3.0",
@@ -20,11 +22,14 @@
 		"resolve-url-loader": "^4.0.0",
 		"sass": "^1.45.0",
 		"sass-loader": "^12.4.0",
-		"tailwindcss": "^3",
-		"@tailwindcss/line-clamp": "^0.3.0"
+		"tailwindcss": "^3"
 	},
 	"dependencies": {
 		"@alpinejs/persist": "^3.7.0",
+		"@editorjs/editorjs": "^2.22.2",
+		"@editorjs/header": "^2.6.2",
+		"@editorjs/list": "^1.6.2",
+		"@editorjs/table": "^2.0.1",
 		"@splidejs/splide": "^3.6.9",
 		"@yaireo/tagify": "^4.9.4",
 		"alpinejs": "^3.7.0",

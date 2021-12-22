@@ -8,8 +8,8 @@
 @endif
 
 @section('content')
-  @if ($page->temaplate == 'delivery')
-    @include ('site.pages.templates.delivery')
+  @if ($page->template == 'accordion')
+    @include ('site.pages.templates.accordion')
   @else
     @include ('site.pages.templates.plain')
   @endif
