@@ -17,7 +17,7 @@
             <div class="relative overflow-hidden transition-all duration-700 max-h-0"
               x-ref="container{{ $key }}"
               x-bind:style="selected == {{ $key }} ? 'max-height: ' + $refs.container{{ $key }}.scrollHeight + 'px' : ''">
-              <div class="py-4 prose max-w-none">
+              <div class="px-8 pt-4 pb-6 prose max-w-none">
                 {!! blockToHtml(json_decode($block['content'], true)) !!}
               </div>
             </div>

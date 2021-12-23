@@ -18,7 +18,7 @@ trait ExportImport
         $collection = (new FastExcel())->import($filePath);
 
         try {
-            $this->createTagsFromCollection($collection);
+            $this->importData($collection);
 
             return true;
         } catch (\Throwable $th) {
@@ -33,8 +33,8 @@ trait ExportImport
     public function importData($collection)
     {
         foreach ($collection->toArray() as $key => $row) {
-            if (Product::where('id', $row['id'])->first()) {
-                $product1c = Product::where('id', $row['id'])
+            if (Product1C::where('id', $row['id'])->first()) {
+                $product1c = Product1C::where('id', $row['id'])
                 ->first();
 
 
@@ -46,48 +46,49 @@ trait ExportImport
         }
     }
 
-    public function setAttributes(Product $product, $row)
+    public function setAttributes(Product1C $product1c, $row)
     {
-        $attrsId = [4, 52, 66];
+        $product1c->unit_value = 'на развес';
+        $product1c->save();
 
-        foreach ($attrsId as $itemId) {
-            if (data_get($row, $itemId) !== '') {
-                $attr = Attribute::where('id', $itemId)
-                ->with('items')
-                ->first();
-
-
-                $product->unit()->associate(5);
+        // foreach ($attrsId as $itemId) {
+        //     if (data_get($row, $itemId) !== '') {
+        //         $attr = Attribute::where('id', $itemId)
+        //         ->with('items')
+        //         ->first();
 
 
-                $value = trim($row[$itemId]);
+        //         $product->unit()->associate(5);
+
+
+        //         $value = trim($row[$itemId]);
 
 
 
-                if (!empty($value)) {
-                    if ($attr->items()->exists() && $attr->items()->where('name', $value)->first()) {
-                        $attribute_item = $attr->items()->where('name', $value)->first();
-                        // dd($attribute_item);
-                        if (!$product->attributes()
-                                    ->where('attribute_item.attribute_id', $attr->id)
-                                    ->where('attribute_item.id', $attribute_item->id)
-                                    ->first()) {
-                            $product->attributes()->attach($attribute_item->id);
-                        }
-                    } else {
-                        $attribute_item = AttributeItem::create([
-                            'name' => $value,
-                            'attribute_id' => $attr->id,
-                        ]);
+        //         if (!empty($value)) {
+        //             if ($attr->items()->exists() && $attr->items()->where('name', $value)->first()) {
+        //                 $attribute_item = $attr->items()->where('name', $value)->first();
+        //                 // dd($attribute_item);
+        //                 if (!$product->attributes()
+        //                             ->where('attribute_item.attribute_id', $attr->id)
+        //                             ->where('attribute_item.id', $attribute_item->id)
+        //                             ->first()) {
+        //                     $product->attributes()->attach($attribute_item->id);
+        //                 }
+        //             } else {
+        //                 $attribute_item = AttributeItem::create([
+        //                     'name' => $value,
+        //                     'attribute_id' => $attr->id,
+        //                 ]);
 
-                        $product->attributes()->attach($attribute_item->id);
-                    }
-                    unset($attribute_item);
-                }
+        //                 $product->attributes()->attach($attribute_item->id);
+        //             }
+        //             unset($attribute_item);
+        //         }
 
-                unset($attr);
-            }
-        }
+        //         unset($attr);
+        //     }
+        // }
         unset($attrsId);
     }
 

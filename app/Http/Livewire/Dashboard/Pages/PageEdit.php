@@ -116,13 +116,6 @@ class PageEdit extends Component
         });
     }
 
-    public function remove()
-    {
-        Page::find($this->pageId)->delete();
-
-        redirect()->route('dashboard.pages');
-    }
-
     public function render()
     {
         return view('livewire.dashboard.pages.page-edit')

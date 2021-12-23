@@ -135,8 +135,8 @@
               <div class="flex flex-col items-center justify-start space-x-8 md:flex-row">
                 @forelse ($brandsOffer as $brand)
                   <div>
-                    <a title="Товары бренда {{ $brand->name }}" href="{{ route('site.brand', $brand->slug) }}"
-                      class="p-2 group">
+                    <a title="Товары бренда {{ $brand->name }}"
+                      href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}" class="p-2 group">
                       @if ($brand->logo)
                         <img src="/brands/{{ $brand->logo }}" alt="Товары бренда {{ $brand->name }}"
                           class="group-hover:text-blue-500">

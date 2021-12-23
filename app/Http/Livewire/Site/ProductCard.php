@@ -166,9 +166,11 @@ class ProductCard extends Component
                 $query->where('status', 'published');
             },
             ])
-            ->with('brand')
-            ->with('attributes')
             ->with('attributes.attribute')
+            ->withWhereHas('attributes', function ($query) {
+                $query->where('show', true);
+            })
+            ->with('brand')
             ->with('serie')
             ->with('unit')
             ->with('variations')

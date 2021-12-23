@@ -22,6 +22,10 @@
   @stack('header-css')
   <link href="{{ mix('css/app.css') }}" rel="stylesheet">
   <livewire:styles>
+    <link rel="preload" href="{{ asset('assets/fonts/nunito-v20-latin_cyrillic-700.woff2') }}" as="font"
+      type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="{{ asset('assets/fonts/nunito-v20-latin_cyrillic-800.woff2') }}" as="font"
+      type="font/woff2" crossorigin="anonymous" />
     @stack('header-js')
 </head>
 

@@ -71,7 +71,7 @@
             <input type="text" wire:model.defer="editor.{{ $index }}.title" placeholder="Заголовок блока">
 
             <livewire:editor editor-id="editor{{ $index }}" :value="$editor[$index]['content']"
-              class="prose max-w-none" :wire:key="$loop->index" />
+              class="max-h-screen prose max-w-none" :wire:key="$loop->index" />
           </div>
           <button class="text-gray-500 border border-gray-100 hover:text-red-500 btn hover:border-red-300"
             wire:click="removeBlockOfEditor({{ $index }})">
@@ -87,39 +87,12 @@
 
     <div class="space-y-6">
 
-      <div class="flex items-center justify-between space-x-6">
+      <div class="flex items-center justify-end space-x-6">
+
 
         <div class="flex items-center justify-end space-x-6">
 
           <x-toggle wire:model="isActive" :property="$isActive" :lable="'Опубликована'" />
-
-          @if ($pageId)
-            <div x-data="{ confirm: false }" class="relative">
-
-              <button x-on:click="confirm = true" type="button" title="remove"
-                class="p-2 text-gray-400 rounded-lg hover:text-red-500">
-                <x-tabler-trash class="w-6 h-6 stroke-current" />
-              </button>
-
-              <div x-show="confirm === true" x-transition
-                class="absolute top-0 left-0 px-4 py-2 -mt-10 bg-white shadow-xl rounded-2xl">
-                <h3 class="">Вы уверены?</h3>
-                <div class="flex justify-around">
-                  <button x-on:click="confirm = false"
-                    class="px-3 py-2 text-blue-400 rounded-lg hover:text-blue-500 focus:outline-none focus:ring hover:bg-gray-200"
-                    type="button">
-                    Нет
-                  </button>
-                  <button x-on:click="confirm = false" wire:click="remove"
-                    class="px-3 py-2 text-red-400 rounded-lg hover:text-red-600 focus:outline-none focus:ring hover:bg-gray-200"
-                    type="button">
-                    Удалить
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          @endif
 
           <button wire:click="save"
             class="p-2 px-3 text-white bg-pink-500 cursor-pointer rounded-2xl hover:bg-pink-700">

@@ -46,7 +46,7 @@ $watch('confirmId', value => {
   </div>
 
   <button x-on:click="confirmId = {{ $confirmId }}"
-    class="px-5 py-2 font-semibold text-gray-400 transition duration-200 hover:text-red-500 focus:outline-none focus:shadow-outline">
+    class="px-2 py-2 font-semibold text-gray-400 transition duration-200 hover:text-red-500 focus:outline-none focus:shadow-outline">
     <x-tabler-trash class="w-6 h-6 stroke-current" />
   </button>
 

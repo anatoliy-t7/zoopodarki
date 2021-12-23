@@ -22,7 +22,7 @@
           <div class="flex items-center justify-between space-x-6">
             <div>
               @if ($product->brand()->exists())
-                <a href="{{ route('site.brand', $product->brand->slug) }}">
+                <a href="{{ route('site.brand', ['brandslug' => $product->brand->slug]) }}">
                   @if ($product->brand->logo)
                     <img loading="lazy" class="w-auto h-10" src="/brands/{{ $product->brand->logo }}"
                       alt="Логотип {{ $product->brand->name }}">
@@ -564,9 +564,8 @@
           </div>
         </div>
 
-        <div x-cloak class="w-full pb-6 content">
-          <div :class="tab == 1 ? 'block' : 'hidden'" class="pt-4 leading-normal prose max-w-none"
-            itemprop="description">
+        <div x-cloak class="w-full pb-6 prose content max-w-none">
+          <div :class="tab == 1 ? 'block' : 'hidden'" class="pt-4 leading-normal" itemprop="description">
             @if ($product->description)
               {!! $product->description !!}
             @else
@@ -575,15 +574,13 @@
           </div>
 
           @if ($product->consist)
-            <div :class="tab == 2 ? 'block' : 'hidden'" x-transition.opacity
-              class="pt-4 leading-normal prose max-w-none">
+            <div :class="tab == 2 ? 'block' : 'hidden'" x-transition.opacity class="pt-4 leading-normal">
               {!! $product->consist !!}
             </div>
           @endif
 
           @if ($product->applying)
-            <div :class="tab == 3 ? 'block' : 'hidden'" x-transition.opacity
-              class="pt-4 leading-normal prose max-w-none">
+            <div :class="tab == 3 ? 'block' : 'hidden'" x-transition.opacity class="pt-4 leading-normal">
               {!! $product->applying !!}
             </div>
           @endif

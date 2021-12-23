@@ -83,17 +83,18 @@
 
               <x-dashboard.table.cell>
 
-                <div class="flex items-center gap-4 opacity-0 group-hover:opacity-100">
+                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100">
+                  <a class="p-2 text-gray-400 hover:text-orange-400"
+                    href="{{ route('site.page', ['slug' => $page->slug]) }}" target="_blank">
+                    <x-tabler-external-link class="w-6 h-6 stroke-current" />
+                  </a>
 
-                  <a id="add" title="Редактировать" class="text-gray-400 hover:text-orange-400"
+                  <a id="add" title="Редактировать" class="p-2 text-gray-400 hover:text-orange-400"
                     href="{{ route('dashboard.page.edit', ['pageId' => $page->id]) }}">
                     <x-tabler-edit class="w-6 h-6 stroke-current" />
                   </a>
 
-                  <a class="text-gray-400 hover:text-orange-400"
-                    href="{{ route('site.page', ['slug' => $page->slug]) }}" target="_blank">
-                    <x-tabler-external-link class="w-6 h-6 stroke-current" />
-                  </a>
+                  <x-dashboard.confirm wire:click="remove({{ $page->id }})" :confirmId="$page->id" />
                 </div>
 
               </x-dashboard.table.cell>

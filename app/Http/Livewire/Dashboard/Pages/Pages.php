@@ -5,10 +5,21 @@ namespace App\Http\Livewire\Dashboard\Pages;
 use App\Models\Page;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Pages extends Component
 {
+    use WireToast;
     use WithPagination;
+
+    public function remove($pageId)
+    {
+        Page::find($pageId)->delete();
+
+        toast()
+            ->success('Страница удалена')
+            ->push();
+    }
 
     public function render()
     {

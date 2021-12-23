@@ -37,20 +37,20 @@ if (!function_exists('blockToHtml')) {
                     $rows .= '<tr>';
                     if ($block['data']['withHeadings'] === true && $key == 0) {
                         foreach ($row as $col) {
-                            $rows .= '<td class="border-b font-semibold text-left border-gray-100 text-base p-4 pl-8 text-gray-500">';
+                            $rows .= '<td class="p-4 pl-8 text-base font-semibold text-left text-gray-500 border-b border-gray-100">';
                             $rows .= $col;
                             $rows .= '</td>';
                         }
                     } else {
                         foreach ($row as $col) {
-                            $rows .= '<td class="border-b text-left border-gray-100 p-4 pl-8 text-gray-500">';
+                            $rows .= '<td class="p-4 pl-8 text-left text-gray-500 border-b border-gray-100">';
                             $rows .= $col;
                             $rows .= '</td>';
                         }
                     }
                     $rows .= '</tr>';
                 }
-                $content .= '<table  class="border-collapse table-fixed w-full text-sm"><tbody class="bg-white dark:bg-gray-800">' . $rows . '</tbody></table>' . "\n";
+                $content .= '<table  class="w-full text-sm border-collapse table-fixed"><tbody class="bg-white dark:bg-gray-800">' . $rows . '</tbody></table>' . "\n";
             }
         }
 
@@ -128,7 +128,7 @@ if (!function_exists('getNextOrderNumber')) {
 if (!function_exists('kg')) {
     function kg($value)
     {
-        if ($value !== 0) {
+        if ($value !== 0 && $value !== null) {
             if (is_string($value)) {
                 if (Str::contains($value, 'на развес')) {
                     return $value;
@@ -137,7 +137,6 @@ if (!function_exists('kg')) {
                 $value = Str::replace('гр', '', $value);
                 $value = trim($value);
             }
-
 
             if (strlen((string) $value) > 3) {
                 $value = intval($value) / 1000;
