@@ -354,8 +354,7 @@
           <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
               <td class="align-center" width="100%">
-                <a href="{{ route('site.home') }}"><img loading="lazy"
-                    src="{{ route('site.home') }}/assets/img/favicon.svg" height="40" alt="ZooPodarki"></a>
+                <x-logo style="width: 80px" />
               </td>
             </tr>
           </table>

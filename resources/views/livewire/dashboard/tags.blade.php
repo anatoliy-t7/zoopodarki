@@ -169,7 +169,7 @@
 
       <x-dashboard.modal>
 
-        <x-loader wire:target="openForm, save" />
+        <x-loader wire:target="openForm, save, categoryId, selectedTypeFilterId, selectedFilterId" />
 
         <div class="flex flex-col justify-between h-screen space-y-2">
 

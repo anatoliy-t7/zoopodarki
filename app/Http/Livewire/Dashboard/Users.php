@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Dashboard;
 
+use App\Mail\UserRegistration;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
@@ -77,18 +79,14 @@ class Users extends Component
     public function save()
     {
         $this->validate([
-            'name' => 'required|string|max:255',
-            'company' => 'boolean',
+            'name' => ['required', 'string', 'max:50'],
+            'email' => ['nullable', 'unique:users,email,' . $this->userId],
+            'phone' => ['required', 'digits:10', 'unique:users,phone,' . $this->userId],
+            'password' => ['nullable', 'string', 'min:8'],
         ]);
 
-        $this->validate([
-            'email' => 'required|between:5,64|email|unique:users,email,' . $this->userId,
-        ]);
-
-        if ($this->phone) {
-            $this->validate([
-                'phone' => 'required|digits:10|unique:users,phone,' . $this->userId,
-            ]);
+        if (!$this->password) {
+            $this->password = Str::random(10);
         }
 
         DB::transaction(function () {
@@ -100,22 +98,21 @@ class Users extends Component
                     'phone' => $this->phone,
                     'company' => $this->company,
                     'discount' => $this->discount,
+                    'password' => Hash::make($this->password),
                 ]
             );
-
-            if ($this->password) {
-                $user->update([
-                    'password' => Hash::make($this->password),
-                ]);
-            }
-
-            $user->save();
 
             $user->syncRoles($this->userRoles);
 
             toast()
-                ->success($this->name . ' сохранен')
+                ->success($user->name . ' сохранен')
                 ->push();
+
+            \Mail::to($user->email)
+            ->send(new UserRegistration([
+                'email' => $user->email,
+                'password' => $this->password,
+            ]));
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');
