@@ -3,23 +3,6 @@
 @endsection
 <div>
 
-  @push('header-css')
-    <style>
-      .trix-button-group--file-tools {
-        display: none !important;
-      }
-
-      .trix-button--icon-code {
-        display: none !important;
-      }
-
-      .trix-button--icon-quote {
-        display: none !important;
-      }
-
-    </style>
-  @endpush
-
   <div x-data="handler" @get-items.window="getItems(event)" @new.window="openForm(event)" @save.window="saveForm(event)"
     @close.window="closeForm(event)" class="space-y-2">
 
@@ -119,6 +102,7 @@
       <x-dashboard.modal>
 
         <x-loader wire:target="openForm, saveIt" />
+
 
         <div class="flex flex-col justify-between h-screen space-y-2">
 
@@ -236,19 +220,11 @@
 
               <div class="w-9/12">
 
-                <div x-data="{ description: @entangle('description').defer }" x-init="$watch('description', function (value) {
-                             $refs.trix.editor.loadHTML(value)
-                             var length = $refs.trix.editor.getDocument().toString().length
-                             $refs.trix.editor.setSelectedRange(length - 1)
-                             }
-                         )" wire:ignore class="space-y-2">
+                <div>
                   <label class="font-bold">Описание</label>
-                  <input id="description" name="description" x-model="description" type="hidden" />
-                  <div wire:ignore x-on:trix-blur="description = $refs.trix.value"
-                    class="w-auto p-4 bg-white rounded-xl">
-                    <trix-editor x-ref="trix" input="description" class="h-48 overflow-y-scroll">
-                    </trix-editor>
-                  </div>
+                  @if ($brandId)
+                    <x-editor :index="$brandId" :content="$description" wire:model.defer="description" />
+                  @endif
                   @error('description')
                   <span class="block text-sm text-red-500">{{ $message }}</span> @enderror
                 </div>
@@ -405,6 +381,10 @@
       }
     </script>
 
-
+    @once
+      @push('header-js')
+        <script src="/js/ckeditor/ckeditor.js" defer></script>
+      @endpush
+    @endonce
   </div>
 </div>

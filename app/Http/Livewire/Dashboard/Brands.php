@@ -215,43 +215,11 @@ class Brands extends Component
         }
     }
 
-    // todo test
-    public function completeUpload($uploadedUrl, $eventName)
-    {
-        foreach ($this->newFiles as $file) {
-            if ($file->getFilename() === $uploadedUrl) {
-                $newFileName = $file->store('public/content');
-
-                $url = Storage::disk('local')->url($newFileName);
-                $this->dispatchBrowserEvent($eventName, [
-                    'url' => $url,
-                    'href' => $url,
-                ]);
-
-                return;
-            }
-        }
-    }
-
-    public function removeFileAttachment($url)
-    {
-        try {
-            Storage::disk('public')->delete('content/' . $url);
-
-            toast()
-                ->info('Изображение удалено')
-                ->push();
-        } catch (\Throwable$th) {
-            toast()
-                ->warning('Изображение не удалено')
-                ->push();
-        }
-    }
 
     public function closeForm()
     {
         $this->resetFields();
-        $this->dispatchBrowserEvent('get-items', $this->itemsName);
+        $this->dispatchBrowserEvent('get-items', []);
         $this->dispatchBrowserEvent('close');
     }
 

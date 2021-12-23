@@ -129,35 +129,20 @@
 
                 <div class="space-y-1">
                   <label for="description" class="font-bold">Описание</label>
-                  <input id="description" name="description" value='{{ $description }}' type="hidden" />
-                  <div wire:ignore x-on:trix-change.defer="$wire.set('description', $refs.descriptionInput.value, true)"
-                    x-on:trix-attachment-add="uploadFileAttachment($event.attachment)"
-                    x-on:trix-attachment-remove="removeFileAttachment($event.attachment)">
-                    <trix-editor x-ref="descriptionInput" input="description">
-                    </trix-editor>
-                  </div>
+
+                  <x-editor :index="'description'" :content="$description" wire:model.defer="description" />
                 </div>
 
                 <div class="space-y-1">
                   <label for="consist" class="font-bold">Состав</label>
-                  <input id="consist" name="consist" value='{{ $consist }}' type="hidden" />
-                  <div wire:ignore x-on:trix-change.defer="$wire.set('consist', $refs.consistInput.value, true)"
-                    x-on:trix-attachment-add="uploadFileAttachment($event.attachment)"
-                    x-on:trix-attachment-remove="removeFileAttachment($event.attachment)">
-                    <trix-editor x-ref="consistInput" input="consist">
-                    </trix-editor>
-                  </div>
+
+                  <x-editor :index="'consist'" :content="$consist" wire:model.defer="consist" />
                 </div>
 
                 <div>
-                  <label for="consapplyingist" class="font-bold">Применение</label>
-                  <input id="applying" name="applying" value='{{ $applying }}' type="hidden" />
-                  <div wire:ignore x-on:trix-change.defer="$wire.set('applying', $refs.applyingInput.value, true)"
-                    x-on:trix-attachment-add="uploadFileAttachment($event.attachment)"
-                    x-on:trix-attachment-remove="removeFileAttachment($event.attachment)">
-                    <trix-editor x-ref="applyingInput" input="applying">
-                    </trix-editor>
-                  </div>
+                  <label for="applying" class="font-bold">Применение</label>
+
+                  <x-editor :index="'applying'" :content="$applying" wire:model.defer="applying" />
                 </div>
 
               </div>
@@ -630,29 +615,6 @@
   @endcan
 
   <script>
-    function uploadFileAttachment(attachment) {
-
-      @this.upload('newFiles', attachment.file, function(uploadedUrl) {
-        const eventName = 'zoo:trix-upload-completed:${btoa(unescape(encodeURIComponent(uploadedUrl)))}';
-        const listener = function(event) {
-          attachment.setAttributes(event.detail);
-          window.removeEventListener(eventName, listener);
-        }
-        window.addEventListener(eventName, listener)
-        @this.call('completeUpload', uploadedUrl, eventName);
-
-      }, () => {
-        console.log('Error');
-      }, function(event) {
-        attachment.setUploadProgress(event.detail.progress)
-      })
-
-    }
-
-    function removeFileAttachment(attachment) {
-      @this.call('removeFileAttachment', attachment.attachment.attributes.values.url.split("/").pop());
-    }
-
     document.addEventListener('alpine:initializing', () => {
       Alpine.data('handler', () => ({
         attributes: [],

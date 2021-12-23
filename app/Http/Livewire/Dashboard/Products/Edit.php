@@ -12,7 +12,6 @@ use App\Models\Product;
 use App\Models\ProductUnit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -157,38 +156,6 @@ class Edit extends Component
         $this->brands = Brand::orderBy('name', 'ASC')->get();
         $this->units = ProductUnit::orderBy('name', 'ASC')->get();
         $this->statuses = config('constants.product_status');
-    }
-
-    public function completeUpload($uploadedUrl, $eventName)
-    {
-        foreach ($this->newFiles as $file) {
-            if ($file->getFilename() === $uploadedUrl) {
-                $newFileName = $file->store('public/content');
-
-                $url = Storage::disk('local')->url($newFileName);
-                $this->dispatchBrowserEvent($eventName, [
-                    'url' => $url,
-                    'href' => $url,
-                ]);
-
-                return;
-            }
-        }
-    }
-
-    public function removeFileAttachment($url)
-    {
-        try {
-            Storage::disk('public')->delete('content/' . $url);
-
-            toast()
-                ->info('Изображение удалено')
-                ->push();
-        } catch (\Throwable$th) {
-            toast()
-                ->warning('Изображение не удалено')
-                ->push();
-        }
     }
 
     public function updated($field)
