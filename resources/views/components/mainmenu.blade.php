@@ -18,9 +18,8 @@
   </div>
 
   <div x-cloak x-show="open" x-transition.opacity @click.outside="open = false" id="megaMenu"
-    class="absolute left-0 z-40 w-full h-auto overflow-x-hidden bg-gray-100 top-16 scrollbar">
-    <div
-      class="relative z-50 flex items-start w-full h-auto mx-auto overflow-y-auto text-gray-700 max-w-screen overscroll-contain pb-28 sm:pb-0">
+    class="absolute left-0 z-40 w-full mt-2 overflow-x-hidden bg-gray-100 top-16">
+    <div class="relative z-50 flex items-start w-full h-auto mx-auto text-gray-700 max-w-screen pb-28 sm:pb-0">
       <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="w-3/12 py-6">
         <div itemprop="about" itemscope itemtype="http://schema.org/ItemList" class="h-full leading-snug bg-transparent">
           @foreach ($menuCatalogs as $menuCatalog)
@@ -43,14 +42,15 @@
           @endforeach
         </div>
       </nav>
-      <div class="flex self-stretch w-9/12 min-h-full p-8 bg-white"
+      <div class="flex self-stretch w-9/12 h-screen p-8 overflow-y-auto bg-white scrollbar"
         :class=" { 'rounded-tl-none' : tab==={{ $menuCatalog->id }} }">
         @foreach ($menuCatalogs as $catalog)
           <div x-show="tab == {{ $catalog->id }}" class="w-full">
             @if ($catalog->brandsById)
-              <div class="flex items-center justify-start pb-6 pl-16 space-x-12">
+              <div class="flex items-center justify-start pt-6 pb-10 pl-16 space-x-12">
                 @foreach ($catalog->brandsById as $brand)
-                  <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}">
+                  <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}"
+                    class="font-bold hover:text-orange-500">
                     @if ($brand->logo)
                       <img loading="lazy" class="w-auto h-24" src="/brands/{{ $brand->logo }}">
                     @else
@@ -60,7 +60,7 @@
                 @endforeach
               </div>
             @endif
-            <div class="flex flex-wrap w-full max-w-screen-lg">
+            <div class="flex flex-wrap w-full max-w-screen-lg pb-40">
               @foreach ($catalog->categories as $menuCategory)
                 <div class="py-2 pl-12 w-80">
                   <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug]) }}"
@@ -75,8 +75,7 @@
                   @if ($menuCategory->tags->count() > 0)
                     <div class="px-2 space-y-2">
                       @foreach ($menuCategory->tags as $tag)
-                        <a href="
-                      {{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug, 'tagslug' => $tag->slug]) }}"
+                        <a href="{{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug, 'tagslug' => $tag->slug]) }}"
                           class="block text-base text-gray-800 hover:text-orange-500">
                           {{ $tag->name }}
                         </a>
@@ -87,7 +86,6 @@
               @endforeach
             </div>
           </div>
-
         @endforeach
       </div>
     </div>

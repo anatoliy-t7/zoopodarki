@@ -307,24 +307,23 @@
 
         <div class="space-y-4">
 
-          <div class="text-2xl font-semibold">Помоги приюту</div>
+          <div class="text-2xl font-semibold text-center">Помоги приюту</div>
 
-          <div class="flex space-x-8">
+          <div class="flex justify-center space-x-8">
             <div class="w-6/12">
               <a href="#">
                 <img itemprop="image" loading="lazy"
-                  class="object-contain object-center w-full h-full bg-white rounded-2xl hover:brightness-105"
+                  class="object-contain object-center w-full h-full bg-white rounded-2xl hover:brightness-110"
                   src="/assets/img/dogs-shelter.webp" alt="Приют для собак">
               </a>
             </div>
+            {{-- <div class="w-6/12">
 
-            <div class="w-6/12">
-              <a href="#">
                 <img itemprop="image" loading="lazy"
-                  class="object-contain object-center w-full h-full bg-white rounded-2xl hover:brightness-105"
+                  class="object-contain object-center w-full h-full bg-white rounded-2xl hover:brightness-110"
                   src="/assets/img/cats-shelter.webp" alt="Приют для кошек">
-              </a>
-            </div>
+
+            </div> --}}
 
           </div>
         </div>

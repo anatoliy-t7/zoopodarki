@@ -288,3 +288,13 @@ article p {
 .first-letter::first-letter {
 	text-transform: capitalize;
 }
+
+.image-center img {
+	@apply mx-auto;
+}
+img.image-right {
+	@apply ml-auto;
+}
+img.image-left {
+	@apply mr-auto;
+}
