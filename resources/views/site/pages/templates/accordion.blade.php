@@ -18,7 +18,7 @@
               x-ref="container{{ $key }}"
               x-bind:style="selected == {{ $key }} ? 'max-height: ' + $refs.container{{ $key }}.scrollHeight + 'px' : ''">
               <div class="px-8 pt-4 pb-6 prose max-w-none">
-                {!! blockToHtml(json_decode($block['content'], true)) !!}
+                {!! $block['content'] !!}
               </div>
             </div>
           </div>

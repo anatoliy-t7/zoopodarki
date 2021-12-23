@@ -64,14 +64,18 @@
       </div>
     </div>
 
+    <div>
+
+    </div>
+
     <div class="flex flex-col gap-6">
       @foreach ($editor as $index => $block)
+
         <div class="flex items-start gap-6" wire:key="content-field-{{ $index }}">
           <div wire:ignore class="flex flex-col w-full max-w-screen-md gap-4">
             <input type="text" wire:model.defer="editor.{{ $index }}.title" placeholder="Заголовок блока">
-
-            <livewire:editor editor-id="editor{{ $index }}" :value="$editor[$index]['content']"
-              class="max-h-screen prose max-w-none" :wire:key="$loop->index" />
+            <x-editor :index="$index" :content="$block['content']"
+              wire:model.defer="editor.{{ $index }}.content" />
           </div>
           <button class="text-gray-500 border border-gray-100 hover:text-red-500 btn hover:border-red-300"
             wire:click="removeBlockOfEditor({{ $index }})">

@@ -65,7 +65,12 @@
                 <div class="py-2 pl-12 w-80">
                   <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug]) }}"
                     class="block p-2 text-lg font-bold text-gray-900 hover:text-orange-500">
-                    {{ $menuCategory->name }}
+                    @if ($menuCategory->menu_name !== null)
+                      {{ $menuCategory->menu_name }}
+                    @else
+                      {{ $menuCategory->name }}
+                    @endif
+
                   </a>
                   @if ($menuCategory->tags->count() > 0)
                     <div class="px-2 space-y-2">

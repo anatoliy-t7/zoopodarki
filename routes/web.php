@@ -145,5 +145,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
         Route::get('/waitlists', \App\Http\Livewire\Dashboard\Waitlists::class)->name('waitlists');
 
         Route::get('/excel', \App\Http\Livewire\Dashboard\Excel::class)->name('excel');
+
+        Route::post('upload', 'App\Http\Controllers\Dashboard\UploadController@upload')->name('upload');
     }
 );

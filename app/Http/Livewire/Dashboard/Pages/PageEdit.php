@@ -31,7 +31,7 @@ class PageEdit extends Component
     public $templates = [];
     protected $listeners = [
         'save',
-        'editorjs-save' => 'saveDataEditor',
+        'saveDataEditor',
     ];
     protected $queryString = ['pageId'];
     protected $rules = [
@@ -51,9 +51,9 @@ class PageEdit extends Component
             $this->pageTemplate = $page->template;
             $this->slug = $page->slug;
             $this->isActive = $page->isActive;
-            if (!empty($page->content) || $page->content != '') {
+            if (!empty(json_decode($page->content)) || json_decode($page->content) != []) {
                 $this->editor = json_decode($page->content, true);
-                // dd($this->editor);
+                //dd($this->editor);
             }
         }
         $this->getListOfTemplates();
@@ -81,10 +81,9 @@ class PageEdit extends Component
         unset($this->editor[$index]);
     }
 
-    public function saveDataEditor($editorJsonData)
+    public function saveDataEditor($index, $content)
     {
-        $index = Str::after($editorJsonData['editorId'], 'editor');
-        $this->editor[$index]['content'] = json_encode($editorJsonData['data']);
+        $this->editor[$index]['content'] = $content;
     }
 
     public function save()

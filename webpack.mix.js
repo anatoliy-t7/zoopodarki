@@ -31,6 +31,9 @@ mix.copy('node_modules/@yaireo/tagify/dist/tagify.css', 'public/css');
 // Slider
 mix.copy('node_modules/@splidejs/splide/dist/js/splide.min.js', 'public/js');
 
+// ckeditor 4
+// mix.copy('node_modules/ckeditor4', 'public/js/editor');
+
 mix.options({
 	autoprefixer: false,
 });

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09ee98753d304bf83f3e1188b8e9a843",
+    "content-hash": "b057699f5dc67d19d5e1b115d6e67664",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -2617,16 +2617,16 @@
         },
         {
             "name": "laravel/ui",
-            "version": "v3.4.0",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/ui.git",
-                "reference": "b3e804559bf3973ecca160a4ae1068e6c7c167c6"
+                "reference": "9a1e52442dd238647905b98d773d59e438eb9f9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/ui/zipball/b3e804559bf3973ecca160a4ae1068e6c7c167c6",
-                "reference": "b3e804559bf3973ecca160a4ae1068e6c7c167c6",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/9a1e52442dd238647905b98d773d59e438eb9f9d",
+                "reference": "9a1e52442dd238647905b98d773d59e438eb9f9d",
                 "shasum": ""
             },
             "require": {
@@ -2672,9 +2672,9 @@
                 "ui"
             ],
             "support": {
-                "source": "https://github.com/laravel/ui/tree/v3.4.0"
+                "source": "https://github.com/laravel/ui/tree/v3.4.1"
             },
-            "time": "2021-11-30T16:22:00+00:00"
+            "time": "2021-12-22T10:40:50+00:00"
         },
         {
             "name": "league/commonmark",
@@ -3269,69 +3269,6 @@
                 }
             ],
             "time": "2020-05-30T13:11:16+00:00"
-        },
-        {
-            "name": "maxeckel/livewire-editorjs",
-            "version": "v1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/maxeckel/livewire-editorjs.git",
-                "reference": "d9dd765cde6992a427679a56e39b211ba6bf9397"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/maxeckel/livewire-editorjs/zipball/d9dd765cde6992a427679a56e39b211ba6bf9397",
-                "reference": "d9dd765cde6992a427679a56e39b211ba6bf9397",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "illuminate/support": "^7.0|^8.0",
-                "livewire/livewire": "^2.3",
-                "php": "^7.3|^8.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^5.0|^6.0",
-                "phpunit/phpunit": "^9.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Maxeckel\\LivewireEditorjs\\LivewireEditorjsServiceProvider"
-                    ],
-                    "aliases": {
-                        "LivewireEditorjs": "Maxeckel\\LivewireEditorjs\\LivewireEditorjsFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Maxeckel\\LivewireEditorjs\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Max Eckel",
-                    "email": "contact@max-eckel.dev",
-                    "role": "Developer"
-                }
-            ],
-            "description": "This Package aims for an easy integration of Editor.JS with Laravel Livewire",
-            "homepage": "https://github.com/maxeckel/livewire-editorjs",
-            "keywords": [
-                "livewire-editorjs",
-                "maxeckel"
-            ],
-            "support": {
-                "issues": "https://github.com/maxeckel/livewire-editorjs/issues",
-                "source": "https://github.com/maxeckel/livewire-editorjs/tree/v1.3.0"
-            },
-            "time": "2021-11-18T17:28:14+00:00"
         },
         {
             "name": "meilisearch/meilisearch-php",
@@ -10265,16 +10202,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.2.0",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "e174a4c4324f50a6f2de472aa1055c24a2fe2b2a"
+                "reference": "bbc265e16561ab8e0f5e7cac395ea72640251f0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/e174a4c4324f50a6f2de472aa1055c24a2fe2b2a",
-                "reference": "e174a4c4324f50a6f2de472aa1055c24a2fe2b2a",
+                "url": "https://api.github.com/repos/composer/composer/zipball/bbc265e16561ab8e0f5e7cac395ea72640251f0c",
+                "reference": "bbc265e16561ab8e0f5e7cac395ea72640251f0c",
                 "shasum": ""
             },
             "require": {
@@ -10344,7 +10281,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
-                "source": "https://github.com/composer/composer/tree/2.2.0"
+                "source": "https://github.com/composer/composer/tree/2.2.1"
             },
             "funding": [
                 {
@@ -10360,7 +10297,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-22T10:03:27+00:00"
+            "time": "2021-12-22T21:21:31+00:00"
         },
         {
             "name": "composer/metadata-minifier",

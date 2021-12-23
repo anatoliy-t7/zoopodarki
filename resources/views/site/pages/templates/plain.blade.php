@@ -6,7 +6,7 @@
             @if ($block['title'] !== '')
               <h2>{{ $block['title'] }}</h2>
             @endif
-            {!! blockToHtml(json_decode($block['content'], true)) !!}
+            {!! $block['content'] !!}
           </div>
         @endforeach
       </div>
