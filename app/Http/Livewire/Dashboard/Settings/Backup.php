@@ -13,7 +13,7 @@ class Backup extends Component
 
     public function updateProduct()
     {
-        UpdateProduct::dispatch();
+        //UpdateProduct::dispatch();
 
         // $products = Product::with('attributes')->get();
 
@@ -24,9 +24,9 @@ class Backup extends Component
         //     // $this->updateProduct($product);
         // }
 
-        toast()
-            ->info('Job UpdateProduct added')
-            ->push();
+        // toast()
+        //     ->info('Job UpdateProduct added')
+        //     ->push();
     }
 
     public function backupDb()
@@ -45,15 +45,6 @@ class Backup extends Component
 
             \Log::error($th);
         }
-    }
-
-    public function queueRun()
-    {
-        \Artisan::call('queue:work');
-
-        toast()
-            ->success('Queue is running')
-            ->push();
     }
 
     public function generateSitemap()

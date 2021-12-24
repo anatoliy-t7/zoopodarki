@@ -1,5 +1,6 @@
     <article class="max-w-screen-lg py-4 mx-auto space-y-4">
       <h1 class="text-3xl font-bold">{{ $page->title }}</h1>
+
       <div x-data="{selected:0}" class="p-12 bg-white shadow-sm rounded-2xl ">
         @foreach (json_decode($page->content, true) as $key => $block)
           <div class="relative border-t border-gray-200">
@@ -17,6 +18,11 @@
             <div class="relative overflow-hidden transition-all duration-700 max-h-0"
               x-ref="container{{ $key }}"
               x-bind:style="selected == {{ $key }} ? 'max-height: ' + $refs.container{{ $key }}.scrollHeight + 'px' : ''">
+              @if ($loop->first && $page->slug === 'delivery')
+                <div class="pb-2">
+                  <x-map-zones />
+                </div>
+              @endif
               <div class="px-8 pt-4 pb-6 prose max-w-none">
                 {!! $block['content'] !!}
               </div>

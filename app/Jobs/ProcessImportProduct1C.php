@@ -87,17 +87,15 @@ class ProcessImportProduct1C implements ShouldQueue
                         ->first();
 
                     if ($oldProduct->product()->exists() && $oldProduct->product->variations()->count() === 1) {
-                        if ($oldProduct->product->categories()->exists()) {
+                        if ($oldProduct->product->categories->isNotEmpty()) {
                             $oldProduct->product->categories()->detach();
                         }
 
-                        if ($oldProduct->product->attributes()->exists()) {
+                        if ($oldProduct->product->attributes->isNotEmpty()) {
                             $oldProduct->product->attributes()->detach();
                         }
 
-                        if ($oldProduct->product->unit()->exists()) {
-                            $oldProduct->product->unit()->dissociate();
-                        }
+                        $oldProduct->product->variations()->update(['product_id' => null]);
 
                         $oldProduct->product->forceDelete();
                         $this->count++;

@@ -175,7 +175,7 @@
 
                         <div class="relative">
                           <img loading="lazy" class="object-contain object-center w-full h-32 pb-1"
-                            src="/brands/{{ $logoName }}">
+                            src="/assets/brands/{{ $logoName }}">
 
                           <div class="absolute z-40 -top-8 -right-1">
                             <button x-on:click="confirm = true" type="button" title="remove"

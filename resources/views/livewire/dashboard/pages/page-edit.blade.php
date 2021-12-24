@@ -7,7 +7,7 @@
 @endsection
 <div>
 
-  <div class="flex items-center justify-between w-full pb-4 space-x-6">
+  <div class="flex items-center justify-start w-full gap-4 pb-4">
 
     <h3 class="text-2xl">
       @if ($title)
@@ -16,7 +16,12 @@
         Новая страница
       @endif
     </h3>
-
+    @if ($pageId)
+      <a class="p-2 text-gray-400 hover:text-orange-400" href="{{ route('site.page', ['slug' => $slug]) }}"
+        target="_blank">
+        <x-tabler-external-link class="w-6 h-6 stroke-current" />
+      </a>
+    @endif
   </div>
 
   <div class="block max-w-5xl p-6 space-y-6 bg-white rounded-2xl">
