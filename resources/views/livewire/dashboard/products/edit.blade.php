@@ -6,9 +6,8 @@
   @set-brands.window="setBrandsFromServer(event)" @set-series.window="setSeriesFromServer(event)"
   @set-product-serie.window="setProductSerieFromServer(event)" @set-consist.window="setConsistContent(event)"
   @update-categories.window="updateCategoriesFromServer(event)" @update-brands.window="updateBrandsFromServer(event)"
-  @save-it.window="saveIt(event)" @update-query-id.window="updateQueryId(event)" wire:init="sendDataToFrontend"
-  class="relative">
-  <x-loader wire:dirty />
+  @save-it.window="saveIt(event)" @update-query-id.window="updateQueryId(event)" wire:init="sendDataToFrontend">
+  <x-loader />
   <div class="flex justify-between w-full space-x-6">
 
     <div class="flex items-center justify-between pb-2 space-x-4">
@@ -562,9 +561,6 @@
                     <div class="text-sm text-gray-500">Выберите товары слева для создания вариативности
                     </div>
                   @endforelse
-                </div>
-                <div class="w-full">
-                  <x-loader wire:target="setVariation" />
                 </div>
               </div>
             </div>

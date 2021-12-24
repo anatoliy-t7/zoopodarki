@@ -87,11 +87,11 @@ class ProcessImportProduct1C implements ShouldQueue
                         ->first();
 
                     if ($oldProduct->product()->exists() && $oldProduct->product->variations()->count() === 1) {
-                        if ($oldProduct->product->categories->isNotEmpty()) {
+                        if ($oldProduct->product->categories()->exists()) {
                             $oldProduct->product->categories()->detach();
                         }
 
-                        if ($oldProduct->product->attributes->isNotEmpty()) {
+                        if ($oldProduct->product->attributes()->exists()) {
                             $oldProduct->product->attributes()->detach();
                         }
 
@@ -101,8 +101,10 @@ class ProcessImportProduct1C implements ShouldQueue
                         $this->count++;
                     }
 
-                    $oldProduct->delete();
-                    $this->forDelete++;
+                    if (!$oldProduct->orders()->exists()) {
+                        $oldProduct->delete();
+                        $this->forDelete++;
+                    }
                 }
             } elseif (Product1C::where('uuid', $product1c['Ид'])->first()) {
                 $this->updateProduct($product1c);

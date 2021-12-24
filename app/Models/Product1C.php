@@ -14,11 +14,15 @@ class Product1C extends Model
         return $this->belongsTo('App\Models\Product');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'unit_id');
+    }
+
     public function scopeHasStock($query)
     {
         return $query->where('stock', '>=', 1)->where('price', '>=', 1);
     }
-
 
     public function scopeGetTypeOfDiscount($query, $typeF)
     {

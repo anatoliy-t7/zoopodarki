@@ -66,7 +66,7 @@ class Units extends Component
             );
 
             toast()
-                ->success('Единица измерения "'.$this->editUnit['name'].'" сохранена.')
+                ->success('Единица измерения "' . $this->editUnit['name'] . '" сохранена.')
                 ->push();
 
             $this->closeForm();
@@ -78,7 +78,7 @@ class Units extends Component
     {
         $unit = ProductUnit::find($unitId);
 
-        if ($unit->products->isNotEmpty()) {
+        if ($unit->products()->exists()) {
             toast()
                 ->warning('С этой единицей измерения связан товар')
                 ->push();
@@ -89,7 +89,7 @@ class Units extends Component
             $this->reset(['editUnit']);
 
             toast()
-                ->warning('Единица измерения "'.$unit_name.'" удалена.')
+                ->warning('Единица измерения "' . $unit_name . '" удалена.')
                 ->push();
         }
     }

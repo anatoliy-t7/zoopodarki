@@ -300,8 +300,8 @@ class Edit extends Component
         $this->validate([
             'name' => 'required',
             'status' => 'required',
-            //'readyCategories' => 'required', // TODO test
-            //'productBrand' => 'required', // TODO test
+            // 'readyCategories' => 'required',
+            // 'productBrand' => 'required',
             //'meta_description' => 'max:150',
             //'meta_title' => 'max:70',
         ]);
@@ -322,6 +322,12 @@ class Edit extends Component
                     'price_avg' => ceil($this->average),
                 ]
             );
+
+            $this->productId = $functionProduct->id;
+
+            $this->product = Product::where('id', $this->productId)
+                    ->with('media')
+                    ->first();
 
             $unit = ProductUnit::find($this->unitId);
 
@@ -370,7 +376,7 @@ class Edit extends Component
                     'unit_value' => trim($value['unit_value']),
                 ]);
             }
-            $this->productId = $functionProduct->id;
+
 
             if ($this->photos) {
                 foreach ($this->photos as $photo) {
@@ -387,11 +393,8 @@ class Edit extends Component
                         ->addMedia(storage_path('app/') . $path)
                         ->toMediaCollection('product-images');
                 }
-
                 $this->photos = [];
-                $this->product = Product::where('id', $this->productId)
-                    ->with('media')
-                    ->first();
+
                 $this->media = $this->product->getMedia('product-images');
             }
 

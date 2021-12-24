@@ -36,7 +36,7 @@
         <a class="flex items-center justify-center px-3 py-4 bg-white rounded-xl hover:shadow-lg"
           href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}">
           @if ($brand->logo)
-            <img loading="lazy" class="object-scale-down w-full h-16" src="/brands/{{ $brand->logo }}"
+            <img loading="lazy" class="object-scale-down w-full h-16" src="/assets/brands/{{ $brand->logo }}"
               alt="Логотип {{ $brand->name }}">
           @else
             <span class="font-bold text-blue-500">{{ $brand->name }}</span>

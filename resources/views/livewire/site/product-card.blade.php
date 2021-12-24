@@ -24,7 +24,7 @@
               @if ($product->brand()->exists())
                 <a href="{{ route('site.brand', ['brandslug' => $product->brand->slug]) }}">
                   @if ($product->brand->logo)
-                    <img loading="lazy" class="w-auto h-10" src="/brands/{{ $product->brand->logo }}"
+                    <img loading="lazy" class="w-auto h-10" src="/assets/brands/{{ $product->brand->logo }}"
                       alt="Логотип {{ $product->brand->name }}">
                   @else
                     <div class="font-bold text-blue-500 hover:underline">{{ $product->brand->name }}</div>

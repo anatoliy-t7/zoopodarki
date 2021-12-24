@@ -24,7 +24,7 @@
 
     <div class="flex items-start justify-start p-6 space-x-6 bg-white rounded-2xl">
       @if ($brand->logo)
-        <img loading="lazy" class="w-3/12" src="/brands/{{ $brand->logo }}"
+        <img loading="lazy" class="w-3/12" src="/assets/brands/{{ $brand->logo }}"
           alt="Логотип {{ $brand->name }}">
       @endif
       <div class="flex flex-col w-9/12 gap-4">
