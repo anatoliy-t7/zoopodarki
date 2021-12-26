@@ -13,10 +13,6 @@
           display: inline-block !important;
         }
 
-        .sm-h-32 {
-          height: 32px !important;
-        }
-
         .sm-w-full {
           width: 100% !important;
         }
@@ -61,19 +57,25 @@
                           <tr>
                             <td colspan="3">
                               <h2 style="margin: 0; text-align: center; font-size: 24px; line-height: 24px;">
-                                Ваш отзыв был опубликован
+                                Учетные данные на сайте "Зооподарки"
                               </h2>
                             </td>
                           </tr>
                           <tr>
                             <td colspan="3">
-                              <div style="margin-top: 3px; margin-bottom: 3px; padding-top: 24px; text-align: left; font-size: 14px;">
-                                <p>
-                                  Ваш отзыв на товар
-                                  <a href="{{$productLink}}" target="_blank">{{ $productName }}</a>
-                                  был опубликован.
+                              <div style="margin-top: 3px; margin-bottom: 3px; padding-top: 24px; text-align: left; font-size: 14px; line-height: 1.5;">
+                                <p style="padding-top: 4px; padding-bottom: 4px;">
+                                  Уважаемый покупатель, Вы зарегистрировались
+                                  на сайте магазина "Зооподарки"
                                 </p>
-                                <b>"{!!$review->body!!}"</b>
+                                <p style="padding-top: 4px; padding-bottom: 4px;">
+                                  Ваш <b>email</b> <code>{{ $data['email'] }}</code> и <b>пароль</b>
+                                  <code></code>{{ $data['password'] }} для входа на
+                                  сайт.
+                                </p>
+                                <p style="padding-top: 4px; padding-bottom: 4px; text-align: center;">
+                                  <a href="{{ env('APP_URL') }}" style="font-size: 18px; font-weight: 700; color: #3b82f6;">Сделать заказ</a>
+                                </p>
                               </div>
                             </td>
                           </tr>
@@ -84,7 +86,27 @@
                 </td>
               </tr>
               <tr>
-                <td class="sm-h-32" style="height: 48px;"></td>
+                <td style="padding-top: 4px; padding-bottom: 4px;">
+                  <table style="width: 100%; padding-top: 6px; padding-bottom: 32px;" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr style="width: 100%;">
+                      <td style="width: 41.666667%;">
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">8 (931) 239-98-83</p>
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">8 (812) 459-07-20</p>
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">с 10.00 до 20.00</p>
+                      </td>
+                      <td style="width: 58.333333%;">
+                        <a href="{{ route('site.contact') }}" style="margin: 0; cursor: pointer; text-align: center; font-size: 14px; color: #9ca3af;">
+                          Адреса магазинов ZOOподарки
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-bottom: 32px; text-align: center; color: #9ca3af;">
+                  Спасибо, что выбрали нас!
+                </td>
               </tr>
             </table>
           </td>

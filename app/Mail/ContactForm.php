@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class UserRegistration extends Mailable
+class ContactForm extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +19,7 @@ class UserRegistration extends Mailable
 
     public function build()
     {
-        return $this->view('emails.templates.dist.user-registration')
-            ->subject('Регистрация на сайте ZooPodarki');
+        return $this->view('emails.templates.dist.contact-form')
+            ->subject('Сообщение с контактной формы. ZOOподарки');
     }
 }

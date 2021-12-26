@@ -147,7 +147,7 @@
 
           <div>
             <label for="email" class="block mb-2 text-sm font-bold text-gray-700">
-              Email
+              Адрес эл. почты
             </label>
             <div class="relative text-lg">
               <div class="absolute top-0 left-0 z-30 pt-4 pl-3 cursor-default">

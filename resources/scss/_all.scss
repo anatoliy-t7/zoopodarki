@@ -298,3 +298,21 @@ img.image-right {
 img.image-left {
 	@apply mr-auto;
 }
+
+.masonry {
+	column-count: 1;
+	column-gap: 1.5rem;
+	column-fill: balance;
+
+	@media (min-width: 640px) {
+		column-count: 2;
+	}
+
+	@media (min-width: 768px) {
+		column-count: 3;
+	}
+
+	@media (min-width: 1024px) {
+		column-count: 4;
+	}
+}

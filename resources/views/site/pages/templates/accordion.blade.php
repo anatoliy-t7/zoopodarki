@@ -4,7 +4,7 @@
       <div x-data="{selected:0}" class="p-12 bg-white shadow-sm rounded-2xl ">
         @foreach (json_decode($page->content, true) as $key => $block)
           <div class="relative border-t border-gray-200">
-            <div class="w-full px-8 py-6 text-left cursor-pointer hover:bg-gray-50"
+            <div class="w-full px-8 py-6 text-left cursor-pointer hover:text-orange-500"
               @click="selected !== {{ $key }} ? selected = {{ $key }} : selected = null">
               <div class="flex items-center justify-between ">
                 <h3 class="text-xl font-semibold">{{ $block['title'] }}</h3>

@@ -59,24 +59,61 @@
                       <td class="sm-w-full sm-inline-block" style="width: 100%; padding-bottom: 10px;">
                         <table style="width: 100%; border-radius: 0.75rem; background-color: #ffffff; padding: 24px;" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>
-                            <td colspan="3">
-                              <h2 style="margin: 0; text-align: center; font-size: 24px; line-height: 24px;">
-                                Ваш отзыв был опубликован
+                            <td>
+                              <h2 style="margin: 0; text-align: center; font-size: 18px; line-height: 24px;">
+                                Вы получили новое сообщение от пользователя
+                                интернет-магазина
                               </h2>
                             </td>
                           </tr>
                           <tr>
-                            <td colspan="3">
-                              <div style="margin-top: 3px; margin-bottom: 3px; padding-top: 24px; text-align: left; font-size: 14px;">
-                                <p>
-                                  Ваш отзыв на товар
-                                  <a href="{{$productLink}}" target="_blank">{{ $productName }}</a>
-                                  был опубликован.
-                                </p>
-                                <b>"{!!$review->body!!}"</b>
-                              </div>
+                            <td>
+                              <p align="left" style="text-align: left; font-size: 16px; font-weight: 700;">
+                                Сообщение:
+                              </p>
+                              <p align="left" style="text-align: left; font-size: 16px;">
+                                {{ $data['content'] }}
+                              </p>
                             </td>
                           </tr>
+                          <tr>
+                            <td>
+                              <p style="text-align: left;">
+                                <span style="text-align: left; font-size: 16px; font-weight: 700;">
+                                Имя:
+                              </span>
+                                <span style="text-align: left; font-size: 16px;">
+                                {{ $data['name'] }}
+                                </span>
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p style="text-align: left;">
+                                <span style="text-align: left; font-size: 16px; font-weight: 700;">
+                                Email:
+                              </span>
+                                <span style="text-align: left; font-size: 16px;">
+                                {{ $data['email'] }}
+                                </span>
+                              </p>
+                            </td>
+                          </tr>
+                          @if($data['phone'])
+                          <tr>
+                            <td>
+                              <p style="text-align: left;">
+                                <span style="text-align: left; font-size: 16px; font-weight: 700;">
+                                Телефон:
+                              </span>
+                                <span style="text-align: left; font-size: 16px;">
+                                {{ $data['phone'] }}
+                                </span>
+                              </p>
+                            </td>
+                          </tr>
+                          @endif
                         </table>
                       </td>
                     </tr>

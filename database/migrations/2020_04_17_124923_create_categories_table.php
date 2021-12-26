@@ -21,7 +21,6 @@ class CreateCategoriesTable extends Migration
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->boolean('menu')->default(1);
-            $table->boolean('show_in_catalog')->default(0);
             $table->integer('sort')->default(1);
 
             $table->string('attributes')->nullable();

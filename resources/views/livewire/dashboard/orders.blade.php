@@ -192,7 +192,7 @@
 
             @if ($orderSelected->contact['email'])
               <div class="flex items-center justify-start space-x-4 text-gray-600">
-                <div class="w-4/12 ">Email:</div>
+                <div class="w-4/12 ">Адрес эл. почты:</div>
                 <div class="font-bold">{{ $orderSelected->contact['email'] }}</div>
               </div>
             @endif
@@ -294,7 +294,7 @@
                 </x-button>
               </div>
 
-              <div class="flex items-end justify-end space-x-6">
+              <div class="flex flex-col items-end justify-end gap-6">
                 <div class="max-w-xs space-y-1">
                   <label for="ordersSatus">Статус заказа</label>
                   <select wire:model.defer="orderSelected.status" name="ordersSatus" id="ordersSatus"
@@ -306,9 +306,14 @@
                     @endforeach
                   </select>
                 </div>
-                <x-button wire:click="save" :color="'pink'" class="mb-1">
-                  Сохранить
-                </x-button>
+                <div class="flex items-start justify-between gap-6">
+                  <x-button wire:click="saveAndNotify" :color="'green'" class="mb-1">
+                    Сохранить и оповестить
+                  </x-button>
+                  <x-button wire:click="save" :color="'pink'" class="mb-1">
+                    Сохранить
+                  </x-button>
+                </div>
               </div>
 
             </div>

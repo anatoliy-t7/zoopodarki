@@ -13,10 +13,6 @@
           display: inline-block !important;
         }
 
-        .sm-h-32 {
-          height: 32px !important;
-        }
-
         .sm-w-full {
           width: 100% !important;
         }
@@ -61,20 +57,23 @@
                           <tr>
                             <td colspan="3">
                               <h2 style="margin: 0; text-align: center; font-size: 24px; line-height: 24px;">
-                                Ваш отзыв был опубликован
+                                Ваш заказ доставлен
                               </h2>
+                              <p style="padding-top: 10px; font-size: 16px; line-height: 24px;">
+                                Уважаемый покупатель, Ваш заказ
+                                <b>{{ $order->order_number }}</b> доставлен по
+                                указанному Вами адресу.
+                              </p>
                             </td>
                           </tr>
                           <tr>
                             <td colspan="3">
-                              <div style="margin-top: 3px; margin-bottom: 3px; padding-top: 24px; text-align: left; font-size: 14px;">
-                                <p>
-                                  Ваш отзыв на товар
-                                  <a href="{{$productLink}}" target="_blank">{{ $productName }}</a>
-                                  был опубликован.
-                                </p>
-                                <b>"{!!$review->body!!}"</b>
-                              </div>
+                              <p style="padding-top: 10px; text-align: center; font-size: 16px; line-height: 24px;">
+                                Благодарим Вас за покупку!
+                              </p>
+                              <p style="padding-top: 32px; padding-bottom: 32px; text-align: center; font-size: 16px; line-height: 24px;">
+                                <a href="{{ env('APP_URL') }}" style="font-size: 18px; font-weight: 700; color: #3b82f6;">Сделать новый заказ</a>
+                              </p>
                             </td>
                           </tr>
                         </table>
@@ -84,7 +83,22 @@
                 </td>
               </tr>
               <tr>
-                <td class="sm-h-32" style="height: 48px;"></td>
+                <td class="sm-px-24" style="border-radius: 4px; padding-left: 48px; padding-right: 48px; text-align: left; color: #6b7280;">
+                  <table style="width: 100%; padding-top: 6px; padding-bottom: 32px;" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr style="width: 100%;">
+                      <td style="width: 41.666667%;">
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">8 (931) 239-98-83</p>
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">8 (812) 459-07-20</p>
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">с 10.00 до 20.00</p>
+                      </td>
+                      <td style="width: 58.333333%;">
+                        <a href="{{ route('site.contact') }}" style="margin: 0; cursor: pointer; text-align: center; font-size: 14px; color: #9ca3af;">
+                          Адреса магазинов ZOOподарки
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
               </tr>
             </table>
           </td>

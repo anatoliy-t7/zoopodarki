@@ -300,7 +300,7 @@ class Edit extends Component
         $this->validate([
             'name' => 'required',
             'status' => 'required',
-            // 'readyCategories' => 'required',
+            'readyCategories' => 'required',
             // 'productBrand' => 'required',
             //'meta_description' => 'max:150',
             //'meta_title' => 'max:70',

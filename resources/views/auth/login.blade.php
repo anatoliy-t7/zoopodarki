@@ -15,7 +15,7 @@
 
           <div class="flex flex-wrap mb-6">
             <label for="email" class="block mb-2 text-sm font-bold text-gray-700">
-              Email
+              Адрес эл. почты
             </label>
 
             <input id="email" type="email" class="field w-full @error('email') border-red-500 @enderror" name="email"

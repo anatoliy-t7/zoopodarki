@@ -244,7 +244,8 @@
 
                     <div class="flex items-center justify-between w-full space-x-4">
                       <div class="flex items-center justify-start space-x-4">
-                        <div class="flex justify-start space-x-2 text-gray-300 cursor-move hover:text-gray-500">
+                        <div class="p-1 text-xs text-gray-400">{{ $category['sort'] }}</div>
+                        <div class="text-gray-300 cursor-move hover:text-gray-500">
                           <x-tabler-drag-drop-2 class="w-6 h-6 stroke-current " />
                         </div>
 
@@ -385,15 +386,6 @@
             <div class="w-6/12 pt-6 ">
 
               <x-toggle wire:model="editCategory.menu" :property="$editCategory['menu']" :lable="'Показывать в меню'" />
-
-              @if ($editCategory['id'] !== null)
-                <div class="block py-6 space-y-6">
-
-                  <x-toggle wire:model="editCategory.show_in_catalog" :property="$editCategory['show_in_catalog']"
-                    :lable="'Показать избранные товары на странице каталога'" />
-
-                </div>
-              @endif
 
             </div>
 

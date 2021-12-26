@@ -19,7 +19,7 @@ class CreateOrderItemTable extends Migration
             $table->string('barcode')->nullable(); //ШтрихкодЕдиницы
             $table->string('vendorcode')->nullable();
             $table->string('name');
-            $table->unsignedInteger('quantity');
+            $table->integer('quantity');
             $table->string('unit')->nullable();
             $table->integer('price')->default(0);
             $table->integer('amount')->default(0);

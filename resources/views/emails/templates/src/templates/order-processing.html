@@ -1,0 +1,139 @@
+<extends src="src/layouts/master.html">
+  <block name="template">
+    <table class="w-full font-sans">
+      <tr>
+        <td align="center" class="bg-gray-50 sm:px-16">
+          <table class="w-600 sm:w-full">
+            <component src="src/components/logo.html"></component>
+            <tr>
+              <td class="w-full px-24 text-left sm:px-0">
+                <table class="w-full">
+                  <tr>
+                    <td class="w-full pb-10 sm:w-full sm:inline-block">
+                      <table class="w-full p-24 bg-white rounded-xl">
+                        <tr>
+                          <td colspan="3">
+                            <h2 class="m-0 text-2xl text-center leading-24">
+                              Мы приняли Ваш заказ
+                            </h2>
+                            <p class="pt-10 text-base leading-24">
+                              Уважаемый покупатель, Ваш заказ в обработке
+                            </p>
+                            <p class="py-2 text-base leading-24">
+                              Заказ @{{ $order->order_number }} от @{{
+                              simpleDate($order->created_at) }}
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            <div class="my-3 text-sm text-left">
+                              Телефон:
+                              <span class="font-bold"
+                                >@{{ $order->contact['phone'] }}</span
+                              >
+                            </div>
+                            <div class="my-3 text-sm text-left">
+                              Адрес доставки:
+                              <span class="font-bold"
+                                >@{{ $order->address }}</span
+                              >
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            <table class="w-full pt-25">
+                              <tr>
+                                <th align="left" class="w-2/12">
+                                  <p>Товар</p>
+                                </th>
+                                <th align="left" class="w-6/12"></th>
+                                <th align="left" class="w-2/12">
+                                  <p>Кол-во</p>
+                                </th>
+                                <th align="right" class="w-2/12 text-right">
+                                  <p>Цена</p>
+                                </th>
+                              </tr>
+
+                              @foreach ($order->items as $item)
+                              <tr>
+                                <td class="w-2/12 pb-10 pr-10 b-border">
+                                  <img
+                                    class="object-fill h-full w-14"
+                                    src="@{{env('APP_URL') . $item->product1c->product->getFirstMediaUrl('product-images', 'thumb')}}"
+                                    alt="@{{ $item->name }}"
+                                  />
+                                </td>
+
+                                <td
+                                  class="w-6/12 pb-10 text-xs  b-border leading-18"
+                                >
+                                  <div>@{{$item->name}}</div>
+                                </td>
+                                <td
+                                  align="left"
+                                  class="w-2/12 pb-10 text-base text-left  b-border"
+                                >
+                                  @{{$item->quantity}}
+                                </td>
+                                <td
+                                  align="right"
+                                  class="w-2/12 pb-10 text-base text-right  b-border"
+                                >
+                                  @{{$item->amount - $item->discount}}
+                                </td>
+                              </tr>
+                              @endforeach
+
+                              <tr>
+                                <td class="w-2/12 pt-10"></td>
+                                <td class="w-6/12 pt-10"></td>
+                                <td class="w-2/12 pt-10">
+                                  <p
+                                    align="left"
+                                    class="m-0 text-base font-bold text-left  leading-24"
+                                  >
+                                    Всего
+                                  </p>
+                                </td>
+                                <td class="w-2/12 pt-10">
+                                  <p
+                                    align="right"
+                                    class="m-0 text-base font-bold text-right  leading-24"
+                                  >
+                                    @{{$order->amount}}
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-48 text-left text-gray-500 rounded sm:px-24">
+                <component src="src/components/footer.html"></component>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-48 pt-24 text-left rounded sm:px-24">
+                <p class="m-0 text-sm text-center text-gray-500">
+                  Благодарим за покупку!
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="h-48 sm:h-32"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </block>
+</extends>

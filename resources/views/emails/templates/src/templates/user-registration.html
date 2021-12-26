@@ -1,0 +1,65 @@
+<extends src="src/layouts/master.html">
+  <block name="template">
+    <table class="w-full font-sans">
+      <tr>
+        <td align="center" class="bg-gray-50 sm:px-16">
+          <table class="w-600 sm:w-full">
+            <component src="src/components/logo.html"></component>
+            <tr>
+              <td class="w-full px-24 text-left sm:px-0">
+                <table class="w-full">
+                  <tr>
+                    <td class="w-full pb-10 sm:w-full sm:inline-block">
+                      <table class="w-full p-24 bg-white rounded-xl">
+                        <tr>
+                          <td colspan="3">
+                            <h2 class="m-0 text-2xl text-center leading-24">
+                              Учетные данные на сайте "Зооподарки"
+                            </h2>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            <div
+                              class="pt-24 my-3 text-sm leading-normal text-left "
+                            >
+                              <p class="py-4 ">
+                                Уважаемый покупатель, Вы зарегистрировались
+                                на сайте магазина "Зооподарки"
+                              </p>
+
+                              <p class="py-4">
+                                Ваш <b>email</b> <code>@{{ $data['email'] }}</code> и <b>пароль</b>
+                                <code></code>@{{ $data['password'] }}</code> для входа на
+                                сайт.
+                              </p>
+
+                              <p class="py-4 text-center">
+                                <a href="@{{ env('APP_URL') }}" class="text-lg font-bold text-blue-500 ">Сделать заказ</a>
+                              </p>
+
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td class="py-4">
+                <component src="src/components/footer.html"></component>
+              </td>
+            </tr>
+            <tr>
+              <td class="pb-32 text-center text-gray-400">
+                Спасибо, что выбрали нас!
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </block>
+</extends>

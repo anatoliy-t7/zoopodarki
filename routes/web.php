@@ -77,9 +77,6 @@ Route::prefix('account')->name('account.')->middleware(['throttle:1000,60', 'aut
 
         Route::get('/profile', \App\Http\Livewire\Site\Account\ProfilePage::class)->name('profile');
 
-        Route::PATCH('/profile/{id}', 'App\Http\Controllers\Site\AccountController@profileUpdate')
-        ->name('user.update');
-
         Route::get('/favorites', \App\Http\Livewire\Site\Account\FavoritesPage::class)->name('favorites');
 
         Route::get('/orders', 'App\Http\Controllers\Site\OrderController@orders')->name('orders');

@@ -97,7 +97,6 @@ class ProductCard extends Component
         SEOMeta::setTitle($metaTitle)->setDescription($metaDescription);
     }
 
-
     public function preOrder(int $itemId, $email)
     {
         $this->email = $email;

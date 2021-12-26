@@ -52,7 +52,7 @@
                   <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}"
                     class="font-bold hover:text-orange-500">
                     @if ($brand->logo)
-                      <img loading="lazy" class="w-auto h-24" src="/assets/brands/{{ $brand->logo }}">
+                      <img loading="lazy" class="w-auto h-16" src="/assets/brands/{{ $brand->logo }}">
                     @else
                       <div>{{ $brand->name }}</div>
                     @endif
@@ -61,7 +61,7 @@
               </div>
             @endif
             <div class="flex flex-wrap w-full max-w-screen-lg pb-40">
-              @foreach ($catalog->categories as $menuCategory)
+              @foreach ($catalog->categories->sortBy('sort') as $menuCategory)
                 <div class="py-2 pl-12 w-80">
                   <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug]) }}"
                     class="block p-2 text-lg font-bold text-gray-900 hover:text-orange-500">

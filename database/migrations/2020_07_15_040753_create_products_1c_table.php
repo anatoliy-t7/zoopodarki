@@ -42,6 +42,7 @@ class CreateProducts1cTable extends Migration
                 ->on('products');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -52,6 +53,8 @@ class CreateProducts1cTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products_1c');
+        Schema::table('products_1c', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 }

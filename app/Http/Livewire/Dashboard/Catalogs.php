@@ -42,7 +42,6 @@ class Catalogs extends Component
         'meta_description' => null,
         'menu' => 1,
         'sort' => 0,
-        'show_in_catalog' => 0,
         'attributes' => '',
         'catalog_id' => null,
     ];
@@ -73,7 +72,7 @@ class Catalogs extends Component
 
     public function openForm($catalog_id)
     {
-        $this->categories = Category::where('catalog_id', $catalog_id)->orderBy('name')->get()->toArray();
+        $this->categories = Category::where('catalog_id', $catalog_id)->orderBy('sort', 'asc')->get()->toArray();
 
         $this->editCatalog = Catalog::where('id', $catalog_id)->with('brandsById')->first();
         $this->brandsForCatalog = $this->editCatalog->brandsById()->get(['brand_id'])->pluck('brand_id');
@@ -109,7 +108,6 @@ class Catalogs extends Component
                         'meta_description' => $this->editCategory['meta_description'],
                         'attributes' => $this->editCategory['attributes'],
                         'menu' => $this->editCategory['menu'],
-                        'show_in_catalog' => $this->editCategory['show_in_catalog'],
                         'catalog_id' => $this->editCatalog['id'],
                     ]);
 
@@ -122,7 +120,6 @@ class Catalogs extends Component
                         'meta_description' => $this->editCategory['meta_description'],
                         'attributes' => $this->editCategory['attributes'],
                         'menu' => $this->editCategory['menu'],
-                        'show_in_catalog' => $this->editCategory['show_in_catalog'],
                         'catalog_id' => $this->editCatalog['id'],
                     ]);
                 }

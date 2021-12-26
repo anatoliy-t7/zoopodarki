@@ -1,0 +1,98 @@
+<extends src="src/layouts/master.html">
+  <block name="template">
+    <table class="w-full font-sans">
+      <tr>
+        <td align="center" class="bg-gray-50 sm:px-16">
+          <table class="w-600 sm:w-full">
+            <component src="src/components/logo.html"></component>
+            <tr>
+              <td class="w-full px-24 text-left sm:px-0">
+                <table class="w-full">
+                  <tr>
+                    <td class="w-full pb-10 sm:w-full sm:inline-block">
+                      <table class="w-full p-24 bg-white rounded-xl">
+                        <tr>
+                          <td colspan="3">
+                            <h2 class="m-0 text-2xl text-center leading-24">
+                              Ваш заказ отправлен
+                            </h2>
+                            <p class="pt-10 text-base leading-24">
+                              Уважаемый покупатель, Ваш заказ передан в службу
+                              доставки
+                            </p>
+                            <p class="py-2 text-base leading-24">
+                              Заказ <b>@{{ $order->order_number }}</b>
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            <table class="w-full pt-25">
+                              <tr>
+                                <td class="w-4/12 pb-10 text-base text-left">
+                                  Дата доставки:
+                                </td>
+                                <td
+                                  class="w-8/12 pb-10 text-base font-semibold text-left "
+                                >
+                                  @{{simpleDate($order->date)}}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="w-4/12 pb-10 text-base text-left">
+                                  Диапазон доставки:
+                                </td>
+                                <td
+                                  class="w-8/12 pb-10 text-base font-semibold text-left "
+                                >
+                                  @{{$order->delivery_time}}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="w-4/12 pb-10 text-base text-left">
+                                  Адрес доставки:
+                                </td>
+                                <td
+                                  class="w-8/12 pb-10 text-base font-semibold text-left "
+                                >
+                                  @{{$order->address}}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="w-4/12 pb-10 text-base text-left">
+                                  Способ оплаты:
+                                </td>
+                                <td
+                                  class="w-8/12 pb-10 text-base font-semibold text-left "
+                                >
+                                  @if($order->payment_method === 0) Онлайн @else
+                                  Наличными при доставке @endif
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-48 text-left text-gray-500 rounded sm:px-24">
+                <component src="src/components/footer.html"></component>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-48 pb-32 text-left rounded sm:px-24">
+                <p class="m-0 text-sm text-center text-gray-500">
+                  Благодарим за покупку! Заходите снова!
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </block>
+</extends>

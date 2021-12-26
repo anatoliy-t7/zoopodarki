@@ -362,7 +362,7 @@
           balloonContentFooter: ''
         }
       }, {
-        fillColor: '#7dd3fc',
+        fillColor: '#a5b4fc',
         strokeColor: '#222',
         opacity: 0.6,
         strokeWidth: 0,

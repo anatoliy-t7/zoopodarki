@@ -14,23 +14,27 @@
                         <tr>
                           <td colspan="3">
                             <h2 class="m-0 text-2xl text-center leading-24">
-                              Ваш отзыв был опубликован
+                              Ваш заказ доставлен
                             </h2>
+                            <p class="pt-10 text-base leading-24">
+                              Уважаемый покупатель, Ваш заказ
+                              <b>@{{ $order->order_number }}</b> доставлен по
+                              указанному Вами адресу.
+                            </p>
                           </td>
                         </tr>
                         <tr>
                           <td colspan="3">
-                            <div class="pt-24 my-3 text-sm text-left">
-                              <p>
-                                Ваш отзыв на товар
-                                <a href="@{{$productLink}}" target="_blank"
-                                  >@{{ $productName }}</a
-                                >
-                                был опубликован.
-                              </p>
-
-                              <b>"{!!$review->body!!}"</b>
-                            </div>
+                            <p class="pt-10 text-base text-center leading-24">
+                              Благодарим Вас за покупку!
+                            </p>
+                            <p class="py-32 text-base text-center leading-24">
+                              <a
+                                href="@{{ env('APP_URL') }}"
+                                class="text-lg font-bold text-blue-500"
+                                >Сделать новый заказ</a
+                              >
+                            </p>
                           </td>
                         </tr>
                       </table>
@@ -40,7 +44,9 @@
               </td>
             </tr>
             <tr>
-              <td class="h-48 sm:h-32"></td>
+              <td class="px-48 text-left text-gray-500 rounded sm:px-24">
+                <component src="src/components/footer.html"></component>
+              </td>
             </tr>
           </table>
         </td>

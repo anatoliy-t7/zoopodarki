@@ -69,7 +69,7 @@
 
             <div class="relative z-40 flex-col justify-between h-screen px-6 pb-16 space-y-2 overflow-y-auto pt-36">
 
-              @foreach ($menuCatalog->categories as $menuCategory)
+              @foreach ($menuCatalog->categories->sortBy('sort') as $menuCategory)
                 <div>
                   <a href="{{ route('site.category', ['catalogslug' => $menuCatalog->slug, 'categoryslug' => $menuCategory->slug]) }}"
                     class="block p-1 text-lg font-semibold text-gray-800">

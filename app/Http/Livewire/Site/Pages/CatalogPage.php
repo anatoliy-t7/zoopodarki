@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Site\Pages;
 
 use App\Models\Catalog;
-use App\Models\Category;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Livewire\Component;
 
@@ -14,20 +13,11 @@ class CatalogPage extends Component
 
     public function mount($catalogslug)
     {
-        $this->catalog = Catalog::where('slug', $catalogslug)->with('categories')->first();
+        $this->catalog = Catalog::where('slug', $catalogslug)
+        ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
+        ->withWhereHas('categories.tags', fn ($query) => $query->where('show_in_menu', true))
+        ->first();
 
-        $categoriesId = $this->catalog->categories()
-            ->where('show_in_catalog', true)
-            ->get('id'); // Categories ID that marked with show in catalog
-
-        $this->selectedCategories = Category::whereIn('id', $categoriesId)
-            ->with(
-                ['products' => function ($query) {
-                    return $query->with(['media', 'variations', 'unit', 'brand'])
-                        ->orderBy('products.popularity');
-                }]
-            )
-            ->get();
         $this->setSeo();
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Order;
 use App\Notifications\SendSms;
+use App\Traits\SendOrderEmail;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -11,6 +12,7 @@ use Usernotnull\Toast\Concerns\WireToast;
 
 class Orders extends Component
 {
+    use SendOrderEmail;
     use WireToast;
     use WithPagination;
 
@@ -66,18 +68,33 @@ class Orders extends Component
             ->first();
     }
 
+    public function saveAndNotify()
+    {
+        $this->save();
+
+        $this->sendEmailWithStatus(Order::where('id', $this->orderSelected->id)->first());
+    }
+
     public function save()
     {
         $this->validate();
 
-        $orderSelected = Order::where('id', $this->orderSelected->id)
-        ->update([
-            'status' => $this->orderSelected->status,
-        ]);
+        try {
+            $orderSelected = Order::where('id', $this->orderSelected->id)
+                ->update([
+                    'status' => $this->orderSelected->status,
+                ]);
 
-        toast()
+            toast()
             ->success('Статус заказа изменен')
             ->push();
+        } catch (\Throwable $th) {
+            \Log::error($th);
+
+            toast()
+            ->danger('Статус заказа не изменен')
+            ->push();
+        }
     }
 
     public function setSms($phone)

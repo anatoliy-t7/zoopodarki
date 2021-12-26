@@ -75,12 +75,12 @@
     @endif
   </div>
 
-  <div class="w-full h-full space-y-4 md:w-2/12">
+  <div class="w-full h-full gap-6 md:w-2/12">
 
-    <div>
-      @if ($pendingReviews->count() > 0)
+    @if ($pendingReviews->count() > 0)
+      <div>
         <a href="{{ route('dashboard.reviews', ['filteredBy' => 'pending']) }}"
-          class="relative inline-flex items-center justify-between w-full gap-6 px-8 py-4 bg-white cursor-pointer rounded-xl hover:shadow-md">
+          class="relative inline-flex items-center justify-between w-full gap-6 px-8 py-4 bg-white rounded-lg cursor-pointer hover:shadow-md">
           <div>
             <h4 class="pt-0">Отзывы</h4>
             <div class="text-xs leading-snug text-gray-400">ожидающие проверки</div>
@@ -94,13 +94,13 @@
             {{ $pendingReviews->count() }}
           </div>
         </a>
-      @endif
-    </div>
+      </div>
+    @endif
 
-    <div>
-      @if ($pendingWaitlist->count() > 0)
+    @if ($pendingWaitlist->count() > 0)
+      <div>
         <a href="{{ route('dashboard.waitlists', ['filteredBy' => 'pending']) }}"
-          class="relative inline-flex items-center justify-between w-full gap-6 px-8 py-4 bg-white cursor-pointer rounded-xl hover:shadow-md">
+          class="relative inline-flex items-center justify-between w-full gap-6 px-8 py-4 bg-white rounded-lg cursor-pointer hover:shadow-md">
           <div>
             <h4 class="pt-0">Товары</h4>
             <div class="text-xs leading-snug text-gray-400">которые ждут люди</div>
@@ -114,8 +114,8 @@
             {{ $pendingWaitlist->count() }}
           </div>
         </a>
-      @endif
-    </div>
+      </div>
+    @endif
 
   </div>
 

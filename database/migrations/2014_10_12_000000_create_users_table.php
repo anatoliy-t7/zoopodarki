@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
 
             $table->string('password');
 
-            $table->boolean('company')->default(0);
             $table->boolean('subscribed')->default(0);
 
             $table->integer('discount')->default(0);

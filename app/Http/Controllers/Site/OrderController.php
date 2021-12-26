@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product1C;
+use App\Traits\SendOrderEmail;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    use SendOrderEmail;
+
     public function orders()
     {
         $orders = Order::where('user_id', auth()->user()->id)
@@ -54,11 +57,17 @@ class OrderController extends Controller
     public function yooKassaCallback(Request $request)
     {
         if ($request->has('event')) {
-            $order = Order::where('id', $request->object['metadata']['order_id'])->first();
+            $order = Order::where('id', $request->object['metadata']['order_id'])
+            ->getOrderData()
+            ->with('user')
+            ->first();
+
             if ($request->event == 'payment.succeeded' && $request->object['status'] == 'succeeded') {
                 if ($request->object['paid'] === true) {
                     $order->payment_status = 'succeeded';
                     $order->status = 'processing';
+
+                    $this->sendEmailWithStatusProcessing($order);
                 }
             } elseif ($request->event == 'payment.waiting_for_capture') {
                 $order->payment_status = 'waiting_for_capture';
@@ -73,6 +82,7 @@ class OrderController extends Controller
             $this->incrementPopularity($order);
         }
     }
+
 
     public function incrementPopularity($order)
     {

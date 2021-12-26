@@ -44,7 +44,7 @@
           </x-dashboard.table.head>
           <x-dashboard.table.head sortable wire:click="sortBy('email')"
             :direction="$sortField === 'email' ? $sortDirection : null">
-            Email
+            Адрес эл. почты
           </x-dashboard.table.head>
           <x-dashboard.table.head>
             Права

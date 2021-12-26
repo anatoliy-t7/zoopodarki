@@ -22,7 +22,6 @@ class CreateCatalogsTable extends Migration
             $table->string('extra_title')->nullable();
             $table->boolean('menu')->default(1);
             $table->integer('sort')->default(1);
-            $table->text('icon')->nullable();
         });
     }
 

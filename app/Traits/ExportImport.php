@@ -4,10 +4,10 @@ namespace App\Traits;
 
 use App\Models\Attribute;
 use App\Models\AttributeItem;
+use App\Models\Category;
 use App\Models\Product1C;
 use App\Models\Product;
 use App\Models\ProductUnit;
-use App\Models\Tag;
 use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -94,6 +94,20 @@ trait ExportImport
 
     public function exportToFile()
     {
+        //$collection = $this->exportOfAttributesFromCategories();
+        $collection = $this->exportOfAttributes();
+
+        if (!file_exists(storage_path('app/excel'))) {
+            mkdir(storage_path('app/excel'), 0777, true);
+        }
+        $path = storage_path('app/excel');
+        $filePath = (new FastExcel($collection))->export($path . '/attributes.xlsx');
+
+        return $filePath;
+    }
+
+    public function exportOfAttributesFromCategories()
+    {
         $collection = collect();
 
         $categories = Category::with('catalog', )
@@ -117,18 +131,29 @@ trait ExportImport
                         'attribute_name' => $attribute->name,
                         'item_id' => $item->id,
                         'item_name' => $item->name,
+                        'hide' => $item->show,
                     ]);
                 }
             }
         }
 
-        if (!file_exists(storage_path('app/excel'))) {
-            mkdir(storage_path('app/excel'), 0777, true);
-        }
-        $path = storage_path('app/excel');
-        $filePath = (new FastExcel($collection))->export($path . '/attributes.xlsx');
+        return $collection;
+    }
 
-        return $filePath;
+    public function exportOfAttributes()
+    {
+        $collection = collect();
+
+        $attributes = Attribute::all();
+
+        foreach ($attributes as $attribute) {
+            $collection->push([
+                'id' => $attribute->id,
+                'name' => $attribute->name,
+            ]);
+        }
+
+        return $collection;
     }
 
     public function setData2($collection)

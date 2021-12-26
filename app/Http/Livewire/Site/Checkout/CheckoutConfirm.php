@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Site\Checkout;
 
 use App\Models\Order;
+use App\Traits\SendOrderEmail;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
 use YooKassa\Client;
@@ -10,6 +11,7 @@ use YooKassa\Client;
 class CheckoutConfirm extends Component
 {
     use WireToast;
+    use SendOrderEmail;
 
     public $order;
     public $noStockItems = [];
@@ -42,6 +44,8 @@ class CheckoutConfirm extends Component
     public function confirmOrder()
     {
         $order = Order::where('id', $this->order->id)
+            ->getOrderData()
+            ->with('user')
             ->first();
 
         // 1 cash
@@ -64,6 +68,8 @@ class CheckoutConfirm extends Component
         if ($order->payment_method == 0) {
             $this->payCreate($order);
         } else {
+            $this->sendEmailWithStatusProcessing($order);
+
             redirect()->route('site.checkout.callback', [
                 'order_id' => $order->id,
             ]);

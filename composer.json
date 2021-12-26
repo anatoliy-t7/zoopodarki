@@ -37,6 +37,7 @@
 		"laravel/tinker": "^2",
 		"laravel/ui": "^3",
 		"livewire/livewire": "^2",
+		"lukeraymonddowning/honey": "^0.3.4",
 		"meilisearch/meilisearch-php": "^0",
 		"mews/purifier": "^3",
 		"nao-pon/flysystem-google-drive": "~1",
