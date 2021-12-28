@@ -237,7 +237,10 @@
               </svg>
             </span>
             <span>
-              Подтвердить заказ<br><span class="text-xs lowercase">и перейти к оплате</span>
+              Подтвердить заказ
+              @if ($order->payment_method == 0)
+                <br><span class="text-xs lowercase">и перейти к оплате</span>
+              @endif
             </span>
           </button>
         </div>

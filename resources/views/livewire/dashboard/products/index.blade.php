@@ -20,7 +20,7 @@
 
   <div class="items-center justify-between block w-full lg:flex lg:space-x-8">
 
-    <div class="items-center justify-start block space-y-4 lg:space-y-0 lg:space-x-6 lg:flex lg:w-2/3">
+    <div class="flex flex-col items-center justify-start gap-6 lg:flex-row lg:w-2/3">
 
       <x-dashboard.search />
 
@@ -208,7 +208,7 @@
     </x-dashboard.table>
   </div>
 
-  <div class="items-center block px-4 space-y-4 lg:flex lg:space-y-0">
+  <div class="flex flex-col items-center justify-center w-full gap-6 lg:px-4 lg:flex-row">
     <div class="w-full lg:w-8/12">
       {{ $products->links() }}
     </div>

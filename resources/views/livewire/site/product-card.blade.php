@@ -540,7 +540,7 @@
 
       <div class="px-4 pt-2 bg-white lg:px-8 lg:rounded-2xl">
         <div class="flex items-center justify-between space-x-6">
-          <nav class="flex items-center justify-start">
+          <nav class="flex items-center justify-start gap-4 md:gap-0">
             <h2 x-on:click="tabDescription" data-route="description"
               :class="{ 'text-blue-500 border-blue-500': tab == 1 }"
               class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">

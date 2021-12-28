@@ -36,7 +36,7 @@
   </div>
 
 
-  <div x-cloak :class="menu ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
+  <div x-cloak id="menuWindow" @swipeleft="close" :class="menu ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
     class="fixed left-0 z-20 w-full h-screen max-w-full overflow-hidden text-gray-700 transition duration-300 transform bg-gray-50 bottom-14">
     <div>
 
@@ -80,7 +80,7 @@
                       @foreach ($menuCategory->tags as $tag)
                         <a href="
                       {{ route('site.tag', ['catalogslug' => $menuCatalog->slug, 'categoryslug' => $menuCategory->slug, 'tagslug' => $tag->slug]) }}"
-                          class="block text-base text-gray-800 hover:text-orange-500">
+                          class="block text-base text-gray-800 lowercase hover:text-orange-500">
                           {{ $tag->name }}
                         </a>
                       @endforeach
@@ -102,6 +102,7 @@
   <script>
     document.addEventListener('alpine:initializing', () => {
       Alpine.data('mobmenu', () => ({
+        menuWindow: new TouchSweep(menuWindow),
         body: document.body,
         menu: false,
         tab: null,

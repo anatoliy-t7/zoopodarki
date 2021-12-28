@@ -20,7 +20,7 @@
 
     </div>
 
-    <div class="flex items-center justify-start w-full space-x-6">
+    <div class="flex flex-col items-center justify-start w-full gap-6 lg:flex-row">
 
       <x-dashboard.search />
 
@@ -37,8 +37,6 @@
           @endforeach
         </select>
       </div>
-
-
 
       <div class="flex space-x-8">
         <div class="flex items-center space-x-2">
@@ -345,12 +343,12 @@
 
     </div>
 
-    <div class="flex items-center px-4">
-      <div class="w-8/12">
+    <div class="flex flex-col items-center justify-center w-full gap-6 lg:px-4 lg:flex-row">
+      <div class="w-full lg:w-8/12">
         {{ $tags->links() }}
       </div>
 
-      <div class="flex items-center justify-end w-4/12 space-x-4">
+      <div class="flex items-center justify-end w-full lg:w-4/12">
         <x-dashboard.items-per-page />
       </div>
     </div>

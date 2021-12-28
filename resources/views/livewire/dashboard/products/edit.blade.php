@@ -450,7 +450,7 @@
       </div>
 
       @can('edit')
-        <div class="flex w-full p-6 space-x-4 bg-white rounded-2xl">
+        <div id="top" class="flex w-full p-6 space-x-4 bg-white rounded-2xl">
           <div class="flex w-6/12">
             <div class="w-full">
               <div class="p-6 space-y-4 border-2 border-gray-100 rounded-2xl">

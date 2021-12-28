@@ -75,7 +75,7 @@
     @endif
   </div>
 
-  <div class="w-full h-full gap-6 md:w-2/12">
+  <div class="flex flex-col w-full h-full gap-6 md:w-2/12">
 
     @if ($pendingReviews->count() > 0)
       <div>

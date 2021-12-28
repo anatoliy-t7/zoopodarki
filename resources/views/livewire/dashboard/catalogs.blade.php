@@ -430,12 +430,12 @@
       </div>
     </div>
 
-    <div class="flex items-center justify-between px-4">
-      <div class="w-8/12">
+    <div class="flex flex-col items-center justify-center w-full gap-6 lg:px-4 lg:flex-row">
+      <div class="w-full lg:w-8/12">
         {{ $catalogs->links() }}
       </div>
 
-      <div class="flex items-center justify-end w-4/12 space-x-4">
+      <div class="flex items-center justify-end w-full lg:w-4/12">
         <x-dashboard.items-per-page />
       </div>
     </div>

@@ -1,10 +1,12 @@
 import Alpine from 'alpinejs';
 import persist from '@alpinejs/persist';
+import TouchSweep from 'touchsweep';
 Alpine.plugin(persist);
 import ToastComponent from '../../vendor/usernotnull/tall-toasts/dist/js/tall-toasts';
 Alpine.data('ToastComponent', ToastComponent);
 
 window.Alpine = Alpine;
+window.TouchSweep = TouchSweep;
 
 var lozad = require('lozad');
 

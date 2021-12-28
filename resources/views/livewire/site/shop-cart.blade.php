@@ -33,11 +33,10 @@
     class="fixed top-0 bottom-0 left-0 right-0 z-40 w-screen h-screen overflow-hidden bg-gray-900 bg-opacity-50 cursor-pointer pointer-events-auto">
   </div>
 
-  <div x-cloak x-transition :class="openCart ? 'translate-x-0' : 'translate-x-full'"
+  <div id="cart" @swiperight="close" x-cloak x-transition :class="openCart ? 'translate-x-0' : 'translate-x-full'"
     class="fixed top-0 right-0 z-50 h-screen text-gray-700 transition-all duration-700 ease-in-out transform bg-white w-cart">
 
     <div class="flex flex-col justify-between h-screen ">
-
       <div
         class="flex items-center justify-between w-full px-6 py-3 bg-white border-b border-gray-100 md:border-transparent md:py-5 ">
         <div class="flex justify-between space-x-2">
@@ -305,6 +304,7 @@
   <script>
     document.addEventListener('alpine:initializing', () => {
       Alpine.data('cart', () => ({
+        cartWindow: new TouchSweep(cart),
         body: document.body,
         openCart: false,
         open() {

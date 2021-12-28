@@ -1,4 +1,5 @@
 <div x-cloak wire:ignore :class="{'translate-x-0': sidebar, '-translate-x-full sm:-translate-x-56': !sidebar}"
+  id="sidebarWindow" @swipeleft="sidebar = false"
   class="fixed top-0 bottom-0 left-0 z-30 block w-full h-full min-h-screen overflow-y-auto font-light text-gray-400 transition-transform duration-300 ease-in-out transform translate-x-0 bg-gray-900 shadow-lg sm:w-56 scrollbar">
 
   <div class="flex flex-col items-stretch justify-between h-full">

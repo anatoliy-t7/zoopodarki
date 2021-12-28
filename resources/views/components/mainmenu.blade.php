@@ -52,7 +52,7 @@
                   <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}"
                     class="font-bold hover:text-orange-500">
                     @if ($brand->logo)
-                      <img loading="lazy" class="w-auto h-16" src="/assets/brands/{{ $brand->logo }}">
+                      <img loading="lazy" class="w-24 h-auto" src="/assets/brands/{{ $brand->logo }}">
                     @else
                       <div>{{ $brand->name }}</div>
                     @endif
@@ -76,7 +76,7 @@
                     <div class="px-2 space-y-2">
                       @foreach ($menuCategory->tags as $tag)
                         <a href="{{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug, 'tagslug' => $tag->slug]) }}"
-                          class="block text-base text-gray-800 hover:text-orange-500">
+                          class="block text-base text-gray-800 lowercase hover:text-orange-500">
                           {{ $tag->name }}
                         </a>
                       @endforeach
