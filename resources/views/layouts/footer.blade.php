@@ -119,23 +119,18 @@
       </div>
     </div>
   </div>
-
 </footer>
 
 @guest
   <livewire:auth.auth-com />
 @endguest
-
-
 @production
-  <livewire:error-catcher>
-  @endproduction
+  <livewire:error-catcher />
+@endproduction
+<livewire:scripts />
+<livewire:toasts />
+<script src="{{ mix('js/app.js') }}"></script>
+@stack('footer')
+</body>
 
-  <livewire:scripts />
-  <livewire:toasts />
-  <script src="{{ mix('js/app.js') }}"></script>
-
-  @stack('footer')
-  </body>
-
-  </html>
+</html>
