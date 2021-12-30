@@ -6,8 +6,7 @@ use App\Traits\Revieweable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// TODO on in production
-//use Laravel\Scout\Searchable;
+use Laravel\Scout\Searchable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -21,7 +20,7 @@ class Product extends Model implements HasMedia
     use SoftDeletes;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
-    //use Searchable;
+    use Searchable;
 
     protected $table = 'products';
     protected $guarded = [];

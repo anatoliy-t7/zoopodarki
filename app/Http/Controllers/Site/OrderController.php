@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product1C;
 use App\Traits\SendOrderEmail;
+use App\Traits\SendOrderSms;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
     use SendOrderEmail;
+    use SendOrderSms;
 
     public function orders()
     {
@@ -67,7 +69,8 @@ class OrderController extends Controller
                     $order->payment_status = 'succeeded';
                     $order->status = 'processing';
 
-                    $this->sendEmailWithStatusProcessing($order);
+                    $this->sendEmailWithStatus($order);
+                    $this->sendSmsWithStatus($order);
                 }
             } elseif ($request->event == 'payment.waiting_for_capture') {
                 $order->payment_status = 'waiting_for_capture';

@@ -45,10 +45,9 @@
                           <td colspan="3">
                             <table class="w-full pt-25">
                               <tr>
-                                <th align="left" class="w-2/12">
+                                <th align="left" class="w-6/12">
                                   <p>Товар</p>
                                 </th>
-                                <th align="left" class="w-6/12"></th>
                                 <th align="left" class="w-2/12">
                                   <p>Кол-во</p>
                                 </th>
@@ -59,14 +58,6 @@
 
                               @foreach ($order->items as $item)
                               <tr>
-                                <td class="w-2/12 pb-10 pr-10 b-border">
-                                  <img
-                                    class="object-fill h-full w-14"
-                                    src="@{{env('APP_URL') . $item->product1c->product->getFirstMediaUrl('product-images', 'thumb')}}"
-                                    alt="@{{ $item->name }}"
-                                  />
-                                </td>
-
                                 <td
                                   class="w-6/12 pb-10 text-xs  b-border leading-18"
                                 >

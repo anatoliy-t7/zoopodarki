@@ -11,6 +11,10 @@ trait SendOrderEmail
 {
     public function sendEmailWithStatus($order)
     {
+        if ($order->status === 'processing') {
+            $this->sendEmailWithStatusProcessing($order);
+        }
+
         if ($order->status === 'shipped') {
             $this->sendEmailWithStatusShipped($order);
         }

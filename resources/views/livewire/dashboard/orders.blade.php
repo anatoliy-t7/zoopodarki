@@ -282,40 +282,27 @@
               </table>
             </div>
 
-            <div class="flex items-start justify-between w-full pt-2 space-x-8">
-
-              <div class="max-w-xs space-y-1">
-                <label for="smsText">SMS текст</label>
-                @error('smsText')<span class="pl-4 text-sm text-red-500">{{ $message }}</span> @enderror
-                <textarea wire:model.defer="smsText" name="smsText" id="smsText" rows="3"></textarea>
-                <x-button wire:click="setSms({{ $orderSelected->contact['phone'] }})" :color="'blue'"
-                  class="mb-1">
-                  Отправить SMS
+            <div class="flex items-center justify-between w-full gap-8 pt-2">
+              <div class="space-y-1">
+                <label for="ordersSatus">Статус заказа</label>
+                <select wire:model.defer="orderSelected.status" name="ordersSatus" id="ordersSatus"
+                  class="w-full">
+                  @foreach ($this->orderStatuses as $orderStatus)
+                    <option {{ $orderSelected->status === $orderStatus ? 'selected' : '' }}
+                      value="{{ $orderStatus }}">{{ __('constants.order_status.' . $orderStatus) }}
+                    </option>
+                  @endforeach
+                </select>
+                <p class="text-xs text-gray-500">При создании заказа, оповещения отправляются автоматически</p>
+              </div>
+              <div class="flex items-start justify-between gap-6">
+                <x-button wire:click="saveAndNotify" :color="'green'">
+                  Сохранить и оповестить
+                </x-button>
+                <x-button wire:click="save" :color="'pink'">
+                  Сохранить
                 </x-button>
               </div>
-
-              <div class="flex flex-col items-end justify-end gap-6">
-                <div class="max-w-xs space-y-1">
-                  <label for="ordersSatus">Статус заказа</label>
-                  <select wire:model.defer="orderSelected.status" name="ordersSatus" id="ordersSatus"
-                    class="w-full">
-                    @foreach ($this->orderStatuses as $orderStatus)
-                      <option {{ $orderSelected->status === $orderStatus ? 'selected' : '' }}
-                        value="{{ $orderStatus }}">{{ __('constants.order_status.' . $orderStatus) }}
-                      </option>
-                    @endforeach
-                  </select>
-                </div>
-                <div class="flex items-start justify-between gap-6">
-                  <x-button wire:click="saveAndNotify" :color="'green'" class="mb-1">
-                    Сохранить и оповестить
-                  </x-button>
-                  <x-button wire:click="save" :color="'pink'" class="mb-1">
-                    Сохранить
-                  </x-button>
-                </div>
-              </div>
-
             </div>
 
           @endif

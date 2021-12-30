@@ -138,7 +138,7 @@
                     <a title="Товары бренда {{ $brand->name }}"
                       href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}" class="p-2 group">
                       @if ($brand->logo)
-                        <img src="/brands/{{ $brand->logo }}" alt="Товары бренда {{ $brand->name }}"
+                        <img src="/assets/brands/{{ $brand->logo }}" alt="Товары бренда {{ $brand->name }}"
                           class="group-hover:text-blue-500">
                       @else
                         <span class="text-xl font-bold group-hover:text-blue-500">{{ $brand->name }}</span>

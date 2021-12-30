@@ -1,6 +1,6 @@
 @props(['color' => 'orange'])
 <button
-  {{ $attributes->merge(['type' => 'submit', 'class' => 'relative inline-flex items-center px-4 py-2 disabled:cursor-not-allowed bg-' . $color . '-500 border border-transparent rounded-lg font-bold text-sm text-white uppercase tracking-widest hover:bg-' . $color . '-600 active:bg-' . $color . '-600 focus:outline-none focus:border-' . $color . '-600 focus:ring ring-' . $color . '-600 disabled:bg-opacity-50 justify-center']) }}
+  {{ $attributes->merge(['type' => 'submit', 'class' => 'relative inline-flex items-center px-4 pt-3 pb-2 disabled:cursor-not-allowed bg-' . $color . '-500 border border-transparent rounded-lg font-bold text-sm text-white uppercase tracking-widest hover:bg-' . $color . '-600 active:bg-' . $color . '-600 focus:outline-none focus:border-' . $color . '-600 focus:ring ring-' . $color . '-600 disabled:bg-opacity-50 justify-center']) }}
   wire:loading.attr="disabled">
   <span wire:loading.flex wire:target="{{ $attributes->whereStartsWith('wire:click')->first() }}"
     class="absolute inset-0 flex items-center justify-center w-full h-full">

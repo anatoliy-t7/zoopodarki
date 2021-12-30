@@ -3,9 +3,8 @@
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Order;
-use App\Notifications\SendSms;
 use App\Traits\SendOrderEmail;
-use Illuminate\Notifications\AnonymousNotifiable;
+use App\Traits\SendOrderSms;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Usernotnull\Toast\Concerns\WireToast;
@@ -13,6 +12,7 @@ use Usernotnull\Toast\Concerns\WireToast;
 class Orders extends Component
 {
     use SendOrderEmail;
+    use SendOrderSms;
     use WireToast;
     use WithPagination;
 
@@ -21,7 +21,6 @@ class Orders extends Component
     public $sortDirection = 'desc';
     public $itemsPerPage = 30;
     public $order;
-    public $smsText = '';
     public $orderSelected;
     public $status;
     protected $queryString = [
@@ -72,7 +71,12 @@ class Orders extends Component
     {
         $this->save();
 
-        $this->sendEmailWithStatus(Order::where('id', $this->orderSelected->id)->first());
+        $order = Order::where('id', $this->orderSelected->id)->first();
+
+        $this->sendEmailWithStatus($order);
+        $this->sendSmsWithStatus($order);
+
+        unset($order);
     }
 
     public function save()
@@ -94,31 +98,6 @@ class Orders extends Component
             toast()
             ->danger('Статус заказа не изменен')
             ->push();
-        }
-    }
-
-    public function setSms($phone)
-    {
-        $this->validate([
-            'smsText' => 'required|string',
-        ]);
-
-        try {
-            (new AnonymousNotifiable())
-                ->route('smscru', '+7' . $phone)
-                ->notify(new SendSms($this->smsText));
-
-            toast()
-                ->success('Sms отправлено')
-                ->push();
-
-            $this->reset('smsText');
-        } catch (\Throwable$th) {
-            \Log::error($th);
-
-            toast()
-                ->warning('Sms не отправлено')
-                ->push();
         }
     }
 
