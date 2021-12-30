@@ -14,7 +14,6 @@
   <link rel="icon" href="{{ asset('assets/img/favicon.svg') }}" type="image/svg+xml">
   <link rel="preload" as="style" href="{{ mix('css/app.css') }}">
   <link rel="preload" as="script" href="{{ mix('js/app.js') }}">
-  <link rel="preload" as="script" href="/vendor/livewire/livewire.js">
   <link rel="preload" href="{{ asset('assets/fonts/nunito-v20-latin_cyrillic-700.woff2') }}" as="font"
     type="font/woff2" crossorigin="anonymous" />
   <link rel="preload" href="{{ asset('assets/fonts/nunito-v20-latin_cyrillic-800.woff2') }}" as="font"
