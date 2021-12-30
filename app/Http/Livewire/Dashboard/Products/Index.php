@@ -27,6 +27,8 @@ class Index extends Component
     public $productsWithoutImage = false;
     public $available = false;
     public $noCategories = false;
+    public $status;
+    public $statuses;
     public $catalogs;
     protected $queryString = [
         'search' => ['except' => ''],
@@ -46,6 +48,7 @@ class Index extends Component
 
     public function mount()
     {
+        $this->statuses = config('constants.product_status');
         $this->countTrash = Product::onlyTrashed()->count();
         $this->catalogs = Catalog::with(['categories' => function ($query) {
             $query->orderBy('name');
@@ -192,6 +195,9 @@ class Index extends Component
                 $query->whereLike(['name', 'id', 'categories.name', 'variations.name'], $this->search);
             }
         })
+            ->when($this->status, function ($query) {
+                $query->where('status', $this->status);
+            })
             ->when($this->filteredByCategory, function ($query) {
                 $query->whereHas('categories', function ($query) {
                     $query->where('category_id', $this->filteredByCategory);

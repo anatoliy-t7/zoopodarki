@@ -32,22 +32,22 @@
         class="absolute top-0 left-0 right-0 z-40 w-full max-w-2xl max-h-screen p-2 mx-auto mt-12 overflow-x-hidden overflow-y-auto text-gray-800 bg-white shadow-2xl md:p-6 rounded-2xl">
         <div class="divide-y">
           @forelse ($result['hits'] as $item)
-            <div>
-              @if (array_key_exists('category', $item)) <a
-                  href="{{ route('site.product', ['catalogslug' => $item['catalog'], 'categoryslug' => $item['category'], 'productslug' => $item['slug']]) }}"
-                  class="flex items-center justify-start px-4 py-2 space-x-2 text-sm hover:bg-gray-50">
-              @endif
+            @if (array_key_exists('image', $item))
+              <div>
+                @if (array_key_exists('category', $item)) <a
+                    href="{{ route('site.product', ['catalogslug' => $item['catalog'], 'categoryslug' => $item['category'], 'productslug' => $item['slug']]) }}"
+                    class="flex items-center justify-start px-4 py-2 space-x-2 text-sm hover:bg-gray-50">
+                @endif
 
-              @if (array_key_exists('image', $item))
                 <img loading="lazy" class="object-contain object-center w-10 h-10" src="{{ $item['image'] }}"
                   alt="Image">
-              @endif
 
-              <div>{!! $item['_formatted']['name'] !!}</div>
-              @if (array_key_exists('category', $item))
-                </a>
-              @endif
-            </div>
+                <div>{!! $item['_formatted']['name'] !!}</div>
+                @if (array_key_exists('category', $item))
+                  </a>
+                @endif
+              </div>
+            @endif
           @empty
             <div>По этому запросу ничего не найдено</div>
           @endforelse

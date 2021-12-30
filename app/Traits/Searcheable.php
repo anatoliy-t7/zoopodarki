@@ -19,6 +19,7 @@ trait Searcheable
                         ->isStatusActive()
                         ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
                         ->has('categories')
+                        ->has('media')
                         ->with('media')
                         ->with('categories:id,slug,catalog_id')
                         ->with('categories.catalog:id,slug')

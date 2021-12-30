@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
   <meta name="format-detection" content="phone=no">
   <meta name="currency" content="ruble">
 
@@ -12,6 +12,13 @@
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="icon" href="{{ asset('assets/img/favicon.svg') }}" type="image/svg+xml">
+  <link rel="preload" as="style" href="{{ mix('css/app.css') }}">
+  <link rel="preload" as="script" href="{{ mix('js/app.js') }}">
+  <link rel="preload" as="script" href="/vendor/livewire/livewire.js">
+  <link rel="preload" href="{{ asset('assets/fonts/nunito-v20-latin_cyrillic-700.woff2') }}" as="font"
+    type="font/woff2" crossorigin="anonymous" />
+  <link rel="preload" href="{{ asset('assets/fonts/nunito-v20-latin_cyrillic-800.woff2') }}" as="font"
+    type="font/woff2" crossorigin="anonymous" />
   @stack('header-meta')
   <style>
     [x-cloak] {
@@ -22,10 +29,7 @@
   @stack('header-css')
   <link href="{{ mix('css/app.css') }}" rel="stylesheet">
   <livewire:styles>
-    <link rel="preload" href="{{ asset('assets/fonts/nunito-v20-latin_cyrillic-700.woff2') }}" as="font"
-      type="font/woff2" crossorigin="anonymous" />
-    <link rel="preload" href="{{ asset('assets/fonts/nunito-v20-latin_cyrillic-800.woff2') }}" as="font"
-      type="font/woff2" crossorigin="anonymous" />
+
     @stack('header-js')
 </head>
 

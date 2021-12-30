@@ -1,4 +1,4 @@
-<div class="flex justify-start py-1 text-xs font-semibold text-gray-400 " itemscope
+<div class="flex justify-start py-1 text-xs font-semibold text-gray-500 " itemscope
   itemtype="https://schema.org/BreadcrumbList">
 
   <div class="flex items-center justify-between" itemprop="itemListElement" itemscope

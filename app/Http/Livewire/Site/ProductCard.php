@@ -50,7 +50,15 @@ class ProductCard extends Component
             ->where('price', '>', 0)
             ->min('price');
 
-        $brand = $this->product->brand() ? $this->product->brand->name_rus : '';
+        $brand = '';
+        if ($this->product->brand()->exists()) {
+            if ($this->product->brand->name_rus) {
+                $brand = $this->product->brand->name_rus;
+            } else {
+                $brand = $this->product->brand->name;
+            }
+        }
+
 
 
         if ($this->tab === 2) {
@@ -156,6 +164,7 @@ class ProductCard extends Component
     {
         $this->product = Product::where('slug', $this->productslug)
             ->isStatusActive()
+          //  ->has('media')
             ->whereHas('variations', function ($query) {
                 $query
                     ->where('price', '>', 0)

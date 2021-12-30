@@ -5,9 +5,9 @@
     <a itemprop="url"
       href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product->slug]) }}"
       class="block " title="{{ $product->name }}">
-      <img itemprop="image" loading="lazy" class="object-contain object-center w-full h-64 lozad "
-        src="/assets/img/placeholder.svg" data-src="{{ $product->getFirstMediaUrl('product-images', 'thumb') }}"
-        alt="{{ $product->name }}">
+      <img width="198" height="256" itemprop="image" loading="lazy"
+        class="object-contain object-center w-full h-64 lozad " src="/assets/img/placeholder.svg"
+        data-src="{{ $product->getFirstMediaUrl('product-images', 'thumb') }}" alt="{{ $product->name }}">
     </a>
 
 

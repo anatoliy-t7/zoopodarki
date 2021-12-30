@@ -17,7 +17,7 @@
 
       <div id="top" class="w-full">
 
-        <div class="w-full px-4 pb-6 bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
+        <div class="w-full px-4 py-6 bg-white lg:px-6 lg:rounded-2xl">
 
           <div class="relative ">
             {{-- <div class="flex items-center justify-end py-3">

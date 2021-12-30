@@ -22,8 +22,8 @@
      @if ($showPromoF)
        <div class="pt-4">
          <div class="container-checkbox">
-           <label class="text-base sm:text-sm">Акции</label>
-           <input wire:model="promoF" type="checkbox">
+           <label for="promoF" class="text-base sm:text-sm">Акции</label>
+           <input id="promoF" wire:model="promoF" type="checkbox">
            <span class="checkmark"></span>
          </div>
        </div>
@@ -45,11 +45,11 @@
          <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
 
            <template x-for="(item, index) in filteredBrands" :key="item.id" hidden>
-             <div class=" container-checkbox">
+             <label :for="'brand'+item.id" class="container-checkbox">
                <span class="text-base sm:text-sm" x-text="item.name"></span>
-               <input :value="item.id" type="checkbox" x-model.number="brandsF">
+               <input :id="'brand'+item.id" :value="item.id" type="checkbox" x-model.number="brandsF">
                <span class="checkmark"></span>
-             </div>
+             </label>
            </template>
 
            <script>
@@ -104,9 +104,10 @@
 
              <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
                <template x-for="(item, index) in filteredAttribute" :key="item.id" hidden>
-                 <label for="item.id" class="container-checkbox">
+                 <label :for="'attr'+item.id" class="container-checkbox">
                    <span class="text-base sm:text-sm" x-text="item.name"></span>
-                   <input id="item.id" :value="item.id" type="checkbox" x-model.number.debounce.700="attributeFilter">
+                   <input :id="'attr'+item.id" :value="item.id" type="checkbox"
+                     x-model.number.debounce.700="attributeFilter">
                    <span class="checkmark"></span>
                  </label>
                </template>

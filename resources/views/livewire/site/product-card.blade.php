@@ -123,7 +123,7 @@
                       @foreach ($product->getMedia('product-images') as $image)
                         <li wire:key="{{ $loop->index }}" class="relative cursor-pointer splide__slide">
 
-                          <img itemprop="image" class="object-scale-down w-full h-80"
+                          <img width="315" height="320" itemprop="image" class="object-scale-down w-full h-80"
                             data-splide-lazy="{{ $image->getUrl('thumb') }}" alt="{{ $product->name }}"
                             data-bp="{{ $image->getUrl('medium') }}">
 

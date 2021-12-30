@@ -16,7 +16,7 @@
                 Самовывоз
               </a>
               <a itemprop="itemListElement" href="{{ route('site.contact') }}" class="px-3 py-2 hover:underline">
-                Адреса и контакты
+                Магазины и контакты
               </a>
             </div>
           </nav>

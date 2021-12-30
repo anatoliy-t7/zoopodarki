@@ -24,7 +24,7 @@
 
       <x-dashboard.search />
 
-      <div wire:ignore class="flex items-center justify-end py-3">
+      <div wire:ignore class="flex items-center justify-end gap-6 py-3">
         <div class="max-w-xs">
           <label for="filteredByCategory"></label>
           <select wire:model="filteredByCategory" name="filteredByCategory" id="filteredByCategory"
@@ -36,6 +36,15 @@
                   <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
               </optgroup>
+            @endforeach
+          </select>
+        </div>
+        <div class="max-w-xs">
+          <label for="status"></label>
+          <select wire:model="status" name="status" id="status" class="w-64">
+            <option default value="">Все статусы</option>
+            @foreach ($statuses as $item)
+              <option value="{{ $item }}">{{ __('constants.product_status.' . $item) }}</option>
             @endforeach
           </select>
         </div>
