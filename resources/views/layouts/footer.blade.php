@@ -4,8 +4,8 @@
     <nav aria-label="Secondary"
       class="flex flex-col flex-wrap justify-between order-first space-y-4 text-left md:space-x-8 md:flex-row md:space-y-0">
       <div class="">
-        <h2 class="mb-4 text-sm font-medium tracking-widest text-gray-300 uppercase title-font">Каталог</h2>
-        <ul class="space-y-3 text-gray-500 list-none ">
+        <h2 class="mb-4 text-sm font-medium tracking-widest text-gray-400 uppercase title-font">Каталог</h2>
+        <ul class="space-y-3 text-gray-600 list-none ">
           <li>
             <a class="hover:text-orange-500">Кошки</a>
           </li>
@@ -24,8 +24,8 @@
         </ul>
       </div>
       <div class="">
-        <h2 class="mb-4 text-sm font-medium tracking-widest text-gray-300 uppercase title-font">Помощь</h2>
-        <ul class="space-y-3 text-gray-500 list-none">
+        <h2 class="mb-4 text-sm font-medium tracking-widest text-gray-400 uppercase title-font">Помощь</h2>
+        <ul class="space-y-3 text-gray-600 list-none">
           <li>
             <a class="hover:text-orange-500">Как оформить заказ</a>
           </li>
@@ -41,8 +41,8 @@
         </ul>
       </div>
       <div class="">
-        <h2 class="mb-4 text-sm font-medium tracking-widest text-gray-300 uppercase title-font">Компания</h2>
-        <ul class="space-y-3 text-gray-500 list-none ">
+        <h2 class="mb-4 text-sm font-medium tracking-widest text-gray-400 uppercase title-font">Компания</h2>
+        <ul class="space-y-3 text-gray-600 list-none ">
           <li>
             <a href="{{ route('site.page', ['slug' => 'about']) }}" class="hover:text-orange-500">О нас</a>
           </li>
@@ -60,7 +60,7 @@
       </div>
       <div class="">
         <x-share-buttons :url="url()->full()" />
-        <div class="block pt-4 pb-6 space-y-4 text-gray-500">
+        <div class="block pt-4 pb-6 space-y-4 text-gray-600">
           <div>
             пн-пт 8:00 - 20:00
           </div>

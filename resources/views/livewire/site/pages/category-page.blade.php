@@ -5,20 +5,22 @@
     <div>
       <div class="space-y-6">
 
-        <div class="flex items-center justify-start space-x-4 text-2xl ">
+        <div class="flex items-center justify-start space-x-3 text-3xl ">
           <h1 class="font-bold first-letter">
             {{ $name }}
           </h1>
 
-          <div class="text-lg text-gray-400" title="Найдено товаров">{{ $products->total() }}</div>
+          <div class="text-3xl font-bold text-gray-700" title="Найдено товаров">{{ $products->total() }}
+            {{ trans_choice('titles.count_products', $products->total()) }}</div>
         </div>
 
         @if ($tags->count() > 0)
           <div class="flex flex-wrap items-center justify-start lg:px-0">
             @forelse ($tags as $tagItem)
               <div class="p-1">
-                <a href="{{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug, 'tagslug' => $tagItem->slug]) }}"
-                  class="block px-3 py-2 text-xs border rounded-full hover:bg-blue-500 lowercase hover:border-blue-500 hover:text-white {{ request()->is('pet/' . $catalog->slug . '/' . $category->slug . '/tag/' . $tagItem->slug) ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-blue-500 border-blue-200' }}">
+                <a title="{{ $tagItem->name }}"
+                  href="{{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug, 'tagslug' => $tagItem->slug]) }}"
+                  class="block px-3 py-1 text-sm  border rounded-full lowercase hover:text-orange-600  {{ request()->is('pet/' . $catalog->slug . '/' . $category->slug . '/tag/' . $tagItem->slug) ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-100 text-gray-700 border-gray-200' }}">
                   {{ $tagItem->name }}
                 </a>
               </div>
