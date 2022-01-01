@@ -2,7 +2,8 @@
   <x-modal>
     <x-slot name="button">
       <div
-        class="flex items-center justify-center w-full px-4 py-3 space-x-1 bg-gray-100 border border-gray-300 cursor-pointer hover:border-gray-500 h-14 rounded-xl">
+        class=" flex items-center justify-center w-full px-4 py-3 space-x-1 bg-gray-100 border border-gray-300 cursor-pointer hover:border-gray-500 h-14 rounded-xl">
+        <x-loader-small wire:target="setContact" :bg="true" />
         <div>Мои контакты</div>
         <x-tabler-chevron-right class="w-6 h-6 text-gray-400 stroke-current" />
       </div>
@@ -18,7 +19,7 @@
           <div x-cloak x-data="{ newContact: false }" x-on:close-form.window="newContact = false"
             x-on:edit-contact.window="newContact = true">
 
-            <div :class="newContact === false ? 'block' : 'hidden'">
+            <div x-show="newContact === false" x-transition>
 
               @if ($contacts)
                 <div class="space-y-4">
@@ -27,13 +28,14 @@
                       class="relative block px-4 py-3 mt-4 bg-white border border-gray-200 hover:border-green-400 rounded-xl ">
 
                       <div>
-
                         <div x-cloak x-data="{ open: false }" class="absolute top-0 right-0 z-40 p-2 rounded-r-xl"
                           :class="open ? 'h-full bg-gray-100' : ''">
+
                           <div x-show="open === false" x-transition.opacity class="cursor-pointer"
                             x-on:click="open = true" x-on:click.outside="open = false">
                             <x-tabler-dots-vertical class="w-5 h-5 text-gray-300 stroke-current hover:text-gray-500" />
                           </div>
+
                           <div x-show="open" x-transition.opacity
                             class="flex flex-col items-center justify-around h-full space-y-2">
 
@@ -41,18 +43,20 @@
                               class="cursor-pointer">
                               <x-tabler-edit class="w-5 h-5 text-gray-300 stroke-current hover:text-blue-400" />
                             </div>
+
                             @if ($contactItem->id !== $contact['id'])
                               <div x-on:click="open = false" wire:click="removeContact({{ $contactItem->id }})"
                                 class="cursor-pointer">
                                 <x-tabler-trash class="w-5 h-5 text-gray-300 stroke-current hover:text-red-400" />
                               </div>
                             @endif
+
                           </div>
                         </div>
-
                       </div>
 
-                      <div wire:click="setContact({{ $contactItem->id }}), $render" class="space-y-1 cursor-pointer">
+                      <div wire:click="setContact({{ $contactItem->id }}), $render" @click="$dispatch('close-modal')"
+                        class="space-y-1 cursor-pointer">
                         <div>{{ $contactItem->name }}</div>
                         <div>{{ $contactItem->phone }}</div>
                         <div class="text-sm text-gray-400">{{ $contactItem->email }}</div>

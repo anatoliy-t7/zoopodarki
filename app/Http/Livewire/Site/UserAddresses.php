@@ -103,7 +103,7 @@ class UserAddresses extends Component
 
         if ($user->pref_contact === $contactId) {
             toast()
-            ->success('Для удаления адреса сначало выберите другой адрес для заказа')
+            ->success('Для удаления адреса сначала выберите другой адрес для заказа')
             ->push();
         } else {
             Address::find($addressId)->delete();

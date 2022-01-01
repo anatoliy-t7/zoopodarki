@@ -51,46 +51,43 @@
         <div>
           <h4 class="text-lg font-bold">Контакты</h4>
           <div class="items-center justify-start block pt-2 space-y-6 md:space-y-0 md:space-x-6 md:flex">
-            @if ($contact)
+            @if ($contactSelected)
               <div
                 class="items-start justify-start block w-full px-4 py-3 space-y-4 md:w-9/12 md:space-y-0 md:space-x-4 md:flex md:h-14">
 
-                @if ($contact['name'])
+                @if ($contactSelected['name'])
                   <div>
                     <div class="text-xs text-gray-400">Имя: </div>
-                    <div>{{ $contact['name'] }}</div>
+                    <div>{{ $contactSelected['name'] }}</div>
                   </div>
                 @endif
 
-                @if ($contact['phone'])
+                @if ($contactSelected['phone'])
                   <div class="w-32">
                     <div class="text-xs text-gray-400">Тел: </div>
-                    <div>{{ $contact['phone'] }}</div>
+                    <div>{{ $contactSelected['phone'] }}</div>
                   </div>
                 @endif
 
-                @if ($contact['email'])
+                @if ($contactSelected['email'])
                   <div>
                     <div class="text-xs text-gray-400">Адрес эл. почты: </div>
-                    <div>{{ $contact['email'] }}</div>
+                    <div>{{ $contactSelected['email'] }}</div>
                   </div>
                 @endif
-
-
               </div>
             @else
               <div class="w-full md:w-9/12">
                 <div>Добавьте контакт который должен получить заказ</div>
-                @error('contact')
+                @error('contactSelected')
                   <div class="text-sm text-red-500">
                     Вам необходимо добавить контакты
                   </div>
                 @enderror
               </div>
             @endif
-            <span wire:loading wire:target="contact">Updating...</span>
 
-            <div class="w-full md:w-3/12">
+            <div class="relative w-full md:w-3/12">
               <livewire:site.user-contacts />
             </div>
 
@@ -102,7 +99,7 @@
         <div x-data="{ toggle: {{ $orderType }} }">
           <h4 class="pb-2 text-lg font-bold">Способ доставки</h4>
           <div class="space-y-4">
-            <div class="content-center justify-start block space-y-4 md:space-y-0 md:space-x-4 md:flex">
+            <div class="items-center justify-start block space-y-4 md:space-y-0 md:space-x-4 md:flex">
               <div
                 class="inline-flex w-full leading-none text-gray-400 bg-gray-200 border-2 border-gray-200 rounded-2xl md:w-6/12 h-14">
 
@@ -142,18 +139,18 @@
 
               <div :class="{ 'flex': toggle == 0, 'hidden': toggle == 1}"
                 class="flex flex-col items-center justify-start gap-6 md:flex-row">
-                @if (is_array($address) && !empty($address))
+                @if (is_array($addressSelected) && !empty($addressSelected))
                   <div class="flex-col items-start justify-start w-full px-4 py-3 space-y-1 md:w-9/12 h-14">
                     <div class="leading-snug">
-                      {{ $address['address'] }} {{ $address['building'] }}
+                      {{ $addressSelected['address'] }} {{ $addressSelected['building'] }}
 
-                      @if (Arr::has($address, 'apartment'))
-                        , кв. {{ $address['apartment'] }}
+                      @if (Arr::has($addressSelected, 'apartment'))
+                        , кв. {{ $addressSelected['apartment'] }}
                       @endif
                     </div>
-                    @if (Arr::has($address, 'extra'))
+                    @if (Arr::has($addressSelected, 'extra'))
                       <div class="text-xs text-gray-400">
-                        {{ $address['extra'] }}
+                        {{ $addressSelected['extra'] }}
                       </div>
                     @endif
                     @if ($this->deliveryCost === 99999)
@@ -163,7 +160,7 @@
                 @else
                   <div class="w-full md:w-9/12 md:pl-4">
                     Добавьте адрес доставки
-                    @error('address')
+                    @error('addressSelected')
                       <div class="pt-1 text-sm text-red-500">
                         Вам необходимо добавить адрес
                       </div>
@@ -171,7 +168,8 @@
                   </div>
                 @endif
 
-                <div class="w-full md:w-3/12">
+                <div class="relative w-full md:w-3/12">
+                  <x-loader-small wire:target="address" :bg="true" />
                   <livewire:site.user-addresses />
                 </div>
 
@@ -179,24 +177,8 @@
 
               <div x-cloak :class="{ 'block': toggle == 1, 'hidden': toggle == 0}" class="w-full fadeIn">
 
-                <div x-cloak x-data="modal">
-                  <div x-on:close-modal.window="close()" x-show="showModal" x-transition.opacity
-                    @keydown.window.escape="close()"
-                    class="fixed top-0 left-0 z-40 flex items-center justify-center w-screen h-screen bg-gray-500 bg-opacity-50"
-                    role="dialog" aria-modal="true">
-                    <div x-on:click.outside="close()" x-show="showModal" x-transition
-                      class="absolute z-50 flex flex-col max-w-5xl bg-white md:shadow-xl md:rounded-xl">
+                <div x-cloak>
 
-                      <div class="absolute flex items-center justify-between top-4 left-4 md:left-auto md:right-4">
-                        <button x-on:click="close()" class="link-hover">
-                          <x-tabler-x class="w-6 h-6 text-gray-500 stroke-current" />
-                        </button>
-                      </div>
-
-                      <livewire:site.map :checkout="true">
-
-                    </div>
-                  </div>
                   <div class="items-center justify-start block gap-6 md:flex">
 
                     <div class="items-center justify-start block w-full pb-2 md:px-4 md:flex md:w-9/12">
@@ -204,8 +186,8 @@
                         @if ($pickupStore)
                           {{ $pickupStore }}
                         @else
-                          <div x-on:click="open(), $dispatch('init-map')" class="py-2 cursor-pointer">
-                            Выберите пункт выдачи
+                          <div class="py-2 cursor-pointer">
+                            Выберите пункт выдачи справа
                           </div>
                         @endif
                         @error('pickupStore')
@@ -216,29 +198,22 @@
                       </div>
                     </div>
 
-                    <div x-on:click="open(), $dispatch('init-map')"
-                      class="flex items-center justify-center w-full px-4 space-x-1 bg-gray-100 border border-gray-300 cursor-pointer md:w-3/12 hover:border-gray-400 h-14 rounded-xl">
-                      <div>Пункты выдачи</div>
-                      <x-tabler-chevron-right class="w-6 h-6 text-gray-400 stroke-current" />
+                    <div class="w-full md:w-3/12">
+                      <x-modal :width="'6xl'">
+                        <x-slot name="button">
+                          <div x-on:click="$dispatch('init-map')"
+                            class="flex items-center justify-center w-full gap-1 px-4 bg-gray-100 border border-gray-300 cursor-pointer hover:border-gray-400 h-14 rounded-xl">
+                            <div>Пункты выдачи</div>
+                            <x-tabler-chevron-right class="w-6 h-6 text-gray-400 stroke-current" />
+                          </div>
+                        </x-slot>
+                        <x-slot name="content">
+                          <livewire:site.map :checkout="true">
+                        </x-slot>
+                      </x-modal>
                     </div>
-
                   </div>
-                  <script>
-                    document.addEventListener('alpine:initializing', () => {
-                      Alpine.data('modal', () => ({
-                        body: document.body,
-                        showModal: false,
-                        open() {
-                          this.showModal = true
-                          this.body.classList.add('overflow-hidden', 'pr-4');
-                        },
-                        close() {
-                          this.showModal = false
-                          this.body.classList.remove('overflow-hidden', 'pr-4');
-                        },
-                      }))
-                    })
-                  </script>
+
                 </div>
               </div>
 
@@ -626,7 +601,7 @@
         @endif
 
         <div class="flex justify-between pt-2 text-lg font-bold border-t">
-          <span wire:ignore>Итого</span>
+          <span>Итого</span>
           <span class="font-bold">{{ RUB($totalAmount) }}</span>
         </div>
       </div>
@@ -700,8 +675,8 @@
           <button wire:click="createOrder"
             class="relative w-full px-3 py-4 text-lg font-bold text-white uppercase bg-green-500 hover:bg-green-600 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
             wire:loading.attr="disabled">
-            <span wire:loading wire:target="createOrder" class="absolute top-4 left-4">
-              <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
+            <span wire:loading wire:target="createOrder" class="absolute top-0 flex items-center h-full left-6">
+              <svg class="w-6 h-6 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor"

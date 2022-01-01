@@ -35,8 +35,8 @@ class Checkout extends Component
     public $totalAmount;
     public $totalWeight = 200;
     public $userId;
-    public $contact;
-    public $address = [];
+    public $contactSelected;
+    public $addressSelected = [];
     public $date;
     public $dates;
     public $orderComment = '';
@@ -94,13 +94,13 @@ class Checkout extends Component
 
     public function updatedOrderType()
     {
-        if ($this->orderType === 0 && !empty($this->address)) {
-            //$this->getDeliveryCostsByBoxberry($this->totalWeight, $this->address['zip']);
-            if (Arr::has($this->address, 'lat')) {
+        if ($this->orderType === 0 && !empty($this->addressSelected)) {
+            //$this->getDeliveryCostsByBoxberry($this->totalWeight, $this->addressSelected['zip']);
+            if (Arr::has($this->addressSelected, 'lat')) {
                 $this->deliveryCost = $this->getDeliveryCostsByStore(
                     $this->subTotal,
-                    $this->address['lat'],
-                    $this->address['lng']
+                    $this->addressSelected['lat'],
+                    $this->addressSelected['lng']
                 );
             }
         }
@@ -249,7 +249,7 @@ class Checkout extends Component
         }
 
         $this->validate([
-            'contact' => 'required',
+            'contactSelected' => 'required',
         ]);
 
         if (0 == $this->orderType) {
@@ -259,14 +259,14 @@ class Checkout extends Component
                 'address' => 'required',
             ]);
 
-            $address = $this->address['address'] . ' ' . $this->address['building'];
+            $address = $this->addressSelected['address'] . ' ' . $this->addressSelected['building'];
 
-            if (Arr::has($this->address, 'apartment')) {
-                $address = $address . ', кв ' . $this->address['apartment'];
+            if (Arr::has($this->addressSelected, 'apartment')) {
+                $address = $address . ', кв ' . $this->addressSelected['apartment'];
             }
 
-            if (Arr::has($this->address, 'extra')) {
-                $address = $address . ', ' . $this->address['extra'];
+            if (Arr::has($this->addressSelected, 'extra')) {
+                $address = $address . ', ' . $this->addressSelected['extra'];
             }
         } else {
             $this->validate([
@@ -321,7 +321,7 @@ class Checkout extends Component
                 'date' => Carbon::parse($this->date),
                 'delivery_time' => $this->deliveryTime,
                 'delivery_cost' => $this->deliveryCost,
-                'contact' => $this->contact,
+                'contact' => $this->contactSelected,
                 'address' => $address,
                 'order_comment' => $orderComment,
             ]);
@@ -547,7 +547,7 @@ class Checkout extends Component
             $user->load('addresses');
 
             if ($user->pref_contact !== 0) {
-                $this->contact = $user->contacts->where('id', $user->pref_contact)->first()->toArray();
+                $this->contactSelected = $user->contacts->where('id', $user->pref_contact)->first()->toArray();
             }
         }
     }
@@ -559,7 +559,7 @@ class Checkout extends Component
             $user->load('addresses');
 
             if ($user->pref_address !== 0) {
-                $this->address = $user->addresses->where('id', $user->pref_address)->first()->toArray();
+                $this->addressSelected = $user->addresses->where('id', $user->pref_address)->first()->toArray();
             }
         }
 

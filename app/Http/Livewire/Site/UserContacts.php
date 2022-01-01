@@ -25,7 +25,7 @@ class UserContacts extends Component
 
         if ($user->pref_contact === $contactId) {
             toast()
-            ->success('Для удаления контакта сначало выберите другой контакт для заказа')
+            ->success('Для удаления контакта сначала выберите другой контакт для заказа')
             ->push();
         } else {
             Contact::find($contactId)->delete();
@@ -99,6 +99,7 @@ class UserContacts extends Component
             }
 
             $this->emitUp('getContactsforCheckout', $this->contact);
+            // $this->dispatchBrowserEvent('close-modal');
         }
     }
 
@@ -107,7 +108,6 @@ class UserContacts extends Component
         User::where('id', auth()->user()->id)->update([
             'pref_contact' => $contactId,
         ]);
-        $this->dispatchBrowserEvent('close-modal');
         $this->getContacts();
     }
 

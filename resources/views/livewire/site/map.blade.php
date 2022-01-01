@@ -1,8 +1,8 @@
-<div x-data="mapToggle" x-on:init-map.once.window="initMap()" class="w-full">
+<div wire:ignore x-data="mapToggle" x-on:init-map.once.window="initMap()" class="w-full">
 
   <div class="block w-full min-h-full overflow-y-auto md:overflow-hidden md:flex ">
 
-    <div wire:ignore class="w-full md:w-8/12 block-map">
+    <div class="w-full md:w-8/12 block-map">
       <div class="h-full">
         <div id="map" class="w-full overflow-hidden block-map rounded-l-xl">
         </div>
@@ -40,9 +40,6 @@
 
   @push('header-meta')
     <link rel="dns-prefetch" href="//api-maps.yandex.ru">
-    <link rel="preload"
-      href="https://yastatic.net/s3/front-maps-static/maps-front-jsapi-v2-1/2.1.79-29/build/release/full-d1de67c44ff77d445058e8457ca6578da7094d3a.js"
-      as="script">
   @endpush
 
   <script>
@@ -70,6 +67,7 @@
         },
 
         initMap() {
+          console.log('initMap');
           const script = document.createElement('script');
           script.src = 'https://api-maps.yandex.ru/2.1/?apikey=cd408cfa-b066-4543-8d65-dc5be38d9c48&lang=ru_RU';
           document.head.appendChild(script);

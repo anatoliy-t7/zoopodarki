@@ -15,7 +15,7 @@ class CatalogPage extends Component
     {
         $this->catalog = Catalog::where('slug', $catalogslug)
         ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
-        ->withWhereHas('categories.tags', fn ($query) => $query->where('show_in_menu', true))
+        ->with('categories.tags', fn ($query) => $query->where('show_in_menu', true))
         ->first();
 
         $this->setSeo();

@@ -1,6 +1,7 @@
 @props(['width' => 'sm'])
 <div x-cloak x-data="{ open: false }"
-  x-effect="document.body.classList.toggle('overflow-hidden', open), document.body.classList.toggle('pr-4', open)">
+  x-effect="document.body.classList.toggle('overflow-hidden', open), document.body.classList.toggle('pr-4', open)"
+  x-on:close-modal.window="open = false">
 
   <button @click="open = true">
     {{ $button }}
@@ -14,7 +15,7 @@
     <div x-show="open" x-transition @click="open = false"
       class="relative flex items-center justify-center min-h-screen p-4 z-70">
       <div @click.stop
-        class="relative w-full max-w-{{ $width }} px-6 py-5 overflow-y-auto bg-white shadow-xl rounded-xl ">
+        class="relative w-full  max-w-{{ $width }} px-6 py-5 overflow-y-auto bg-white shadow-xl rounded-xl ">
         <div class="flex items-center justify-between">
           <div></div>
           <button x-on:click="open = false" class="link-hover">
