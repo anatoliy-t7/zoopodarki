@@ -13,6 +13,10 @@
           display: inline-block !important;
         }
 
+        .sm-h-32 {
+          height: 32px !important;
+        }
+
         .sm-w-full {
           width: 100% !important;
         }
@@ -57,26 +61,65 @@
                           <tr>
                             <td colspan="3">
                               <h2 style="margin: 0; text-align: center; font-size: 24px; line-height: 24px;">
-                                Учетные данные на сайте "Зооподарки"
+                                Ваш заказ отменен
                               </h2>
+                              <p style="padding-top: 10px; font-size: 16px; line-height: 24px;">
+                                Уважаемый покупатель, Ваш заказ отменен.
+                              </p>
+                              <p style="font-size: 16px; line-height: 24px;">
+                                Денежные средства вернутся только на то же
+                                платежное средство, с которого был произведен
+                                платеж, в течение 10 (десяти) рабочих дней. В
+                                случае оплаты наличными обратитесь, пожалуйста, в
+                                магазин «Зооподарки».
+                              </p>
+                              <p style="padding-top: 2px; padding-bottom: 2px; text-align: center; font-size: 16px; font-weight: 700; line-height: 24px;">
+                                Заказ {{ $order->order_number }} от {{
+                              simpleDate($order->created_at) }}
+                              </p>
                             </td>
                           </tr>
                           <tr>
                             <td colspan="3">
-                              <div style="margin-top: 3px; margin-bottom: 3px; padding-top: 24px; text-align: left; font-size: 14px; line-height: 1.5;">
-                                <p style="padding-top: 4px; padding-bottom: 4px;">
-                                  Уважаемый покупатель, Вы зарегистрировались
-                                  на сайте магазина "Зооподарки"
-                                </p>
-                                <p style="padding-top: 4px; padding-bottom: 4px;">
-                                  Ваш <b>email</b> <code>{{ $data['email'] }}</code> и <b>пароль</b>
-                                  <code></code>{{ $data['password'] }} для входа на
-                                  сайт.
-                                </p>
-                                <p style="padding-top: 4px; padding-bottom: 4px; text-align: center;">
-                                  <a href="{{ env('APP_URL') }}" style="font-size: 18px; font-weight: 700; color: #3b82f6;">Сделать заказ</a>
-                                </p>
-                              </div>
+                              <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                                <tr>
+                                  <th align="left" style="width: 50%;">
+                                    <p>Товар</p>
+                                  </th>
+                                  <th align="left" style="width: 16.666667%;">
+                                    <p>Кол-во</p>
+                                  </th>
+                                  <th align="right" style="width: 16.666667%; text-align: right;">
+                                    <p>Цена</p>
+                                  </th>
+                                </tr>
+                                @foreach ($order->items as $item)
+                                <tr>
+                                  <td style="border-bottom: 1px solid #e5e7eb; width: 50%; padding-bottom: 10px; font-size: 12px;">
+                                    <div>{{$item->name}}</div>
+                                  </td>
+                                  <td align="left" style="border-bottom: 1px solid #e5e7eb; width: 16.666667%; padding-bottom: 10px; text-align: left; font-size: 16px;">
+                                    {{$item->quantity}}
+                                  </td>
+                                  <td align="right" style="border-bottom: 1px solid #e5e7eb; width: 16.666667%; padding-bottom: 10px; text-align: right; font-size: 16px;">
+                                    {{$item->amount - $item->discount}}
+                                  </td>
+                                </tr>
+                                @endforeach
+                                <tr>
+                                  <td style="width: 50%; padding-top: 10px;"></td>
+                                  <td style="width: 16.666667%; padding-top: 10px;">
+                                    <p align="left" style="margin: 0; text-align: left; font-size: 16px; font-weight: 700; line-height: 24px;">
+                                      Всего
+                                    </p>
+                                  </td>
+                                  <td style="width: 16.666667%; padding-top: 10px;">
+                                    <p align="right" style="margin: 0; text-align: right; font-size: 16px; font-weight: 700; line-height: 24px;">
+                                      {{$order->amount}}
+                                    </p>
+                                  </td>
+                                </tr>
+                              </table>
                             </td>
                           </tr>
                         </table>
@@ -86,7 +129,7 @@
                 </td>
               </tr>
               <tr>
-                <td style="padding-top: 4px; padding-bottom: 4px;">
+                <td class="sm-px-24" style="border-radius: 4px; padding-left: 48px; padding-right: 48px; text-align: left; color: #6b7280;">
                   <table style="width: 100%; padding-top: 6px; padding-bottom: 32px;" cellpadding="0" cellspacing="0" role="presentation">
                     <tr style="width: 100%;">
                       <td style="width: 41.666667%;">
@@ -108,9 +151,14 @@
                 </td>
               </tr>
               <tr>
-                <td style="padding-bottom: 32px; text-align: center; color: #9ca3af;">
-                  Спасибо, что выбрали нас!
+                <td class="sm-px-24" style="border-radius: 4px; padding-left: 48px; padding-right: 48px; padding-top: 24px; text-align: left;">
+                  <p style="margin: 0; text-align: center; font-size: 14px; color: #6b7280;">
+                    Заходите снова!
+                  </p>
                 </td>
+              </tr>
+              <tr>
+                <td class="sm-h-32" style="height: 48px;"></td>
               </tr>
             </table>
           </td>

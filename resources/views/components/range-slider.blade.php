@@ -14,7 +14,7 @@
           class="absolute z-30 w-full h-6 opacity-0 appearance-none cursor-pointer pointer-events-none">
       </label>
       <label>
-        <input type="range" step="100" :min="min" :input="moveThumb" :max="max" x-model="maxprice"
+        <input type="range" step="10" :min="min" :input="moveThumb" :max="max" x-model="maxprice"
           class="absolute z-30 w-full h-6 opacity-0 appearance-none cursor-pointer pointer-events-none">
       </label>
       <div class="relative z-10 h-1">
@@ -36,8 +36,8 @@
         Alpine.data('range', () => ({
           minprice: {{ $minPrice }},
           maxprice: {{ $maxPrice }},
-          min: {{ $minPrice }},
-          max: {{ $maxPrice }},
+          min: {{ $minRange }},
+          max: {{ $maxRange }},
           minthumb: {{ $minPrice }},
           maxthumb: {{ $maxPrice }},
           range: 100,
@@ -56,6 +56,14 @@
 
             this.range = 100 - (((this.maxprice - this.min) / (this.max - this.min)) * 100);
           },
+          reset() {
+            this.minprice = {{ $minPrice }};
+            this.maxprice = {{ $maxPrice }};
+            this.min = {{ $minPrice }};
+            this.max = {{ $maxPrice }};
+            this.minthumb = {{ $minPrice }};
+            this.maxthumb = {{ $maxPrice }};
+          }
         }))
       })
     </script>

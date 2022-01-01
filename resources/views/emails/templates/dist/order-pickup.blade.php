@@ -13,10 +13,6 @@
           display: inline-block !important;
         }
 
-        .sm-h-32 {
-          height: 32px !important;
-        }
-
         .sm-w-full {
           width: 100% !important;
         }
@@ -61,32 +57,20 @@
                           <tr>
                             <td colspan="3">
                               <h2 style="margin: 0; text-align: center; font-size: 24px; line-height: 24px;">
-                                Мы приняли Ваш заказ
+                                Ваш заказ готов к самовывозу
                               </h2>
                               <p style="padding-top: 10px; font-size: 16px; line-height: 24px;">
-                                Уважаемый покупатель, Ваш заказ в обработке
+                                Уважаемый покупатель, Вы можете забрать Ваш заказ
+                                в магазине "Зооподарки"
                               </p>
                               <p style="padding-top: 2px; padding-bottom: 2px; font-size: 16px; line-height: 24px;">
-                                Заказ {{ $order->order_number }} от {{
-                              simpleDate($order->created_at) }}
+                                Заказ <b>{{ $order->order_number }}</b>
                               </p>
                             </td>
                           </tr>
                           <tr>
                             <td colspan="3">
-                              <div style="margin-top: 3px; margin-bottom: 3px; text-align: left; font-size: 14px;">
-                                Телефон:
-                                <span style="font-weight: 700;">{{ $order->contact['phone'] }}</span>
-                              </div>
-                              <div style="margin-top: 3px; margin-bottom: 3px; text-align: left; font-size: 14px;">
-                                Адрес доставки:
-                                <span style="font-weight: 700;">{{ $order->address }}</span>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td colspan="3">
-                              <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                              <table style="width: 100%; padding-top: 28px; padding-bottom: 28px;" cellpadding="0" cellspacing="0" role="presentation">
                                 <tr>
                                   <th align="left" style="width: 50%;">
                                     <p>Товар</p>
@@ -127,6 +111,40 @@
                               </table>
                             </td>
                           </tr>
+                          <tr>
+                            <td colspan="3">
+                              <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                                <tr>
+                                  <td style="width: 33.333333%; padding-bottom: 10px; text-align: left; font-size: 16px;">
+                                    Заказ будет храниться до:
+                                  </td>
+                                  <td style="width: 66.666667%; padding-bottom: 10px; text-align: left; font-size: 16px; font-weight: 600;">
+                                    {{simpleDate(Carbon::createFromFormat('Y.m.d',
+                                  $user->premiumDate)->addDays(7))}}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="width: 33.333333%; padding-bottom: 10px; text-align: left; font-size: 16px;">
+                                    Адрес самовывоза:
+                                  </td>
+                                  <td style="width: 66.666667%; padding-bottom: 10px; text-align: left; font-size: 16px; font-weight: 600;">
+                                    {{$order->address}}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="width: 33.333333%; padding-bottom: 10px; text-align: left; font-size: 16px;">
+                                    Способ оплаты:
+                                  </td>
+                                  <td style="width: 66.666667%; padding-bottom: 10px; text-align: left; font-size: 16px; font-weight: 600;">
+                                    @if($order->payment_method === 0) Онлайн
+                                    @if($order->payment_status !== 'succeeded') не
+                                    оплачен @endif @else Наличными при доставке
+                                    @endif
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
                         </table>
                       </td>
                     </tr>
@@ -156,14 +174,11 @@
                 </td>
               </tr>
               <tr>
-                <td class="sm-px-24" style="border-radius: 4px; padding-left: 48px; padding-right: 48px; padding-top: 24px; text-align: left;">
+                <td class="sm-px-24" style="border-radius: 4px; padding-left: 48px; padding-right: 48px; padding-bottom: 32px; text-align: left;">
                   <p style="margin: 0; text-align: center; font-size: 14px; color: #6b7280;">
-                    Благодарим за покупку!
+                    Благодарим за покупку! Заходите снова!
                   </p>
                 </td>
-              </tr>
-              <tr>
-                <td class="sm-h-32" style="height: 48px;"></td>
               </tr>
             </table>
           </td>

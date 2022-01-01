@@ -87,8 +87,12 @@
                   <table style="width: 100%; padding-top: 6px; padding-bottom: 32px;" cellpadding="0" cellspacing="0" role="presentation">
                     <tr style="width: 100%;">
                       <td style="width: 41.666667%;">
-                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">8 (931) 239-98-83</p>
-                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">8 (812) 459-07-20</p>
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">
+                          {{ config('constants.phone') }}
+                        </p>
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">
+                          {{ config('constants.phone2') }}
+                        </p>
                         <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">с 10.00 до 20.00</p>
                       </td>
                       <td style="width: 58.333333%;">

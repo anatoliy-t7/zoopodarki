@@ -26,15 +26,19 @@ class CategoryPage extends Component
     public $attributesRanges = [];
     private $attrsGroupFilters = []; // Групирует выбранные свойства
 
+    public $shelterUrgentlyRequired = false; // Срочно требуется для приюта 2546
+    public $shelterMarkdown = false; // Уценка для приюта
+
     public $promoF = false;
     public $attrsF = []; // Собирает выбранные свойства
     public $brandsF = [];
     public $stockF = 3;
 
-
     public $showPromoF = true; // TODO сделать проверку
     public $maxPrice = 10000;
     public $minPrice = 0;
+    public $maxRange = 10000;
+    public $minRange = 0;
     public $sortSelectedName = 'По популярности';
     public $sortSelectedType = 'popularity';
     public $sortBy = 'desc';
@@ -124,6 +128,9 @@ class CategoryPage extends Component
             ->whereIn('id', $variationsId)
             ->where('price', '>', 0)
             ->min('price');
+
+        $this->maxRange = $this->maxPrice;
+        $this->minRange = $this->minPrice;
     }
 
     public function setSeo()
@@ -300,6 +307,7 @@ class CategoryPage extends Component
             ->when($this->brandsF, function ($query) {
                 $query->whereIn('brand_id', $this->brandsF);
             })
+
             ->with('attributes')
             ->when($this->attributesRangeOn, function ($query) {
                 $query->whereHas('attributes', function ($query) {
@@ -316,10 +324,17 @@ class CategoryPage extends Component
                 });
             })
 
+             ->when($this->shelterUrgentlyRequired, function ($query) {
+                 $query->whereHas('attributes', fn ($q) => $q->where('attribute_item.id', 2546));
+             })
+
             ->whereHas('variations', function ($query) {
                 $query->whereBetween('price', [$this->minPrice, $this->maxPrice])
                 ->when($this->promoF, function ($query) {
                     $query->where('promotion_type', '>', 0);
+                })
+                ->when($this->shelterMarkdown, function ($query) {
+                    $query->where('promotion_type', 1);
                 });
             })
 

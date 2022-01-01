@@ -22,6 +22,14 @@ trait SendOrderEmail
         if ($order->status === 'delivered') {
             $this->sendEmailWithStatusDelivered($order);
         }
+
+        if ($order->status === 'ready') {
+            $this->sendEmailWithStatusReady($order);
+        }
+
+        if ($order->status === 'canceled') {
+            $this->sendEmailWithStatusCanceled($order);
+        }
     }
 
     public function sendEmailWithStatusProcessing($order)
@@ -54,6 +62,28 @@ trait SendOrderEmail
 
         if ($order->user->email !== null && $order->user->email !== $order->contact['email']) {
             Mail::to($order->contact['email'])->send(new OrderDelivered($order));
+        }
+    }
+
+    public function sendEmailWithStatusReady($order)
+    {
+        if ($order->user->email !== null) {
+            Mail::to($order->user->email)->send(new OrderReady($order));
+        }
+
+        if ($order->user->email !== null && $order->user->email !== $order->contact['email']) {
+            Mail::to($order->contact['email'])->send(new OrderReady($order));
+        }
+    }
+
+    public function sendEmailWithStatusCanceled($order)
+    {
+        if ($order->user->email !== null) {
+            Mail::to($order->user->email)->send(new OrderCanceled($order));
+        }
+
+        if ($order->user->email !== null && $order->user->email !== $order->contact['email']) {
+            Mail::to($order->contact['email'])->send(new OrderCanceled($order));
         }
     }
 }

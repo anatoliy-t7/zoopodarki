@@ -13,7 +13,7 @@
 
     <div class="px-12 pb-28">
       <x-filters :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges" :brands="$brands"
-        :showPromoF="$showPromoF" />
+        :showPromoF="$showPromoF" :catalogId="$catalogId" />
     </div>
 
   </div>

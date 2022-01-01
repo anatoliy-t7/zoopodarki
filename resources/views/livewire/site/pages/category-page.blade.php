@@ -33,10 +33,12 @@
                 <!--noindex-->
                 @if (Agent::isMobile())
                   <x-mob-sidebar :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges"
-                    :brands="$brands" :showPromoF="$showPromoF" />
+                    :minRange="$minRange" :maxRange="$maxRange" :brands="$brands" :showPromoF="$showPromoF"
+                    :catalogId="$catalog->id" />
                 @else
-                  <x-filters :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges"
-                    :brands="$brands" :showPromoF="$showPromoF" />
+                  <x-filters :minPrice="$minPrice" :maxPrice="$maxPrice" :minRange="$minRange" :maxRange="$maxRange"
+                    :attributesRanges="$attributesRanges" :brands="$brands" :showPromoF="$showPromoF"
+                    :catalogId="$catalog->id" />
                 @endif
                 <!--/noindex-->
                 <!--googleon: all-->
@@ -56,6 +58,9 @@
 
               @if ($category->id === 44)
                 <x-message44 />
+              @endif
+              @if ($catalog->id === 14)
+                <x-message-shelter />
               @endif
 
               <div class="relative w-full pb-6 md:px-4 md:bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">

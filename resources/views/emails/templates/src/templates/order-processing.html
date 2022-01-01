@@ -59,19 +59,35 @@
                               @foreach ($order->items as $item)
                               <tr>
                                 <td
-                                  class="w-6/12 pb-10 text-xs  b-border leading-18"
+                                  class="
+                                    w-6/12
+                                    pb-10
+                                    text-xs
+                                    b-border
+                                    leading-18
+                                  "
                                 >
                                   <div>@{{$item->name}}</div>
                                 </td>
                                 <td
                                   align="left"
-                                  class="w-2/12 pb-10 text-base text-left  b-border"
+                                  class="
+                                    w-2/12
+                                    pb-10
+                                    text-base text-left
+                                    b-border
+                                  "
                                 >
                                   @{{$item->quantity}}
                                 </td>
                                 <td
                                   align="right"
-                                  class="w-2/12 pb-10 text-base text-right  b-border"
+                                  class="
+                                    w-2/12
+                                    pb-10
+                                    text-base text-right
+                                    b-border
+                                  "
                                 >
                                   @{{$item->amount - $item->discount}}
                                 </td>
@@ -79,12 +95,17 @@
                               @endforeach
 
                               <tr>
-                                <td class="w-2/12 pt-10"></td>
                                 <td class="w-6/12 pt-10"></td>
                                 <td class="w-2/12 pt-10">
                                   <p
                                     align="left"
-                                    class="m-0 text-base font-bold text-left  leading-24"
+                                    class="
+                                      m-0
+                                      text-base
+                                      font-bold
+                                      text-left
+                                      leading-24
+                                    "
                                   >
                                     Всего
                                   </p>
@@ -92,7 +113,13 @@
                                 <td class="w-2/12 pt-10">
                                   <p
                                     align="right"
-                                    class="m-0 text-base font-bold text-right  leading-24"
+                                    class="
+                                      m-0
+                                      text-base
+                                      font-bold
+                                      text-right
+                                      leading-24
+                                    "
                                   >
                                     @{{$order->amount}}
                                   </p>

@@ -70,6 +70,49 @@
                           </tr>
                           <tr>
                             <td colspan="3">
+                              <table style="width: 100%; padding-top: 28px; padding-bottom: 28px;" cellpadding="0" cellspacing="0" role="presentation">
+                                <tr>
+                                  <th align="left" style="width: 50%;">
+                                    <p>Товар</p>
+                                  </th>
+                                  <th align="left" style="width: 16.666667%;">
+                                    <p>Кол-во</p>
+                                  </th>
+                                  <th align="right" style="width: 16.666667%; text-align: right;">
+                                    <p>Цена</p>
+                                  </th>
+                                </tr>
+                                @foreach ($order->items as $item)
+                                <tr>
+                                  <td style="border-bottom: 1px solid #e5e7eb; width: 50%; padding-bottom: 10px; font-size: 12px;">
+                                    <div>{{$item->name}}</div>
+                                  </td>
+                                  <td align="left" style="border-bottom: 1px solid #e5e7eb; width: 16.666667%; padding-bottom: 10px; text-align: left; font-size: 16px;">
+                                    {{$item->quantity}}
+                                  </td>
+                                  <td align="right" style="border-bottom: 1px solid #e5e7eb; width: 16.666667%; padding-bottom: 10px; text-align: right; font-size: 16px;">
+                                    {{$item->amount - $item->discount}}
+                                  </td>
+                                </tr>
+                                @endforeach
+                                <tr>
+                                  <td style="width: 50%; padding-top: 10px;"></td>
+                                  <td style="width: 16.666667%; padding-top: 10px;">
+                                    <p align="left" style="margin: 0; text-align: left; font-size: 16px; font-weight: 700; line-height: 24px;">
+                                      Всего
+                                    </p>
+                                  </td>
+                                  <td style="width: 16.666667%; padding-top: 10px;">
+                                    <p align="right" style="margin: 0; text-align: right; font-size: 16px; font-weight: 700; line-height: 24px;">
+                                      {{$order->amount}}
+                                    </p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="3">
                               <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                                 <tr>
                                   <td style="width: 33.333333%; padding-bottom: 10px; text-align: left; font-size: 16px;">
@@ -118,8 +161,12 @@
                   <table style="width: 100%; padding-top: 6px; padding-bottom: 32px;" cellpadding="0" cellspacing="0" role="presentation">
                     <tr style="width: 100%;">
                       <td style="width: 41.666667%;">
-                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">8 (931) 239-98-83</p>
-                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">8 (812) 459-07-20</p>
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">
+                          {{ config('constants.phone') }}
+                        </p>
+                        <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">
+                          {{ config('constants.phone2') }}
+                        </p>
                         <p style="margin: 0; padding-bottom: 4px; text-align: left; font-size: 14px; color: #6b7280;">с 10.00 до 20.00</p>
                       </td>
                       <td style="width: 58.333333%;">

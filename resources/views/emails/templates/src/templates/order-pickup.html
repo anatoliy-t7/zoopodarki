@@ -14,11 +14,11 @@
                         <tr>
                           <td colspan="3">
                             <h2 class="m-0 text-2xl text-center leading-24">
-                              Ваш заказ отправлен
+                              Ваш заказ готов к самовывозу
                             </h2>
                             <p class="pt-10 text-base leading-24">
-                              Уважаемый покупатель, Ваш заказ передан в службу
-                              доставки
+                              Уважаемый покупатель, Вы можете забрать Ваш заказ
+                              в магазине "Зооподарки"
                             </p>
                             <p class="py-2 text-base leading-24">
                               Заказ <b>@{{ $order->order_number }}</b>
@@ -89,27 +89,18 @@
                             <table class="w-full pt-25">
                               <tr>
                                 <td class="w-4/12 pb-10 text-base text-left">
-                                  Дата доставки:
+                                  Заказ будет храниться до:
                                 </td>
                                 <td
                                   class="w-8/12 pb-10 text-base font-semibold text-left "
                                 >
-                                  @{{simpleDate($order->date)}}
+                                  @{{simpleDate(Carbon::createFromFormat('Y.m.d',
+                                  $user->premiumDate)->addDays(7))}}
                                 </td>
                               </tr>
                               <tr>
                                 <td class="w-4/12 pb-10 text-base text-left">
-                                  Диапазон доставки:
-                                </td>
-                                <td
-                                  class="w-8/12 pb-10 text-base font-semibold text-left "
-                                >
-                                  @{{$order->delivery_time}}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td class="w-4/12 pb-10 text-base text-left">
-                                  Адрес доставки:
+                                  Адрес самовывоза:
                                 </td>
                                 <td
                                   class="w-8/12 pb-10 text-base font-semibold text-left "
@@ -124,8 +115,10 @@
                                 <td
                                   class="w-8/12 pb-10 text-base font-semibold text-left "
                                 >
-                                  @if($order->payment_method === 0) Онлайн @else
-                                  Наличными при доставке @endif
+                                  @if($order->payment_method === 0) Онлайн
+                                  @if($order->payment_status !== 'succeeded') не
+                                  оплачен @endif @else Наличными при доставке
+                                  @endif
                                 </td>
                               </tr>
                             </table>
