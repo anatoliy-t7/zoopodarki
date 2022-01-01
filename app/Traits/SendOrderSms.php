@@ -20,11 +20,26 @@ trait SendOrderSms
         if ($order->status === 'delivered') {
             $this->sendSmsWithStatusDelivered($order);
         }
+
+        if ($order->status === 'ready') {
+            $this->sendSmsWithStatusReady($order);
+        }
+
+        if ($order->status === 'canceled') {
+            $this->sendSmsWithStatusCanceled($order);
+        }
     }
 
     public function sendSmsWithStatusProcessing($order)
     {
         $text = 'Ваш заказ #' . $order->order_number . ' в магазине "Зооподарки"' . "\n" . 'https://zoopodarki.spb.ru';
+
+        $this->trySendSms($order->contact['phone'], $text);
+    }
+
+    public function sendSmsWithStatusReady($order)
+    {
+        $text = 'Ваш заказ #' . $order->order_number . ' ждет вас в магазине "' . $order->address . "\n" . 'https://zoopodarki.spb.ru';
 
         $this->trySendSms($order->contact['phone'], $text);
     }
@@ -39,6 +54,13 @@ trait SendOrderSms
     public function sendSmsWithStatusDelivered($order)
     {
         $text = 'Ваш заказ #' . $order->order_number . ' доставлен. Заходите снова! ' . "\n" . 'https://zoopodarki.spb.ru';
+
+        $this->trySendSms($order->contact['phone'], $text);
+    }
+
+    public function sendSmsWithStatusCanceled($order)
+    {
+        $text = 'Ваш заказ #' . $order->order_number . ' отменен. Подробности в личном кабинете"' . "\n" . 'https://zoopodarki.spb.ru';
 
         $this->trySendSms($order->contact['phone'], $text);
     }

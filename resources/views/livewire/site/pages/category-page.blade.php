@@ -1,22 +1,19 @@
   <div class="space-y-2">
-
     <x-breadcrumbs :category="$category" :catalog="$catalog" />
-
     <div>
       <div class="space-y-6">
-
         <div class="flex items-center justify-start space-x-3 text-3xl ">
           <h1 class="font-bold first-letter">
             {{ $name }}
           </h1>
-
           <div class="text-3xl font-bold text-gray-700" title="Найдено товаров">{{ $products->total() }}
-            {{ trans_choice('titles.count_products', $products->total()) }}</div>
+
+            {{ trans_choice('titles.count_products', substr($products->total(), -1)) }}</div>
         </div>
 
         @if ($tags->count() > 0)
           <div class="flex flex-wrap items-center justify-start lg:px-0">
-            @forelse ($tags as $tagItem)
+            @foreach ($tags as $tagItem)
               <div class="p-1">
                 <a title="{{ $tagItem->name }}"
                   href="{{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug, 'tagslug' => $tagItem->slug]) }}"
@@ -24,8 +21,7 @@
                   {{ $tagItem->name }}
                 </a>
               </div>
-            @empty
-            @endforelse
+            @endforeach
           </div>
         @endif
 
@@ -45,7 +41,6 @@
                 <!--/noindex-->
                 <!--googleon: all-->
               </div>
-
               @if (Agent::isDesktop())
                 <div class="px-4 pt-4 lg:py-4">
                   <button
@@ -59,8 +54,11 @@
 
             <article id="top" class="w-full">
 
-              <div class="relative w-full pb-6 md:px-4 md:bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
+              @if ($category->id === 44)
+                <x-message44 />
+              @endif
 
+              <div class="relative w-full pb-6 md:px-4 md:bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
                 <div class="relative ">
                   <div class="flex items-center justify-end py-3">
                     <x-dropdown>
@@ -80,32 +78,24 @@
                   <div itemscope itemtype="https://schema.org/ItemList">
                     @if ($products->total() !== 0)
                       <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-
                         @foreach ($products as $product)
                           <div itemprop="itemListElement" itemscope itemtype="https://schema.org/Product">
-
                             <livewire:site.card-products :product="$product" :catalog="$catalog->slug"
                               :category="$category->slug" :wire:key="'product-'.$product->id" />
-
                           </div>
                         @endforeach
-
                       </div>
                     @else
                       <p>По этому фильтру ничего не найдено</p>
                     @endif
                   </div>
                 </div>
-
               </div>
-
               <div class="py-4">
                 {{ $products->links() }}
               </div>
-
             </article>
           </div>
-
         </div>
       </div>
     </div>

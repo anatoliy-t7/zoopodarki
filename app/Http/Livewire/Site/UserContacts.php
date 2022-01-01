@@ -20,13 +20,22 @@ class UserContacts extends Component
 
     public function removeContact($contactId)
     {
-        Contact::find($contactId)->delete();
+        $user = auth()->user();
+        $user->load('contacts');
 
-        $this->getContacts();
+        if ($user->pref_contact === $contactId) {
+            toast()
+            ->success('Для удаления контакта сначало выберите другой контакт для заказа')
+            ->push();
+        } else {
+            Contact::find($contactId)->delete();
 
-        toast()
+            $this->getContacts();
+
+            toast()
             ->success('Контакт удален')
             ->push();
+        }
     }
 
     public function editContact($contactId)
@@ -44,7 +53,7 @@ class UserContacts extends Component
             'newContact.email' => 'nullable|email',
         ]);
 
-        if (! Arr::has($this->newContact, 'email')) {
+        if (!Arr::has($this->newContact, 'email')) {
             $this->newContact['email'] = null;
         }
 
@@ -82,7 +91,7 @@ class UserContacts extends Component
     {
         if (auth()->user()) {
             $user = auth()->user();
-            $user->load('addresses');
+            $user->load('contacts');
 
             if ($user->pref_contact !== 0) {
                 $this->contact = $user->contacts->where('id', $user->pref_contact)->first()->toArray();

@@ -10,10 +10,7 @@
               class="flex items-center justify-end space-x-2">
               <a itemprop="itemListElement" href="{{ route('site.page', 'delivery') }}"
                 class="px-3 py-2 hover:underline">
-                Доставка
-              </a>
-              <a itemprop="itemListElement" href="#" class="px-3 py-2 hover:underline">
-                Самовывоз
+                Доставка и самовывоз
               </a>
               <a itemprop="itemListElement" href="{{ route('site.contact') }}" class="px-3 py-2 hover:underline">
                 Магазины и контакты

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
 
 return [
 
@@ -31,7 +30,7 @@ return [
     |
      */
 
-    'lifetime' => env('SESSION_LIFETIME', 43800),
+    'lifetime' => env('SESSION_LIFETIME', 525960),
 
     'expire_on_close' => false,
 

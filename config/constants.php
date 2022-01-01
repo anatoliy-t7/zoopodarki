@@ -6,6 +6,7 @@ return [
     'phone2' => env('ZOO_PHONE2', ''),
     'website_url' => env('APP_URL', 'https//:zoopodarki.spb.ru'),
     'manager_mail' => env('MANAGER_MAIL', 'manager@zoopodarki.spb.ru'),
+    'mail' => env('MAIL', 'zoopodarki@mail.ru'),
     'boxberry_token' => env('BOXBERRY_TOKEN', '1111'),
     'here_com_token' => env('HERE_COM_TOKEN', '1111'),
     'lat_departure' => env('LAT_DEPARTURE', '59.91954757368843'),

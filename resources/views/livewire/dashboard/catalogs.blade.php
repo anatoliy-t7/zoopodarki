@@ -257,12 +257,6 @@
 
                       <div class="flex items-center space-x-2 justi fy-end">
 
-                        @if ($category['show_in_catalog'] == 1)
-                          <div title="Отображаеться в каталоге">
-                            <x-tabler-pinned class="w-4 h-4 text-gray-400 stroke-current" />
-                          </div>
-                        @endif
-
                         @if ($editCategory['menu'] == 1)
                           <div title="Отображается в меню">
                             <x-tabler-menu-2 class="w-4 h-4 text-gray-400 stroke-current" />

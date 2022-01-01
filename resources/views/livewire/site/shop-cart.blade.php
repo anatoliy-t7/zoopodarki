@@ -1,6 +1,6 @@
 <div x-data="cart" @close.window="close(event)" class="relative">
   <button x-on:click="open" class="p-1 group focus:outline-none hover:text-orange-500 focus:text-orange-500"
-    @add-to-cart.window="close(event)">
+    @add-to-cart.window="close(event)" aria-label="Открыть корзину">
 
     <svg class="text-gray-600 w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
       <path class="text-gray-600 stroke-current group-hover:text-orange-500 focus:text-orange-500" stroke-linecap="round"
@@ -53,7 +53,8 @@
         </div>
 
         <div>
-          <button @click="close" class="link-hover focus:outline-none focus:shadow-outline">
+          <button @click="close" class="link-hover focus:outline-none focus:shadow-outline"
+            aria-label="Закрыть корзину">
             <x-tabler-x class="text-gray-500 stroke-current w-7 h-7" />
           </button>
         </div>
@@ -88,7 +89,6 @@
                       <div class="flex items-center justify-between w-full space-x-2">
 
                         <div class="flex items-center justify-start w-2/12 py-2 text-xs text-gray-500">
-
                           @if ($item->attributes->has('unit'))
                             <x-units :unit="$item->attributes['unit']" :value="$item->attributes->weight">
                             </x-units>
@@ -101,20 +101,21 @@
                             @if ($item->attributes->unit_value != 'на развес')
                               @if ($item->quantity == 1)
                                 <button wire:click="delete({{ $item->id }})"
-                                  class="flex items-center justify-center w-8 h-8 text-gray-400 bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
+                                  class="flex items-center justify-center w-8 h-8 text-gray-400 bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300"
+                                  aria-label="Удалить товар">
                                   <x-tabler-trash class="w-5 h-5" />
                                 </button>
                               @else
-                                <button wire:click="decrement({{ $item->id }})"
+                                <button wire:click="decrement({{ $item->id }})" aria-label="Уменьшить"
                                   class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 rounded-l-lg border border-gray-200 hover:bg-gray-300 {{ $item->quantity == 1 ? 'text-gray-400 cursor-not-allowed' : ' ' }} "
                                   {{ $item->quantity == 1 ? 'disabled' : ' ' }}>-</button>
                               @endif
                               <div class="flex items-center justify-center w-8 h-8 border-t border-b">
-                                <div class="border-gray-200 ">
+                                <div class="border-gray-200" aria-label="Количество">
                                   {{ $item->quantity }}
                                 </div>
                               </div>
-                              <button wire:click="increment({{ $item->id }})"
+                              <button wire:click="increment({{ $item->id }})" aria-label="Увеличить"
                                 class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">+</button>
 
                             @else

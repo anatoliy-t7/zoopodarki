@@ -67,11 +67,15 @@ class AuthCom extends Component
             if ($this->checkOtp()) {
                 $this->authUser();
             }
+
+            info('otp: authUser');
         } else {
             if ($this->checkOtp()) {
                 $this->createUser();
                 $this->authUser();
             }
+
+            info('otp: createUser');
         }
     }
 

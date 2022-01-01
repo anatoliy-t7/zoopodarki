@@ -51,6 +51,7 @@ class Checkout extends Component
     public $userHasDiscount = 0;
     public $userHasDiscountOnReview = false;
     public $productDiscountIdsByWeight = false;
+    public $contactlessDelivery = false;
     protected $listeners = [
         'setPickupStore',
         'getAddressesforCheckout',
@@ -249,7 +250,7 @@ class Checkout extends Component
 
         if ($this->deliveryCost === false) {
             return toast()
-            ->warning('Дорогой покупатель, в настоящее время мы доставляем только в пределах КАД,
+            ->warning('Дорогой покупатель, в настоящее время мы доставляем только в пределах СПБ КАД,
             но совсем скоро начнем доставку и за его пределами!')
             ->push();
         }
@@ -291,6 +292,10 @@ class Checkout extends Component
         $this->getCartCheckout();
 
         $orderComment = $this->orderComment;
+
+        if ($contactlessDelivery === true) {
+            $orderComment = 'Бесконтактная доставка' . "\n" . $orderComment;
+        }
 
         if (0 !== $this->firstOrder) {
             $orderComment = 'Скидка за первый заказ -'
@@ -555,6 +560,8 @@ class Checkout extends Component
                 $this->address = $user->addresses->where('id', $user->pref_address)->first()->toArray();
             }
         }
+
+        $this->updatedOrderType();
     }
 
     public function render()

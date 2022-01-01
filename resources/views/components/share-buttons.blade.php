@@ -1,6 +1,7 @@
 <div x-data="{ share: false, url: '{{ $url }}', copy: false,  copyToggle() { this.copy = !this.copy} }"
   class="relative">
-
+  <!--googleoff: all-->
+  <!--noindex-->
   <button x-on:click="share = !share" title="Поделиться ссылкой" class="link-hover"
     :class="share ? 'text-orange-500' : 'text-gray-500'">
     <x-tabler-share class="w-6 h-6 stroke-current hover:text-orange-500" />
@@ -9,7 +10,7 @@
   <div x-cloak x-on:click.outside="share = false" x-show="share" x-transition
     class="absolute z-30 flex flex-col items-start justify-between w-auto text-sm text-gray-500 shadow-lg -right-4 top-8 rounded-xl bg-gray-50 ">
 
-    <a href="https://vk.com/share.php?url={{ $url }}" target="_blank"
+    <a href="https://vk.com/share.php?url={{ $url }}" target="_blank" rel="noreferrer"
       class="flex items-center justify-start w-full px-4 pt-3 pb-2 space-x-3 rounded-t-xl hover:bg-gray-100"
       title="Вконтакте">
       <svg class="bg-blue-600 rounded-md fill-current w-7 h-7 " viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +21,7 @@
       <span>Вконтакте</span>
     </a>
 
-    <a href="https://connect.ok.ru/offer?url={{ $url }}" target="_blank"
+    <a href="https://connect.ok.ru/offer?url={{ $url }}" target="_blank" rel="noreferrer"
       class="flex items-center justify-start w-full px-4 py-2 space-x-3 hover:bg-gray-100" title="Одноклассники">
       <svg class="bg-orange-400 rounded-md fill-current w-7 h-7 " viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <g fill="#FFF" fill-rule="evenodd">
@@ -31,7 +32,7 @@
       <span>Одноклассники</span>
     </a>
 
-    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $url }}" target="_blank"
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $url }}" target="_blank" rel="noreferrer"
       class="flex items-center justify-start w-full px-4 py-2 space-x-3 hover:bg-gray-100" title="Facebook">
       <svg class="bg-blue-600 rounded-md fill-current w-7 h-7 " viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M13.423 20v-7.298h2.464l.369-2.845h-2.832V8.042c0-.824.23-1.385 1.417-1.385h1.515V4.111A20.255 20.255 0
@@ -40,7 +41,7 @@
       <span>Facebook</span>
     </a>
 
-    <button x-on:click="navigator.clipboard.writeText(url); copyToggle()"
+    <button aria-label="Скопировать ссылку" x-on:click="navigator.clipboard.writeText(url); copyToggle()"
       class="flex items-center justify-start w-full px-4 pt-1 pb-3 space-x-3 rounded-b-xl hover:bg-gray-100"
       title="Скопировать ссылку">
       <span :class="copy ? 'animate-spin-once' : ''">
@@ -50,6 +51,6 @@
     </button>
 
   </div>
-
-
+  <!--/noindex-->
+  <!--googleon: all-->
 </div>

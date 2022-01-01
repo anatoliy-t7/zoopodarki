@@ -70,7 +70,7 @@
 
                 <template x-for="(star, index) in ratings" :key="index" hidden>
                   <div aria-hidden="true" class="p-px rounded-sm focus:outline-none focus:ring">
-                    <svg :class="{ 'text-gray-600' : hoverRating >= star, 'text-red-400' : rating >= star }"
+                    <svg :class="{ 'text-gray-600' : hoverRating >= star, 'text-orange-400' : rating >= star }"
                       class="w-4 text-gray-400 fill-current" viewBox="0 -10 511.991 511"
                       xmlns="http://www.w3.org/2000/svg">
                       <path
@@ -150,167 +150,98 @@
                 class="grid w-full grid-cols-3 gap-4 lg:grid-cols-4">
                 @foreach ($product->variations as $key => $item)
 
-                  @if ($category !== 'pomogi-priyutu')
+                  <div wire:key="{{ $loop->index }}"
+                    :class="item.id === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
+                    class="relative flex flex-col items-start justify-between px-3 py-2 space-y-1 border rounded-xl"
+                    x-on:click="item.id = {{ $item->id }}, item.stock = {{ $item->stock }}, item.unit_value = '{{ $item->unit_value }}'">
 
-                    <div wire:key="{{ $loop->index }}"
-                      :class="item.id === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
-                      class="relative flex flex-col items-start justify-between px-3 py-2 space-y-1 border rounded-xl"
-                      x-on:click="item.id = {{ $item->id }}, item.stock = {{ $item->stock }}, item.unit_value = '{{ $item->unit_value }}'">
-
-
-                      @if ($item->promotion_type === 1)
-                        <div class="absolute z-20 block -top-3 -left-3">
-                          <div class="relative font-bold tooltip" data-title="Уценка">
-                            <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
-                          </div>
+                    @if ($item->promotion_type === 1)
+                      <div class="absolute z-20 block -top-3 -left-3">
+                        <div class="relative font-bold tooltip" data-title="Уценка">
+                          <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
                         </div>
-                      @endif
-                      @if ($item->promotion_type === 2)
-                        <div class="absolute z-20 -top-3 -left-3">
-                          <div class="font-bold tooltip" data-title="Второй товар из этой акции бесплатно">
-                            <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
-                          </div>
-                        </div>
-                      @endif
-                      @if ($item->promotion_type === 3)
-                        <div class="absolute z-20 block -top-3 -left-3">
-                          <div class="font-bold tooltip" data-title="Скидка -{{ $item->promotion_percent }}%">
-                            <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
-                          </div>
-                        </div>
-                      @endif
-                      @if ($item->promotion_type === 4)
-                        <div class="absolute z-20 block -top-3 -left-3">
-                          <div class="font-bold tooltip" data-title="Скидка -{{ $item->promotion_percent }}%">
-                            <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
-                          </div>
-                        </div>
-                      @endif
-
-                      <div wire:key="{{ $loop->index }}" class="absolute w-40 text-xs text-gray-400 -top-6"
-                        x-show="item.id === {{ $item->id }}" x-transition>
-                        {{ $item->cod1c }}
                       </div>
+                    @endif
 
-                      <x-units :unit="$product->unit" :value="$item->unit_value" :wire:key="$product->id" />
+                    @if ($item->promotion_type === 2)
+                      <div class="absolute z-20 -top-3 -left-3">
+                        <div class="font-bold tooltip" data-title="Второй товар из этой акции бесплатно">
+                          <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
+                        </div>
+                      </div>
+                    @endif
+                    @if ($item->promotion_type === 3)
+                      <div class="absolute z-20 block -top-3 -left-3">
+                        <div class="font-bold tooltip" data-title="Скидка -{{ $item->promotion_percent }}%">
+                          <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
+                        </div>
+                      </div>
+                    @endif
+                    @if ($item->promotion_type === 4)
+                      <div class="absolute z-20 block -top-3 -left-3">
+                        <div class="font-bold tooltip" data-title="Скидка -{{ $item->promotion_percent }}%">
+                          <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
+                        </div>
+                      </div>
+                    @endif
 
-                      <div class="relative z-10 w-full">
-                        <link itemprop="availability" href="http://schema.org/InStock" />
-                        @if ($item->stock <= 5 && $item->stock > 0)
-                          <div class="flex items-center justify-center w-full mb-1 space-x-2 text-sm tooltip"
-                            data-title="Осталось на складе {{ $item->stock }}">
-                            <div>{{ $item->stock }}</div>
-                            <div>
-                              <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="-8 -14.5 100 100">
-                                <path
-                                  d="M78 29v32l-2 2-34 11h-2L8 59l-1-2V22L-3 4l1-3h2l31 14 7-1 7-15 2-2L86 8c2 0 2 1 2 3l-9 18zm-36 4l25-5-28-10-4 1 7 14zm32-2l-31 6v32l31-10V31zM48 2l-6 13 33 10 7-14-34-9zm-9 34L11 24v31l28 13V36zM4 8l7 11 25 12-5-11L4 8z" />
-                              </svg>
-                            </div>
+                    <div wire:key="{{ $loop->index }}" class="absolute w-24 text-xs text-gray-500 -top-6"
+                      x-show="item.id === {{ $item->id }}" x-transition>
+                      {{ $item->cod1c }}
+                    </div>
+
+                    <x-units :unit="$product->unit" :value="$item->unit_value" :wire:key="$product->id" />
+
+                    <div class="relative z-10 w-full">
+                      <link itemprop="availability" href="http://schema.org/InStock" />
+                      @if ($item->stock <= 5 && $item->stock > 0)
+                        <div class="flex items-center justify-center w-full mb-1 space-x-2 text-sm tooltip"
+                          data-title="Осталось на складе {{ $item->stock }}">
+                          <div>{{ $item->stock }}</div>
+                          <div>
+                            <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg"
+                              viewBox="-8 -14.5 100 100">
+                              <path
+                                d="M78 29v32l-2 2-34 11h-2L8 59l-1-2V22L-3 4l1-3h2l31 14 7-1 7-15 2-2L86 8c2 0 2 1 2 3l-9 18zm-36 4l25-5-28-10-4 1 7 14zm32-2l-31 6v32l31-10V31zM48 2l-6 13 33 10 7-14-34-9zm-9 34L11 24v31l28 13V36zM4 8l7 11 25 12-5-11L4 8z" />
+                            </svg>
                           </div>
-                        @elseif ($item->stock > 5)
-                          <div title="В наличии" class="text-xs font-semibold text-green-600">
-                            В наличии
+                        </div>
+                      @elseif ($item->stock > 5)
+                        <div title="В наличии" class="text-xs font-semibold text-green-700">
+                          В наличии
+                        </div>
+                      @endif
+
+                      <div>
+                        @if ($item->stock === 0)
+                          <div class="relative w-full text-xs text-red-600">
+                            <div class="w-24 ">Нет в наличии</div>
                           </div>
                         @endif
-
-                        <div class="">
-                          @if ($item->stock === 0)
-                            <div class="relative w-full text-xs text-red-500">
-                              <div class="w-24 ">Нет в наличии</div>
-                            </div>
-                          @endif
-                        </div>
-
-                      </div>
-
-                      <div class="w-full font-semibold text-right "
-                        :class="item.id === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
-                        @if ($item->promotion_type === 0)
-                          <span>{{ RUB($item->price) }}</span>
-                          <span itemprop="price" content="{{ $item->price }}"></span>
-                        @elseif ($item->promotion_type === 1 || $item->promotion_type === 3)
-                          <div class="text-xs text-gray-500 line-through">{{ RUB($item->promotion_price) }}</div>
-                          <div>{{ RUB($item->price) }}</div>
-                          <span itemprop="price" content="{{ $item->price }}"></span>
-                        @elseif ($item->promotion_type === 2 || $item->promotion_type === 4)
-                          <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
-                          <div>{{ RUB(discount($item->price, $item->promotion_percent)) }}</div>
-                          <span itemprop="price"
-                            content="{{ discount($item->price, $item->promotion_percent) }}"></span>
-                        @endif
-                        <span itemprop="priceCurrency" content="RUB"></span>
                       </div>
 
                     </div>
 
-                  @else
-
-                    <div wire:key="{{ $loop->index }}"
-                      :class="item.id === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
-                      class="relative flex flex-col items-start justify-between px-3 py-2 space-y-1 border rounded-xl"
-                      x-on:click="item.id = {{ $item->id }}, item.stock = {{ $item->stock }}, item.unit_value = '{{ $item->unit_value }}'">
-
-                      @if ($item->promotion_type === 1)
-                        <div class="absolute z-20 block -top-3 -left-3">
-                          <div class="relative font-bold tooltip" data-title="Уценка">
-                            <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
-                          </div>
-                        </div>
+                    <div class="w-full font-semibold text-right "
+                      :class="item.id === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
+                      @if ($item->promotion_type === 0)
+                        <span>{{ RUB($item->price) }}</span>
+                        <span itemprop="price" content="{{ $item->price }}"></span>
+                      @elseif ($item->promotion_type === 1 || $item->promotion_type === 3)
+                        <div class="text-xs text-gray-500 line-through">{{ RUB($item->promotion_price) }}</div>
+                        <div>{{ RUB($item->price) }}</div>
+                        <span itemprop="price" content="{{ $item->price }}"></span>
+                      @elseif ($item->promotion_type === 2 || $item->promotion_type === 4)
+                        <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
+                        <div>{{ RUB(discount($item->price, $item->promotion_percent)) }}</div>
+                        <span itemprop="price"
+                          content="{{ discount($item->price, $item->promotion_percent) }}"></span>
                       @endif
-
-                      <div wire:key="{{ $loop->index }}" class="absolute w-40 text-xs text-gray-400 -top-6"
-                        x-show="item.id === {{ $item->id }}" x-transition>
-                        {{ $item->cod1c }}
-                      </div>
-
-                      <x-units :unit="$product->unit" :value="$item->unit_value" :wire:key="$product->id" />
-
-                      <div class="w-full">
-                        <link itemprop="availability" href="http://schema.org/InStock">
-                        @if ($item->stock <= 5 && $item->stock > 0)
-                          <div class="flex items-center justify-center w-full mb-1 space-x-2 text-sm tooltip"
-                            data-title="Осталось на складе {{ $item->stock }}">
-                            <div>{{ $item->stock }}</div>
-                            <div>
-                              <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="-8 -14.5 100 100">
-                                <path
-                                  d="M78 29v32l-2 2-34 11h-2L8 59l-1-2V22L-3 4l1-3h2l31 14 7-1 7-15 2-2L86 8c2 0 2 1 2 3l-9 18zm-36 4l25-5-28-10-4 1 7 14zm32-2l-31 6v32l31-10V31zM48 2l-6 13 33 10 7-14-34-9zm-9 34L11 24v31l28 13V36zM4 8l7 11 25 12-5-11L4 8z" />
-                              </svg>
-                            </div>
-                          </div>
-                        @elseif ($item->stock > 5)
-                          <div title="В наличии" class="text-xs font-semibold text-green-600">
-                            В наличии
-                          </div>
-                        @endif
-                        <div>
-                          @if ($item->stock === 0)
-                            <div class="relative w-full text-xs text-red-500">
-                              <div class="absolute w-24 -top-2">Нет в наличии</div>
-                            </div>
-                          @endif
-                        </div>
-                      </div>
-
-                      <div class="w-full font-semibold text-right "
-                        :class="item.id === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
-                        @if ($item->promotion_type === 1)
-                          <div class="text-xs text-gray-500 line-through">
-                            {{ RUB($item->promotion_price) }}
-                          </div>
-                          <div>{{ RUB($item->price) }}</div>
-                          <span itemprop="price" content="{{ $item->price }}"></span>
-                        @endif
-                        <span itemprop="priceCurrency" content="RUB"></span>
-
-                      </div>
-
+                      <span itemprop="priceCurrency" content="RUB"></span>
                     </div>
 
+                  </div>
 
-                  @endif
                 @endforeach
               </div>
 
@@ -327,7 +258,7 @@
                         @endif
                         {{ $loop->first ? '' : ', ' }}
                         <div class="relative z-10 pl-1 my-1 bg-white whitespace-nowrap"><a
-                            class="text-blue-500 hover:underline"
+                            class="text-blue-600 hover:underline"
                             href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) . '?attrsF[0]=' . $item['id'] }}">{{ $item['name'] }}</a>
                         </div>
                       @endforeach
@@ -344,16 +275,16 @@
                 <div x-show="item.stock > 0 && item.unit_value != 'на развес'"
                   class="flex justify-center w-40 leading-none text-gray-500">
 
-                  <button x-on:click="decrement()"
+                  <button x-on:click="decrement()" aria-label="Уменьшить"
                     class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300">
                     <x-tabler-minus class="w-6 h-6 stroke-current" />
                   </button>
-
-                  <input id="number" type="number" min="1" max="50"
-                    class="w-20 h-10 p-3 text-lg font-bold text-center border-t border-b border-gray-200"
-                    x-model.debounce.500="count">
-
-                  <button x-on:click="count++"
+                  <label class="relative z-10">
+                    <input id="number" type="number" min="1" max="50"
+                      class="w-16 h-10 p-3 text-lg font-bold text-center border border-gray-200 focus:outline-none focus:ring "
+                      x-model.debounce.500="count">
+                  </label>
+                  <button x-on:click="count++" aria-label="Увеличить"
                     class="flex items-center justify-center w-12 h-10 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">
                     <x-tabler-plus class="w-6 h-6 stroke-current" />
                   </button>
@@ -386,8 +317,8 @@
               </div>
 
               <button x-show="item.stock > 0" x-transition.opacity x-on:click="addToCart()"
-                class="flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-orange-500 cursor-pointer rounded-lg active:scale-95 hover:bg-orange-600"
-                wire:loading.attr="disabled">
+                class="flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-orange-500 cursor-pointer rounded-lg active:scale-95 hover:bg-orange-600 "
+                wire:loading.attr="disabled" aria-label="Добавить в корзину">
                 <span>В корзину</span>
                 <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"
                   viewBox="0 0 24 24">
@@ -466,7 +397,8 @@
 
                 </div>
 
-                <button x-on:click="open()" class="w-40 px-4 py-1 text-blue-500 hover:underline">
+                <button x-on:click="open()" class="w-40 px-4 py-1 text-blue-600 hover:underline"
+                  aria-label="Купить в 1 клик">
                   Купить в 1 клик
                 </button>
 

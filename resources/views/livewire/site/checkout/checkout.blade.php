@@ -144,7 +144,7 @@
                 class="flex flex-col items-center justify-start gap-6 md:flex-row">
                 @if (is_array($address) && !empty($address))
                   <div class="flex-col items-start justify-start w-full px-4 py-3 space-y-1 md:w-9/12 h-14">
-                    <div>
+                    <div class="leading-snug">
                       {{ $address['address'] }} {{ $address['building'] }}
 
                       @if (Arr::has($address, 'apartment'))
@@ -156,7 +156,7 @@
                         {{ $address['extra'] }}
                       </div>
                     @endif
-                    @if ($this->deliveryCost === false)
+                    @if ($this->deliveryCost === 99999)
                       <span class="text-xs text-red-500">Пожалуйста укажите адрес в пределах КАД</span>
                     @endif
                   </div>
@@ -200,7 +200,7 @@
                   <div class="items-center justify-start block gap-6 md:flex">
 
                     <div class="items-center justify-start block w-full pb-2 md:px-4 md:flex md:w-9/12">
-                      <div>
+                      <div class="leading-snug">
                         @if ($pickupStore)
                           {{ $pickupStore }}
                         @else
@@ -383,7 +383,11 @@
           </div>
         </div>
 
-        <div class="flex justify-between pt-2">
+        @if ($orderType === 0 && $orderPaymentType === 0)
+          <x-toggle wire:model="contactlessDelivery" :property="$contactlessDelivery" :lable="'Бесконтактная доставка'" />
+        @endif
+
+        <div class="flex justify-between">
           <div class="w-full">
             <div class="block pb-2 text-lg font-bold text-gray-700">Комментарий к заказу</div>
             <textarea wire:model="orderComment" name="comment" rows="2" class="resize-none field"></textarea>
@@ -574,6 +578,22 @@
             <span>Доставка в приют</span>
             <span class="font-bold">{{ RUB($deliveryCostToShelter) }}</span>
           </div>
+        @endif
+
+        @if ($userHasDiscount !== 0)
+          <x-tooltip :width="'280px'">
+            <x-slot name="title">
+              <span></span>Есть дисконтная карта?
+              <x-tabler-alert-circle class="w-6 h-6 text-orange-400 stroke-current" />
+            </x-slot>
+            <div class="flex items-start justify-start space-x-2">
+              <span>Если вы приобрели дисконтную карту в одном из наших магазинов, но не видите здесь скидку по карте
+                5%, отправьте, пожалуйста, фото карты на email (zoopodarki@mail.ru) или воцап (8 (931)239 98 83) и мы
+                обязательно исправим
+                это временное
+                недоразумение!</span>
+            </div>
+          </x-tooltip>
         @endif
 
         <div class="flex justify-between pt-2 text-lg font-bold border-t">

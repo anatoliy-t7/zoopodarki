@@ -58,7 +58,7 @@ trait Delivery
         $point = [[$latTo, $lngTo]];
 
         if ($this->pointInPolygon($point, $this->kadSpb) === false) {
-            return false;
+            return 99999;
         }
 
         $distans = $this->getDistance($latTo, $lngTo);
@@ -150,6 +150,6 @@ trait Delivery
             $p1 = $p2;
         }
         // if the number of edges we passed through is even, then it's not in the poly.
-        return $c == 2; // here is modified code. before was: $c%2!=0; I do not know why, but now works fine!
+        return $c % 2 != 0; // here is modified code. before was: $c%2!=0; I do not know why, but now works fine! //$c == 2
     }
 }

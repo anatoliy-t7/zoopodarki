@@ -98,13 +98,22 @@ class UserAddresses extends Component
 
     public function removeAddress($addressId)
     {
-        Address::find($addressId)->delete();
+        $user = auth()->user();
+        $user->load('address');
 
-        $this->getAddresses();
+        if ($user->pref_contact === $contactId) {
+            toast()
+            ->success('Для удаления адреса сначало выберите другой адрес для заказа')
+            ->push();
+        } else {
+            Address::find($addressId)->delete();
 
-        toast()
+            $this->getAddresses();
+
+            toast()
             ->success('Адрес удален')
             ->push();
+        }
     }
 
     public function editAddress($addressId)
@@ -191,11 +200,6 @@ class UserAddresses extends Component
         ]);
 
         $this->getAddresses();
-    }
-
-    public function updatedAddress()
-    {
-        $this->render();
     }
 
     public function getCustomerLocation(string $address = '')

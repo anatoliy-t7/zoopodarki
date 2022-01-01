@@ -31,7 +31,11 @@
               <div class="text-sm text-center">Вы уже добавили отзыв<br /> к этому товару</div>
             @else
               <div>
+                <!--googleoff: all-->
+                <!--noindex-->
                 <livewire:site.review-write :modelId="$model->id" />
+                <!--/noindex-->
+                <!--googleon: all-->
               </div>
             @endif
           @else

@@ -18,7 +18,7 @@
           <div x-cloak x-data="{ newContact: false }" x-on:close-form.window="newContact = false"
             x-on:edit-contact.window="newContact = true">
 
-            <div :class="newContact === false ? 'block' : 'hidden'" >
+            <div :class="newContact === false ? 'block' : 'hidden'">
 
               @if ($contacts)
                 <div class="space-y-4">
@@ -37,11 +37,13 @@
                           <div x-show="open" x-transition.opacity
                             class="flex flex-col items-center justify-around h-full space-y-2">
 
-                            <div wire:click="editContact({{ $contactItem->id }})" class="cursor-pointer">
+                            <div x-on:click="open = false" wire:click="editContact({{ $contactItem->id }})"
+                              class="cursor-pointer">
                               <x-tabler-edit class="w-5 h-5 text-gray-300 stroke-current hover:text-blue-400" />
                             </div>
                             @if ($contactItem->id !== $contact['id'])
-                              <div wire:click="removeContact({{ $contactItem->id }})" class="cursor-pointer">
+                              <div x-on:click="open = false" wire:click="removeContact({{ $contactItem->id }})"
+                                class="cursor-pointer">
                                 <x-tabler-trash class="w-5 h-5 text-gray-300 stroke-current hover:text-red-400" />
                               </div>
                             @endif
@@ -73,7 +75,7 @@
 
             <div :class="newContact === true ? 'block' : 'hidden'" x-transition.opacity>
 
-              <div class="absolute top-4 left-4" x-on:click="newContact = false">
+              <div class="absolute top-4 left-4" x-on:click="newContact = false; $wire.set('newContact', [])">
                 <x-tabler-chevron-left class="w-6 h-6 text-gray-500 cursor-pointer stroke-current" />
               </div>
 
@@ -112,7 +114,7 @@
                 </div>
 
                 <div>
-                  <button wire:click="addNewContact(), $render" class="font-bold text-white bg-green-500 btn hover:bg-green-600">
+                  <button wire:click="addNewContact()" class="font-bold text-white bg-green-500 btn hover:bg-green-600">
                     <div wire:loading wire:target="addNewContact">
                       <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 24 24">

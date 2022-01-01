@@ -3,19 +3,41 @@
 
   <div class="flex items-start gap-6 px-16 bg-white shadow-sm py-14 rounded-2xl">
 
-    <div class="flex flex-col w-4/12 gap-2 prose prose-h2:text-gray-600">
+    <div class="flex flex-col w-4/12 gap-2 prose prose-h2:text-gray-600" itemscope
+      itemtype="http://schema.org/Organization">
       <h2>Наши контакты</h2>
-      <div class="flex items-center gap-2 ">
-        <x-tabler-phone class="w-6 h-6 text-gray-400" />
-        <span>{{ config('constants.phone') }}</span>
+      <div class="flex items-center gap-3 ">
+        <x-tabler-mail class="w-6 h-6 text-gray-400" />
+        <span><a rel="noopener" itemprop="email"
+            href="mailto:{{ config('constants.mail') }}">{{ config('constants.mail') }}</a></span>
       </div>
-      <div class="flex items-center gap-2 ">
+      <div class="flex items-center gap-3 ">
         <x-tabler-phone class="w-6 h-6 text-gray-400" />
-        <span>{{ config('constants.phone2') }}</span>
+        <span><a rel="noopener" itemprop="telephone"
+            href="tel:{{ config('constants.phone') }}">{{ config('constants.phone') }}</a></span>
+        <a rel="noopener" target="_blank"
+          href="https://wa.me/{{ preg_replace('/[^0-9.]+/', '', config('constants.phone')) }}" class="link-hover">
+          <x-tabler-brand-whatsapp class="text-green-500 w-7 h-7 hover:text-green-600" />
+        </a>
       </div>
-      <div class="flex items-center gap-2 ">
+      <div class="flex items-center gap-3 ">
+        <x-tabler-phone class="w-6 h-6 text-gray-400" />
+        <span><a rel="noopener"
+            href="tel:{{ config('constants.phone2') }}">{{ config('constants.phone2') }}</a></span>
+      </div>
+      <div class="flex items-center gap-3 ">
         <x-tabler-clock class="w-6 h-6 text-gray-400" />
-        <span>с 10.00 до 20.00</span>
+        <span>с 10:00 до 20:00 каждый день</span>
+      </div>
+      <div class="flex items-start gap-3" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+        <x-tabler-map-pin class="w-6 h-6 text-gray-400" />
+        <span class="leading-snug"><span itemprop="addressLocality">Санкт-Петербург</span>, <span
+            itemprop="streetAddress">ул.Коллонтай, дом 5</span>,<br>
+          корпус 1, лит А, кв. 673, <span itemprop="postalCode">193318</span></span>
+      </div>
+      <div class="flex items-center gap-6 pt-6 not-prose">
+        <img class="w-20 h-auto" src="/assets/img/zoopodarki-logo.jpg" alt="Логотип компании ZOOподарки">
+        <span class="text-xl font-bold" itemprop="name">ZOOподарки</span>
       </div>
     </div>
 
@@ -78,11 +100,7 @@
           </div>
         </div>
 
-        <div class="flex items-end justify-between w-full gap-2 ">
-          <div>
-            <x-honey recaptcha />
-          </div>
-
+        <div class="flex items-start justify-between w-full gap-2 ">
           <button type="submit"
             class="px-4 py-4 font-bold text-gray-100 bg-orange-400 rounded-xl hover:bg-orange-500 focus:outline-none focus:ring hover:shadow-lg hover:shadow-orange-300 disabled:opacity-50 disabled:cursor-not-allowed"
             wire:loading.attr="disabled">
@@ -99,6 +117,9 @@
               Отправить сообщение
             </span>
           </button>
+          <div>
+            <x-honey recaptcha />
+          </div>
         </div>
 
         <div class="text-xs text-gray-500">Настоящим подтверждаю, что я ознакомлен и согласен с условиями <a

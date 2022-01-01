@@ -1,7 +1,7 @@
 <div x-cloak x-data="writeRating" @close-writer.window="close(event)" class="relative">
 
-  <button @click="open" class="px-3 py-2 text-white bg-green-500 rounded-lg focus:outline-none hover:bg-green-600">
-    Написать отзыв
+  <button @click="open" aria-label="Написать отзыв"
+    class="px-4 py-3 text-white bg-green-500 rounded-lg focus:outline-none hover:bg-green-600">Написать отзыв
   </button>
 
   <div x-cloak @click="close" x-show="write" x-transition.opacity

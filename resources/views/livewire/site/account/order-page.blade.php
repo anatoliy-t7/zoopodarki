@@ -25,11 +25,18 @@
   <div class="p-8 space-y-8 bg-white rounded-2xl">
 
     <div>
-
       <h1 class="text-2xl font-bold">
         Заказ {{ $order->order_number }}
       </h1>
     </div>
+
+    @if ($order->status === 'canceled')
+      <div class="prose max-w-none">
+        Денежные средства вернутся только на то же платежное средство, с которого был произведен платеж, в течение 10
+        (десяти) рабочих дней. В случае оплаты наличными обратитесь, пожалуйста, в <a
+          href="{{ route('site.contact') }}">магазин «Зооподарки»</a>.
+      </div>
+    @endif
 
     <div class="flex items-center justify-between px-6 py-5 bg-gray-50 rounded-xl">
       <div class="flex items-center justify-start space-x-16">

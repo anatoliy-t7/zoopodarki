@@ -14,7 +14,7 @@ return [
     'order_status.pending_confirm' => 'Ожидающий подтверждения',
     'order_status.pending_payment' => 'Ожидающий платеж',
     'order_status.processing' => 'В обработке',
-    'order_status.ready' => 'Ожидает отгрузки',
+    'order_status.ready' => 'Готов к самовывозу',
     'order_status.shipped' => 'Отправлен',
     'order_status.delivered' => 'Доставлен',
     'order_status.completed' => 'Завершен',

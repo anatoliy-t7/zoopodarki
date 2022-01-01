@@ -9,13 +9,14 @@
     </div>
     <div class="relative w-full" @mouseup="$wire.emit('updatedMinMaxPrice', minprice, maxprice)"
       @touchend="$wire.emit('updatedMinMaxPrice', minprice, maxprice)">
-
-      <input type="range" step="100" :min="min" :input="moveThumb" :max="max" x-model="minprice"
-        class="absolute z-30 w-full h-6 opacity-0 appearance-none cursor-pointer pointer-events-none">
-
-      <input type="range" step="100" :min="min" :input="moveThumb" :max="max" x-model="maxprice"
-        class="absolute z-30 w-full h-6 opacity-0 appearance-none cursor-pointer pointer-events-none">
-
+      <label>
+        <input type="range" step="100" :min="min" :input="moveThumb" :max="max" x-model="minprice"
+          class="absolute z-30 w-full h-6 opacity-0 appearance-none cursor-pointer pointer-events-none">
+      </label>
+      <label>
+        <input type="range" step="100" :min="min" :input="moveThumb" :max="max" x-model="maxprice"
+          class="absolute z-30 w-full h-6 opacity-0 appearance-none cursor-pointer pointer-events-none">
+      </label>
       <div class="relative z-10 h-1">
         <div class="absolute inset-0 z-10 bg-gray-200 rounded-md"></div>
         <div class="absolute top-0 bottom-0 z-20 bg-yellow-300 rounded-md "

@@ -97,9 +97,12 @@
   </div>
 </footer>
 
+<x-cookie />
+
 @guest
   <livewire:auth.auth-com />
 @endguest
+
 @production
   <livewire:error-catcher />
 @endproduction
