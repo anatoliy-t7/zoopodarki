@@ -150,7 +150,7 @@ class Checkout extends Component
         $shelterCartCounter = $shelterCart->getTotalQuantity();
         $this->counter = $cart->getTotalQuantity() + $shelterCartCounter;
 
-        $this->getTotalWeight($this->items, $functionShelterItems);
+        $this->getTotalWeight($this->items);
 
         // Check and set discounts
         if ($functionItems) {
@@ -196,20 +196,13 @@ class Checkout extends Component
         $this->orderPaymentType = $type;
     }
 
-    public function getTotalWeight($items, $shelterItems)
+    public function getTotalWeight($items)
     {
         $this->totalWeight = collect();
 
         if (count($items) > 0) {
             foreach ($items as $item) {
                 $itemWeight = $item->attributes->weight * $item->quantity;
-                $this->totalWeight->push($itemWeight);
-            }
-        }
-
-        if (count($shelterItems) > 0) {
-            foreach ($shelterItems as $shelterItem) {
-                $itemWeight = $shelterItem->attributes->weight * $shelterItem->quantity;
                 $this->totalWeight->push($itemWeight);
             }
         }
@@ -293,7 +286,7 @@ class Checkout extends Component
 
         $orderComment = $this->orderComment;
 
-        if ($contactlessDelivery === true) {
+        if ($this->contactlessDelivery === true) {
             $orderComment = 'Бесконтактная доставка' . "\n" . $orderComment;
         }
 
@@ -339,43 +332,9 @@ class Checkout extends Component
                     ->with('product.unit')
                     ->first();
 
-                $unit = '';
-                if ($product1c->unit_value == 'на развес') {
-                    $unit = $item->attributes->weight;
-                }
-                if ($product1c->product->unit()->exists()) {
-                    $unit = $product1c->unit_value . ' ' . $unit . ' ' . $product1c->product->unit->name;
-                }
+                $unit = $this->setUnit($product1c, $item);
 
-                $amount = $item->getPriceSumWithConditions();
-                $discount = 0;
-                $discountComment = '';
-
-                if (0 == $item->associatedModel['promotion_type']) {
-                    $discount = $item->getPriceSum() - $item->getPriceSumWithConditions();
-                    $discountComment = '';
-                }
-                if (1 == $item->associatedModel['promotion_type']) {
-                    $discountComment = 'Акция "Уценка"';
-                }
-                if (2 == $item->associatedModel['promotion_type']) {
-                    $discountComment = 'Акция "1+1"';
-                }
-                if (3 == $item->associatedModel['promotion_type']) {
-                    $discountComment = 'Акция поставщика, -' . $product1c->promotion_percent;
-                }
-                if (4 == $item->associatedModel['promotion_type']) {
-                    $discount = $item->getPriceSum() - $item->getPriceSumWithConditions();
-                    $discountComment = 'Праздничные скидки ' . $product1c->promotion_percent . '%';
-                }
-
-                if ($item->attributes->unit_value == 'на развес') {
-                    $discountComment = 'на развес: ' . $item->attributes->weight . 'гр, ' . $discountComment;
-                }
-
-                if ($item->getConditionByType('discount_card')) {
-                    $discountComment = $discountComment . 'Прим. диск. карта ' . $this->userHasDiscount . '%';
-                }
+                $arrayDiscount = $this->setDiscount($product1c, $item);
 
                 $discountProcent = (($item->getPriceSum() - $item->getPriceSumWithConditions()) * 100)
                  / $item->getPriceSum();
@@ -388,11 +347,11 @@ class Checkout extends Component
                     'quantity' => $item->quantity,
                     'unit' => $unit,
                     'price' => $item->price,
-                    'amount' => ceil($amount),
+                    'amount' => ceil($item->getPriceSumWithConditions()),
                     'order_id' => $order->id,
                     'product_id' => $product1c->id,
-                    'discount_comment' => $discountComment,
-                    'discount' => ceil($discount),
+                    'discount_comment' => $arrayDiscount['discountComment'],
+                    'discount' => ceil((int)$arrayDiscount['discount']),
                     'discount_procent' => $discountProcent,
                 ]);
 
@@ -401,21 +360,16 @@ class Checkout extends Component
 
             if (count($this->shelterItems) > 0) {
                 foreach ($this->shelterItems as $shelterItem) {
-                    $product1c = Product1C::find($shelterItem->id);
+                    $product1c = Product1C::where('id', $shelterItem->id)
+                    ->with('product')
+                    ->with('product.unit')
+                    ->first();
 
-                    $unit = '';
-                    if ($product1c->product->unit()->exists()) {
-                        $unit = $product1c->unit_value . ' ' . $product1c->product->unit->name;
-                    }
+                    $unit = $this->setUnit($product1c, $shelterItem);
+                    $arrayDiscount = $this->setDiscount($product1c, $shelterItem);
 
-                    $discountComment = 'Уценка "Помоги приюту"';
-
-                    if ($shelterItem->getConditionByType('discount_card')) {
-                        $discountComment = $discountComment . 'Прим. диск. карта ' . $this->userHasDiscount . '%';
-                    }
-
-                    $discountProcent = (($item->getPriceSum() - $shelterItem->getPriceSumWithConditions()) * 100)
-                    / $shelterItem->getPriceSum();
+                    $discountProcent = (($shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions()) * 100)
+                 / $shelterItem->getPriceSum();
 
                     OrderItem::create([
                         'name' => $shelterItem->name,
@@ -428,14 +382,15 @@ class Checkout extends Component
                         'amount' => ceil($shelterItem->getPriceSumWithConditions()),
                         'order_id' => $order->id,
                         'product_id' => $product1c->id,
-                        'discount_comment' => $discountComment,
-                        'discount' => ceil($shelterItem->getPriceSum() - $shelterItem->getPriceSumWithConditions()),
+                        'shelter' => 1,
+                        'discount_comment' => $arrayDiscount['discountComment'],
+                        'discount' => ceil((int)$arrayDiscount['discount']),
                         'discount_procent' => $discountProcent,
                     ]);
+
+                    unset($product1c, $category);
                 }
             }
-
-            $order->load('items');
 
             // if (auth()->user()->review === 'on') {
             //     $user = auth()->user();
@@ -461,6 +416,53 @@ class Checkout extends Component
             ->warning('Ваш заказ не создан, попробуйте еще раз')
             ->push();
         }
+    }
+
+    private function setUnit(Product1C $product1c, $item)
+    {
+        $unit = '';
+        if ($product1c->unit_value == 'на развес') {
+            $unit = $item->attributes->weight;
+        }
+        if ($product1c->product->unit()->exists()) {
+            $unit = $product1c->unit_value . ' ' . $unit . ' ' . $product1c->product->unit->name;
+        }
+
+        return $unit;
+    }
+
+    private function setDiscount(Product1C $product1c, $item)
+    {
+        $discount = '';
+        $discountComment = '';
+
+        if (0 == $item->associatedModel['promotion_type']) {
+            $discount = $item->getPriceSum() - $item->getPriceSumWithConditions();
+            $discountComment = '';
+        }
+        if (1 == $item->associatedModel['promotion_type']) {
+            $discountComment = 'Акция "Уценка"';
+        }
+        if (2 == $item->associatedModel['promotion_type']) {
+            $discountComment = 'Акция "1+1"';
+        }
+        if (3 == $item->associatedModel['promotion_type']) {
+            $discountComment = 'Акция поставщика, -' . $product1c->promotion_percent;
+        }
+        if (4 == $item->associatedModel['promotion_type']) {
+            $discount = $item->getPriceSum() - $item->getPriceSumWithConditions();
+            $discountComment = 'Праздничные скидки ' . $product1c->promotion_percent . '%';
+        }
+
+        if ($item->attributes->unit_value == 'на развес') {
+            $discountComment = 'на развес: ' . $item->attributes->weight . 'гр, ' . $discountComment;
+        }
+
+        if ($item->getConditionByType('discount_card')) {
+            $discountComment = $discountComment . 'Прим. диск. карта ' . $this->userHasDiscount . '%';
+        }
+
+        return ['discount' => $discount, 'discountComment' => $discountComment];
     }
 
     public function reserveStock($cartId, $shelterCart = false, $noStockItems = [

@@ -59,7 +59,7 @@
               @if ($category->id === 44)
                 <x-message44 />
               @endif
-              @if ($catalog->id === 14)
+              @if ($catalog->id === config('constants.shelter_catalog_id'))
                 <x-message-shelter />
               @endif
 
@@ -86,7 +86,8 @@
                         @foreach ($products as $product)
                           <div itemprop="itemListElement" itemscope itemtype="https://schema.org/Product">
                             <livewire:site.card-products :product="$product" :catalog="$catalog->slug"
-                              :category="$category->slug" :wire:key="'product-'.$product->id" />
+                              :catalogId="$catalog->id" :category="$category->slug"
+                              :wire:key="'product-'.$product->id" />
                           </div>
                         @endforeach
                       </div>

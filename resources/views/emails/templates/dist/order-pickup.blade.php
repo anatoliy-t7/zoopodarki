@@ -83,17 +83,19 @@
                                   </th>
                                 </tr>
                                 @foreach ($order->items as $item)
+                                @if ($item->shelter === 0)
                                 <tr>
                                   <td style="border-bottom: 1px solid #e5e7eb; width: 50%; padding-bottom: 10px; font-size: 12px;">
-                                    <div>{{$item->name}}</div>
+                                    <div>{{ $item->name }}</div>
                                   </td>
                                   <td align="left" style="border-bottom: 1px solid #e5e7eb; width: 16.666667%; padding-bottom: 10px; text-align: left; font-size: 16px;">
-                                    {{$item->quantity}}
+                                    {{ $item->quantity }}
                                   </td>
                                   <td align="right" style="border-bottom: 1px solid #e5e7eb; width: 16.666667%; padding-bottom: 10px; text-align: right; font-size: 16px;">
-                                    {{$item->amount - $item->discount}}
+                                    {{ RUB($item->amount - $item->discount) }}
                                   </td>
                                 </tr>
+                                @endif
                                 @endforeach
                                 <tr>
                                   <td style="width: 50%; padding-top: 10px;"></td>
@@ -104,7 +106,7 @@
                                   </td>
                                   <td style="width: 16.666667%; padding-top: 10px;">
                                     <p align="right" style="margin: 0; text-align: right; font-size: 16px; font-weight: 700; line-height: 24px;">
-                                      {{$order->amount}}
+                                      {{ RUB($order->amount) }}
                                     </p>
                                   </td>
                                 </tr>
@@ -119,8 +121,7 @@
                                     Заказ будет храниться до:
                                   </td>
                                   <td style="width: 66.666667%; padding-bottom: 10px; text-align: left; font-size: 16px; font-weight: 600;">
-                                    {{simpleDate(Carbon::createFromFormat('Y.m.d',
-                                  $user->premiumDate)->addDays(7))}}
+                                    {{ @simpleDate(Carbon::createFromFormat('Y.m.d', $user->premiumDate)->addDays(7)) }}
                                   </td>
                                 </tr>
                                 <tr>
@@ -128,7 +129,7 @@
                                     Адрес самовывоза:
                                   </td>
                                   <td style="width: 66.666667%; padding-bottom: 10px; text-align: left; font-size: 16px; font-weight: 600;">
-                                    {{$order->address}}
+                                    {{ $order->address }}
                                   </td>
                                 </tr>
                                 <tr>
@@ -136,8 +137,8 @@
                                     Способ оплаты:
                                   </td>
                                   <td style="width: 66.666667%; padding-bottom: 10px; text-align: left; font-size: 16px; font-weight: 600;">
-                                    @if($order->payment_method === 0) Онлайн
-                                    @if($order->payment_status !== 'succeeded') не
+                                    @if ($order->payment_method === 0) Онлайн
+                                    @if ($order->payment_status !== 'succeeded') не
                                     оплачен @endif @else Наличными при доставке
                                     @endif
                                   </td>

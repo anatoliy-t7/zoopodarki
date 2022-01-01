@@ -26,11 +26,9 @@
                               случае оплаты наличными обратитесь, пожалуйста, в
                               магазин «Зооподарки».
                             </p>
-                            <p
-                              class="py-2 text-base font-bold text-center  leading-24"
-                            >
-                              Заказ @{{ $order->order_number }} от @{{
-                              simpleDate($order->created_at) }}
+                            <p class="py-2 text-base font-bold text-center leading-24">
+                              Заказ @{{ $order->order_number }} от
+                              @{{ @simpleDate($order->created_at) }}
                             </p>
                           </td>
                         </tr>
@@ -50,43 +48,31 @@
                               </tr>
 
                               @foreach ($order->items as $item)
-                              <tr>
-                                <td
-                                  class="w-6/12 pb-10 text-xs  b-border leading-18"
-                                >
-                                  <div>@{{$item->name}}</div>
-                                </td>
-                                <td
-                                  align="left"
-                                  class="w-2/12 pb-10 text-base text-left  b-border"
-                                >
-                                  @{{$item->quantity}}
-                                </td>
-                                <td
-                                  align="right"
-                                  class="w-2/12 pb-10 text-base text-right  b-border"
-                                >
-                                  @{{$item->amount - $item->discount}}
-                                </td>
-                              </tr>
+                                @if ($item->shelter === 0)
+                                  <tr>
+                                    <td class="w-6/12 pb-10 text-xs b-border leading-18">
+                                      <div>@{{ $item->name }}</div>
+                                    </td>
+                                    <td align="left" class="w-2/12 pb-10 text-base text-left b-border">
+                                      @{{ $item->quantity }}
+                                    </td>
+                                    <td align="right" class="w-2/12 pb-10 text-base text-right b-border">
+                                      @{{ RUB($item->amount - $item->discount) }}
+                                    </td>
+                                  </tr>
+                                @endif
                               @endforeach
 
                               <tr>
                                 <td class="w-6/12 pt-10"></td>
                                 <td class="w-2/12 pt-10">
-                                  <p
-                                    align="left"
-                                    class="m-0 text-base font-bold text-left  leading-24"
-                                  >
+                                  <p align="left" class="m-0 text-base font-bold text-left leading-24">
                                     Всего
                                   </p>
                                 </td>
                                 <td class="w-2/12 pt-10">
-                                  <p
-                                    align="right"
-                                    class="m-0 text-base font-bold text-right  leading-24"
-                                  >
-                                    @{{$order->amount}}
+                                  <p align="right" class="m-0 text-base font-bold text-right leading-24">
+                                    @{{ RUB($order->amount) }}
                                   </p>
                                 </td>
                               </tr>

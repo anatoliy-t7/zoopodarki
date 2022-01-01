@@ -243,7 +243,7 @@
               <table class="table min-w-full text-xs table-fixed">
                 <thead>
                   <tr class="text-left border-b border-gray-100">
-                    <th class="px-1 py-2 ">Id товара</th>
+                    <th class="px-1 py-2 ">Id</th>
                     <th class="px-1 py-2 ">Наименование</th>
                     <th class="px-1 py-2 ">Цена</th>
                     <th class="px-1 py-2 ">Скидка</th>
@@ -254,20 +254,26 @@
                 <tbody>
                   @foreach ($orderSelected->items as $item)
                     <tr class="text-left border-b border-gray-100">
-                      <td class="px-1 py-2 w-18 ">{{ $item->product_id }}</td>
-                      <td class="max-w-xs px-1 py-2 truncate ">{{ $item->name }}
+                      <td class="px-1 py-2">{{ $item->product_id }}</td>
+                      <td class="flex max-w-xs gap-2 px-1 py-2">
+                        @if ($item->shelter !== 0)
+                          <div class="h-full" title="Товар для приюта">
+                            <x-tabler-pacman class="text-orange-500" />
+                          </div>
+                        @endif
+                        {{ $item->name }}
                       </td>
-                      <td class="px-1 py-2 ">{{ $item->price }}</td>
+                      <td class="px-1 py-2 ">{{ RUB($item->price) }}</td>
                       <td class="px-1 py-2 ">
                         @if ($item->discount)
-                          {{ $item->discount }}
+                          {{ RUB($item->discount) }}
                         @endif
                         @if ($item->discount_comment)
-                          ({{ $item->discount_comment }})
+                          {{ $item->discount_comment }}
                         @endif
                       </td>
                       <td class="px-1 py-2 ">{{ $item->quantity }}</td>
-                      <td class="px-1 py-2 ">{{ $item->amount }}</td>
+                      <td class="px-1 py-2 ">{{ RUB($item->amount) }}</td>
                     </tr>
                   @endforeach
                   <tr>
@@ -275,7 +281,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="px-1 pt-2 text-base font-bold">{{ $orderSelected->quantity }}</td>
+                    <td class="px-1 pt-2 text-base font-bold">{{ $orderSelected->quantity }} шт</td>
                     <td class="px-1 pt-2 text-base font-bold">{{ RUB($orderSelected->amount) }}</td>
                   </tr>
                 </tbody>

@@ -107,7 +107,7 @@
                                     {{$item->quantity}}
                                   </td>
                                   <td align="right" style="border-bottom: 1px solid #e5e7eb; width: 16.666667%; padding-bottom: 10px; text-align: right; font-size: 16px;">
-                                    {{$item->amount - $item->discount}}
+                                    {{RUB($item->amount - $item->discount)}}
                                   </td>
                                 </tr>
                                 @endforeach
@@ -120,7 +120,7 @@
                                   </td>
                                   <td style="width: 16.666667%; padding-top: 10px;">
                                     <p align="right" style="margin: 0; text-align: right; font-size: 16px; font-weight: 700; line-height: 24px;">
-                                      {{$order->amount}}
+                                      {{RUB($order->amount)}}
                                     </p>
                                   </td>
                                 </tr>

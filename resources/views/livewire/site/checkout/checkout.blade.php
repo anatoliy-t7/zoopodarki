@@ -402,10 +402,9 @@
       <div class="p-6 space-y-4 text-sm ">
         <div class="text-lg font-bold">Ваш заказ</div>
         @if ($items)
-          <div class="flex flex-col justify-between w-full ">
+          <div class="flex flex-col justify-between w-full divide-y">
             @foreach ($items as $item)
-
-              <div class="py-2 border-b border-gray-200 ">
+              <div class="py-2">
                 <div class="flex items-center justify-between space-x-2 ">
                   <div class="p-2 bg-white ">
                     @if ($item->associatedModel['image'])
@@ -477,38 +476,75 @@
         @endif
 
         @if ($shelterItems)
-          <div class="px-6 -mx-6 bg-gray-100">
-            <div class="py-2 font-semibold">"Помоги приюту"</div>
+          <div class="px-6 py-2 -mx-6 bg-gray-100 rounded-xl">
+            <div class="py-2 text-lg font-semibold">"Помоги приюту"</div>
 
-            <div class="flex flex-col justify-between w-full ">
+            <div class="flex flex-col justify-between w-full divide-y">
               @foreach ($shelterItems as $shelterItem)
-                <div class="flex items-center justify-between py-2 space-x-2 border-b border-gray-200">
-
-                  <div class="p-2">
-                    <img loading="lazy" class="object-cover object-center w-12"
-                      src="{{ $shelterItem->associatedModel['image'] }}" alt="">
-                  </div>
-
-                  <div class="w-full">
-                    <div>
-                      {{ $shelterItem->name }}
+                <div class="py-2">
+                  <div class="flex items-center justify-between space-x-2 ">
+                    <div class="p-2 ">
+                      @if ($shelterItem->associatedModel['image'])
+                        <a class="w-full" target="_blank"
+                          href="{{ route('site.product', ['catalogslug' => $shelterItem->associatedModel['catalog_slug'], 'categoryslug' => $shelterItem->associatedModel['category_slug'], 'productslug' => $shelterItem->associatedModel['product_slug']]) }}">
+                          <img loading="lazy" class="object-fill w-12 h-full"
+                            src="{{ $shelterItem->associatedModel['image'] }}" alt="{{ $shelterItem->name }}">
+                        </a>
+                      @endif
                     </div>
 
-                    <div class="flex justify-between py-2 ">
-                      <div class="flex justify-start text-xs text-gray-500">
-                        <span>
-                          {{ $shelterItem->quantity }} шт
-                        </span>
-                      </div>
+                    <div class="w-full">
 
-                      <div class="flex items-center justify-end space-x-2 font-bold">
-                        <div class="text-xs line-through">
-                          {{ RUB($shelterItem->getPriceSum()) }}
+                      <a class="block w-full hover:underline" target="_blank"
+                        href="{{ route('site.product', ['catalogslug' => $shelterItem->associatedModel['catalog_slug'], 'categoryslug' => $shelterItem->associatedModel['category_slug'], 'productslug' => $shelterItem->associatedModel['product_slug']]) }}">
+                        {{ $shelterItem->name }}
+                      </a>
+
+                      <div class="flex justify-between pt-2">
+                        <div class="flex justify-start space-x-4 text-xs text-gray-500">
+                          @if ($shelterItem->attributes->has('unit'))
+                            <x-units :unit="$shelterItem->attributes['unit']" :value="$shelterItem->attributes->weight">
+                            </x-units>
+                          @endif
                         </div>
-                        <div class="font-bold text-orange-500">
-                          {{ RUB($shelterItem->getPriceSumWithConditions()) }}</div>
-                      </div>
+                        <div class="flex space-x-4 items-centerjustify-end">
+                          @if ($shelterItem->attributes->unit_value != 'на развес')
+                            <div>{{ $shelterItem->quantity }} шт x</div>
+                          @else
+                            <div>на развес</div>
+                          @endif
 
+                          <div class="flex justify-end ">
+                            @if ($shelterItem->associatedModel['promotion_type'] === 0)
+                              <div class="font-bold ">
+                                {{ RUB($shelterItem->price) }}
+                              </div>
+                            @elseif ($shelterItem->associatedModel['promotion_type'] === 1 ||
+                              $shelterItem->associatedModel['promotion_type'] === 3)
+                              <div class="flex items-center justify-end space-x-2 ">
+                                <div class="text-xs line-through">
+                                  {{ RUB($shelterItem->associatedModel['promotion_price']) }}
+                                </div>
+                                <div class="font-bold text-orange-500">
+                                  {{ RUB($shelterItem->price) }}
+                                </div>
+                              </div>
+                            @elseif ($shelterItem->associatedModel['promotion_type'] === 2 ||
+                              $shelterItem->associatedModel['promotion_type'] === 4)
+                              <div class="flex items-center justify-end space-x-2 ">
+                                <div class="text-xs line-through">
+                                  {{ RUB($shelterItem->price) }}
+                                </div>
+                                <div class="font-bold text-orange-500">
+                                  {{ RUB($shelterItem->getPriceWithConditions()) }}
+                                </div>
+                              </div>
+                            @endif
+
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -570,13 +606,6 @@
           <div class="flex justify-between">
             <span>Самовывоз</span>
             <span class="font-bold">бесплатно</span>
-          </div>
-        @endif
-
-        @if (count($shelterItems) > 0)
-          <div class="flex justify-between">
-            <span>Доставка в приют</span>
-            <span class="font-bold">{{ RUB($deliveryCostToShelter) }}</span>
           </div>
         @endif
 

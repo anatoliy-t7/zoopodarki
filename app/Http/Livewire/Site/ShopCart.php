@@ -21,13 +21,13 @@ class ShopCart extends Component
     public $shelterItems;
     public $subTotal;
     public $totalWeight;
+    public $shelterCatalogId;
 
     public $currentUrl;
     protected $listeners = [
         'addToCart',
         'increment',
         'decrement',
-
     ];
 
     public function mount()
@@ -39,6 +39,8 @@ class ShopCart extends Component
         $this->generateId();
 
         $this->getCart();
+
+        $this->shelterCatalogId = config('constants.shelter_catalog_id');
     }
 
     public function addToCart(int $itemId, int $quantity, $catalogId = 0, int $byWeight = 0)
@@ -141,8 +143,7 @@ class ShopCart extends Component
     {
         $cart = $this->checkShelterCategory($catalogId);
         $item = $cart->get($itemId);
-
-        if ($item->associatedModel['vendorcode'] === 'DISCOUNT_CARD') {
+        if ($item->associatedModel['vendorcode'] !== null && $item->associatedModel['vendorcode'] === 'DISCOUNT_CARD') {
             $cart->update($item->id, [
                 'quantity' => [
                     'relative' => false,
@@ -236,10 +237,10 @@ class ShopCart extends Component
         $functionShelterItems = $shelterCart->getContent();
         $this->shelterItems = $functionShelterItems->all();
 
-        $this->getTotalWeight($functionItems, $functionShelterItems);
+        $this->getTotalWeight($functionItems);
     }
 
-    public function getTotalWeight($items, $shelterItems): void
+    public function getTotalWeight($items): void
     {
         $this->totalWeight = collect();
 
@@ -250,19 +251,12 @@ class ShopCart extends Component
             }
         }
 
-        if (count($shelterItems) > 0) {
-            foreach ($shelterItems as $shelterItem) {
-                $itemWeight = $shelterItem->attributes->weight * $shelterItem->quantity;
-                $this->totalWeight->push($itemWeight);
-            }
-        }
-
         $this->totalWeight = $this->totalWeight->sum();
     }
 
     public function checkShelterCategory($catalogId)
     {
-        if ($catalogId === 14) { // Помоги приюту
+        if ($catalogId === (int)$this->shelterCatalogId) { // Помоги приюту
             return $cart = app('shelter')->session($this->shelterCartId);
         } else {
             return $cart = \Cart::session($this->cartId);

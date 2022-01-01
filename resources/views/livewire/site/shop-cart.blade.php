@@ -175,10 +175,9 @@
           <div class="px-6 py-2 -mx-6 bg-gray-50">
             <div class="py-2">"Помоги приюту"</div>
             <div class="text-sm divide-y divide-gray-100">
-              @foreach ($shelterItems as $shelterItem)
-                <div class="relative z-50 flex items-center justify-between space-x-2 md:space-x-3">
-
-                  <div class="w-24 p-2">
+              @foreach ($shelterItems as $key => $shelterItem)
+                <div class="flex items-center justify-between space-x-2 md:space-x-3">
+                  <div class="w-2/12 p-2">
                     @if ($shelterItem->associatedModel['image'])
                       <a class="w-full"
                         href="{{ route('site.product', ['catalogslug' => $shelterItem->associatedModel['catalog_slug'], 'categoryslug' => $shelterItem->associatedModel['category_slug'], 'productslug' => $shelterItem->associatedModel['product_slug']]) }}">
@@ -186,13 +185,11 @@
                           src="{{ $shelterItem->associatedModel['image'] }}" alt="{{ $shelterItem->name }}">
                       </a>
                     @endif
-
                   </div>
 
                   <div class="flex items-center w-10/12 space-x-3">
 
                     <div class="flex flex-col items-start justify-between w-full py-2">
-
                       <a class="block w-full"
                         href="{{ route('site.product', ['catalogslug' => $shelterItem->associatedModel['catalog_slug'], 'categoryslug' => $shelterItem->associatedModel['category_slug'], 'productslug' => $shelterItem->associatedModel['product_slug']]) }}"
                         class="text-xs">
@@ -203,37 +200,77 @@
 
                         <div class="flex items-center justify-start w-2/12 py-2 text-xs text-gray-500">
                           @if ($shelterItem->attributes->has('unit'))
-                            <x-units :unit="$shelterItem->attributes['unit']"
-                              :value="$shelterItem->attributes->unit_value">
+                            <x-units :unit="$item->attributes['unit']" :value="$item->attributes->weight">
                             </x-units>
                           @endif
                         </div>
 
                         <div class="flex items-center justify-between w-10/12">
-                          <div class="flex justify-center p-2 leading-none">
-                            @if ($shelterItem->quantity == 1)
-                              <button wire:click="delete({{ $shelterItem->id }}), 82"
-                                class="px-1 text-gray-400 bg-gray-200 border border-gray-200 hover:bg-gray-300">
-                                <x-tabler-trash class="w-6 h-6" />
-                              </button>
+
+                          <div class="flex items-center justify-center p-2 leading-none">
+                            @if ($shelterItem->attributes->unit_value != 'на развес')
+                              @if ($shelterItem->quantity == 1)
+                                <button wire:click="delete({{ $shelterItem->id }}, {{ $shelterCatalogId }})"
+                                  class="flex items-center justify-center w-8 h-8 text-gray-400 bg-gray-200 border border-gray-200 rounded-l-lg hover:bg-gray-300"
+                                  aria-label="Удалить товар">
+                                  <x-tabler-trash class="w-5 h-5" />
+                                </button>
+                              @else
+                                <button wire:click="decrement({{ $shelterItem->id }}, {{ $shelterCatalogId }})"
+                                  aria-label="Уменьшить"
+                                  class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 rounded-l-lg border border-gray-200 hover:bg-gray-300 {{ $shelterItem->quantity == 1 ? 'text-gray-400 cursor-not-allowed' : ' ' }} "
+                                  {{ $shelterItem->quantity == 1 ? 'disabled' : ' ' }}>-</button>
+                              @endif
+                              <div class="flex items-center justify-center w-8 h-8 border-t border-b">
+                                <div class="border-gray-200" aria-label="Количество">
+                                  {{ $shelterItem->quantity }}
+                                </div>
+                              </div>
+                              <button wire:click="increment({{ $shelterItem->id }}, 1, {{ $shelterCatalogId }})"
+                                aria-label="Увеличить"
+                                class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 rounded-r-lg hover:bg-gray-300">+</button>
+
                             @else
-                              <button wire:click="decrement({{ $shelterItem->id }}, 82)"
-                                class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 hover:bg-gray-300 {{ $shelterItem->quantity == 1 ? 'text-gray-400 cursor-not-allowed' : ' ' }} "
-                                {{ $shelterItem->quantity == 1 ? 'disabled' : ' ' }}>-</button>
+                              <button wire:click="delete({{ $shelterItem->id }}, {{ $shelterCatalogId }})"
+                                class="p-1 text-gray-400 bg-gray-200 border border-gray-200 rounded-lg hover:bg-gray-300">
+                                <x-tabler-trash class="w-5 h-5" />
+                              </button>
+                              <div class="pl-2 text-sm text-gray-400">на развес</div>
                             @endif
-                            <span class="w-8 h-8 p-2 px-3 border-t border-b border-gray-200">
-                              {{ $shelterItem->quantity }}
-                            </span>
-                            <button wire:click="increment({{ $shelterItem->id }}, 82)"
-                              class="w-8 h-8 px-2 pb-2 text-xl bg-gray-200 border border-gray-200 hover:bg-gray-300">+</button>
                           </div>
 
-                          <div class="flex items-center justify-end p-2 space-x-2 w-60">
-                            <div class="text-xs line-through">
-                              {{ RUB($shelterItem->getPriceSum()) }}
+                          <div class="flex justify-end p-2">
+
+                            <div>
+                              @if ($shelterItem->associatedModel['promotion_type'] === 0)
+                                <div class="flex items-center justify-end p-2 ">
+                                  <div class="font-bold">
+                                    {{ RUB($shelterItem->price) }}
+                                  </div>
+                                </div>
+                              @elseif ($shelterItem->associatedModel['promotion_type'] === 1 ||
+                                $shelterItem->associatedModel['promotion_type'] === 3)
+                                <div class="flex items-center justify-end p-2 space-x-2">
+                                  <div class="text-xs line-through">
+                                    {{ RUB($shelterItem->associatedModel['promotion_price']) }}
+                                  </div>
+                                  <div class="font-bold text-orange-500">
+                                    {{ RUB($shelterItem->price) }}
+                                  </div>
+                                </div>
+                              @elseif ($shelterItem->associatedModel['promotion_type'] === 2 ||
+                                $shelterItem->associatedModel['promotion_type'] === 4)
+                                <div class="flex items-center justify-end p-2 space-x-2">
+                                  <div class="text-xs line-through">
+                                    {{ RUB($shelterItem->price) }}
+                                  </div>
+                                  <div class="font-bold text-orange-500">
+                                    {{ RUB($shelterItem->getPriceWithConditions()) }}
+                                  </div>
+                                </div>
+                              @endif
                             </div>
-                            <div class="font-bold text-orange-500">
-                              {{ RUB($shelterItem->getPriceSumWithConditions()) }}</div>
+
                           </div>
 
                         </div>

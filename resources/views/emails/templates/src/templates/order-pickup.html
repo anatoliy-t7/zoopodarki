@@ -41,43 +41,31 @@
                               </tr>
 
                               @foreach ($order->items as $item)
-                              <tr>
-                                <td
-                                  class="w-6/12 pb-10 text-xs  b-border leading-18"
-                                >
-                                  <div>@{{$item->name}}</div>
-                                </td>
-                                <td
-                                  align="left"
-                                  class="w-2/12 pb-10 text-base text-left  b-border"
-                                >
-                                  @{{$item->quantity}}
-                                </td>
-                                <td
-                                  align="right"
-                                  class="w-2/12 pb-10 text-base text-right  b-border"
-                                >
-                                  @{{$item->amount - $item->discount}}
-                                </td>
-                              </tr>
+                                @if ($item->shelter === 0)
+                                  <tr>
+                                    <td class="w-6/12 pb-10 text-xs b-border leading-18">
+                                      <div>@{{ $item->name }}</div>
+                                    </td>
+                                    <td align="left" class="w-2/12 pb-10 text-base text-left b-border">
+                                      @{{ $item->quantity }}
+                                    </td>
+                                    <td align="right" class="w-2/12 pb-10 text-base text-right b-border">
+                                      @{{ RUB($item->amount - $item->discount) }}
+                                    </td>
+                                  </tr>
+                                @endif
                               @endforeach
 
                               <tr>
                                 <td class="w-6/12 pt-10"></td>
                                 <td class="w-2/12 pt-10">
-                                  <p
-                                    align="left"
-                                    class="m-0 text-base font-bold text-left  leading-24"
-                                  >
+                                  <p align="left" class="m-0 text-base font-bold text-left leading-24">
                                     Всего
                                   </p>
                                 </td>
                                 <td class="w-2/12 pt-10">
-                                  <p
-                                    align="right"
-                                    class="m-0 text-base font-bold text-right  leading-24"
-                                  >
-                                    @{{$order->amount}}
+                                  <p align="right" class="m-0 text-base font-bold text-right leading-24">
+                                    @{{ RUB($order->amount) }}
                                   </p>
                                 </td>
                               </tr>
@@ -91,33 +79,26 @@
                                 <td class="w-4/12 pb-10 text-base text-left">
                                   Заказ будет храниться до:
                                 </td>
-                                <td
-                                  class="w-8/12 pb-10 text-base font-semibold text-left "
-                                >
-                                  @{{simpleDate(Carbon::createFromFormat('Y.m.d',
-                                  $user->premiumDate)->addDays(7))}}
+                                <td class="w-8/12 pb-10 text-base font-semibold text-left ">
+                                  @{{ @simpleDate(Carbon::createFromFormat('Y.m.d', $user->premiumDate)->addDays(7)) }}
                                 </td>
                               </tr>
                               <tr>
                                 <td class="w-4/12 pb-10 text-base text-left">
                                   Адрес самовывоза:
                                 </td>
-                                <td
-                                  class="w-8/12 pb-10 text-base font-semibold text-left "
-                                >
-                                  @{{$order->address}}
+                                <td class="w-8/12 pb-10 text-base font-semibold text-left ">
+                                  @{{ $order->address }}
                                 </td>
                               </tr>
                               <tr>
                                 <td class="w-4/12 pb-10 text-base text-left">
                                   Способ оплаты:
                                 </td>
-                                <td
-                                  class="w-8/12 pb-10 text-base font-semibold text-left "
-                                >
-                                  @if($order->payment_method === 0) Онлайн
-                                  @if($order->payment_status !== 'succeeded') не
-                                  оплачен @endif @else Наличными при доставке
+                                <td class="w-8/12 pb-10 text-base font-semibold text-left ">
+                                  @if ($order->payment_method === 0) Онлайн
+                                    @if ($order->payment_status !== 'succeeded') не
+                                    оплачен @endif @else Наличными при доставке
                                   @endif
                                 </td>
                               </tr>

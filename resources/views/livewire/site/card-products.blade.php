@@ -61,7 +61,8 @@
 
           <div class="flex items-start justify-end w-2/12 -mt-1">
             @if ($item->stock > 0)
-              <button wire:click="$emit('addToCart', {{ $item->id }}, 1, 0, 1000)" aria-label="Добавить в корзину"
+              <button wire:click="$emit('addToCart', {{ $item->id }}, 1, {{ $catalogId }}, 1000)"
+                aria-label="Добавить в корзину"
                 class="z-10 transition ease-in-out cursor-pointer focus:outline-none active:scale-95 link-hover group">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <path class="text-blue-400 stroke-current group-hover:text-blue-500" stroke-linecap="round"

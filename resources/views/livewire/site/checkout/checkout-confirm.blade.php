@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <h3 class="block px-4 text-2xl font-semibold">Подтверждение заказа</h3>
+  <h3 class="block px-4 pt-4 text-2xl font-semibold">Подтверждение заказа #{{ $order->order_number }}</h3>
 
   <div class="justify-between block md:flex md:space-x-6">
     <div class="block w-full px-8 py-6 space-y-6 bg-white md:w-8/12 rounded-2xl">
@@ -73,6 +73,9 @@
                         {{ kg($item->unit) }}
                       @endif
                     </div>
+                    @if ($item->shelter !== 0)
+                      <p>Товар для приюта</p>
+                    @endif
                     <div class="flex space-x-4 items-centerjustify-end">
                       <div
                         class="{{ !empty($noStockItems) && in_array($item['product_id'], $noStockItems['less_stock']) ? 'text-red-500 font-bold' : '' }}">

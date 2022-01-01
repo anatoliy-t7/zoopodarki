@@ -9,6 +9,7 @@ class CardProducts extends Component
     public $product;
     public $catalog;
     public $category;
+    public $catalogId;
 
     public function render()
     {
