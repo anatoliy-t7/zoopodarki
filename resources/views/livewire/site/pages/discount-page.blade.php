@@ -40,7 +40,8 @@
 
                     @if ($maxPrice > 100)
                       <div class="pb-2">
-                        <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
+                        <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" :minRange="$minRange"
+                          :maxRange="$maxRange" />
                       </div>
                     @endif
 

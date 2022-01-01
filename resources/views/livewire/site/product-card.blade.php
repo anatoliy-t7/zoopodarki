@@ -141,7 +141,6 @@
             @endif
           </div>
 
-
           <div x-cloak x-data="variationsToggle" x-init="$watch('count', value => { validate('count') })"
             @close-modal.window="close()" class="relative flex flex-col w-full h-full lg:flex-row md:w-7/12">
 
@@ -154,41 +153,40 @@
                     :class="item.id === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
                     class="relative flex flex-col items-start justify-between px-3 py-2 space-y-1 border rounded-xl"
                     x-on:click="item.id = {{ $item->id }}, item.stock = {{ $item->stock }}, item.unit_value = '{{ $item->unit_value }}'">
-
-                    @if ($item->promotion_type === 1)
-                      <div class="absolute z-20 block -top-3 -left-3">
-                        <div class="relative font-bold tooltip" data-title="Уценка">
-                          <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
-                        </div>
+                    <!--googleoff: all-->
+                    <!--noindex-->
+                    @if ($item->promotion_type > 0 || $item->unit_value === 'на развес')
+                      <div class="absolute block -top-3 -left-3">
+                        <x-modal :width="'3xl'">
+                          <x-slot name="button">
+                            <div class="font-bold tooltip" data-title="Нажмите чтобы прочитать условия акции">
+                              <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
+                            </div>
+                          </x-slot>
+                          <x-slot name="content">
+                            @if ($item->promotion_type === 1)
+                              <x-messages.discount-1 />
+                            @endif
+                            @if ($item->promotion_type === 3)
+                              <x-messages.discount-3 :percent="$item->promotion_percent" />
+                            @endif
+                            @if ($item->promotion_type === 4)
+                              <x-messages.discount-4 :percent="$item->promotion_percent"
+                                :enddate="$item->promotion_date" />
+                            @endif
+                            @if ($item->unit_value === 'на развес')
+                              <x-messages.discount-by-weight :percent="10" />
+                            @endif
+                          </x-slot>
+                        </x-modal>
                       </div>
                     @endif
-
-                    @if ($item->promotion_type === 2)
-                      <div class="absolute z-20 -top-3 -left-3">
-                        <div class="font-bold tooltip" data-title="Второй товар из этой акции бесплатно">
-                          <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
-                        </div>
-                      </div>
-                    @endif
-                    @if ($item->promotion_type === 3)
-                      <div class="absolute z-20 block -top-3 -left-3">
-                        <div class="font-bold tooltip" data-title="Скидка -{{ $item->promotion_percent }}%">
-                          <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
-                        </div>
-                      </div>
-                    @endif
-                    @if ($item->promotion_type === 4)
-                      <div class="absolute z-20 block -top-3 -left-3">
-                        <div class="font-bold tooltip" data-title="Скидка -{{ $item->promotion_percent }}%">
-                          <x-tabler-discount-2 class="w-6 h-6 text-orange-500 stroke-current" />
-                        </div>
-                      </div>
-                    @endif
-
                     <div wire:key="{{ $loop->index }}" class="absolute w-24 text-xs text-gray-500 -top-6"
                       x-show="item.id === {{ $item->id }}" x-transition>
                       {{ $item->cod1c }}
                     </div>
+                    <!--/noindex-->
+                    <!--googleon: all-->
 
                     <x-units :unit="$product->unit" :value="$item->unit_value" :wire:key="$product->id" />
 
@@ -407,14 +405,14 @@
               <div x-show="item.stock == 0" x-transition.opacity>
                 <x-modal>
                   <x-slot name="button">
-                    <button x-on:click="open()"
-                      class=" relative flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-blue-500 cursor-pointer rounded-lg active:scale-95 hover:bg-blue-600">
+                    <div
+                      class="relative flex items-center justify-center w-40 px-4 py-2.5 space-x-3 font-bold text-white transition ease-in-out transform bg-blue-500 cursor-pointer rounded-lg active:scale-95 hover:bg-blue-600">
                       <span>Заказать</span>
                       <x-tabler-package class="w-6 h-6" />
-                    </button>
+                    </div>
                   </x-slot>
 
-                  <x-slot name="content">
+                  <x-slot name="content" class="max-w-sm">
                     <div class="w-full space-y-6">
 
                       <div class="pt-4 font-bold leading-tight text-center text-gray-600">Оповестить когда
@@ -473,19 +471,20 @@
       <div class="px-4 pt-2 bg-white lg:px-8 lg:rounded-2xl">
         <div class="flex items-center justify-between space-x-6">
           <nav class="flex items-center justify-start gap-4 md:gap-0">
-            <h2 x-on:click="tabDescription" data-route="description"
-              :class="{ 'text-blue-500 border-blue-500': tab == 1 }"
+            <h2 x-on:click="tab = 1; tabUrl = ''; openTab();" :class="{ 'text-blue-500 border-blue-500': tab == 1 }"
               class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
               Описание
             </h2>
             @if ($product->consist)
-              <h2 x-on:click="tabСonsist" data-route="consist" :class="{ 'text-blue-500 border-blue-500': tab == 2 }"
+              <h2 x-on:click="tab = 2; tabUrl = '/consist'; openTab();"
+                :class="{ 'text-blue-500 border-blue-500': tab == 2 }"
                 class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
                 Состав
               </h2>
             @endif
             @if ($product->applying)
-              <h2 x-on:click="tabApplying" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 3 }"
+              <h2 x-on:click="tab = 3; tabUrl = '/applying'; openTab();"
+                :class="{ 'text-blue-500 border-blue-500': tab == 3 }"
                 class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
                 Применение
               </h2>
@@ -560,24 +559,6 @@
             url: window.location.pathname,
             title: '',
             tabUrl: '',
-            tabDescription() {
-              this.tab = 1;
-              this.tabUrl = ''
-              this.openTab();
-            },
-
-            tabСonsist() {
-              this.tab = 2;
-              this.tabUrl = '/consist'
-              this.openTab();
-            },
-
-            tabApplying() {
-              this.tab = 3;
-              this.tabUrl = '/applying'
-              this.openTab();
-            },
-
             openTab() {
               const state = {};
               this.url = '/pet/{{ $catalog->slug }}/{{ $category->slug }}/{{ $product->slug }}' + this
@@ -636,7 +617,7 @@
             },
             preOrder() {
               window.livewire.emit('preOrder', this.item.id, this.email)
-              this.showModal = false;
+              this.openModal = false;
             },
             open() {
               this.openModal = true
@@ -662,7 +643,6 @@
           }))
         })
       </script>
-
       @if ($product->media()->exists())
         <script src="{{ mix('js/splide.min.js') }}"></script>
         <script>

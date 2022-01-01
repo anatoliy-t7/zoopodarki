@@ -1,7 +1,7 @@
 <div itemscope itemtype="http://schema.org/WPHeader">
 
   @if (Agent::isDesktop())
-    <header class="relative z-40 block">
+    <header class="block">
       <div class="text-gray-600 bg-gray-50">
         <div class="flex items-center justify-between max-w-screen-xl px-4 py-1 mx-auto text-xs">
           <div class="font-bold text-gray-500">Санкт-Петербург</div>
@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <div class="z-40 w-screen text-gray-700 bg-white navbar">
+      <div class="w-screen text-gray-700 bg-white navbar">
         <div class="flex items-center justify-between max-w-screen-xl px-4 mx-auto">
 
           <div class="flex items-center justify-start space-x-12">

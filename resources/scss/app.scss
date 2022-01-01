@@ -53,7 +53,7 @@ input[type='range']::-webkit-slider-thumb {
 
 .navbar {
 	transition: all 0.4s;
-	@apply py-3 fixed top-0 left-0 mt-10;
+	@apply py-3 fixed top-0 left-0 mt-10 z-40;
 	box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 21px 0px;
 }
 

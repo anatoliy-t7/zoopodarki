@@ -22,12 +22,14 @@
       <div class="text-lg text-gray-400" title="Найдено товаров">{{ $products->total() }}</div>
     </div>
 
-    <div class="flex items-start justify-start p-6 space-x-6 bg-white rounded-2xl">
+    <div class="flex items-start justify-start gap-6 p-6 bg-white rounded-2xl">
       @if ($brand->logo)
-        <img loading="lazy" class="w-3/12" src="/assets/brands/{{ $brand->logo }}"
-          alt="Логотип {{ $brand->name }}">
+        <div class="">
+          <img loading="lazy" class="w-auto h-24" src="/assets/brands/{{ $brand->logo }}"
+            alt="Логотип {{ $brand->name }}">
+        </div>
       @endif
-      <div class="flex flex-col w-9/12 gap-4">
+      <div class="flex flex-col gap-4">
         @if ($brand->items()->exists())
           <div class="flex items-center space-x-4">
             <div class="text-sm text-gray-500">Серии бренда:</div>
@@ -69,7 +71,8 @@
 
                     @if ($maxPrice > 100)
                       <div class="pb-2">
-                        <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" />
+                        <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" :minRange="$minRange"
+                          :maxRange="$maxRange" />
                       </div>
                     @endif
 

@@ -51,15 +51,14 @@ class ProductCard extends Component
             ->min('price');
 
         $brand = '';
-        if ($this->product->brand()->exists()) {
+
+        if ($this->product->brand) {
             if ($this->product->brand->name_rus) {
                 $brand = $this->product->brand->name_rus;
             } else {
                 $brand = $this->product->brand->name;
             }
         }
-
-
 
         if ($this->tab === 2) {
             //SEO TITLE

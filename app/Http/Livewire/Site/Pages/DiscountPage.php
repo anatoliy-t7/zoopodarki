@@ -21,6 +21,8 @@ class DiscountPage extends Component
     public $sortBy = 'desc';
     public $maxPrice = 10000;
     public $minPrice = 0;
+    public $maxRange = 10000;
+    public $minRange = 0;
     public $catalogs;
     public $categories;
     public $brands;
@@ -71,6 +73,8 @@ class DiscountPage extends Component
             ->whereIn('id', $variationsId)
             ->where('price', '>', 0)
             ->min('price');
+        $this->maxRange = $this->maxPrice;
+        $this->minRange = $this->minPrice;
     }
 
     public function setSeo()

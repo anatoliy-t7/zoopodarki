@@ -1,7 +1,7 @@
 <div wire:init="getContacts()" class="w-full">
   <x-modal>
     <x-slot name="button">
-      <div x-on:click="open()"
+      <div
         class="flex items-center justify-center w-full px-4 py-3 space-x-1 bg-gray-100 border border-gray-300 cursor-pointer hover:border-gray-500 h-14 rounded-xl">
         <div>Мои контакты</div>
         <x-tabler-chevron-right class="w-6 h-6 text-gray-400 stroke-current" />

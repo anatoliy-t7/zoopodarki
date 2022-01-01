@@ -57,10 +57,10 @@
             <article id="top" class="w-full">
 
               @if ($category->id === 44)
-                <x-message44 />
+                <x-messages.category-44 />
               @endif
               @if ($catalog->id === config('constants.shelter_catalog_id'))
-                <x-message-shelter />
+                <x-messages.shelter />
               @endif
 
               <div class="relative w-full pb-6 md:px-4 md:bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
