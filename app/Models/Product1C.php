@@ -17,9 +17,9 @@ class Product1C extends Model
         return $this->belongsTo('App\Models\Product');
     }
 
-    public function orders()
+    public function orderItems()
     {
-        return $this->hasMany(Order::class, 'unit_id');
+        return $this->hasMany(OrderItem::class, 'product_id');
     }
 
     public function scopeHasStock($query)

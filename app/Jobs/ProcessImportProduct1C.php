@@ -101,7 +101,7 @@ class ProcessImportProduct1C implements ShouldQueue
                         $this->count++;
                     }
 
-                    if (!$oldProduct->orders()->exists()) {
+                    if (!$oldProduct->orderItems()->exists()) {
                         $oldProduct->delete();
                         $this->forDelete++;
                     }
