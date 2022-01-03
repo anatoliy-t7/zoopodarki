@@ -1,6 +1,6 @@
 <div x-cloak x-data="range" x-init="moveThumb" @reset-range.window="reset()">
   <div class="pb-3 font-bold">Цена, руб.</div>
-  <div class="flex flex-col items-center w-full max-w-xl">
+  <div class="flex flex-col items-center w-full">
     <div class="flex items-center justify-between w-full pb-4">
       <div x-text="minprice">
       </div>
@@ -21,7 +21,7 @@
         <div class="absolute inset-0 z-10 bg-gray-200 rounded-md"></div>
         <div class="absolute top-0 bottom-0 z-20 bg-yellow-300 rounded-md "
           x-bind:style="'right:'+range+'%; left:'+minthumb+'%'"></div>
-        <div class="relative mr-4">
+        <div class="relative mr-5">
           <div class="absolute top-0 z-20 w-5 h-5 -mt-2 bg-yellow-400 rounded-full shadow-lg"
             x-bind:style="'left: '+minthumb+'%'"></div>
 
@@ -59,8 +59,8 @@
           reset() {
             this.minprice = {{ $minPrice }};
             this.maxprice = {{ $maxPrice }};
-            this.min = {{ $minPrice }};
-            this.max = {{ $maxPrice }};
+            this.min = {{ $minRange }};
+            this.max = {{ $maxRange }};
             this.minthumb = {{ $minPrice }};
             this.maxthumb = {{ $maxPrice }};
           }

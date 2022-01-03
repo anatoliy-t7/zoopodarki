@@ -29,7 +29,6 @@ class Users extends Component
     public $email;
     public $phone;
     public $password;
-    public $company = 0;
     public $discount = 0;
     public $userRoles = [];
 
@@ -71,7 +70,6 @@ class Users extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->phone = $user->phone;
-        $this->company = $user->company;
         $this->discount = $user->discount;
         $this->userRoles = collect($user->roles)->pluck('name');
     }
@@ -96,7 +94,6 @@ class Users extends Component
                     'name' => trim($this->name),
                     'email' => $this->email,
                     'phone' => $this->phone,
-                    'company' => $this->company,
                     'discount' => $this->discount,
                     'password' => Hash::make($this->password),
                 ]

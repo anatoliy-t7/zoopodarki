@@ -33,7 +33,7 @@
 
     <div class="grid w-full grid-cols-2 gap-6 pt-2 md:grid-cols-3 lg:grid-cols-4">
       @forelse ($brands as $brand)
-        <a class="flex items-center justify-center px-3 py-4 bg-white rounded-xl hover:shadow-lg"
+        <a class="flex items-center justify-center px-3 py-4 transition-shadow bg-white shadow-sm rounded-xl hover:shadow-lg"
           href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}">
           @if ($brand->logo)
             <img loading="lazy" class="object-scale-down w-full h-16" src="/assets/brands/{{ $brand->logo }}"

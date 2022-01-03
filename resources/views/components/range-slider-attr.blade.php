@@ -1,7 +1,7 @@
 @props(['minRange', 'maxRange', 'idRange'])
 <div x-data="rangeAttr{{ $idRange }}" x-init="moveThumbAttr" @reset-range-attr.window="reset()">
 
-  <div class="flex flex-col items-center w-full max-w-xl">
+  <div class="flex flex-col items-center w-full">
     <div class="flex items-center justify-between w-full pb-4">
       <div x-text="minrange">
       </div>
@@ -22,7 +22,7 @@
         <div class="absolute inset-0 z-10 bg-gray-200 rounded-md"></div>
         <div class="absolute top-0 bottom-0 z-20 bg-yellow-300 rounded-md "
           x-bind:style="'right:'+range+'%; left:'+minthumb+'%'"></div>
-        <div class="relative mr-4">
+        <div class="relative mr-5">
           <div class="absolute top-0 z-20 w-5 h-5 -mt-2 bg-yellow-400 rounded-full shadow-lg"
             x-bind:style="'left: '+minthumb+'%'"></div>
 
@@ -57,6 +57,14 @@
 
             this.range = 100 - (((this.maxrange - this.min) / (this.max - this.min)) * 100);
           },
+          reset() {
+            this.minrange = {{ $minRange }};
+            this.maxrange = {{ $maxRange }};
+            this.min = {{ $minRange }};
+            this.max = {{ $maxRange }};
+            this.minthumb = {{ $minRange }};
+            this.maxthumb = {{ $maxRange }};
+          }
         }))
       })
     </script>

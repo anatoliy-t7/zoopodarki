@@ -18,7 +18,7 @@
         <div class="masonry">
           @foreach ($catalog->categories->sortBy('sort') as $category)
             <div
-              class="inline-block w-full px-4 pt-4 pb-6 mb-6 space-y-2 bg-white item lg:px-6 rounded-2xl break-inside-avoid">
+              class="inline-block w-full px-4 pt-4 pb-6 mb-6 space-y-2 bg-white shadow-sm item lg:px-6 rounded-2xl break-inside-avoid">
               <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}"
                 class="block px-2 py-2 text-lg font-semibold leading-tight hover:underline">
                 {{ $category->menu_name }}

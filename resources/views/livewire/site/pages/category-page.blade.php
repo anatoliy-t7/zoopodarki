@@ -2,13 +2,13 @@
     <x-breadcrumbs :category="$category" :catalog="$catalog" />
     <div>
       <div class="space-y-6">
-        <div class="flex items-center justify-start space-x-3 text-3xl ">
+        <div class="flex items-center justify-start gap-3 text-3xl">
           <h1 class="font-bold first-letter">
             {{ $name }}
           </h1>
           <div class="text-3xl font-bold text-gray-700" title="Найдено товаров">{{ $products->total() }}
-
-            {{ trans_choice('titles.count_products', substr($products->total(), -1)) }}</div>
+            {{ trans_choice('titles.count_products', substr($products->total(), -1)) }}
+          </div>
         </div>
 
         @if ($tags->count() > 0)
@@ -28,7 +28,7 @@
         <div class="flex w-full">
           <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
             <aside class="w-full lg:w-3/12">
-              <div class="relative md:p-4 md:pb-6 md:bg-white lg:rounded-2xl">
+              <div class="relative shadow-sm md:p-6 md:bg-white lg:rounded-2xl">
                 <!--googleoff: all-->
                 <!--noindex-->
                 @if (Agent::isMobile())
@@ -40,18 +40,19 @@
                     :attributesRanges="$attributesRanges" :brands="$brands" :showPromoF="$showPromoF"
                     :catalogId="$catalog->id" />
                 @endif
+
+                @if (Agent::isDesktop())
+                  <div class="pt-6">
+                    <button
+                      class="inline-block w-full px-3 py-2 font-bold text-gray-600 bg-gray-100 border border-gray-200 md:text-sm rounded-xl hover:bg-gray-200"
+                      wire:click.debounce.1000="resetFilters(), $render" wire:loading.attr="disabled">
+                      Сбросить фильтры
+                    </button>
+                  </div>
+                @endif
                 <!--/noindex-->
                 <!--googleon: all-->
               </div>
-              @if (Agent::isDesktop())
-                <div class="px-4 pt-4 lg:py-4">
-                  <button
-                    class="inline-block w-full px-3 py-2 text-gray-600 bg-gray-200 border border-gray-200 md:text-sm rounded-2xl hover:text-gray-900 hover:bg-gray-400"
-                    wire:click.debounce.1000="resetFilters(), $render" wire:loading.attr="disabled">
-                    Сбросить фильтры
-                  </button>
-                </div>
-              @endif
             </aside>
 
             <article id="top" class="w-full">
@@ -59,11 +60,11 @@
               @if ($category->id === 44)
                 <x-messages.category-44 />
               @endif
-              @if ($catalog->id === config('constants.shelter_catalog_id'))
+              @if ($catalog->id == (int) config('constants.shelter_catalog_id'))
                 <x-messages.shelter />
               @endif
 
-              <div class="relative w-full pb-6 md:px-4 md:bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
+              <div class="relative w-full pb-6 shadow-sm md:px-4 md:bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
                 <div class="relative ">
                   <div class="flex items-center justify-end py-3">
                     <x-dropdown>

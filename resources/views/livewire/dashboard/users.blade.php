@@ -152,10 +152,6 @@
 
           <div class="flex items-start justify-between space-x-6">
 
-            <div class="py-2">
-              <x-toggle wire:model="company" :property="$company" :lable="'Компания'" />
-            </div>
-
             <div class="flex items-center justify-between space-x-4">
               <div class="font-bold">Скидка по карте % (число)</div>
               <div class="w-16">
