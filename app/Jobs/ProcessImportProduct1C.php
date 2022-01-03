@@ -66,9 +66,9 @@ class ProcessImportProduct1C implements ShouldQueue
             Log::info('Product1C deleted: ' . $this->forDelete);
         }
 
-        Log::info('import.xml processed successed');
-
         unlink($this->file);
+
+        Log::info('import.xml processed successed');
     }
 
     public function getProducts($product1c)

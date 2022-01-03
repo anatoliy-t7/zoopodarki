@@ -104,12 +104,12 @@ class Users extends Component
             toast()
                 ->success($user->name . ' сохранен')
                 ->push();
-            // TODO on prod on
-            // \Mail::to($user->email)
-            // ->send(new UserRegistration([
-            //     'email' => $user->email,
-            //     'password' => $this->password,
-            // ]));
+
+            \Mail::to($user->email)
+            ->send(new UserRegistration([
+                'email' => $user->email,
+                'password' => $this->password,
+            ]));
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');
