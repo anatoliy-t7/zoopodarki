@@ -109,7 +109,7 @@
               </div>
               <div x-cloak x-show="open" x-transition.opacity class="space-y-6">
 
-                <div class="space-y-1">
+                {{-- <div class="space-y-1">
                   <label for="meta_title" class="font-bold">Meta заголовок</label>
                   <input wire:model.defer="meta_title" id="meta_title" name="meta_title">
                   @error('meta_title')
@@ -124,7 +124,7 @@
                   @error('meta_description')
                     <span class="text-xs text-red-500">{{ $message }}</span>
                   @enderror
-                </div>
+                </div> --}}
 
                 <div class="space-y-1">
                   <label for="description" class="font-bold">Описание</label>

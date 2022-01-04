@@ -45,7 +45,7 @@ return [
         'telegram' => [
             'driver' => 'custom',
             'via' => Logger\TelegramLogger::class,
-            'level' => 'debug',
+            'level' => 'warning',
         ],
 
         'stackandtelegram' => [

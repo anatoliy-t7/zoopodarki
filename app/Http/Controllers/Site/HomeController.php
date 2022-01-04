@@ -103,7 +103,7 @@ class HomeController extends Controller
 
         $popular2 = cache()->remember('popular2-homepage', 60 * 60 * 24, function () {
             return Product::withWhereHas('categories', function ($query) {
-                $query->where('category_id', 44); // Одежда для собак
+                $query->where('category_id', 45); // Амуниция для собак
             })
             ->with('media')
             ->with('brand')
@@ -146,7 +146,22 @@ class HomeController extends Controller
             ->get();
         });
 
-        return view('site.home', compact('brandsOffer', 'discountsCats', 'discountsDogs', 'discountsBirds', 'discountsRodents', 'popular1', 'popular2', 'popular3', 'popular4'));
+        $popular5 = cache()->remember('popular5-homepage', 60 * 60 * 24, function () {
+            return Product::withWhereHas('categories', function ($query) {
+                $query->where('category_id', 39); // Игрушки для собак
+            })
+            ->with('media')
+            ->with('brand')
+            ->with('unit')
+            ->with('attributes')
+            ->with('variations')
+            ->with('categories.catalog')
+            ->orderBy('popularity', 'desc')
+            ->take(5)
+            ->get();
+        });
+
+        return view('site.home', compact('brandsOffer', 'discountsCats', 'discountsDogs', 'discountsBirds', 'discountsRodents', 'popular1', 'popular2', 'popular3', 'popular4', 'popular5'));
     }
 
     public function setSeo()

@@ -1,126 +1,136 @@
 @extends('layouts.wide')
 @section('content')
 
-  <div class="py-8">
-    <div class="space-y-20">
+  <div class="pt-6 pb-14">
+    <div class="space-y-24">
 
       <div class="flex flex-col max-w-screen-xl gap-8 px-4 mx-auto">
         <div class="flex items-center justify-between gap-8">
-          <div
-            class="w-7/12 p-12 text-white transition cursor-pointer h-72 bg-amber-300 bg-opacity-80 rounded-3xl hover:bg-opacity-100">
-            <h2 class="text-4xl font-bold">Сухой корм для котов</h2>
-          </div>
-          <div class="w-5/12 p-12 text-white transition bg-blue-300 cursor-pointer h-72 rounded-3xl hover:bg-blue-400">
-            <h2 class="text-4xl font-bold">Сухой корм для котов</h2>
-          </div>
+          <a href="{{ route('site.category', ['catalogslug' => 'cats', 'categoryslug' => 'suhoy-korm']) }}"
+            class="relative w-7/12 py-12 overflow-hidden text-white transition cursor-pointer px-14 h-72 bg-amber-300 bg-opacity-80 rounded-3xl hover:bg-opacity-100">
+            <h2 class="relative z-20 text-5xl font-bold">Сухой корм<br>для кошек</h2>
+            <img src="/assets/img/home-block-one.webp" alt="Сухой корм для котов" class="absolute right-0 -bottom-4">
+          </a>
+          <a href="{{ route('site.category', ['catalogslug' => 'dogs', 'categoryslug' => 'odezhda-i-obuv']) }}"
+            class="relative w-5/12 py-12 overflow-hidden text-white transition bg-blue-300 cursor-pointer px-14 h-72 rounded-3xl hover:bg-blue-400">
+            <h2 class="relative z-20 text-5xl font-bold">Одежда<br>для<br>собак</h2>
+            <img src="/assets/img/home-block-two.webp" alt="Сухой корм для кошек" class="absolute z-10 right-4 -bottom-0">
+          </a>
         </div>
-        <div class="flex items-center justify-between gap-8">
-          <div class="w-5/12 p-12 text-white transition bg-orange-300 cursor-pointer h-72 rounded-3xl hover:bg-orange-400">
-            <h2 class="text-4xl font-bold">Сухой корм для котов</h2>
-          </div>
-          <div
-            class="w-7/12 p-12 text-white transition bg-pink-300 cursor-pointer h-72 bg-opacity-80 rounded-3xl hover:bg-opacity-100">
-            <h2 class="text-4xl font-bold">Сухой корм для котов</h2>
-          </div>
+        <div class="flex items-center justify-between gap-8 ">
+          <a href="{{ route('site.category', ['catalogslug' => 'cats', 'categoryslug' => 'kogtetochki-domiki-lezhanki']) }}"
+            class="relative w-5/12 py-12 overflow-hidden text-white transition bg-orange-300 cursor-pointer px-14 h-72 rounded-3xl hover:bg-orange-400">
+            <h2 class="relative z-20 text-5xl font-bold">Домики<br>для<br>кошек</h2>
+            <img src="/assets/img/home-block-three.webp" alt="Сухой корм для кошек"
+              class="absolute z-10 -right-6 -bottom-0">
+          </a>
+          <a href="{{ route('site.category', ['catalogslug' => 'dogs', 'categoryslug' => 'suhoy-korm-1']) }}"
+            class="relative w-7/12 py-12 overflow-hidden text-white transition bg-pink-300 cursor-pointer px-14 h-72 bg-opacity-80 rounded-3xl hover:bg-opacity-100">
+            <h2 class="relative z-20 text-5xl font-bold">Сухой корм<br>для собак</h2>
+            <img src="/assets/img/home-block-four.webp" alt="Сухой корм для собак"
+              class="absolute z-10 right-6 -bottom-2">
+          </a>
         </div>
       </div>
 
-      <div class="max-w-screen-xl px-4 mx-auto space-y-4">
-        <div class="flex flex-col items-center justify-between md:flex-row">
-          <div class="text-2xl font-semibold">Выгодные предложения</div>
-          <div>
-            <a href="{{ route('site.discounts') }}"
-              class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
-              <span>Все предложения</span>
-              <x-tabler-chevron-right class="w-5 h-5" />
-            </a>
+      @if ($discountsCats->isNotEmpty() || $discountsDogs->isNotEmpty() || $discountsBirds->isNotEmpty() || $discountsBirds->isNotEmpty() || $discountsRodents->isNotEmpty())
+        <div class="max-w-screen-xl px-4 mx-auto space-y-4">
+          <div class="flex flex-col items-center justify-between md:flex-row">
+            <div class="text-2xl font-semibold">Выгодные предложения</div>
+            <div>
+              <a href="{{ route('site.discounts') }}"
+                class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
+                <span>Все предложения</span>
+                <x-tabler-chevron-right class="w-5 h-5" />
+              </a>
+            </div>
           </div>
-        </div>
 
-        <div x-cloak x-data="{tab: 1}" class="px-4 pt-2 lg:px-8 ">
-          <div class="flex items-center justify-between space-x-6">
-            <nav class="items-center justify-start flex-none md:flex">
+          <div x-cloak x-data="{tab: 1}" class="px-4 pt-2 lg:px-8 ">
+            <div class="flex items-center justify-between space-x-6">
+              <nav class="items-center justify-start flex-none md:flex">
+                @if ($discountsCats->isNotEmpty())
+                  <h2 x-on:click="tab = 1" data-route="description" :class="{ 'text-blue-500 border-blue-500': tab == 1 }"
+                    class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+                    Кошки
+                  </h2>
+                @endif
+                @if ($discountsDogs->isNotEmpty())
+                  <h2 x-on:click="tab = 2" data-route="consist" :class="{ 'text-blue-500 border-blue-500': tab == 2 }"
+                    class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+                    Собаки
+                  </h2>
+                @endif
+                @if ($discountsBirds->isNotEmpty())
+                  <h2 x-on:click="tab = 3" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 3 }"
+                    class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+                    Птицы
+                  </h2>
+                @endif
+                @if ($discountsRodents->isNotEmpty())
+                  <h2 x-on:click="tab = 4" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 4 }"
+                    class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+                    Грызуны
+                  </h2>
+                @endif
+              </nav>
+            </div>
+
+            <div class="w-full pb-6 ">
               @if ($discountsCats->isNotEmpty())
-                <h2 x-on:click="tab = 1" data-route="description" :class="{ 'text-blue-500 border-blue-500': tab == 1 }"
-                  class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
-                  Кошки
-                </h2>
+                <div x-cloak :class="tab == 1 ? 'block' : 'hidden'"
+                  class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                  @foreach ($discountsCats as $discountsCat)
+                    <div class="w-full max-w-xs">
+                      <livewire:site.card-products :product="$discountsCat"
+                        :catalog="$discountsCat->categories[0]->catalog->slug"
+                        :category="$discountsCat->categories[0]->slug" :wire:key="'product-'.$discountsCat->id" />
+                    </div>
+                  @endforeach
+                </div>
               @endif
               @if ($discountsDogs->isNotEmpty())
-                <h2 x-on:click="tab = 2" data-route="consist" :class="{ 'text-blue-500 border-blue-500': tab == 2 }"
-                  class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
-                  Собаки
-                </h2>
+                <div x-cloak :class="tab == 2 ? 'block' : 'hidden'"
+                  class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                  @foreach ($discountsDogs as $discountsDog)
+                    <div class="w-full max-w-xs">
+                      <livewire:site.card-products :product="$discountsDog"
+                        :catalog="$discountsDog->categories[0]->catalog->slug"
+                        :category="$discountsDog->categories[0]->slug" :wire:key="'product-'.$discountsDog->id" />
+                    </div>
+                  @endforeach
+                </div>
               @endif
+
               @if ($discountsBirds->isNotEmpty())
-                <h2 x-on:click="tab = 3" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 3 }"
-                  class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
-                  Птицы
-                </h2>
+                <div x-cloak :class="tab == 3 ? 'block' : 'hidden'"
+                  class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                  @foreach ($discountsBirds as $discountsBird)
+                    <div class="w-full max-w-xs">
+                      <livewire:site.card-products :product="$discountsBird"
+                        :catalog="$discountsBird->categories[0]->catalog->slug"
+                        :category="$discountsBird->categories[0]->slug" :wire:key="'product-'.$discountsBird->id" />
+                    </div>
+                  @endforeach
+                </div>
               @endif
               @if ($discountsRodents->isNotEmpty())
-                <h2 x-on:click="tab = 4" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 4 }"
-                  class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
-                  Грызуны
-                </h2>
+                <div x-cloak :class="tab == 4 ? 'block' : 'hidden'"
+                  class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                  @foreach ($discountsRodents as $discountsRodent)
+                    <div class="w-full max-w-xs">
+                      <livewire:site.card-products :product="$discountsRodent"
+                        :catalog="$discountsRodent->categories[0]->catalog->slug"
+                        :category="$discountsRodent->categories[0]->slug" :wire:key="'product-'.$discountsRodent->id" />
+                    </div>
+                  @endforeach
+                </div>
               @endif
-            </nav>
-          </div>
 
-          <div class="w-full pb-6 ">
-            @if ($discountsCats->isNotEmpty())
-              <div x-cloak :class="tab == 1 ? 'block' : 'hidden'"
-                class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
-                @foreach ($discountsCats as $discountsCat)
-                  <div class="w-full max-w-xs">
-                    <livewire:site.card-products :product="$discountsCat"
-                      :catalog="$discountsCat->categories[0]->catalog->slug"
-                      :category="$discountsCat->categories[0]->slug" :wire:key="'product-'.$discountsCat->id" />
-                  </div>
-                @endforeach
-              </div>
-            @endif
-            @if ($discountsDogs->isNotEmpty())
-              <div x-cloak :class="tab == 2 ? 'block' : 'hidden'"
-                class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
-                @foreach ($discountsDogs as $discountsDog)
-                  <div class="w-full max-w-xs">
-                    <livewire:site.card-products :product="$discountsDog"
-                      :catalog="$discountsDog->categories[0]->catalog->slug"
-                      :category="$discountsDog->categories[0]->slug" :wire:key="'product-'.$discountsDog->id" />
-                  </div>
-                @endforeach
-              </div>
-            @endif
-
-            @if ($discountsBirds->isNotEmpty())
-              <div x-cloak :class="tab == 3 ? 'block' : 'hidden'"
-                class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
-                @foreach ($discountsBirds as $discountsBird)
-                  <div class="w-full max-w-xs">
-                    <livewire:site.card-products :product="$discountsBird"
-                      :catalog="$discountsBird->categories[0]->catalog->slug"
-                      :category="$discountsBird->categories[0]->slug" :wire:key="'product-'.$discountsBird->id" />
-                  </div>
-                @endforeach
-              </div>
-            @endif
-            @if ($discountsRodents->isNotEmpty())
-              <div x-cloak :class="tab == 4 ? 'block' : 'hidden'"
-                class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
-                @foreach ($discountsRodents as $discountsRodent)
-                  <div class="w-full max-w-xs">
-                    <livewire:site.card-products :product="$discountsRodent"
-                      :catalog="$discountsRodent->categories[0]->catalog->slug"
-                      :category="$discountsRodent->categories[0]->slug" :wire:key="'product-'.$discountsRodent->id" />
-                  </div>
-                @endforeach
-              </div>
-            @endif
-
+            </div>
           </div>
         </div>
-      </div>
+      @endif
 
       <div class="py-24 bg-gray-50">
         <div x-data class="grid max-w-screen-xl gap-12 px-4 mx-auto sm:grid-cols-2 md:grid-cols-4">
@@ -153,7 +163,7 @@
         </div>
       </div>
 
-      <div class="max-w-screen-xl px-4 mx-auto space-y-4">
+      <div class="max-w-screen-xl px-4 pb-24 mx-auto space-y-4">
         <div class="flex items-center justify-between">
           <div class="text-2xl font-semibold">Предложение от брендов</div>
           <div>
@@ -201,7 +211,7 @@
               @if ($popular2->isNotEmpty())
                 <h2 x-on:click="tab = 2" data-route="consist" :class="{ 'text-blue-500 border-blue-500': tab == 2 }"
                   class="block py-2 text-base font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
-                  Одежда для собак
+                  Амуниция для собак
                 </h2>
               @endif
               @if ($popular3->isNotEmpty())
@@ -214,6 +224,12 @@
                 <h2 x-on:click="tab = 4" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 4 }"
                   class="block py-2 text-base font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
                   Кормушки для птиц
+                </h2>
+              @endif
+              @if ($popular5->isNotEmpty())
+                <h2 x-on:click="tab = 5" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 4 }"
+                  class="block py-2 text-base font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+                  Игрушки для собак
                 </h2>
               @endif
             </nav>
@@ -257,9 +273,9 @@
                 </div>
                 <div class="flex items-center justify-center w-full px-4 space-x-1">
                   <a href="{{ route('site.category', ['catalogslug' => $popular2Product->categories[0]->catalog->slug, 'categoryslug' => $popular2Product->categories[0]->slug]) }}"
-                    title="Вся одежда для собак"
+                    title="Вся амуниция для собак"
                     class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
-                    <span>Вся одежда для собак</span>
+                    <span>Вся амуниция для собак</span>
                     <x-tabler-chevron-right class="w-5 h-5" />
                   </a>
                 </div>
@@ -304,6 +320,28 @@
                     title="Все кормушки для птиц"
                     class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
                     <span>Все кормушки для птиц</span>
+                    <x-tabler-chevron-right class="w-5 h-5" />
+                  </a>
+                </div>
+              </div>
+            @endif
+
+            @if ($popular5->isNotEmpty())
+              <div x-cloak :class="tab == 5 ? 'block' : 'hidden'" class="pt-6 space-y-8">
+                <div class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                  @foreach ($popular5 as $popular5Product)
+                    <div class="w-full max-w-xs">
+                      <livewire:site.card-products :product="$popular5Product"
+                        :catalog="$popular5Product->categories[0]->catalog->slug"
+                        :category="$popular5Product->categories[0]->slug" :wire:key="'product-'.$popular5Product->id" />
+                    </div>
+                  @endforeach
+                </div>
+                <div class="flex items-center justify-center w-full px-4 space-x-1">
+                  <a href="{{ route('site.category', ['catalogslug' => $popular5Product->categories[0]->catalog->slug, 'categoryslug' => $popular5Product->categories[0]->slug]) }}"
+                    title="Все кормушки для птиц"
+                    class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
+                    <span>Все игрушки для собак</span>
                     <x-tabler-chevron-right class="w-5 h-5" />
                   </a>
                 </div>
