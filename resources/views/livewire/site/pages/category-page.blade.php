@@ -64,7 +64,7 @@
                 <x-messages.shelter />
               @endif
 
-              <div class="relative w-full pb-6 shadow-sm md:px-4 md:bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
+              <div class="relative w-full pb-6 md:shadow-sm md:px-4 md:bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
                 <div class="relative ">
                   <div class="flex items-center justify-end py-3">
                     <x-dropdown>

@@ -33,8 +33,6 @@ class CheckDeadlinePromotions implements ShouldQueue
      */
     public function handle()
     {
-
-        //TODO test it
         $products1cPromotionsWithDate = Product1C::where('promotion_date', '<=', now()->toDateString())->get();
 
         foreach ($products1cPromotionsWithDate as $product1c) {

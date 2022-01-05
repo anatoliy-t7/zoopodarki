@@ -90,7 +90,7 @@ class HomeController extends Controller
             });
         }
 
-        $popular1 = cache()->remember('popular1-homepage', 60 * 60 * 24, function () {
+        $popular1 = cache()->remember('popular1-homepage', 60 * 30 * 24, function () {
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 20); // Наполнитель для кошачего туалета
             })
@@ -107,7 +107,7 @@ class HomeController extends Controller
             ->get();
         });
 
-        $popular2 = cache()->remember('popular2-homepage', 60 * 60 * 24, function () {
+        $popular2 = cache()->remember('popular2-homepage', 60 * 30 * 24, function () {
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 45); // Амуниция для собак
             })
@@ -124,7 +124,7 @@ class HomeController extends Controller
             ->get();
         });
 
-        $popular3 = cache()->remember('popular3-homepage', 60 * 60 * 24, function () {
+        $popular3 = cache()->remember('popular3-homepage', 60 * 30 * 24, function () {
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 61); // Аквариумы для рыбок
             })
@@ -141,7 +141,7 @@ class HomeController extends Controller
             ->get();
         });
 
-        $popular4 = cache()->remember('popular4-homepage', 60 * 60 * 24, function () {
+        $popular4 = cache()->remember('popular4-homepage', 60 * 30 * 24, function () {
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 58); // Кормушки для птиц
             })
@@ -158,7 +158,7 @@ class HomeController extends Controller
             ->get();
         });
 
-        $popular5 = cache()->remember('popular5-homepage', 60 * 60 * 24, function () {
+        $popular5 = cache()->remember('popular5-homepage', 60 * 30 * 24, function () {
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 39); // Игрушки для собак
             })

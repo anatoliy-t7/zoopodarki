@@ -11,6 +11,7 @@
   {!! OpenGraph::generate() !!}
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="yandex-verification" content="0811cc7cb6f1e83f" />
   <link rel="icon" href="{{ asset('assets/img/favicon.svg') }}" type="image/svg+xml">
   <link rel="canonical" href="{{ url()->current() }}" />
   <link rel="preload" as="style" href="{{ mix('css/app.css') }}">

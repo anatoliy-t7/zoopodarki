@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Product1C;
 use App\Traits\Promotions;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Usernotnull\Toast\Concerns\WireToast;
@@ -91,13 +92,22 @@ class Products1c extends Component
                 ->warning('В процессе создания акции произошла ошибка')
                 ->push();
         }
-
+        $this->cleanCache();
         $this->closeForm();
+    }
+
+    public function cleanCache()
+    {
+        Cache::forget('discountsCats-homepage');
+        Cache::forget('discountsDogs-homepage');
+        Cache::forget('discountsBirds-homepage');
+        Cache::forget('discountsRodents-homepage');
     }
 
     public function stop()
     {
         $this->stopPromotion($this->product1c['id']);
+        $this->cleanCache();
         $this->closeForm();
         toast()
             ->success('Акция прекращена')

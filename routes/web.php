@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['register' => false]);
 
-    // TODO delete in production 'auth'
 Route::middleware(['throttle:1000,60', 'web', 'auth'])
     ->name('site.')
     ->group(

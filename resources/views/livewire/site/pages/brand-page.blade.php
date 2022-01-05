@@ -61,11 +61,80 @@
         <div class="flex w-full">
           <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
             <aside class="w-full lg:w-3/12">
-              <div class="relative p-5 bg-white shadow-sm lg:rounded-2xl">
+              <div class="relative shadow-sm md:p-6 md:bg-white lg:rounded-2xl">
                 <!--googleoff: all-->
                 <!--noindex-->
                 @if (Agent::isMobile())
-                  // TODO
+                  <div x-cloak x-data="{ filter: false}"
+                    x-effect="document.body.classList.toggle('overflow-hidden', filter), document.body.classList.toggle('pr-4', filter)">
+                    <button x-on:click="filter = true" class="absolute z-20 top-8 left-4">
+                      <x-tabler-adjustments class="w-8 h-8 text-gray-600 stroke-current" />
+                    </button>
+
+                    <div :class="{'translate-x-0': filter, '-translate-x-full' : !filter}"
+                      class="fixed inset-0 z-40 w-full h-full min-h-screen overflow-y-auto transition-transform duration-300 ease-in-out transform translate-x-0 bg-white max-w-screen scrollbar overscroll-x-none">
+
+                      <button x-on:click="filter = false" class="sticky top-0 left-0 z-40 pt-4 pl-3">
+                        <x-tabler-chevron-left class="text-gray-500 stroke-current w-7 h-7" />
+                      </button>
+
+                      <div class="px-12 pb-28">
+                        <div class="flex-col px-1 space-y-6">
+                          @if ($maxPrice > 100)
+                            <div class="pb-2">
+                              <x-range-slider :minPrice="$minPrice" :maxPrice="$maxPrice" :minRange="$minRange"
+                                :maxRange="$maxRange" />
+                            </div>
+                          @endif
+
+                          @if ($catalogs)
+                            <div class="space-y-4">
+                              <div class="font-bold">Питомец</div>
+
+                              <div class="py-1 space-y-3">
+
+                                @foreach ($catalogs as $catalog)
+                                  <label class="container-checkbox">
+                                    <span for="cats" class="text-sm">{{ $catalog['name'] }}</span>
+                                    <input value="{{ $catalog['id'] }}" wire:model="petF"
+                                      id="{{ $catalog['slug'] }}" type="checkbox">
+                                    <span class="checkmark"></span>
+                                  </label>
+                                @endforeach
+
+                              </div>
+                            </div>
+                          @endif
+
+                          @if ($petF && $categories)
+                            <div class="space-y-4">
+                              <div class="font-bold">Категории</div>
+                              <div class="py-1 space-y-3">
+                                @foreach ($categories as $category)
+                                  <label class="container-checkbox">
+                                    <span for="category-{{ $category['id'] }}"
+                                      class="text-sm">{{ $category['name'] }}</span>
+                                    <input value="{{ $category['id'] }}" wire:model="catF"
+                                      id="category-{{ $category['id'] }}" type="checkbox">
+                                    <span class="checkmark"></span>
+                                  </label>
+                                @endforeach
+                              </div>
+                            </div>
+                          @endif
+                        </div>
+
+                        <div class="pt-6">
+                          <button
+                            class="inline-block w-full px-3 py-2 font-bold text-gray-600 bg-gray-100 border border-gray-200 md:text-sm rounded-xl hover:bg-gray-200"
+                            wire:click.debounce.1000="resetFilters(), $render" wire:loading.attr="disabled">
+                            Сбросить фильтры
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
                 @else
                   <div class="flex-col px-1 space-y-6">
                     @if ($maxPrice > 100)
@@ -111,7 +180,6 @@
                       </div>
                     @endif
                   </div>
-
                 @endif
                 <div wire:loading
                   class="absolute top-0 bottom-0 left-0 right-0 z-30 w-full h-full bg-gray-100 bg-opacity-75 rounded-2xl">
@@ -134,7 +202,7 @@
 
             <article id="top" class="w-full">
 
-              <div class="relative w-full px-4 pb-6 bg-white shadow-sm lg:pt-2 lg:px-6 lg:rounded-2xl ">
+              <div class="relative w-full pb-6 md:shadow-sm md:px-4 md:bg-white lg:pt-2 lg:px-6 lg:rounded-2xl">
 
                 <div class="relative ">
                   <div class="flex items-center justify-end py-3">
