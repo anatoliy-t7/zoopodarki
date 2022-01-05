@@ -106,6 +106,7 @@
                 @if ($product1c->product)
                   <x-units :unit="$product1c->product->unit" :value="$product1c->unit_value"
                     :wire:key="$product1c->product->id" />
+                  {{ $product1c->unit_value }}
                 @endif
               </x-dashboard.table.cell>
 

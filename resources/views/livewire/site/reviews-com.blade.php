@@ -71,7 +71,7 @@
             <ul id="customersGalleryLightbox" class="flex items-center justify-start space-x-2 splide__list">
               @forelse ($gallery as $image)
                 <li class="cursor-pointer splide__slide">
-                  <img loading="lazy" class="object-cover object-center w-16 h-16" alt=""
+                  <img loading="lazy" class="object-cover object-center w-16 h-16" alt="Отзывы {{ $product->name }}"
                     data-bp="{{ $image->getUrl() }}"
                     {{ $gallery->count() > 10 ? 'data-splide-lazy=' : 'src=' }}"{{ $image->getUrl('thumb') }}">
                 </li>

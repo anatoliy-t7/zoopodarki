@@ -18,8 +18,8 @@
   </div>
 
   <div x-cloak x-show="open" x-transition.opacity @click.outside="open = false" id="megaMenu"
-    class="absolute left-0 z-40 w-full mt-2 overflow-x-hidden bg-gray-100 top-16">
-    <div class="relative z-50 flex items-start w-full h-auto mx-auto text-gray-700 max-w-screen pb-28 sm:pb-0">
+    class="absolute left-0 z-40 w-full mt-2 overflow-x-hidden text-gray-800 bg-gray-100 top-16">
+    <div class="relative z-50 flex items-start w-full h-auto mx-auto max-w-screen pb-28 sm:pb-0">
       <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="w-3/12 py-6">
         <div itemprop="about" itemscope itemtype="http://schema.org/ItemList" class="h-full leading-snug bg-transparent">
           @foreach ($menuCatalogs as $menuCatalog)
@@ -28,16 +28,11 @@
               <a itemprop="url" x-on:mouseover="tab = {{ $menuCatalog->id }}"
                 :class="{ 'bg-white text-orange-500 border-orange-400': tab === {{ $menuCatalog->id }} }"
                 href="{{ route('site.catalog', ['catalogslug' => $menuCatalog->slug]) }}"
-                class="relative flex items-center h-full py-4 pl-6 font-bold text-gray-900 border-r-4 border-transparent rounded-l-lg cursor-pointer hover:border-orange-400 w-80"
+                class="relative flex items-center h-full py-4 pl-6 text-lg font-bold border-r-4 border-transparent rounded-l-lg cursor-pointer hover:border-orange-400 w-80"
                 style="word-spacing: 4px;">
                 {{ $menuCatalog->name }}
               </a>
               <meta itemprop="name" content="{{ $menuCatalog->name }}" />
-              @if ($menuCatalog->icon !== null)
-                <div class="">
-                  {!! $menuCatalog->icon !!}
-                </div>
-              @endif
             </div>
           @endforeach
         </div>
@@ -64,7 +59,7 @@
               @foreach ($catalog->categories->sortBy('sort') as $menuCategory)
                 <div class="py-2 pl-12 w-80">
                   <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug]) }}"
-                    class="block p-2 text-lg font-bold text-gray-900 hover:text-orange-500">
+                    class="block p-2 text-lg font-bold hover:text-orange-500">
                     @if ($menuCategory->menu_name !== null)
                       {{ $menuCategory->menu_name }}
                     @else
@@ -73,10 +68,10 @@
 
                   </a>
                   @if ($menuCategory->tags->count() > 0)
-                    <div class="px-2 space-y-2">
+                    <div class="flex flex-wrap gap-2 px-2">
                       @foreach ($menuCategory->tags as $tag)
                         <a href="{{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug, 'tagslug' => $tag->slug]) }}"
-                          class="block text-base text-gray-800 lowercase hover:text-orange-500">
+                          class="block px-3 py-1 text-sm font-semibold text-gray-500 lowercase bg-gray-50 hover:bg-blue-100 rounded-2xl">
                           {{ $tag->name }}
                         </a>
                       @endforeach

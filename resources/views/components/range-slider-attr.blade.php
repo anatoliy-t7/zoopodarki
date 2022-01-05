@@ -1,7 +1,6 @@
 @props(['minRange', 'maxRange', 'idRange'])
 <div x-data="rangeAttr{{ $idRange }}" x-init="moveThumbAttr" @reset-range-attr.window="reset()">
-
-  <div class="flex flex-col items-center w-full">
+  <div class="flex flex-col items-center w-full select-none">
     <div class="flex items-center justify-between w-full pb-4">
       <div x-text="minrange">
       </div>

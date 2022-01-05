@@ -38,6 +38,10 @@ module.exports = {
 		fontFamily: {
 			nunito: ['nunito', 'sans-serif'],
 		},
+		fontWeight: {
+			semibold: 700,
+			bold: 800,
+		},
 		colors: {
 			transparent: 'transparent',
 			current: 'currentColor',

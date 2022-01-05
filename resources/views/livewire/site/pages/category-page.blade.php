@@ -2,7 +2,7 @@
     <x-breadcrumbs :category="$category" :catalog="$catalog" />
     <div>
       <div class="space-y-6">
-        <div class="flex items-center justify-start gap-3 text-3xl">
+        <div class="flex flex-col items-center justify-start gap-3 text-3xl sm:flex-row">
           <h1 class="font-bold first-letter">
             {{ $name }}
           </h1>

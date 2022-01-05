@@ -8,7 +8,7 @@
 <div class="py-2">
 
   <div class="w-full space-y-4">
-    <h1 class="text-2xl font-bold">
+    <h1 class="text-3xl font-bold text-gray-700">
       {{ $catalog->name }}
     </h1>
 
@@ -20,14 +20,14 @@
             <div
               class="inline-block w-full px-4 pt-4 pb-6 mb-6 space-y-2 bg-white shadow-sm item lg:px-6 rounded-2xl break-inside-avoid">
               <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}"
-                class="block px-2 py-2 text-lg font-semibold leading-tight hover:underline">
+                class="block px-2 py-2 text-xl font-semibold leading-tight text-orange-400 hover:underline">
                 {{ $category->menu_name }}
               </a>
               @if ($category->tags->count() > 0)
-                <div class="px-2 space-y-1">
-                  @foreach ($category->tags as $tag)
+                <div class="flex flex-wrap gap-2 px-2">
+                  @foreach ($category->tags->sortBy('name') as $tag)
                     <a href="{{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug, 'tagslug' => $tag->slug]) }}"
-                      class="block text-base text-gray-800 lowercase hover:text-orange-500">
+                      class="block px-3 py-1 text-sm font-semibold text-gray-500 lowercase bg-gray-50 hover:bg-blue-100 rounded-2xl">
                       {{ $tag->name }}
                     </a>
                   @endforeach

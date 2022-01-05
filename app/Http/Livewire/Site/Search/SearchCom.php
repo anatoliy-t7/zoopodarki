@@ -34,7 +34,6 @@ class SearchCom extends Component
                 toast()
                     ->warning('Поиск временно не работает, мы уже работаем над этим')
                     ->push();
-
             }
         }
 

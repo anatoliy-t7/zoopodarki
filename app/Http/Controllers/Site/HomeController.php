@@ -21,6 +21,7 @@ class HomeController extends Controller
             ->withWhereHas('variations', function ($query) {
                 $query->where('promotion_type', '!=', 0);
             })
+            ->has('media')
             ->with('media')
             ->with('brand')
             ->with('unit')
@@ -38,6 +39,7 @@ class HomeController extends Controller
             ->withWhereHas('variations', function ($query) {
                 $query->where('promotion_type', '!=', 0);
             })
+            ->has('media')
             ->with('media')
             ->with('brand')
             ->with('unit')
@@ -54,6 +56,7 @@ class HomeController extends Controller
             ->withWhereHas('variations', function ($query) {
                 $query->where('promotion_type', '!=', 0);
             })
+            ->has('media')
             ->with('media')
             ->with('brand')
             ->with('unit')
@@ -70,6 +73,7 @@ class HomeController extends Controller
             ->withWhereHas('variations', function ($query) {
                 $query->where('promotion_type', '!=', 0);
             })
+            ->has('media')
             ->with('media')
             ->with('brand')
             ->with('unit')
@@ -90,6 +94,8 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 20); // Наполнитель для кошачего туалета
             })
+            ->has('media')
+            ->has('variations')
             ->with('media')
             ->with('brand')
             ->with('unit')
@@ -105,6 +111,8 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 45); // Амуниция для собак
             })
+            ->has('media')
+            ->has('variations')
             ->with('media')
             ->with('brand')
             ->with('unit')
@@ -120,6 +128,8 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 61); // Аквариумы для рыбок
             })
+            ->has('media')
+            ->has('variations')
             ->with('media')
             ->with('brand')
             ->with('unit')
@@ -135,6 +145,8 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 58); // Кормушки для птиц
             })
+            ->has('media')
+            ->has('variations')
             ->with('media')
             ->with('brand')
             ->with('unit')
@@ -150,6 +162,8 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 39); // Игрушки для собак
             })
+            ->has('media')
+            ->has('variations')
             ->with('media')
             ->with('brand')
             ->with('unit')

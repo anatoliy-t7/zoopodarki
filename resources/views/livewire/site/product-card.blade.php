@@ -5,9 +5,9 @@
     <article x-cloak x-data="tabs" @tab-reviews.window="tabReviews(event)" class="space-y-6" itemscope
       itemtype="https://schema.org/Product">
 
-      <div class="px-4 py-8 space-y-2 bg-white lg:px-8 lg:rounded-2xl">
-        <div class="flex flex-col justify-between space-y-2 lg:space-y-0 lg:space-x-4 lg:items-start lg:flex-row">
-          <h1 class="w-9/12 font-semibold text-left text-md lg:text-xl">
+      <div class="px-4 py-8 space-y-2 bg-white lg:px-8 rounded-2xl">
+        <div class="flex flex-col justify-between gap-2 lg:space-y-0 lg:space-x-4 lg:items-start lg:flex-row">
+          <h1 class="w-full text-lg font-semibold leading-normal text-left md:w-9/12 lg:text-xl">
             <span class="pr-1" x-show="tab == 2" x-transition>
               Состав:
             </span>
@@ -122,11 +122,9 @@
 
                       @foreach ($product->getMedia('product-images') as $image)
                         <li wire:key="{{ $loop->index }}" class="relative cursor-pointer splide__slide">
-
                           <img width="315" height="320" itemprop="image" class="object-scale-down w-full h-80"
                             data-splide-lazy="{{ $image->getUrl('thumb') }}" alt="{{ $product->name }}"
                             data-bp="{{ $image->getUrl('medium') }}">
-
                         </li>
                       @endforeach
 
@@ -324,31 +322,19 @@
                     d="M14,18a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,14,18Zm-4,0a1,1,0,0,0,1-1V15a1,1,0,0,0-2,0v2A1,1,0,0,0,10,18ZM19,6H17.62L15.89,2.55a1,1,0,1,0-1.78.9L15.38,6H8.62L9.89,3.45a1,1,0,0,0-1.78-.9L6.38,6H5a3,3,0,0,0-.92,5.84l.74,7.46a3,3,0,0,0,3,2.7h8.38a3,3,0,0,0,3-2.7l.74-7.46A3,3,0,0,0,19,6ZM17.19,19.1a1,1,0,0,1-1,.9H7.81a1,1,0,0,1-1-.9L6.1,12H17.9ZM19,10H5A1,1,0,0,1,5,8H19a1,1,0,0,1,0,2Z" />
                 </svg>
               </button>
-
+              <!--googleoff: all-->
+              <!--noindex-->
               <div x-show="item.stock > 0" x-transition.opacity>
-                <div x-cloak x-show="openModal" x-transition.opacity
-                  class="fixed top-0 left-0 z-40 flex items-center justify-center w-screen h-screen bg-gray-500 bg-opacity-50"
-                  role="dialog" aria-modal="true">
-
-                  <div x-on:click.outside="close()" @keydown.window.escape="openModal = false"
-                    class="absolute z-50 flex flex-col w-full max-w-sm bg-white divide-y divide-gray-200 shadow-lg rounded-xl">
-
-                    <div class="py-6 px-7">
-                      <div class="flex items-start justify-between">
-                        <h2 class="text-xl font-bold leading-tight text-gray-700">
-                          Покупка в 1 клик
-                        </h2>
-                        <button class="text-gray-400 hover:text-gray-600" x-on:click="close()">
-                          <x-tabler-x class="w-6 transition duration-150 stroke-current" />
-                        </button>
-                      </div>
-
+                <x-modal>
+                  <x-slot name="content">
+                    <div class="pb-6 px-7">
+                      <h2 class="text-xl font-bold leading-tight text-gray-700">
+                        Покупка в 1 клик
+                      </h2>
                       <div class="pt-2 text-xs text-gray-500">Наш оператор перезвонит вам в ближайшее
                         время!</div>
                     </div>
-
                     <div class="pt-4 space-y-4 pb-7 px-7">
-
                       <label class="block w-full">
                         <span class="block pb-1 pl-3 text-sm font-bold text-gray-700 ">Телефон</span>
                         <div class="relative text-lg">
@@ -390,16 +376,13 @@
                       </div>
 
                     </div>
-
-                  </div>
-
-                </div>
-
-                <button x-on:click="open()" class="w-40 px-4 py-1 text-blue-600 hover:underline"
-                  aria-label="Купить в 1 клик">
-                  Купить в 1 клик
-                </button>
-
+                  </x-slot>
+                  <x-slot name="button">
+                    <div class="w-40 px-4 py-1 text-blue-600 hover:underline" aria-label="Купить в 1 клик">
+                      Купить в 1 клик
+                    </div>
+                  </x-slot>
+                </x-modal>
               </div>
 
               <div x-show="item.stock == 0" x-transition.opacity>
@@ -460,7 +443,8 @@
 
                 </x-modal>
               </div>
-
+              <!--/noindex-->
+              <!--googleon: all-->
             </div>
 
           </div>
@@ -468,24 +452,24 @@
         </div>
       </div>
 
-      <div class="px-4 pt-2 bg-white lg:px-8 lg:rounded-2xl">
+      <div class="px-4 pt-2 bg-white lg:px-8 rounded-2xl">
         <div class="flex items-center justify-between space-x-6">
-          <nav class="flex items-center justify-start gap-4 md:gap-0">
+          <nav class="flex items-center justify-start">
             <h2 x-on:click="tab = 1; tabUrl = ''; openTab();" :class="{ 'text-blue-500 border-blue-500': tab == 1 }"
-              class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+              class="block p-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
               Описание
             </h2>
             @if ($product->consist)
               <h2 x-on:click="tab = 2; tabUrl = '/consist'; openTab();"
                 :class="{ 'text-blue-500 border-blue-500': tab == 2 }"
-                class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+                class="block p-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
                 Состав
               </h2>
             @endif
             @if ($product->applying)
               <h2 x-on:click="tab = 3; tabUrl = '/applying'; openTab();"
                 :class="{ 'text-blue-500 border-blue-500': tab == 3 }"
-                class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
+                class="block p-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none">
                 Применение
               </h2>
             @endif

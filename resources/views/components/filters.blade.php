@@ -3,7 +3,6 @@
    <div wire:loading
      class="absolute top-0 bottom-0 left-0 right-0 z-30 w-full h-full bg-gray-100 bg-opacity-75 rounded-2xl">
    </div>
-
    @if ($maxPrice)
      <div wire:ignore>
        <x-range-slider :minRange="$minRange" :maxRange="$maxRange" :minPrice="$minPrice" :maxPrice="$maxPrice" />

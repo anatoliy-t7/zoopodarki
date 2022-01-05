@@ -19,16 +19,16 @@
       </div>
     </div>
 
-    <div class="p-8 space-y-8 bg-white rounded-2xl">
+    <div class="px-4 py-8 space-y-8 bg-white md:p-8 rounded-2xl">
       <div>
         <h1 class="text-2xl font-bold">
           Заказы
         </h1>
       </div>
 
-      <div class="w-full max-w-md overflow-x-auto md:max-w-full ">
+      <div class="">
 
-        <table class="w-full leading-normal table-auto">
+        <table class="w-full leading-normal table-mobile">
           <thead>
             <tr class="text-gray-500 border-b-2 border-gray-200 bg-gray-50">
               <th class="px-5 py-3 text-xs font-semibold tracking-wider text-left">
@@ -51,34 +51,33 @@
           <tbody>
             @foreach ($orders as $order)
               <tr>
-                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                <td data-label="Дата заказа" class="py-5 text-sm bg-white border-b border-gray-200 sm:px-5">
                   {{ simpleDate($order->created_at) }}
                 </td>
-                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                <td data-label="Номер заказа" class="py-5 text-sm bg-white border-b border-gray-200 sm:px-5">
                   <a href="{{ route('account.order', ['orderId' => $order->id]) }}"
                     class="text-blue-500 hover:underline">
                     {{ $order->order_number }}
                   </a>
                 </td>
-                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                  <p class="text-gray-900 whitespace-nowrap">
-                    {{ simpleDate($order->date) }} /
+                <td data-label="Дата и вид получения" class="py-5 text-sm bg-white border-b border-gray-200 sm:px-5">
+                  <div class="text-gray-900 whitespace-nowrap">
+                    {{ simpleDate($order->date) }} <br>
                     @if ($order->order_type)
                       Самовывоз
                     @else
                       Доставка
                     @endif
-                  </p>
+                  </div>
                 </td>
-                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                <td data-label="Сумма" class="py-5 text-sm bg-white border-b border-gray-200 sm:px-5">
                   <p class="text-gray-900 whitespace-nowrap">
                     {{ RUB($order->amount) }} ({{ $order->quantity }} шт, {{ $order->weight }} кг)
                   </p>
                 </td>
-                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200 whitespace-nowrap">
-
+                <td data-label="Статус заказа"
+                  class="py-5 text-sm bg-white border-b border-gray-200 sm:px-5 whitespace-nowrap">
                   {{ __('constants.order_status.' . $order->status) }}
-
                 </td>
               </tr>
             @endforeach

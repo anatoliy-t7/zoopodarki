@@ -39,7 +39,7 @@
     @endif
 
     <div class="flex items-center justify-between px-6 py-5 bg-gray-50 rounded-xl">
-      <div class="flex items-center justify-start space-x-16">
+      <div class="flex flex-col justify-start gap-4 md:items-center md:gap-16 md:flex-row">
         <div class="space-y-1 text-sm text-gray-600">
           <div class="font-bold">Дата заказа</div>
           <div>{{ simpleDate($order->created_at) }}</div>
@@ -82,7 +82,7 @@
     </div>
 
     <div class="pb-4">
-      <table class="w-full leading-normal table-auto">
+      <table class="w-full leading-normal table-mobile">
         <thead>
           <tr class="text-sm font-semibold text-left text-gray-500 border-b border-gray-100">
             <th class="py-3 pr-5">
@@ -104,7 +104,7 @@
         <tbody>
           @foreach ($order->items as $item)
             <tr>
-              <td class="px-5 py-6 text-sm bg-white border-b border-gray-100">
+              <td data-label="Товар" class="px-5 py-6 text-sm bg-white border-b border-gray-100">
                 <div class="flex items-center justify-start space-x-6">
                   @if ($item->product1c()->exists() && $item->product1c->product()->exists())
                     <img loading="lazy" class="object-contain object-center w-12 h-12"
@@ -120,16 +120,16 @@
                   @endif
                 </div>
               </td>
-              <td class="px-5 py-6 text-sm bg-white border-b border-gray-100">
+              <td data-label="Количество" class="px-5 py-6 text-sm bg-white border-b border-gray-100">
                 {{ $item->quantity }} шт
               </td>
-              <td class="px-5 py-6 text-sm bg-white border-b border-gray-100">
+              <td data-label="Ед. измерения" class="px-5 py-6 text-sm bg-white border-b border-gray-100">
                 {{ $item->unit }}
               </td>
-              <td class="px-5 py-6 text-sm bg-white border-b border-gray-100">
+              <td data-label="Цена" class="px-5 py-6 text-sm bg-white border-b border-gray-100">
                 {{ RUB($item->price) }}
               </td>
-              <td class="px-5 py-6 text-sm bg-white border-b border-gray-100">
+              <td data-label="Добавить в корзину" class="px-5 py-6 text-sm bg-white border-b border-gray-100">
                 @if ($item->product1c()->exists() && $item->product1c->product()->exists())
                   <button title="В корзину" wire:click="$emit('addToCart', {{ $item->product_id }}, 1, 0, 1000)"
                     class="z-10 text-blue-500 transition ease-in-out transform cursor-pointer focus:outline-none hover:text-blue-600 active:scale-95 link-hover">
@@ -146,8 +146,9 @@
       </table>
     </div>
 
-    <div class="flex items-center justify-between px-6 py-5 bg-gray-50 rounded-xl">
-      <div class="flex items-center justify-start space-x-16">
+    <div
+      class="flex flex-col justify-between gap-4 px-6 py-5 md:items-center bg-gray-50 rounded-xl md:flex-row md:gap-0">
+      <div class="flex flex-col justify-start gap-4 md:items-center md:gap-16 md:flex-row">
 
         <div class="space-y-1 text-sm text-gray-600">
           <div class="font-bold">Имя</div>

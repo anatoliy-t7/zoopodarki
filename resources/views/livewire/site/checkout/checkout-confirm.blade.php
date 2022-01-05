@@ -177,7 +177,7 @@
         @if ($order->payment_method == 1)
           <div class="flex space-x-2 text-sm">
             <span class="w-full md:w-3/6">Оплата</span>
-            <span class="flex justify-end w-full font-bold md:w-9/6">наличными при получении</span>
+            <span class="flex justify-end w-full font-bold text-right md:w-9/6">наличными при получении</span>
           </div>
           @if ($order->need_change)
             <div class="flex space-x-2 text-sm">

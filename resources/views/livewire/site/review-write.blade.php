@@ -38,7 +38,7 @@
               @empty
                 <div class="flex flex-col items-center justify-center w-full space-y-2 text-gray-500">
                   <x-tabler-camera-plus class="w-6 h-6 stroke-current " />
-                  <div class="flex text-sm ">Нажмите сюда для загрузки фотографий (max: 5)</div>
+                  <div class="flex text-sm text-center">Нажмите сюда для загрузки фотографий (max: 5)</div>
                 </div>
               @endforelse
             </div>

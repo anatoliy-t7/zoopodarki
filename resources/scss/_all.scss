@@ -316,3 +316,28 @@ img.image-left {
 		column-count: 4;
 	}
 }
+
+@media screen and (max-width: 640px) {
+	table.table-mobile tr {
+		display: block;
+	}
+
+	table.table-mobile td {
+		display: block;
+		text-align: right;
+	}
+	table.table-mobile thead {
+		border: none;
+		clip: rect(0 0 0 0);
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		padding: 0;
+		position: absolute;
+		width: 1px;
+	}
+	table.table-mobile td::before {
+		content: attr(data-label);
+		@apply float-left font-bold text-xs uppercase pt-1;
+	}
+}

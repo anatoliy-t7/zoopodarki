@@ -1,5 +1,5 @@
 <div id="mobmenu" x-data="mobmenu"
-  class="z-30 block w-full text-gray-600 bg-white border-t border-gray-200 max-w-screen mobmenu">
+  class="block w-full text-gray-600 bg-white border-t border-gray-200 z-60 max-w-screen mobmenu">
 
   <div class="flex items-center justify-between px-5 space-x-4">
 
