@@ -7,7 +7,7 @@
       <div class="flex flex-col max-w-screen-xl gap-8 px-4 mx-auto">
         <div class="flex flex-col items-center justify-between gap-8 md:flex-row">
           <a href="{{ route('site.category', ['catalogslug' => 'cats', 'categoryslug' => 'suhoy-korm']) }}"
-            class="relative w-full py-12 overflow-hidden transition cursor-pointer sm:text-white md:w-7/12 px-14 h-72 bg-amber-300 bg-opacity-80 rounded-3xl hover:bg-opacity-100">
+            class="relative w-full py-12 overflow-hidden transition bg-yellow-300 cursor-pointer sm:text-white md:w-7/12 px-14 h-72 bg-opacity-80 rounded-3xl hover:bg-opacity-100">
             <h2 class="relative z-20 text-5xl font-bold">Сухой корм<br>для кошек</h2>
             <img src="/assets/img/home-block-one.webp" alt="Сухой корм для котов" class="absolute right-0 -bottom-4">
           </a>
@@ -33,10 +33,10 @@
         </div>
       </div>
 
-      @if ($discountsCats->isNotEmpty() || $discountsDogs->isNotEmpty() || $discountsBirds->isNotEmpty() || $discountsBirds->isNotEmpty() || $discountsRodents->isNotEmpty())
+      @if ($discounts->isNotEmpty())
         <div class="max-w-screen-xl mx-auto space-y-4">
-          <div class="flex flex-col items-center justify-between md:flex-row">
-            <div class="px-4 text-2xl font-semibold">Выгодные предложения</div>
+          <div class="flex flex-col items-center justify-between px-4 md:flex-row">
+            <div class="text-2xl font-semibold">Выгодные предложения</div>
             <div>
               <a href="{{ route('site.discounts') }}"
                 class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
@@ -46,126 +46,54 @@
             </div>
           </div>
 
-          <div x-cloak x-data="{tab: 1}" class="px-4 pt-2 lg:px-8 ">
-            <div class="flex items-center justify-between w-screen gap-6 overflow-x-auto md:px-4">
-              <nav class="flex items-center justify-start flex-nowrap">
-                @if ($discountsCats->isNotEmpty())
-                  <h2 x-on:click="tab = 1" data-route="description" :class="{ 'text-blue-500 border-blue-500': tab == 1 }"
-                    class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none whitespace-nowrap">
-                    Кошки
-                  </h2>
-                @endif
-                @if ($discountsDogs->isNotEmpty())
-                  <h2 x-on:click="tab = 2" data-route="consist" :class="{ 'text-blue-500 border-blue-500': tab == 2 }"
-                    class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none whitespace-nowrap">
-                    Собаки
-                  </h2>
-                @endif
-                @if ($discountsBirds->isNotEmpty())
-                  <h2 x-on:click="tab = 3" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 3 }"
-                    class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none whitespace-nowrap">
-                    Птицы
-                  </h2>
-                @endif
-                @if ($discountsRodents->isNotEmpty())
-                  <h2 x-on:click="tab = 4" data-route="applying" :class="{ 'text-blue-500 border-blue-500': tab == 4 }"
-                    class="block py-2 text-xl font-semibold text-gray-600 border-b-2 border-gray-200 cursor-pointer lg:px-6 hover:text-blue-500 focus:outline-none whitespace-nowrap">
-                    Грызуны
-                  </h2>
-                @endif
-              </nav>
-            </div>
-
-            <div class="w-full pb-6 ">
-              @if ($discountsCats->isNotEmpty())
-                <div x-cloak :class="tab == 1 ? 'block' : 'hidden'"
-                  class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
-                  @foreach ($discountsCats as $discountsCat)
-                    <div class="w-full max-w-xs mx-auto">
-                      <livewire:site.card-products :product="$discountsCat"
-                        :catalog="$discountsCat->categories[0]->catalog->slug"
-                        :category="$discountsCat->categories[0]->slug" :wire:key="'product-'.$discountsCat->id" />
-                    </div>
-                  @endforeach
+          <div class="px-4 pt-4 lg:px-8 ">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+              @foreach ($discounts as $discountItem)
+                <div class="w-full max-w-xs mx-auto">
+                  <livewire:site.card-products :product="$discountItem"
+                    :catalog="$discountItem->categories[0]->catalog->slug" :category="$discountItem->categories[0]->slug"
+                    :wire:key="'product-'.$discountItem->id" :catalogId="$discountItem->categories[0]->catalog->id" />
                 </div>
-              @endif
-              @if ($discountsDogs->isNotEmpty())
-                <div x-cloak :class="tab == 2 ? 'block' : 'hidden'"
-                  class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
-                  @foreach ($discountsDogs as $discountsDog)
-                    <div class="w-full max-w-xs mx-auto">
-                      <livewire:site.card-products :product="$discountsDog"
-                        :catalog="$discountsDog->categories[0]->catalog->slug"
-                        :category="$discountsDog->categories[0]->slug" :wire:key="'product-'.$discountsDog->id" />
-                    </div>
-                  @endforeach
-                </div>
-              @endif
-
-              @if ($discountsBirds->isNotEmpty())
-                <div x-cloak :class="tab == 3 ? 'block' : 'hidden'"
-                  class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
-                  @foreach ($discountsBirds as $discountsBird)
-                    <div class="w-full max-w-xs mx-auto">
-                      <livewire:site.card-products :product="$discountsBird"
-                        :catalog="$discountsBird->categories[0]->catalog->slug"
-                        :category="$discountsBird->categories[0]->slug" :wire:key="'product-'.$discountsBird->id" />
-                    </div>
-                  @endforeach
-                </div>
-              @endif
-              @if ($discountsRodents->isNotEmpty())
-                <div x-cloak :class="tab == 4 ? 'block' : 'hidden'"
-                  class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
-                  @foreach ($discountsRodents as $discountsRodent)
-                    <div class="w-full max-w-xs mx-auto">
-                      <livewire:site.card-products :product="$discountsRodent"
-                        :catalog="$discountsRodent->categories[0]->catalog->slug"
-                        :category="$discountsRodent->categories[0]->slug" :wire:key="'product-'.$discountsRodent->id" />
-                    </div>
-                  @endforeach
-                </div>
-              @endif
-
+              @endforeach
             </div>
           </div>
         </div>
       @endif
 
-      <div class="py-24 bg-gray-50">
+      <div class="py-24 bg-yellow-100">
         <div x-data class="grid max-w-screen-xl gap-12 px-4 mx-auto sm:grid-cols-2 md:grid-cols-4">
           <div @click="$dispatch('auth')"
             class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm cursor-pointer rounded-3xl hover:shadow-lg">
-            <x-tabler-gift class="absolute z-10 w-32 h-32 text-orange-200 stroke-current -right-8 -top-0" />
+            <x-tabler-gift class="absolute z-10 w-32 h-32 text-pink-200 stroke-current -right-8 -top-0" />
             <span class="relative z-20">Скидка за первый заказ</span>
           </div>
           <div @click="$dispatch('auth')"
             class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm cursor-pointer rounded-3xl hover:shadow-lg">
-            <x-tabler-credit-card class="absolute z-10 w-32 h-32 text-orange-200 stroke-current -right-8 -top-2" />
+            <x-tabler-credit-card class="absolute z-10 w-32 h-32 text-pink-200 stroke-current -right-8 -top-2" />
             <span class="relative z-20">Постоянная скидка<br>по карте</span>
           </div>
           <div @click="$dispatch('auth')"
             class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm cursor-pointer rounded-3xl hover:shadow-lg">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              class="absolute z-10 w-32 h-32 text-orange-200 stroke-current -right-8 top-2">
-              <path class="text-orange-200" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              class="absolute z-10 w-32 h-32 text-pink-200 stroke-current -right-8 top-2">
+              <path class="text-pink-200" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M10 22H14C19 22 21 20 21 15V9C21 4 19 2 14 2H10C5 2 3 4 3 9V15C3 20 5 22 10 22Z" />
-              <path class="text-orange-200" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              <path class="text-pink-200" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M17.25 8.29004C14.26 5.63004 9.74 5.63004 6.75 8.29004L8.93 11.79C10.68 10.23 13.32 10.23 15.07 11.79L17.25 8.29004Z" />
             </svg>
             <span class="relative z-20">Скидка на корма<br>от 5 кг</span>
           </div>
           <div @click="$dispatch('auth')"
             class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm cursor-pointer rounded-3xl hover:shadow-lg">
-            <x-tabler-discount-2 class="absolute z-10 w-32 h-32 text-orange-200 stroke-current -right-8 -top-0" />
+            <x-tabler-discount-2 class="absolute z-10 w-32 h-32 text-pink-200 stroke-current -right-8 -top-0" />
             <span class="relative z-20">Суммируем скидки</span>
           </div>
         </div>
       </div>
 
-      <div class="max-w-screen-xl px-4 pb-24 mx-auto space-y-4">
+      <div class="max-w-screen-xl px-4 mx-auto space-y-4">
         <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <div class="text-2xl font-semibold">Предложение от брендов</div>
+          <div class="text-2xl font-semibold">Популярные бренды</div>
           <div>
             <a href="{{ route('site.brands') }}"
               class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
@@ -175,23 +103,21 @@
           </div>
         </div>
         <div class="px-6 py-8">
-          <div>
-            <div class="flex flex-col items-center justify-start space-x-8 md:flex-row">
-              @forelse ($brandsOffer as $brand)
-                <div>
-                  <a title="Товары бренда {{ $brand->name }}"
-                    href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}" class="p-2 group">
-                    @if ($brand->logo)
-                      <img src="/assets/brands/{{ $brand->logo }}" alt="Товары бренда {{ $brand->name }}"
-                        class="group-hover:text-blue-500 group-hover:brightness-105">
-                    @else
-                      <span class="text-xl font-bold group-hover:text-blue-500">{{ $brand->name }}</span>
-                    @endif
-                  </a>
-                </div>
-              @empty
-              @endforelse
-            </div>
+          <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+            @forelse ($brandsOffer as $brand)
+              <div>
+                <a title="Товары бренда {{ $brand->name }}"
+                  href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}" class="block p-2 group">
+                  @if ($brand->logo)
+                    <img src="/assets/brands/{{ $brand->logo }}" alt="Товары бренда {{ $brand->name }}"
+                      class="w-auto h-24 group-hover:brightness-110">
+                  @else
+                    <span class="text-xl font-bold group-hover:text-blue-500">{{ $brand->name }}</span>
+                  @endif
+                </a>
+              </div>
+            @empty
+            @endforelse
           </div>
         </div>
       </div>
@@ -240,12 +166,13 @@
           <div class="w-full px-4">
             @if ($popular1->isNotEmpty())
               <div x-cloak :class="tab == 1 ? 'block' : 'hidden'" class="pt-6 space-y-8">
-                <div class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                   @foreach ($popular1 as $popular1Product)
                     <div class="w-full max-w-xs mx-auto">
                       <livewire:site.card-products :product="$popular1Product"
                         :catalog="$popular1Product->categories[0]->catalog->slug"
-                        :category="$popular1Product->categories[0]->slug" :wire:key="'product-'.$popular1Product->id" />
+                        :category="$popular1Product->categories[0]->slug" :wire:key="'product-'.$popular1Product->id"
+                        :catalogId="$popular1Product->categories[0]->catalog->id" />
                     </div>
                   @endforeach
                 </div>
@@ -262,12 +189,13 @@
 
             @if ($popular2->isNotEmpty())
               <div x-cloak :class="tab == 2 ? 'block' : 'hidden'" class="pt-6 space-y-8">
-                <div class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                   @foreach ($popular2 as $popular2Product)
                     <div class="w-full max-w-xs mx-auto">
                       <livewire:site.card-products :product="$popular2Product"
                         :catalog="$popular2Product->categories[0]->catalog->slug"
-                        :category="$popular2Product->categories[0]->slug" :wire:key="'product-'.$popular2Product->id" />
+                        :category="$popular2Product->categories[0]->slug" :wire:key="'product-'.$popular2Product->id"
+                        :catalogId="$popular2Product->categories[0]->catalog->id" />
                     </div>
                   @endforeach
                 </div>
@@ -284,12 +212,13 @@
 
             @if ($popular3->isNotEmpty())
               <div x-cloak :class="tab == 3 ? 'block' : 'hidden'" class="pt-6 space-y-8">
-                <div class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                   @foreach ($popular3 as $popular3Product)
                     <div class="w-full max-w-xs mx-auto">
                       <livewire:site.card-products :product="$popular3Product"
                         :catalog="$popular3Product->categories[0]->catalog->slug"
-                        :category="$popular3Product->categories[0]->slug" :wire:key="'product-'.$popular3Product->id" />
+                        :category="$popular3Product->categories[0]->slug" :wire:key="'product-'.$popular3Product->id"
+                        :catalogId="$popular3Product->categories[0]->catalog->id" />
                     </div>
                   @endforeach
                 </div>
@@ -306,12 +235,13 @@
 
             @if ($popular4->isNotEmpty())
               <div x-cloak :class="tab == 4 ? 'block' : 'hidden'" class="pt-6 space-y-8">
-                <div class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                   @foreach ($popular4 as $popular4Product)
                     <div class="w-full max-w-xs mx-auto">
                       <livewire:site.card-products :product="$popular4Product"
                         :catalog="$popular4Product->categories[0]->catalog->slug"
-                        :category="$popular4Product->categories[0]->slug" :wire:key="'product-'.$popular4Product->id" />
+                        :category="$popular4Product->categories[0]->slug" :wire:key="'product-'.$popular4Product->id"
+                        :catalogId="$popular4Product->categories[0]->catalog->id" />
                     </div>
                   @endforeach
                 </div>
@@ -328,12 +258,13 @@
 
             @if ($popular5->isNotEmpty())
               <div x-cloak :class="tab == 5 ? 'block' : 'hidden'" class="pt-6 space-y-8">
-                <div class="flex flex-col items-start justify-between gap-4 pt-6 leading-normal md:flex-row">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                   @foreach ($popular5 as $popular5Product)
                     <div class="w-full max-w-xs mx-auto">
                       <livewire:site.card-products :product="$popular5Product"
                         :catalog="$popular5Product->categories[0]->catalog->slug"
-                        :category="$popular5Product->categories[0]->slug" :wire:key="'product-'.$popular5Product->id" />
+                        :category="$popular5Product->categories[0]->slug" :wire:key="'product-'.$popular5Product->id"
+                        :catalogId="$popular5Product->categories[0]->catalog->id" />
                     </div>
                   @endforeach
                 </div>
@@ -353,7 +284,7 @@
 
       </div>
 
-      <div class="py-24 bg-orange-100">
+      <div class="py-24 bg-yellow-100">
         <div class="flex flex-col items-center justify-between max-w-screen-lg gap-6 px-4 mx-auto sm:flex-row">
           <div class="flex flex-col items-center justify-center gap-4 text-lg font-bold">
             <svg class="w-12 h-12 text-orange-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -391,12 +322,12 @@
           </div>
           <div class="w-full prose sm:px-16 md:w-6/12 py-14">
             <h3 class="text-5xl font-bold text-gray-600">Помоги приюту</h3>
-            <p>Вы можете помочь приюту кипив им необходимые товары</p>
+            <p>Помогите приобрести товары приюту, который спасает собак, оказавшихся в тяжёлой ситуации. Они искренне
+              любят собак, и им нужна ваша помощь.</p>
             <div class="py-6 not-prose">
               <a href="{{ route('site.category', ['catalogslug' => 'help-shelter', 'categoryslug' => 'priyut-dlya-sobak']) }}"
-                class="px-4 py-3 text-lg font-bold text-white transition-shadow bg-blue-400 rounded-2xl hover:shadow-blue-300 hover:shadow-lg ">Помоги
-                приюту для
-                собак
+                class="px-4 py-3 text-lg font-bold text-white transition-shadow bg-blue-400 rounded-2xl hover:shadow-blue-300 hover:shadow-lg ">Выбрать
+                товары из списка
               </a>
             </div>
           </div>

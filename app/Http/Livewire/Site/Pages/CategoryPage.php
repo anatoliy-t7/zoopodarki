@@ -298,7 +298,7 @@ class CategoryPage extends Component
     public function getProducts()
     {
         return Product::isStatusActive()
-            ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
+            ->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id', 'discount_weight'])
             ->has('media')
             ->has('categories')
             ->has('variations')
@@ -351,7 +351,6 @@ class CategoryPage extends Component
                 ->with('media')
                 ->with('brand')
                 ->with('unit')
-
                 ->with('variations')
                 ->orderBy($this->sortSelectedType, $this->sortBy)
                 ->paginate(32);

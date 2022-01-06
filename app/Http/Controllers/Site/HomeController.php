@@ -14,71 +14,23 @@ class HomeController extends Controller
     {
         $this->setSeo();
 
-        $discountsCats = cache()->remember('discountsCats-homepage', 60 * 60 * 24, function () {
-            return Product::withWhereHas('categories', function ($query) {
-                $query->where('catalog_id', 1)->with('catalog');
-            })
-            ->withWhereHas('variations', function ($query) {
-                $query->where('promotion_type', '!=', 0);
-            })
+        $discounts = cache()->remember('discounts-homepage', 60 * 60 * 24, function () {
+            return Product::isStatusActive()
             ->has('media')
+            ->has('categories')
+            ->whereHas('attributes', function ($query) {
+                $query->whereIn('product_attribute.attribute_id', [2761, 2505]);  // + подарок и большие мешки
+            })
+            ->orWhereHas('variations', function ($query) {
+                $query->where('promotion_type', '!=', 0)->hasStock();
+            })
+            ->orWhere('discount_weight', 1)
+            ->with('variations')
+            ->with('attributes')
             ->with('media')
             ->with('brand')
             ->with('unit')
-            ->with('attributes')
-            ->with('variations')
-            ->take(5)
-            ->get();
-        });
-
-
-        $discountsDogs = cache()->remember('discountsDogs-homepage', 60 * 60 * 24, function () {
-            return Product::withWhereHas('categories', function ($query) {
-                $query->where('catalog_id', 2);
-            })
-            ->withWhereHas('variations', function ($query) {
-                $query->where('promotion_type', '!=', 0);
-            })
-            ->has('media')
-            ->with('media')
-            ->with('brand')
-            ->with('unit')
-            ->with('attributes')
-            ->with('variations')
-            ->take(5)
-            ->get();
-        });
-
-        $discountsBirds = cache()->remember('discountsBirds-homepage', 60 * 60 * 24, function () {
-            return Product::withWhereHas('categories', function ($query) {
-                $query->where('catalog_id', 4);
-            })
-            ->withWhereHas('variations', function ($query) {
-                $query->where('promotion_type', '!=', 0);
-            })
-            ->has('media')
-            ->with('media')
-            ->with('brand')
-            ->with('unit')
-            ->with('attributes')
-            ->with('variations')
-            ->take(5)
-            ->get();
-        });
-
-        $discountsRodents = cache()->remember('discountsRodents-homepage', 60 * 60 * 24, function () {
-            return Product::withWhereHas('categories', function ($query) {
-                $query->where('catalog_id', 3);
-            })
-            ->withWhereHas('variations', function ($query) {
-                $query->where('promotion_type', '!=', 0);
-            })
-            ->has('media')
-            ->with('media')
-            ->with('brand')
-            ->with('unit')
-            ->with('attributes')
-            ->with('variations')
+            ->with('categories')
             ->with('categories.catalog')
             ->take(5)
             ->get();
@@ -94,6 +46,7 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 20); // Наполнитель для кошачего туалета
             })
+            ->hasStock()
             ->has('media')
             ->has('variations')
             ->with('media')
@@ -111,6 +64,7 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 45); // Амуниция для собак
             })
+            ->hasStock()
             ->has('media')
             ->has('variations')
             ->with('media')
@@ -128,6 +82,7 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 61); // Аквариумы для рыбок
             })
+            ->hasStock()
             ->has('media')
             ->has('variations')
             ->with('media')
@@ -145,6 +100,7 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 58); // Кормушки для птиц
             })
+            ->hasStock()
             ->has('media')
             ->has('variations')
             ->with('media')
@@ -162,6 +118,7 @@ class HomeController extends Controller
             return Product::withWhereHas('categories', function ($query) {
                 $query->where('category_id', 39); // Игрушки для собак
             })
+            ->hasStock()
             ->has('media')
             ->has('variations')
             ->with('media')
@@ -175,7 +132,7 @@ class HomeController extends Controller
             ->get();
         });
 
-        return view('site.home', compact('brandsOffer', 'discountsCats', 'discountsDogs', 'discountsBirds', 'discountsRodents', 'popular1', 'popular2', 'popular3', 'popular4', 'popular5'));
+        return view('site.home', compact('brandsOffer', 'discounts', 'popular1', 'popular2', 'popular3', 'popular4', 'popular5'));
     }
 
     public function setSeo()

@@ -3,14 +3,15 @@
 
     <div class="relative group">
       <div class="absolute top-0 left-0 z-30 px-3 pt-2 cursor-default">
-        <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <path class="text-gray-300 stroke-current group-hover:text-gray-400 focus:text-gray-400" stroke-linecap="round"
+        <svg class="text-blue-300 w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <path class="text-blue-300 stroke-current group-hover:text-blue-400 focus:text-blue-400" stroke-linecap="round"
             stroke-linejoin="round" stroke-width="1.5" d="M11.5 21a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19zM22 22l-2-2" />
         </svg>
       </div>
 
       <input type="searchZoo" name="searchZoo" x-on:input.debounce.750="openResult = 1"
-        class="w-full px-5 py-3 pl-12 font-semibold border border-gray-50 hover:border-gray-400 bg-gray-50 rounded-2xl focus:outline-none focus:ring focus:bg-white"
+        @keydown.enter="$wire.call('render')"
+        class="w-full px-5 py-3 pl-12 font-semibold border border-blue-50 hover:border-blue-300 bg-blue-50 rounded-2xl focus:outline-none focus:ring "
         wire:model.debounce.600ms="search" id="searchZoo" placeholder="Поиск">
 
       <div class="absolute top-0 left-0 right-0 z-30 w-full pt-3" wire:loading>

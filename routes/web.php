@@ -98,13 +98,13 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['throttle:1000,60', 
                 Route::get('/users', \App\Http\Livewire\Dashboard\Users::class)->name('users');
 
                 Route::get('/logs', \App\Http\Livewire\Dashboard\LogsViewer::class)->name('logs');
+            }
+        );
 
-                Route::prefix('settings')->name('settings.')->group(
-                    function () {
-                        Route::get('/backup', \App\Http\Livewire\Dashboard\Settings\Backup::class)->name('backup');
-                        Route::get('/main', \App\Http\Livewire\Dashboard\Settings\Main::class)->name('main');
-                    }
-                );
+        Route::prefix('settings')->name('settings.')->group(
+            function () {
+                Route::get('/backup', \App\Http\Livewire\Dashboard\Settings\Backup::class)->name('backup');
+                Route::get('/main', \App\Http\Livewire\Dashboard\Settings\Main::class)->name('main');
             }
         );
 

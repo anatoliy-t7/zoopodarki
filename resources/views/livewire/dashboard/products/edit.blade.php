@@ -271,7 +271,8 @@
                         </div>
                       </div>
 
-
+                      <x-toggle wire:model="discountWeight" :property="$discountWeight"
+                        :lable="'Применять `Большие мешки`'" title="Будет применяется скидка на общий вес, более 5кг" />
                     </div>
 
                     <div>

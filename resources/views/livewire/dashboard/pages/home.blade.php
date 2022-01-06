@@ -37,7 +37,7 @@
           brands: null,
           tagifyBrands: null,
           homePageBrands: null,
-          maxTags: 7,
+          maxTags: 10,
 
           setHomePageBrandFromServer(homePageBrands) {
             this.homePageBrands = null;

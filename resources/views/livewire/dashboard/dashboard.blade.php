@@ -3,12 +3,33 @@
 @endsection
 <div class="flex flex-wrap items-start justify-start gap-6">
 
+  <div class="flex flex-col w-full gap-6 md:w-2/12">
+    @if ($newProducts1C)
+      <div class="flex items-center justify-between gap-4 px-8 py-6 bg-white rounded-lg shadow-md">
+        <div class="">Создать товаров</div>
+        <div class="text-xl font-bold text-orange-400">{{ $newProducts1C->count() }}</div>
+      </div>
+    @endif
 
-  @if ($orders)
-    <div class="w-full px-8 pt-6 pb-8 bg-white rounded-lg md:w-3/12">
+    @if ($productsDoesNotHaveDescription > 0)
+      <div class="flex items-center justify-between gap-4 px-8 py-6 bg-white rounded-lg shadow-md">
+        <div>Товары без описания</div>
+        <div class="text-xl font-bold text-orange-400">{{ $productsDoesNotHaveDescription }}</div>
+      </div>
+    @endif
+    @if ($productsDoesNotHaveImage > 0)
+      <div class="flex items-center justify-between gap-4 px-8 py-6 bg-white rounded-lg shadow-md">
+        <div>Товары без фото</div>
+        <div class="text-xl font-bold text-orange-400">{{ $productsDoesNotHaveImage }}</div>
+      </div>
+    @endif
+  </div>
+
+  @if ($orders->count() > 0)
+    <div class="w-full px-8 pt-6 pb-8 bg-white rounded-lg shadow-md md:w-3/12">
       <h1 class="font-extrabold tracking-wider">Заказы</h1>
 
-      <div class="flex flex-col mt-5 text-sm gap-7">
+      <div class="flex flex-col gap-8 mt-5 text-sm">
 
         @if ($orders->where('status', 'pending_confirm')->first())
           <a href="{{ route('dashboard.orders', ['status' => 'pending_confirm']) }}"
@@ -35,7 +56,8 @@
             class="flex items-center justify-between px-4 py-3 rounded shadow-sm bg-green-50 hover:bg-green-100">
             <div class="font-bold tracking-wider text-gray-700">
               {{ __('constants.order_status.' . $orders->where('status', 'processing')->first()->status) }}</div>
-            <div class="text-xl font-bold text-yellow-500">{{ $orders->where('status', 'processing')->count() }}</div>
+            <div class="text-xl font-bold text-yellow-500">{{ $orders->where('status', 'processing')->count() }}
+            </div>
           </a>
         @endif
 
@@ -53,34 +75,12 @@
     </div>
   @endif
 
-  <div class="flex flex-col w-full gap-6 md:w-3/12">
-    @if ($newProducts1C)
-      <div class="flex items-center justify-between gap-6 px-8 py-6 bg-white rounded-lg">
-        <div class="">Не обработанных товаров из 1С</div>
-        <div class="text-xl font-bold text-indigo-500">{{ $newProducts1C->count() }}</div>
-      </div>
-    @endif
-
-    @if ($productsDoesNotHaveDescription > 0)
-      <div class="flex items-center justify-between gap-6 px-8 py-6 bg-white rounded-lg">
-        <div>Товары без описания</div>
-        <div class="text-xl font-bold text-indigo-500">{{ $productsDoesNotHaveDescription }}</div>
-      </div>
-    @endif
-    @if ($productsDoesNotHaveImage > 0)
-      <div class="flex items-center justify-between gap-6 px-8 py-6 bg-white rounded-lg">
-        <div>Товары без фото</div>
-        <div class="text-xl font-bold text-indigo-500">{{ $productsDoesNotHaveImage }}</div>
-      </div>
-    @endif
-  </div>
-
   <div class="flex flex-col w-full h-full gap-6 md:w-2/12">
 
     @if ($pendingReviews->count() > 0)
       <div>
         <a href="{{ route('dashboard.reviews', ['filteredBy' => 'pending']) }}"
-          class="relative inline-flex items-center justify-between w-full gap-6 px-8 py-4 bg-white rounded-lg cursor-pointer hover:shadow-md">
+          class="relative inline-flex items-center justify-between w-full gap-6 px-8 py-4 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg">
           <div>
             <h4 class="pt-0">Отзывы</h4>
             <div class="text-xs leading-snug text-gray-400">ожидающие проверки</div>
@@ -100,7 +100,7 @@
     @if ($pendingWaitlist->count() > 0)
       <div>
         <a href="{{ route('dashboard.waitlists', ['filteredBy' => 'pending']) }}"
-          class="relative inline-flex items-center justify-between w-full gap-6 px-8 py-4 bg-white rounded-lg cursor-pointer hover:shadow-md">
+          class="relative inline-flex items-center justify-between w-full gap-6 px-8 py-4 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg">
           <div>
             <h4 class="pt-0">Товары</h4>
             <div class="text-xs leading-snug text-gray-400">которые ждут люди</div>

@@ -4,7 +4,7 @@
         Бренды
       </h1>
 
-      <div class="relative w-full max-w-md group">
+      <div x-data class="relative w-full max-w-md group">
         <div class="absolute top-0 left-0 z-30 px-3 pt-2 cursor-default">
           <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <path class="text-gray-300 stroke-current group-hover:text-gray-400 focus:text-gray-400"
@@ -13,7 +13,7 @@
           </svg>
         </div>
 
-        <input type="searchBrand" name="searchBrand" x-on:input.debounce.750="openResult = 1"
+        <input type="searchBrand" name="searchBrand" @keydown.enter="$wire.call('render')"
           class="w-full px-5 py-3 pl-12 font-semibold bg-white border border-gray-100 hover:border-gray-200 rounded-2xl focus:outline-none focus:ring focus:bg-white "
           wire:model.debounce.600ms="searchBrand" id="searchBrand" placeholder="Поиск по бренду">
 

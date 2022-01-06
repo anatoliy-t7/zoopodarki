@@ -153,7 +153,7 @@
                     x-on:click="item.id = {{ $item->id }}, item.stock = {{ $item->stock }}, item.unit_value = '{{ $item->unit_value }}'">
                     <!--googleoff: all-->
                     <!--noindex-->
-                    @if ($item->promotion_type > 0 || $item->unit_value === 'на развес')
+                    @if ($item->promotion_type > 0 || $product->discount_weight == 1)
                       <div class="absolute block -top-3 -left-3">
                         <x-modal :width="'3xl'">
                           <x-slot name="button">
@@ -172,7 +172,7 @@
                               <x-messages.discount-4 :percent="$item->promotion_percent"
                                 :enddate="$item->promotion_date" />
                             @endif
-                            @if ($item->unit_value === 'на развес')
+                            @if ($product->discount_weight == 1)
                               <x-messages.discount-by-weight :percent="10" />
                             @endif
                           </x-slot>

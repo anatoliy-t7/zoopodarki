@@ -57,7 +57,6 @@ module.exports = {
 			indigo: colors.indigo,
 			pink: colors.rose,
 			purple: colors.violet,
-			amber: colors.amber,
 		},
 	},
 	content: [

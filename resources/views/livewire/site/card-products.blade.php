@@ -32,33 +32,36 @@
     itemtype="https://schema.org/Offer">
     @foreach ($product->variations->sortBy('price') as $key => $item)
 
-      @if ($item->promotion_type != 0)
-        <div class="absolute top-0 left-0">
+      @if ($item->promotion_type > 0 || $product->discount_weight == 1)
+        <div class="absolute top-0 left-0 z-30">
           <x-tabler-discount-2 class="w-8 h-8 text-orange-500 stroke-current" />
         </div>
       @endif
-      <div>
 
+      <div>
         <div class="flex items-center justify-between w-full px-3 pb-3 space-x-2 text-xs">
           <div class="w-5/12 whitespace-nowrap">
             <x-units :unit="$product->unit" :value="$item->unit_value" :wire:key="$product->id" />
           </div>
-
-          <div class="flex items-center justify-end w-5/12 space-x-2 whitespace-nowrap">
-            @if ($item->promotion_type === 0)
+          <div class="flex items-center justify-end w-5/12 gap-2 whitespace-nowrap">
+            @if (($item->promotion_type === 0 && (int) $item->unit_value >= 5000 && $product->whereRelation('attributes', 'product_attribute.attribute_id', 2761)) || ($item->promotion_type === 0 && (int) $item->unit_value >= 5000 && $product->whereRelation('attributes', 'product_attribute.attribute_id', 2505)))
+              <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
+              <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
+                {{ RUB(discount($item->price, 10)) }}</div>
+            @elseif ($item->promotion_type === 0)
               <div class="text-base font-semibold text-gray-800 md:text-sm" itemprop="price">
                 {{ RUB($item->price) }}</div>
             @elseif ($item->promotion_type === 1 || $item->promotion_type === 3)
               <div class="text-xs text-gray-500 line-through">{{ RUB($item->promotion_price) }}</div>
-              <div class="text-base font-semibold text-orange-500 md:text-sm" itemprop="price">
+              <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB($item->price) }}</div>
             @elseif ($item->promotion_type === 2 || $item->promotion_type === 4)
               <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
-              <div class="text-base font-semibold text-orange-500 md:text-sm" itemprop="price">
+              <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB(discount($item->price, $item->promotion_percent)) }}</div>
+
             @endif
           </div>
-
           <div class="flex items-start justify-end w-2/12 -mt-1">
             @if ($item->stock > 0)
               <button wire:click="$emit('addToCart', {{ $item->id }}, 1, {{ $catalogId }}, 1000)"

@@ -4,7 +4,7 @@
       <span>
         @if ($unit->name === 'гр')
           {{ kg($value) }}
-        @else
+        @elseif($value)
           {{ $value }} {{ $unit->name }}
         @endif
       </span>
