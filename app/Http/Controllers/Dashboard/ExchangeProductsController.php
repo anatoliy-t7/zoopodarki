@@ -39,7 +39,7 @@ class ExchangeProductsController extends Controller
         $type = $this->request->query('type');
         $mode = $this->request->query('mode');
 
-        if (! $this->userLogin()) {
+        if (!$this->userLogin()) {
             return $this->failure('wrong username or password');
         } else {
             // как выяснилось - после авторизации Laravel меняет id сессии, т.о.
@@ -72,7 +72,7 @@ class ExchangeProductsController extends Controller
             case $this->stepQuery:
                 return $this->processQuery();
             case $this->stepSuccess:
-                Log::info('Sync 1C');
+                Log::info('Sync 1C Success');
         }
     }
 
@@ -87,13 +87,13 @@ class ExchangeProductsController extends Controller
 
             $attempt = Auth::attempt(['email' => $user, 'password' => $pass]);
 
-            if (! $attempt) {
+            if (!$attempt) {
                 return false;
             }
 
             $gates = config('protocolExchange1C.gates', []);
 
-            if (! is_array($gates)) {
+            if (!is_array($gates)) {
                 $gates = [$gates];
             }
 
@@ -130,10 +130,9 @@ class ExchangeProductsController extends Controller
      */
     protected function init()
     {
-
         try {
-            $zip = 'zip='.($this->canUseZip() ? 'yes' : 'no');
-            $maxFileSize = 'file_limit='.(10 * 1000 * 1024);
+            $zip = 'zip=' . ($this->canUseZip() ? 'yes' : 'no');
+            $maxFileSize = 'file_limit=' . (10 * 1000 * 1024);
 
             return $this->answer("${zip}\n${maxFileSize}");
         } catch (\Throwable $th) {
@@ -158,23 +157,23 @@ class ExchangeProductsController extends Controller
     protected function getFile()
     {
         try {
-                   $filename = preg_replace('#^(/tmp/|upload/1c/webdata)#', '', $this->request->get('filename'));
+            $filename = preg_replace('#^(/tmp/|upload/1c/webdata)#', '', $this->request->get('filename'));
             $filename = trim(str_replace('\\', '/', trim($filename)), '/');
 
             if (empty($filename)) {
                 Log::error('filename is empty');
 
-                return $this->failure('mode: '.$this->stepFile
-                .', filename is empty');
+                return $this->failure('mode: ' . $this->stepFile
+                . ', filename is empty');
             }
 
             $dir = storage_path('app/sync');
 
-            if (! file_exists($dir)) {
+            if (!file_exists($dir)) {
                 mkdir($dir, 0777, true);
             }
 
-            $filePath = $dir.'/'.$filename;
+            $filePath = $dir . '/' . $filename;
 
             $file = fopen($filePath, 'ab');
 
@@ -189,7 +188,7 @@ class ExchangeProductsController extends Controller
             }
 
             if (substr($filePath, -3) == 'zip') {
-                if (! $this->unzip($dir, $filePath)) {
+                if (!$this->unzip($dir, $filePath)) {
                     return $this->failure("Не удалось распаковать архив: ${filePath}");
                 } else {
                     unlink($filePath); // удаление архива
@@ -206,7 +205,7 @@ class ExchangeProductsController extends Controller
     protected function unzip($dir, $filePath)
     {
         if (class_exists('ZipArchive')) {
-            $zip = new \ZipArchive;
+            $zip = new \ZipArchive();
 
             if ($zip->open($filePath) === true) {
                 $zip->extractTo($dir);
@@ -236,7 +235,7 @@ class ExchangeProductsController extends Controller
      */
     protected function failure($details = '')
     {
-        $return = "failure\n".$details;
+        $return = "failure\n" . $details;
 
         return $this->answer($return);
     }
@@ -254,7 +253,7 @@ class ExchangeProductsController extends Controller
 
             $directory = storage_path('app/sync');
 
-            $file = $directory.'/'.$filename;
+            $file = $directory . '/' . $filename;
 
             if (file_exists($file)) {
                 if (strpos($filename, 'import0_1.xml') !== false) {
@@ -283,10 +282,12 @@ class ExchangeProductsController extends Controller
     {
         try {
             $orders = Order::where('sent_to_1c', 0)->with('items', 'items.product1c', 'user')->get();
+
             foreach ($orders as $order) {
                 $order->update([
                     'sent_to_1c' => 1,
                 ]);
+                Log::info('Export order: ' . $order->order_number);
             }
 
             return response()->view('export.orders', compact('orders'))->header('Content-Type', 'application/xml');

@@ -98,11 +98,9 @@
 </footer>
 
 <x-cookie />
-
 @guest
   <livewire:auth.auth-com />
 @endguest
-
 @production
   <livewire:error-catcher />
 @endproduction
@@ -110,6 +108,9 @@
 <livewire:toasts />
 <script src="{{ mix('js/app.js') }}"></script>
 @stack('footer')
+@production
+  <x-metrika />
+@endproduction
 </body>
 
 </html>

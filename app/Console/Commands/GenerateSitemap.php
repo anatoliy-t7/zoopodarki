@@ -27,7 +27,7 @@ class GenerateSitemap extends Command
         $sitemapIndex = SitemapIndex::create();
 
         if (!file_exists(public_path('sitemap'))) {
-            mkdir(public_path('sitemap'), 0777, true);
+            mkdir(public_path('sitemap'), 0775, true);
         }
 
         $productChunks = Product::select(['id', 'slug', 'updated_at'])

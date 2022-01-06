@@ -160,81 +160,99 @@
               <div>{{ $product1c['name'] }}</div>
             </div>
 
-            <div class="block space-y-6">
+            <div class="flex items-center justify-between">
+              <div class="block space-y-6">
 
-              @if ($product1c['promotion_type'] === 0)
+                @if ($product1c['promotion_type'] === 0)
 
-                <div class="block space-y-1 w-60 ">
-                  <label for="promotion" class="block font-bold">Вид акции</label>
-                  <select wire:model="promotion.type" name="promotion" id="promotion" class="w-full">
-                    <option selected value="">Выберите акцию</option>
-                    @foreach ($promotions as $key => $promo)
-                      <option value="{{ $key }}">{{ $promo }}</option>
-                    @endforeach
-                  </select>
-                </div>
+                  <div class="block space-y-1 w-60 ">
+                    <label for="promotion" class="block font-bold">Вид акции</label>
+                    <select wire:model="promotion.type" name="promotion" id="promotion" class="w-full">
+                      <option selected value="">Выберите акцию</option>
+                      @foreach ($promotions as $key => $promo)
+                        <option value="{{ $key }}">{{ $promo }}</option>
+                      @endforeach
+                    </select>
 
-                <div class="flex space-x-8">
+                    @error('promotion.type') <span class="text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                  </div>
 
-                  @if ($promotion['type'] === '2')
-                    <div class="w-6/12 space-y-1">
-                      <label for="stock" class="font-bold">Количество товара <span
-                          class="font-normal ">(максимум:
-                          {{ $product1c['stock'] }})</span></label>
-                      <div class="w-20">
-                        <input wire:model.defer="promotion.stock" type="number" min="1"
-                          max="{{ $product1c['stock'] }}" id="stock" class="field">
+                  <div class="flex flex-col gap-6">
+
+                    @if ($promotion['type'] === '2')
+                      <div class="space-y-1">
+                        <label for="stock" class="font-bold">Количество товара <span
+                            class="font-normal ">(максимум:
+                            {{ $product1c['stock'] }})</span></label>
+                        <div class="w-20">
+                          <input wire:model.defer="promotion.stock" type="number" min="1"
+                            max="{{ $product1c['stock'] }}" id="stock" class="field">
+                        </div>
+                        @error('promotion.stock') <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
                       </div>
-                      @error('promotion.stock') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
-                    </div>
-                  @endif
+                    @endif
 
-                  @if ($promotion['type'] === '2' or $promotion['type'] === '4')
-                    <div class="w-6/12 space-y-1">
-                      <label for="date" class="font-bold">Дата завершения</label>
-                      <input type="date" id="date" wire:model.defer="promotion.date">
-                      @error('promotion.date') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
-                    </div>
-                  @endif
-
-                  @if ($promotion['type'] === '3' or $promotion['type'] === '4')
-                    <div class="w-6/12 space-y-1">
-                      <label for="percent" class="font-bold">Процент скидки
-                        <span class="font-normal ">(указать без знака %)</span>
-                      </label>
-                      <div class="w-20">
-                        <input type="number" id="percent" wire:model.defer="promotion.percent" class="field">
+                    @if ($promotion['type'] === '2' or $promotion['type'] === '4')
+                      <div class="space-y-1">
+                        <label for="date" class="font-bold">Дата завершения</label>
+                        <input type="date" id="date" wire:model.defer="promotion.date">
+                        @error('promotion.date') <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
                       </div>
-                      @error('promotion.percent') <span class="text-sm text-red-500">{{ $message }}</span>
-                      @enderror
-                    </div>
-                  @endif
+                    @endif
 
+                    @if ($promotion['type'] === '3' or $promotion['type'] === '4')
+                      <div class="space-y-1">
+                        <label for="percent" class="font-bold">Процент скидки
+                          <span class="font-normal ">(указать без знака %)</span>
+                        </label>
+                        <div class="w-20">
+                          <input type="number" id="percent" wire:model.defer="promotion.percent" class="field">
+                        </div>
+                        @error('promotion.percent') <span class="text-sm text-red-500">{{ $message }}</span>
+                        @enderror
+                      </div>
+                    @endif
+
+                  </div>
+
+                @else
+
+                  <div class="block space-y-1">
+                    <div>Цена товара: <b>{{ $product1c['price'] }}</b></div>
+                    @if ($product1c['promotion_price'] !== null)
+                      <div>Цена акции: <b>{{ $product1c['promotion_price'] }}</b></div>
+                    @endif
+                  </div>
+
+                  <div class="space-y-1">
+                    <div>Количество товара: <b>{{ $product1c['stock'] }}</b></div>
+                    @if ($product1c['promotion_percent'] !== null)
+                      <div>Процент акции: <b>{{ $product1c['promotion_percent'] }}</b></div>
+                    @endif
+                    @if ($product1c['promotion_date'] !== null)
+                      <div>Окончание акции: <b>{{ $product1c['promotion_date'] }}</b></div>
+                    @endif
+                  </div>
+
+                @endif
+
+              </div>
+
+              @if ($product1c->product()->exists())
+                <div class="flex items-center gap-4">
+                  <div class="tooltip" data-title="Нажимать кнопку 'Сохранить' не нужно">
+                    <x-tabler-info-circle class="w-6 h-6 text-orange-500 stroke-current" />
+                  </div>
+                  <x-toggle wire:model="discountWeight" :property="$discountWeight" :lable="'Применять `Большие мешки`'"
+                    title="Будет применяется скидка на общий вес, более 5кг" />
                 </div>
-
-              @else
-
-                <div class="block w-6/12 space-y-1">
-                  <div>Цена товара: <b>{{ $product1c['price'] }}</b></div>
-                  @if ($product1c['promotion_price'] !== null)
-                    <div>Цена акции: <b>{{ $product1c['promotion_price'] }}</b></div>
-                  @endif
-                </div>
-
-                <div class="w-6/12 space-y-1">
-                  <div>Количество товара: <b>{{ $product1c['stock'] }}</b></div>
-                  @if ($product1c['promotion_percent'] !== null)
-                    <div>Процент акции: <b>{{ $product1c['promotion_percent'] }}</b></div>
-                  @endif
-                  @if ($product1c['promotion_date'] !== null)
-                    <div>Окончание акции: <b>{{ $product1c['promotion_date'] }}</b></div>
-                  @endif
-                </div>
-
               @endif
 
-
             </div>
+
             <div class="py-2 font-bold text-gray-600">
               <div class="pt-6">
                 @if ($product1c['promotion_type'] === 0)

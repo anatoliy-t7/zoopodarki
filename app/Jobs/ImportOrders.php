@@ -34,7 +34,7 @@ class ImportOrders implements ShouldQueue
     public function handle()
     {
         $directory = storage_path('sync');
-        $functionFile = $directory.'/'.$this->file;
+        $functionFile = $directory . '/' . $this->file;
 
         $stream = new Stream\File($functionFile, 1024);
         $parser = new Parser\UniqueNode(['uniqueNode' => 'Документ']);
@@ -110,6 +110,8 @@ class ImportOrders implements ShouldQueue
                     $order->delete();
                 }
             }
+
+            Log::info('Update order: ' . $order1c['Номер']);
 
             unset($order);
         }

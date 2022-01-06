@@ -20,10 +20,11 @@ class Products1c extends Component
     public $sortDirection = 'desc';
     public $itemsPerPage = 30;
     public $onlyPromotions = false;
+    public $discountWeight = false;
     public $product1c;
     public $promotions = [
         '1' => 'Уценка',
-        '2' => '1+1',
+        // '2' => '1+1',
         '3' => 'Акция поставщика',
         '4' => 'Праздничные',
     ];
@@ -43,6 +44,7 @@ class Products1c extends Component
     ];
     protected $listeners = ['save'];
 
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -51,10 +53,21 @@ class Products1c extends Component
     public function openForm($product1cId)
     {
         $this->product1c = Product1C::where('id', $product1cId)
-        ->first()
-        ->toArray();
+        ->with('product')
+        ->first();
+
+        if ($this->product1c->product()->exists()) {
+            $this->discountWeight = $this->product1c->product->discount_weight;
+        }
+
 
         $this->dispatchBrowserEvent('open-form');
+    }
+
+    public function updatedDiscountWeight()
+    {
+        $this->product1c->product->discount_weight = $this->discountWeight;
+        $this->product1c->push();
     }
 
     public function save()
