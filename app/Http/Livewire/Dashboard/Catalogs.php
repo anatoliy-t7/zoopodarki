@@ -84,7 +84,9 @@ class Catalogs extends Component
     public function openCategory($id)
     {
         if ($id !== null) {
-            return $this->editCategory = Category::find($id)->toArray();
+            $this->editCategory = Category::find($id)->toArray();
+
+            return $this->editCategory['attributes'] = explode(',', $this->editCategory['attributes']);;
         }
 
         $this->reset('editCategory');
@@ -106,7 +108,7 @@ class Catalogs extends Component
                         'menu_name' => trim($this->editCategory['menu_name']),
                         'meta_title' => $this->editCategory['meta_title'],
                         'meta_description' => $this->editCategory['meta_description'],
-                        'attributes' => $this->editCategory['attributes'],
+                        'attributes' => implode(',', $this->editCategory['attributes']),
                         'menu' => $this->editCategory['menu'],
                         'catalog_id' => $this->editCatalog['id'],
                     ]);
@@ -118,7 +120,7 @@ class Catalogs extends Component
                         'menu_name' => trim($this->editCategory['menu_name']),
                         'meta_title' => $this->editCategory['meta_title'],
                         'meta_description' => $this->editCategory['meta_description'],
-                        'attributes' => $this->editCategory['attributes'],
+                        'attributes' => implode(',', $this->editCategory['attributes']),
                         'menu' => $this->editCategory['menu'],
                         'catalog_id' => $this->editCatalog['id'],
                     ]);
@@ -131,7 +133,7 @@ class Catalogs extends Component
         }
 
         $this->editCategory = [];
-        $this->categories = Category::where('catalog_id', $this->editCatalog['id'])->get();
+        $this->categories = Category::where('catalog_id', $this->editCatalog['id'])->get()->toArray();
 
         $this->reset('editCategory');
         $this->closeFormCategory();
@@ -139,10 +141,16 @@ class Catalogs extends Component
 
     public function save()
     {
-        $this->validate([
-            'editCatalog.name' => 'required|unique:catalogs,name,' . $this->editCatalog['id'],
-            'editCatalog.slug' => 'required|unique:catalogs,slug,' . $this->editCatalog['id'],
-        ]);
+        $this->validate(
+            [
+                'editCatalog.name' => 'required|unique:catalogs,name,' . $this->editCatalog['id'],
+                'editCatalog.slug' => 'required|unique:catalogs,slug,' . $this->editCatalog['id'],
+                'brandsForCatalog' => 'max:6',
+            ],
+            [
+                'brandsForCatalog.max' => 'Максимальное количество брендов :max',
+            ]
+        );
 
         DB::transaction(function () {
             $editCatalog = Catalog::updateOrCreate(

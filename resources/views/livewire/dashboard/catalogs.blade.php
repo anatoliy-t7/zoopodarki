@@ -151,10 +151,9 @@
                   <div class="w-full space-y-1">
                     <label class="font-bold">ID брендов</label>
 
-                    <div x-data="{tags: @entangle('brandsForCatalog').defer, newTag: '', inputName: 'foo' }">
-
+                    <div x-data="{tags: @entangle('brandsForCatalog').defer, newTag: '' }">
                       <template x-for="(tag, index) in tags" :key="index">
-                        <input type="hidden" x-bind:name="inputName + '[]'" x-bind:value="tag">
+                        <input type="hidden" x-bind:value="tag">
                       </template>
                       <div class="w-full">
                         <div class="flex flex-wrap p-2 bg-white border rounded-lg">
@@ -206,8 +205,6 @@
                   @enderror
                 </div>
 
-
-
               </div>
             </div>
             <div class="flex items-center justify-start pt-6 space-x-4">
@@ -226,64 +223,36 @@
             </div>
 
           </div>
-          <div class="h-full overflow-y-auto bg-white scrollbar rounded-xl">
-            <div
-              @drop.prevent="if(dragging !== null &amp;&amp; dropping !== null){if(dragging &lt; dropping) categories = [...categories.slice(0, dragging), ...categories.slice(dragging + 1, dropping + 1), categories[dragging], ...categories.slice(dropping + 1)]; else categories = [...categories.slice(0, dropping), categories[dragging], ...categories.slice(dropping, dragging), ...categories.slice(dragging + 1)]}; dropping = null;"
-              @dragover.prevent="$event.dataTransfer.dropEffect = &quot;move&quot;" class="relative divide-y ">
-              @forelse ($categories as $key => $category)
-                <div draggable="true" :wire:key="{{ $category['id'] }}"
-                  :class="{'divide-gray-500': dragging === {{ $key }}}"
-                  x-on:dragstart="dragging = {{ $key }}" x-on:dragend="dragging = null"
-                  class="relative hover:bg-gray-100">
-                  <div class="absolute inset-0 opacity-50" x-show="dragging !== null" x-transition
-                    :class="{'bg-gray-200': dropping === {{ $key }}}"
-                    x-on:dragenter.prevent="if({{ $key }} !== dragging) {dropping = {{ $key }}}"
-                    x-on:dragleave="if(dropping === {{ $key }}) dropping = null">
-                  </div>
-                  <div class="flex justify-between w-full px-2 py-2 space-x-2 group">
-
-                    <div class="flex items-center justify-between w-full space-x-4">
-                      <div class="flex items-center justify-start space-x-4">
-                        <div class="p-1 text-xs text-gray-400">{{ $category['sort'] }}</div>
-                        <div class="text-gray-300 cursor-move hover:text-gray-500">
-                          <x-tabler-drag-drop-2 class="w-6 h-6 stroke-current " />
-                        </div>
-
-                        <button wire:click="openCategory({{ $category['id'] }})" x-on:click="openFormCategory()"
-                          class="cursor-pointer hover:underline">
-                          {{ $category['name'] }}
-                        </button>
+          <div wire:ignore class="h-full overflow-y-auto bg-white scrollbar rounded-xl">
+            <div x-data="{a: @entangle('categories').defer, dragging: null, dropping: null, timer: null}"
+              @drop.prevent="if(dragging !== null &amp;&amp; dropping !== null){if(dragging &lt; dropping) a = [...a.slice(0, dragging), ...a.slice(dragging + 1, dropping + 1), a[dragging], ...a.slice(dropping + 1)]; else a = [...a.slice(0, dropping), a[dragging], ...a.slice(dropping, dragging), ...a.slice(dragging + 1)]}; dropping = null;"
+              @dragover.prevent="$event.dataTransfer.dropEffect = &quot;move&quot;" class="py-2">
+              <div class="flex flex-col gap-1 px-4">
+                <template x-for="(category, index) in a" :key="category.id">
+                  <div class="relative flex items-center justify-between p-2 bg-white border rounded" draggable="true"
+                    :class="{'border-blue-600': dragging === index}" @dragstart="dragging = index"
+                    @dragend="dragging = null">
+                    <div class="flex gap-2">
+                      <div class="p-1 text-xs text-gray-400" x-text="category.id"></div>
+                      <div class="text-gray-300 cursor-move hover:text-gray-500">
+                        <x-tabler-drag-drop-2 class="w-6 h-6 stroke-current " />
                       </div>
+                      <button x-on:click="openFormCategory(); $wire.call('openCategory', category.id)"
+                        class="cursor-pointer hover:underline" x-text="category.name"></button>
+                    </div>
 
-                      <div class="flex items-center space-x-2 justi fy-end">
+                    <div class="absolute inset-0 opacity-50" x-show.transition="dragging !== null"
+                      :class="{'bg-blue-200': dropping === index}"
+                      @dragenter.prevent="if(index !== dragging) {dropping = index}"
+                      @dragleave="if(dropping === index) dropping = null"></div>
 
-                        @if ($editCategory['menu'] == 1)
-                          <div title="Отображается в меню">
-                            <x-tabler-menu-2 class="w-4 h-4 text-gray-400 stroke-current" />
-                          </div>
-                        @endif
-
-                      </div>
-
+                    <div x-show="category.menu == 1" title="Отображается в меню">
+                      <x-tabler-menu-2 class="w-4 h-4 text-gray-400 stroke-current" />
                     </div>
 
                   </div>
-                </div>
-
-              @empty
-                <div class="flex items-center justify-center p-6">
-                  <div>
-                    @can('create')
-                      <button wire:click="openCategory(null)" x-on:click="openFormCategory()"
-                        class="flex space-x-2 text-white bg-green-500 btn hover:bg-green-600"
-                        {{ $editCategory['name'] !== null ? 'disabled' : '' }}>
-                        <x-tabler-file-plus class="w-6 h-6 text-white" />
-                        <div>Добавить категорию</div>
-                      </button>
-                    @endcan
-                  </div>
-                </div>
-              @endforelse
+                </template>
+              </div>
             </div>
           </div>
 
@@ -344,17 +313,41 @@
                 <input wire:model.defer="editCategory.menu_name" type="text">
               </div>
 
-              <div class="space-y-1">
+              <div class="flex items-center justify-start w-full">
 
-                <label class="font-bold">ID cвойств <span class="text-xs text-gray-500">(показывать как фильтры в
-                    этой
-                    категории)</span>
-                </label>
-                <input wire:model.defer="editCategory.attributes" type="text">
-                <div class="text-xs text-gray-500 ">через запятую</div>
+                <div class="w-full space-y-1">
+                  <label class="font-bold">ID cвойств <span class="text-xs text-gray-500">(показывать как фильтры в
+                      этой
+                      категории)</span>
+                  </label>
 
+                  <div x-data="{tags: @entangle('editCategory.attributes').defer, newTag: '' }">
+                    <template x-for="(tag, index) in tags" :key="index">
+                      <input type="hidden" x-bind:value="tag">
+                    </template>
+                    <div class="w-full">
+                      <div class="flex flex-wrap p-2 bg-white border rounded-lg">
+                        <template x-for="(tag, index) in tags" :key="index">
+                          <span
+                            class="inline-flex items-center p-1 mr-2 space-x-1 text-sm leading-normal text-blue-100 bg-blue-500 rounded-lg select-none">
+                            <span x-text="tag"></span>
+                            <button type="button" class="tags-input-remove" @click="tags = tags.filter(i => i !== tag)">
+                              &times;
+                            </button>
+                          </span>
+                        </template>
 
+                        <input class="inline-flex flex-1 w-24 py-1 outline-none" placeholder="ввести id и нажать enter"
+                          @keydown.enter.prevent="if (newTag.trim() !== '') tags.push(newTag.trim()); newTag = ''"
+                          x-model="newTag" pattern="[0-9]" type="number">
+                      </div>
+                    </div>
+                  </div>
 
+                  @error('editCategory.attributes') <span class="text-sm text-red-500">{{ $message }}</span>
+                  @enderror
+
+                </div>
               </div>
 
             </div>
