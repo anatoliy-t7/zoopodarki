@@ -153,37 +153,44 @@
                     @endif
 
                     <div class="space-y-3">
+
                       <div class="font-bold">Виды скидок</div>
                       <div class="flex flex-col space-y-3">
-                        <label class="inline-flex items-center space-x-2">
-                          <input type="radio" wire:model="typeF" value="0" name="stockF"
-                            class="w-5 h-5 text-orange-400 form-radio" checked><span
-                            class="text-base text-gray-700 sm:text-sm">Все виды</span>
+                        <label for="typeF2" class="container-checkbox">
+                          <span class="text-sm">Акции</span>
+                          <input value="2" wire:model="typeF" id="typeF2" type="checkbox">
+                          <span class="checkmark"></span>
                         </label>
-                        <label class="inline-flex items-center space-x-2">
-                          <input type="radio" wire:model="typeF" value="2" name="stockF"
-                            class="w-5 h-5 text-orange-400 form-radio"><span
-                            class="text-base text-gray-700 sm:text-sm ">Акции</span>
+
+                        <label for="typeF1" class="container-checkbox">
+                          <span class="text-sm">Уценка</span>
+                          <input value="1" wire:model="typeF" id="typeF1" type="checkbox">
+                          <span class="checkmark"></span>
                         </label>
-                        <label class="inline-flex items-center space-x-2">
-                          <input type="radio" wire:model="typeF" value="1" name="stockF"
-                            class="w-5 h-5 text-orange-400 form-radio"><span
-                            class="text-base text-gray-700 sm:text-sm">Уценка</span>
-                        </label>
+
+                        @foreach ($attributes as $attribute)
+                          <label for="attribute{{ $attribute['id'] }}" class="container-checkbox">
+                            <span class="text-sm">{{ $attribute['name'] }}</span>
+                            <input value="{{ $attribute['id'] }}" wire:model="attrsF"
+                              id="attribute{{ $attribute['id'] }}" type="checkbox">
+                            <span class="checkmark"></span>
+                          </label>
+                        @endforeach
+
                       </div>
                     </div>
 
                     @if ($catalogs)
                       <div class="space-y-4">
                         <div class="font-bold">Питомец</div>
-
                         <div class="py-1 space-y-3">
 
                           @foreach ($catalogs as $catalog)
                             <label class="container-checkbox">
-                              <span for="cats" class="text-sm">{{ $catalog['name'] }}</span>
-                              <input value="{{ $catalog['id'] }}" wire:model="petF" id="{{ $catalog['slug'] }}"
-                                type="checkbox">
+                              <span for="catalog{{ $catalog['id'] }}"
+                                class="text-sm">{{ $catalog['name'] }}</span>
+                              <input value="{{ $catalog['id'] }}" wire:model="petF"
+                                id="catalog{{ $catalog['id'] }}" type="checkbox">
                               <span class="checkmark"></span>
                             </label>
                           @endforeach
@@ -198,10 +205,10 @@
                         <div class="py-1 space-y-3">
                           @foreach ($categories as $category)
                             <label class="container-checkbox">
-                              <span for="category-{{ $category['id'] }}"
+                              <span for="category{{ $category['id'] }}"
                                 class="text-sm">{{ $category['name'] }}</span>
                               <input value="{{ $category['id'] }}" wire:model="catF"
-                                id="category-{{ $category['id'] }}" type="checkbox">
+                                id="category{{ $category['id'] }}" type="checkbox">
                               <span class="checkmark"></span>
                             </label>
                           @endforeach
@@ -215,9 +222,9 @@
                         <div class="py-1 space-y-3">
                           @foreach ($brands as $brand)
                             <label class="container-checkbox">
-                              <span for="brand-{{ $brand['id'] }}"
+                              <span for="brand{{ $brand['id'] }}"
                                 class="text-sm">{{ $brand['name'] }}</span>
-                              <input value="{{ $brand['id'] }}" wire:model="brandF" id="brand-{{ $brand['id'] }}"
+                              <input value="{{ $brand['id'] }}" wire:model="brandF" id="brand{{ $brand['id'] }}"
                                 type="checkbox">
                               <span class="checkmark"></span>
                             </label>

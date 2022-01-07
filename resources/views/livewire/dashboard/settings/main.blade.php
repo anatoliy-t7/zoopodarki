@@ -76,7 +76,7 @@
             </svg>
           </div>
           <div>
-            Удалить "удаленные" товары 1С
+            add discount_weight в сухих кормах
           </div>
         </button>
       @endcan

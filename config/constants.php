@@ -12,6 +12,8 @@ return [
     'lat_departure' => env('LAT_DEPARTURE', '59.91954757368843'),
     'lng_departure' => env('LNG_DEPARTURE', '30.467041076550657'),
 
+    'attributes_discount' => [2761, 2505],
+
     'shelter_catalog_id' => env('SHELTER_CATALOG_ID', 14),
 
     'product_status' => [

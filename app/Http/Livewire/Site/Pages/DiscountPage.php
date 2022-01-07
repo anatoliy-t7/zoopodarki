@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Site\Pages;
 
+use App\Models\AttributeItem;
 use App\Models\Product;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Livewire\Component;
@@ -11,10 +12,11 @@ class DiscountPage extends Component
 {
     use WithPagination;
 
-    public $typeF = 0;
+    public $typeF = [];
     public $petF = [];
     public $catF = [];
     public $brandF = [];
+    public $attrsF = [];
     public $sortType;
     public $sortSelectedName = 'По популярности';
     public $sortSelectedType = 'popularity';
@@ -26,12 +28,14 @@ class DiscountPage extends Component
     public $catalogs;
     public $categories;
     public $brands;
+    public $attributes;
 
     protected $queryString = [
         'typeF' => ['except' => ''],
         'petF' => ['except' => ''],
         'catF' => ['except' => ''],
         'brandF' => ['except' => ''],
+        'attrsF' => ['except' => ''],
         'page' => ['except' => 1],
     ];
 
@@ -44,8 +48,11 @@ class DiscountPage extends Component
         $this->getBrandsForFilter();
         $this->setMaxAndMinPrices();
         $this->getCatalogsForFilter();
+        $this->getAttributesForFilter();
+
         $this->setSeo();
     }
+
     public function updatedMinMaxPrice($minPrice, $maxPrice)
     {
         $this->minPrice = (int)$minPrice;
@@ -101,7 +108,6 @@ class DiscountPage extends Component
         $this->resetPage();
     }
 
-
     public function getCatalogsForFilter(): void
     {
         $this->catalogs = Product::isStatusActive()
@@ -152,17 +158,40 @@ class DiscountPage extends Component
                 ->toArray();
     }
 
+
+    public function getAttributesForFilter(): void
+    {
+        $this->attributes = AttributeItem::whereIn('id', config('constants.attributes_discount'))
+            ->get()
+            ->toArray();
+    }
+
     public function getProducts()
     {
         return Product::isStatusActive()
             //->select(['id', 'name', 'slug', 'brand_id', 'brand_serie_id', 'unit_id'])
-            ->has('media')
-            ->has('categories')
-            ->has('variations')
+
             ->whereHas('variations', function ($query) {
                 $query->whereBetween('price', [$this->minPrice, $this->maxPrice])
-                ->getTypeOfDiscount($this->typeF);
+                ->when(!empty($this->typeF), function ($query) {
+                    $query->getTypeOfDiscount($this->typeF);
+                }, function ($query) {
+                    $query->getTypeOfDiscount();
+                });
             })
+
+            ->when(!empty($this->attrsF), function ($query) {
+                $query->orWhereHas('attributes', function ($query) {
+                    $query->whereIn('product_attribute.attribute_id', $this->attrsF);
+                });
+            }, function ($query) {
+                if (empty($this->typeF)) {
+                    $query->orWhereHas('attributes', function ($query) {
+                        $query->whereIn('product_attribute.attribute_id', config('constants.attributes_discount'));
+                    });
+                }
+            })
+
             ->when($this->petF, function ($query) {
                 $query->withWhereHas('categories', function ($query) {
                     $query->whereIn('catalog_id', $this->petF);
@@ -173,11 +202,14 @@ class DiscountPage extends Component
                     $query->whereIn('category_id', $this->catF);
                 });
             })
-             ->when($this->brandF, function ($query) {
-                 $query->withWhereHas('brand', function ($query) {
-                     $query->whereIn('brand_id', $this->brandF);
-                 });
-             })
+            ->when($this->brandF, function ($query) {
+                $query->withWhereHas('brand', function ($query) {
+                    $query->whereIn('brand_id', $this->brandF);
+                });
+            })
+            ->has('media')
+            ->has('categories')
+            ->has('variations')
                 ->with('media')
                 ->with('brand')
                 ->with('unit')
@@ -185,8 +217,8 @@ class DiscountPage extends Component
                 ->with('variations')
                 ->with('categories')
                 ->with('categories.catalog')
-                ->orderBy($this->sortSelectedType, $this->sortBy)
-                ->paginate(32);
+                    ->orderBy($this->sortSelectedType, $this->sortBy)
+                    ->paginate(32);
     }
 
     public function updated()
@@ -201,6 +233,7 @@ class DiscountPage extends Component
             'petF',
             'brandF',
             'catF',
+            'attrsF',
         ]);
         $this->setMaxAndMinPrices();
         $this->resetPage();

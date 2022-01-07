@@ -27,16 +27,14 @@ class Product1C extends Model
         return $query->where('stock', '>=', 1)->where('price', '>=', 1);
     }
 
-    public function scopeGetTypeOfDiscount($query, $typeF)
+    public function scopeGetTypeOfDiscount($query, $typeF = [0])
     {
-        if ($typeF == 0) {
+        if (in_array(0, $typeF)) {
             return $query->where('promotion_type', '>', 0);
-        }
-        if ($typeF == 1) {
-            return $query->where('promotion_type', 1);
-        }
-        if ($typeF == 2) {
+        } elseif (in_array(2, $typeF)) {
             return $query->where('promotion_type', '>=', 2);
+        } else {
+            return $query->whereIn('promotion_type', $typeF);
         }
     }
 }

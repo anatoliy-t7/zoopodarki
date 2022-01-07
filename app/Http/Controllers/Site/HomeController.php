@@ -19,7 +19,7 @@ class HomeController extends Controller
             ->has('media')
             ->has('categories')
             ->whereHas('attributes', function ($query) {
-                $query->whereIn('product_attribute.attribute_id', [2761, 2505]);  // + подарок и большие мешки
+                $query->whereIn('product_attribute.attribute_id', config('constants.attributes_discount'));  // + подарок и большие мешки
             })
             ->orWhereHas('variations', function ($query) {
                 $query->where('promotion_type', '!=', 0)->hasStock();
