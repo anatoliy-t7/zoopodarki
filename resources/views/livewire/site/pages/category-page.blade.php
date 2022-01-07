@@ -60,6 +60,9 @@
               @if ($category->id === 44)
                 <x-messages.category-44 />
               @endif
+              @if ($category->id === 44 || $category->id === 33)
+                <x-messages.category-33-44 />
+              @endif
               @if ($catalog->id == (int) config('constants.shelter_catalog_id'))
                 <x-messages.shelter />
               @endif

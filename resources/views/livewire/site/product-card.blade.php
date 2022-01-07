@@ -369,7 +369,7 @@
 
                       <div class="flex justify-center">
                         <button x-on:click="$wire.buyOneClick(orderOneClick, item.id, count)"
-                          x-bind:disabled="valid === false"
+                          x-bind:disabled="valid === false" aria-label="Купить"
                           class="mt-3 text-white bg-orange-500 border-orange-500 btn hover:bg-orange-600">
                           Купить
                         </button>
@@ -422,7 +422,7 @@
                         </div>
                       </div>
                       <div class="flex justify-center w-full">
-                        <button x-on:click="preOrder()"
+                        <button x-on:click="preOrder()" aria-label="Оповестить"
                           class="relative flex items-center justify-center w-full space-x-3 font-bold text-white transition ease-in-out transform bg-blue-500 rounded-lg cursor-pointer btn active:scale-95 hover:bg-blue-600">
                           <span>Оповестить</span>
                           <div wire:loading wire:target="preOrder" class="absolute top-2 right-2">
@@ -509,7 +509,7 @@
         @endif
         <div class="flex flex-col">
           <div class="flex items-center justify-start space-x-2 font-semibold">
-            <h4 class="text-xl">Отзывы</h4>
+            <h3 class="text-xl">Отзывы</h3>
             <span class="text-gray-500">
               ({{ $product->reviews_count }})
             </span>

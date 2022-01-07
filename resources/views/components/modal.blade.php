@@ -3,7 +3,7 @@
   x-effect="document.body.classList.toggle('overflow-hidden', open), document.body.classList.toggle('pr-4', open)"
   x-on:close-modal.window="open = false">
 
-  <button @click="open = true">
+  <button @click="open = true" aria-label="Open a modal window">
     {{ $button }}
   </button>
 

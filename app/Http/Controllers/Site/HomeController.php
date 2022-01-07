@@ -16,15 +16,14 @@ class HomeController extends Controller
 
         $discounts = cache()->remember('discounts-homepage', 60 * 60 * 24, function () {
             return Product::isStatusActive()
-            ->has('media')
-            ->has('categories')
             ->whereHas('attributes', function ($query) {
                 $query->whereIn('product_attribute.attribute_id', config('constants.attributes_discount'));  // + подарок и большие мешки
             })
             ->orWhereHas('variations', function ($query) {
                 $query->where('promotion_type', '!=', 0)->hasStock();
             })
-            ->orWhere('discount_weight', 1)
+            ->has('media')
+            ->has('categories')
             ->with('variations')
             ->with('attributes')
             ->with('media')

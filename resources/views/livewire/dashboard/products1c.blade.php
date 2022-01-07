@@ -106,7 +106,6 @@
                 @if ($product1c->product)
                   <x-units :unit="$product1c->product->unit" :value="$product1c->unit_value"
                     :wire:key="$product1c->product->id" />
-                  {{ $product1c->unit_value }}
                 @endif
               </x-dashboard.table.cell>
 
@@ -144,7 +143,6 @@
 
       </x-dashboard.table>
     </div>
-
 
     <x-overflow-bg @click="closeForm" />
 
@@ -197,7 +195,7 @@
                     </div>
                   @endif
 
-                  @if ($promotion['type'] === '3' or $promotion['type'] === '4')
+                  @if ($promotion['type'] === '1' or $promotion['type'] === '3' or $promotion['type'] === '4')
                     <div class="w-6/12 space-y-1">
                       <label for="percent" class="font-bold">Процент скидки
                         <span class="font-normal ">(указать без знака %)</span>

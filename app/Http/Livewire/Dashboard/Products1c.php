@@ -68,7 +68,7 @@ class Products1c extends Component
                 'promotion.stock' => 'required|numeric',
                 'promotion.date' => 'required|date|date|date_format:Y-m-d|after:today',
             ]);
-        } elseif ($this->promotion['type'] === '3') {
+        } elseif ($this->promotion['type'] === '3' || $this->promotion['type'] === '1') {
             $this->validate([
                 'promotion.percent' => 'required|numeric|between:1,99',
             ]);

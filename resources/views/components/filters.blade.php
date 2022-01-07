@@ -10,7 +10,7 @@
    @endif
 
    @if ($catalogId === 14)
-     <div class="py-1 space-y-3">
+     <div class="py-1 space-y-3 lowercase">
        <label class="container-checkbox">
          <span for="shelterUrgentlyRequired" class="text-sm">Срочно требуется</span>
          <input value="1" wire:model="shelterUrgentlyRequired" id="shelterUrgentlyRequired" type="checkbox">
@@ -35,7 +35,7 @@
 
      @if ($showPromoF)
        <div class="pt-4">
-         <div class="container-checkbox">
+         <div class="lowercase container-checkbox">
            <label for="promoF" class="text-base sm:text-sm">Акции</label>
            <input id="promoF" wire:model="promoF" type="checkbox">
            <span class="checkmark"></span>
@@ -116,7 +116,7 @@
                <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
                  <template x-for="(item, index) in filteredAttribute" :key="item.id" hidden>
                    <label :for="'attr'+item.id" class="container-checkbox">
-                     <span class="text-base sm:text-sm" x-text="item.name"></span>
+                     <span class="text-base lowercase sm:text-sm" x-text="item.name"></span>
                      <input :id="'attr'+item.id" :value="item.id" type="checkbox"
                        x-model.number.debounce.700="attributeFilter">
                      <span class="checkmark"></span>
@@ -142,7 +142,7 @@
 
      <div class="space-y-3">
        <div class="font-bold">Наличие в магазинах</div>
-       <div class="flex flex-col space-y-3">
+       <div class="flex flex-col space-y-3 lowercase">
          <label class="inline-flex items-center space-x-2">
            <input type="radio" wire:model="stockF" value="3" name="stockF" class="w-5 h-5 text-orange-400 form-radio"
              checked><span class="text-base text-gray-700 sm:text-sm">Все товары</span>

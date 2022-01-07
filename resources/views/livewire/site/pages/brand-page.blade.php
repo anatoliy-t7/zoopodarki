@@ -95,7 +95,7 @@
 
                                 @foreach ($catalogs as $catalog)
                                   <label class="container-checkbox">
-                                    <span for="cats" class="text-sm">{{ $catalog['name'] }}</span>
+                                    <span for="cats" class="text-sm lowercase">{{ $catalog['name'] }}</span>
                                     <input value="{{ $catalog['id'] }}" wire:model="petF"
                                       id="{{ $catalog['slug'] }}" type="checkbox">
                                     <span class="checkmark"></span>
@@ -113,7 +113,7 @@
                                 @foreach ($categories as $category)
                                   <label class="container-checkbox">
                                     <span for="category-{{ $category['id'] }}"
-                                      class="text-sm">{{ $category['name'] }}</span>
+                                      class="text-sm lowercase">{{ $category['name'] }}</span>
                                     <input value="{{ $category['id'] }}" wire:model="catF"
                                       id="category-{{ $category['id'] }}" type="checkbox">
                                     <span class="checkmark"></span>
@@ -152,7 +152,7 @@
 
                           @foreach ($catalogs as $catalog)
                             <label class="container-checkbox">
-                              <span for="cats" class="text-sm">{{ $catalog['name'] }}</span>
+                              <span for="cats" class="text-sm lowercase">{{ $catalog['name'] }}</span>
                               <input value="{{ $catalog['id'] }}" wire:model="petF" id="{{ $catalog['slug'] }}"
                                 type="checkbox">
                               <span class="checkmark"></span>
@@ -170,7 +170,7 @@
                           @foreach ($categories as $category)
                             <label class="container-checkbox">
                               <span for="category-{{ $category['id'] }}"
-                                class="text-sm">{{ $category['name'] }}</span>
+                                class="text-sm lowercase">{{ $category['name'] }}</span>
                               <input value="{{ $category['id'] }}" wire:model="catF"
                                 id="category-{{ $category['id'] }}" type="checkbox">
                               <span class="checkmark"></span>

@@ -120,7 +120,7 @@ class Product extends Model implements HasMedia
 
     public function variations()
     {
-        return $this->hasMany('App\Models\Product1C');
+        return $this->hasMany('App\Models\Product1C', 'product_id');
     }
 
     public function attributes()

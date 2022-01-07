@@ -194,21 +194,23 @@ class ProductCard extends Component
     public function getRelatedProducts()
     {
         $this->related = Product::isStatusActive()
-            ->select(['id', 'name', 'slug'])
+            ->select(['id', 'name', 'slug', 'brand_id', 'unit_id', 'discount_weight'])
             ->whereHas('categories', function ($query) {
                 $query->where('category_id', $this->category->id);
             })
             ->hasStock()
             ->whereNotIn('id', [$this->product->id])
             ->has('media')
-            ->with('brand')
-            ->with('unit')
-            ->with('variations')
-            ->with('media')
+            ->with('brand:id,name,slug,logo')
+            ->with('unit:id,name')
+            ->with('variations:id,product_id,price,promotion_type,unit_value,promotion_percent,stock')
+            ->with('media:id,model_id,model_type,collection_name,disk,conversions_disk,generated_conversions,file_name')
             ->orderBy('price_avg', 'asc')
             ->inRandomOrder()
             ->take(5)
             ->get();
+
+        // dd($this->related);
     }
 
     public function render()

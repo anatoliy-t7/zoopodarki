@@ -42,7 +42,7 @@ class Catalogs extends Component
         'meta_description' => null,
         'menu' => 1,
         'sort' => 0,
-        'attributes' => '',
+        'attributes' => [],
         'catalog_id' => null,
     ];
     protected $queryString = [
