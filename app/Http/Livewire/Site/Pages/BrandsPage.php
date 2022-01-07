@@ -13,6 +13,10 @@ class BrandsPage extends Component
 
     public $searchBrand;
 
+    protected $queryString = [
+        'searchBrand' => ['except' => ''],
+    ];
+
     public function mount()
     {
         $this->setSeo();

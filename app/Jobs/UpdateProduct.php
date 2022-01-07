@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\AttributeItem;
-use App\Models\Product;
+use App\Models\Product1C;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -36,28 +36,14 @@ class UpdateProduct implements ShouldQueue
      */
     public function handle()
     {
-        $products = Product::withWhereHas('unit', function ($query) {
-            $query->where('product_units.name', 'гр');
-        })
-            ->withWhereHas('variations', function ($query) {
-                $query->where('products_1c.unit_value', '!=', null);
-            })
-            ->get();
-
-        // logger($products);
+        $products = Product1C::onlyTrashed()->get();
 
         foreach ($products as $product) {
-            foreach ($product->variations as $product1c) {
-                if ($product1c->unit_value && $product1c->unit_value !== 'на развес') {
-                    $product1c->weight = $product1c->unit_value;
-                    $product1c->save();
-                    $this->count = $this->count + 1;
-                }
-            }
+            $product->forceDelete();
+            $this->count = $this->count + 1;
         }
 
-        // logger($this->collect);
-        logger('done: ' . $this->count);
+        logger('forceDelete: ' . $this->count);
     }
 
     public function addAttributeItem($attribute)

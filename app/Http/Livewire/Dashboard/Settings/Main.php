@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard\Settings;
 
+use App\Jobs\UpdateProduct;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -11,21 +12,65 @@ class Main extends Component
 {
     use WireToast;
 
-    public function removeAllCache()
+    public function removeDbCache()
     {
         try {
             Cache::flush();
 
             return toast()
-                ->success('Весь кеш отчистин')
+                ->success('Кеш DB отчистен')
                 ->push();
         } catch (\Throwable $th) {
             Log::error($th);
 
             return toast()
-                ->success('Кеш не отчистин')
+                ->warning('Кеш DB не отчистен')
                 ->push();
         }
+    }
+
+    public function removeAllCache()
+    {
+        try {
+            \Artisan::call('optimize:clear');
+            \Artisan::call('optimize');
+            toast()
+                ->success('Кеш отчистен')
+                ->push();
+        } catch (\Throwable$th) {
+            toast()
+                ->warning('Кеш не отчистен')
+                ->push();
+
+            \Log::error($th);
+        }
+    }
+
+    public function generateSitemap()
+    {
+        try {
+            \Artisan::call('optimize:clear');
+            \Artisan::call('optimize');
+            \Artisan::call('sitemap:generate');
+            toast()
+                ->success('Карта сайта создана')
+                ->push();
+        } catch (\Throwable$th) {
+            toast()
+                ->warning('Карта сайта не создается')
+                ->push();
+
+            \Log::error($th);
+        }
+    }
+
+    public function updateProduct()
+    {
+        UpdateProduct::dispatch();
+
+        toast()
+            ->info('Job UpdateProduct added')
+            ->push();
     }
 
     public function render()
