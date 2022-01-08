@@ -88,11 +88,11 @@ class CategoryPage extends Component
             }])
             ->firstOrFail();
 
-        $this->tags = $this->category->tags;
+        $this->tags = $this->category->tags->toArray();
 
         $this->catalog = Catalog::where('slug', $catalogslug)
             ->select('id', 'slug', 'name')
-            ->firstOrFail();
+            ->firstOrFail()->toArray();
 
         if ($tagslug !== null) {
             $this->tag = Tag::where('slug', $tagslug)->firstOrFail();
@@ -157,7 +157,7 @@ class CategoryPage extends Component
 
             SEOMeta::setTitle($metaTitle)->setDescription($metaDescription);
         } else {
-            if ($this->catalog->id === 14) {
+            if ($this->catalog['id'] === 14) {
                 // SEO TITLE
                 // Купите корм для питомника и приюта для собак и кошек в спб + (цена  от ...) + в новом интернет магазине кормов и товаров для животных Зооподарки *доллар* Акции, Скидки, Распродажи, Душевное обслуживание
 
@@ -307,7 +307,6 @@ class CategoryPage extends Component
             ->when($this->brandsF, function ($query) {
                 $query->whereIn('brand_id', $this->brandsF);
             })
-
             ->with('attributes')
             ->when($this->attributesRangeOn, function ($query) {
                 $query->whereHas('attributes', function ($query) {
@@ -348,10 +347,10 @@ class CategoryPage extends Component
                 $query->checkStock((int) $this->stockF);
             })
               //  ->with(['media' => function ($query) { $query->unique('model_id'); }])
-                ->with('media')
-                ->with('brand')
-                ->with('unit')
-                ->with('variations')
+                ->with('media:id,model_id,model_type,collection_name,disk,conversions_disk,generated_conversions,file_name')
+                ->with('brand:id,name,slug')
+                ->with('unit:id,name')
+                ->with('variations:id,product_id,price,promotion_type,unit_value,promotion_percent,stock')
                 ->orderBy($this->sortSelectedType, $this->sortBy)
                 ->paginate(32);
     }

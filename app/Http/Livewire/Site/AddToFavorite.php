@@ -41,7 +41,7 @@ class AddToFavorite extends Component
         $this->model->favorites()->delete($item_id);
 
         toast()
-            ->success('Товар убран из избранных')
+            ->warning('Товар убран из избранных')
             ->push();
 
         $this->emitSelf('check');

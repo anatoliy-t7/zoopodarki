@@ -2,37 +2,37 @@
   class="relative flex flex-col justify-between h-full p-2 bg-white border border-gray-100 md:p-0 lg:border-white hover:border-green-300 rounded-2xl">
   <div class="p-2">
     <a itemprop="url"
-      href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product->slug]) }}"
-      class="block " title="{{ $product->name }}">
+      href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product['slug']]) }}"
+      class="block " title="{{ $product['name'] }}">
       <img width="198" height="256" itemprop="image" class="object-contain object-center w-full h-64 lozad "
         src="/assets/img/placeholder.svg" data-src="{{ $product->getFirstMediaUrl('product-images', 'thumb') }}"
-        alt="{{ $product->name }}">
+        alt="{{ $product['name'] }}">
     </a>
 
-    @if ($product->brand)
+    @if ($product['brand'] !== null)
       <div class="py-2 font-semibold text-center text-green-600 md:pb-2 md:pt-3">
         <a itemprop="url"
-          href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product->slug]) }}"
-          title="{{ $product->brand->name }}">
-          {{ $product->brand->name }}
+          href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product['slug']]) }}"
+          title="{{ $product['brand']['name'] }}">
+          {{ $product['brand']['name'] }}
         </a>
       </div>
     @endif
 
     <div itemprop="name" class="text-base text-center text-gray-800 md:text-sm line-clamp-2">
       <a itemprop="url"
-        href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product->slug]) }}"
-        title="{{ $product->name }}">
-        {{ $product->name }}
+        href="{{ route('site.product', ['catalogslug' => $catalog, 'categoryslug' => $category, 'productslug' => $product['slug']]) }}"
+        title="{{ $product['name'] }}">
+        {{ $product['name'] }}
       </a>
     </div>
   </div>
 
   <div class="flex-col items-center justify-between w-full pt-1" itemprop="offers" itemscope
     itemtype="https://schema.org/Offer">
-    @foreach ($product->variations->sortBy('price') as $key => $item)
-
-      @if ($item->promotion_type > 0 || $product->discount_weight == 1)
+    @foreach ($product['variations'] as $key => $item)
+      {{-- ->sortBy('price') --}}
+      @if ($item['promotion_type'] > 0 || $product['discount_weight'] == 1)
         <div class="absolute top-0 left-0 z-30">
           <x-tabler-discount-2 class="w-8 h-8 text-orange-500 stroke-current" />
         </div>
@@ -41,30 +41,30 @@
       <div>
         <div class="flex items-center justify-between w-full px-3 pb-3 space-x-2 text-xs">
           <div class="w-5/12 whitespace-nowrap">
-            <x-units :unit="$product->unit" :value="$item->unit_value" :wire:key="$product->id" />
+            <x-units :unit="$product['unit']" :value="$item['unit_value']" :wire:key="$product['id']" />
           </div>
           <div class="flex items-center justify-end w-5/12 gap-2 whitespace-nowrap">
-            @if (($item->promotion_type === 0 && (int) $item->unit_value >= 5000 && $product->whereRelation('attributes', 'product_attribute.attribute_id', 2761)) || ($item->promotion_type === 0 && (int) $item->unit_value >= 5000 && $product->whereRelation('attributes', 'product_attribute.attribute_id', 2505)))
-              <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
+            @if (($item['promotion_type'] === 0 && (int) $item['unit_value'] >= 5000 && $product->whereRelation('attributes', 'product_attribute.attribute_id', 2761)) || ($item['promotion_type'] === 0 && (int) $item['unit_value'] >= 5000 && $product->whereRelation('attributes', 'product_attribute.attribute_id', 2505)))
+              <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
-                {{ RUB(discount($item->price, 10)) }}</div>
-            @elseif ($item->promotion_type === 0)
+                {{ RUB(discount($item['price'], 10)) }}</div>
+            @elseif ($item['promotion_type'] === 0)
               <div class="text-base font-semibold text-gray-800 md:text-sm" itemprop="price">
-                {{ RUB($item->price) }}</div>
-            @elseif ($item->promotion_type === 1 || $item->promotion_type === 3)
-              <div class="text-xs text-gray-500 line-through">{{ RUB($item->promotion_price) }}</div>
+                {{ RUB($item['price']) }}</div>
+            @elseif ($item['promotion_type'] === 1 || $item['promotion_type'] === 3)
+              <div class="text-xs text-gray-500 line-through">{{ RUB($item['promotion_price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
-                {{ RUB($item->price) }}</div>
-            @elseif ($item->promotion_type === 2 || $item->promotion_type === 4)
-              <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
+                {{ RUB($item['price']) }}</div>
+            @elseif ($item['promotion_type'] === 2 || $item['promotion_type'] === 4)
+              <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
-                {{ RUB(discount($item->price, $item->promotion_percent)) }}</div>
+                {{ RUB(discount($item['price'], $item['promotion_percent'])) }}</div>
 
             @endif
           </div>
           <div class="flex items-start justify-end w-2/12 -mt-1">
-            @if ($item->stock > 0)
-              <button wire:click="$emit('addToCart', {{ $item->id }}, 1, {{ $catalogId }}, 1000)"
+            @if ($item['stock'] > 0)
+              <button wire:click="$emit('addToCart', {{ $item['id'] }}, 1, {{ $catalogId }}, 1000)"
                 aria-label="Добавить в корзину"
                 class="z-10 transition ease-in-out cursor-pointer focus:outline-none active:scale-95 link-hover group">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

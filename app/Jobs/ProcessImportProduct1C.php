@@ -108,7 +108,7 @@ class ProcessImportProduct1C implements ShouldQueue
                 }
             } elseif (Product1C::where('uuid', $product1c['Ид'])->first()) {
                 $this->updateProduct($product1c);
-            } else {
+            } elseif (!Product1C::withTrashed()->where('uuid', $product1c['Ид'])->first()) {
                 $this->createProduct($product1c);
             }
         });

@@ -11,14 +11,14 @@
           </div>
         </div>
 
-        @if ($tags->count() > 0)
+        @if (count($tags) > 0)
           <div class="flex flex-wrap items-center justify-start lg:px-0">
             @foreach ($tags as $tagItem)
               <div class="p-1">
-                <a title="{{ $tagItem->name }}"
-                  href="{{ route('site.tag', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug, 'tagslug' => $tagItem->slug]) }}"
-                  class="block px-3 py-1 text-sm  border rounded-full lowercase hover:text-orange-600  {{ request()->is('pet/' . $catalog->slug . '/' . $category->slug . '/tag/' . $tagItem->slug) ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-100 text-gray-700 border-gray-200' }}">
-                  {{ $tagItem->name }}
+                <a title="{{ $tagItem['name'] }}"
+                  href="{{ route('site.tag', ['catalogslug' => $catalog['slug'], 'categoryslug' => $category->slug, 'tagslug' => $tagItem['slug']]) }}"
+                  class="block px-3 py-1 text-sm  border rounded-full lowercase hover:text-orange-600  {{ request()->is('pet/' . $catalog['slug'] . '/' . $category->slug . '/tag/' . $tagItem['slug']) ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-100 text-gray-700 border-gray-200' }}">
+                  {{ $tagItem['name'] }}
                 </a>
               </div>
             @endforeach
@@ -34,11 +34,11 @@
                 @if (Agent::isMobile())
                   <x-mob-sidebar :minPrice="$minPrice" :maxPrice="$maxPrice" :attributesRanges="$attributesRanges"
                     :minRange="$minRange" :maxRange="$maxRange" :brands="$brands" :showPromoF="$showPromoF"
-                    :catalogId="$catalog->id" />
+                    :catalogId="$catalog['id']" />
                 @else
                   <x-filters :minPrice="$minPrice" :maxPrice="$maxPrice" :minRange="$minRange" :maxRange="$maxRange"
                     :attributesRanges="$attributesRanges" :brands="$brands" :showPromoF="$showPromoF"
-                    :catalogId="$catalog->id" />
+                    :catalogId="$catalog['id']" />
                 @endif
 
                 @if (Agent::isDesktop())
@@ -63,7 +63,7 @@
               @if ($category->id === 44 || $category->id === 33)
                 <x-messages.category-33-44 />
               @endif
-              @if ($catalog->id == (int) config('constants.shelter_catalog_id'))
+              @if ($catalog['id'] == (int) config('constants.shelter_catalog_id'))
                 <x-messages.shelter />
               @endif
 
@@ -89,8 +89,8 @@
                       <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         @foreach ($products as $product)
                           <div itemprop="itemListElement" itemscope itemtype="https://schema.org/Product">
-                            <livewire:site.card-products :product="$product" :catalog="$catalog->slug"
-                              :catalogId="$catalog->id" :category="$category->slug"
+                            <livewire:site.card-products :product="$product" :catalog="$catalog['slug']"
+                              :catalogId="$catalog['id']" :category="$category->slug"
                               :wire:key="'product-'.$product->id" />
                           </div>
                         @endforeach
