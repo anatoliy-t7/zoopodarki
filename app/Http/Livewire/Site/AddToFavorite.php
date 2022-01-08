@@ -10,15 +10,15 @@ class AddToFavorite extends Component
 {
     use WireToast;
 
-    public $model;
+    public $model = [];
     public $mode = true;
 
-    protected $listeners = ['check'];
+    protected $listeners = ['checkIfItFavorite'];
 
     public function mount($model)
     {
         $this->model = $model;
-        $this->check();
+        $this->checkIfItFavorite();
     }
 
     public function setFavorite()
@@ -33,7 +33,7 @@ class AddToFavorite extends Component
             ->success('Товар добавлен в избранное')
             ->push();
 
-        $this->emitSelf('check');
+        $this->emitSelf('checkIfItFavorite');
     }
 
     public function removeFavorite($item_id)
@@ -44,12 +44,12 @@ class AddToFavorite extends Component
             ->warning('Товар убран из избранных')
             ->push();
 
-        $this->emitSelf('check');
+        $this->emitSelf('checkIfItFavorite');
     }
 
-    public function check()
+    public function checkIfItFavorite()
     {
-        if ($this->model->favorites->firstWhere('favoritable_id', $this->model->id)) {
+        if ($this->model->favorites->firstWhere('product_id', $this->model->id)) {
             $this->mode = true;
         } else {
             $this->mode = false;

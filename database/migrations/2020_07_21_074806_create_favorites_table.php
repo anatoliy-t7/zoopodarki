@@ -16,10 +16,8 @@ class CreateFavoritesTable extends Migration
         Schema::create('favorites', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->unsignedBigInteger('favoritable_id');
-            $table->string("favoritable_type");
-
-            $table->foreign('favoritable_id')
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
                 ->onDelete('cascade');

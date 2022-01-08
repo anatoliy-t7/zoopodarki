@@ -33,7 +33,7 @@
               @endif
             </div>
             @auth
-              <livewire:site.add-to-favorite :model="$product" :key="'product-'.$product->id" />
+              <livewire:site.add-to-favorite :model="$product" :key="'product-'.$product['id']" />
             @endauth
 
             <x-share-buttons

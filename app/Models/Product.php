@@ -155,7 +155,7 @@ class Product extends Model implements HasMedia
 
     public function favorites()
     {
-        return $this->morphMany('App\Models\Favorite', 'favoritable');
+        return $this->hasMany('App\Models\Favorite', 'product_id');
     }
 
     public function scopeCheckStock($query, $stockF)

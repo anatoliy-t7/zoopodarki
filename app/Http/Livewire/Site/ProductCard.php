@@ -181,8 +181,11 @@ class ProductCard extends Component
             ->with('serie')
             ->with('unit')
             ->with('variations')
+            ->with('favorites')
             ->with('media')
             ->firstOrFail();
+
+        // dd($this->product);
 
         $attributes = collect($this->product->attributes);
 

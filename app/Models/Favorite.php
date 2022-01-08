@@ -6,14 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favorite extends Model
 {
-    protected $fillable = [
-        'user_id', 'favoritable_id', 'favoritable_type',
-    ];
-
-    public function favoritable()
-    {
-        return $this->morphTo();
-    }
+    protected $table = 'favorites';
+    protected $guarded = [];
 
     public function user()
     {
@@ -22,6 +16,6 @@ class Favorite extends Model
 
     public function product()
     {
-        return $this->belongsTo('App\Models\Product', 'favoritable_id');
+        return $this->belongsTo('App\Models\Product', 'product_id');
     }
 }

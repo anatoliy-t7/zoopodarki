@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function favorites()
     {
-        return $this->hasMany('App\Models\Favorite');
+        return $this->hasMany('App\Models\Favorite', 'user_id');
     }
 
     public function contacts()
