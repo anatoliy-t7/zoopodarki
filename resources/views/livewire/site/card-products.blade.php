@@ -17,6 +17,8 @@
           {{ $product['brand']['name'] }}
         </a>
       </div>
+    @else
+      <div class="h-8 mb-1"></div>
     @endif
 
     <div itemprop="name" class="text-base text-center text-gray-800 md:text-sm line-clamp-2">

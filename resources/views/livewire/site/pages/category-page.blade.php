@@ -2,13 +2,16 @@
     <x-breadcrumbs :category="$category" :catalog="$catalog" />
     <div>
       <div class="space-y-6">
-        <div class="flex flex-col items-center justify-start gap-3 text-3xl sm:flex-row">
-          <h1 class="font-bold first-letter">
-            {{ $name }}
-          </h1>
-          <div class="text-3xl font-bold text-gray-700" title="Найдено товаров">{{ $products->total() }}
-            {{ trans_choice('titles.count_products', substr($products->total(), -1)) }}
+        <div class="flex flex-col items-center justify-between gap-4 xl:flex-row">
+          <div class="flex flex-col items-center justify-start w-full gap-3 text-3xl xl:w-8/12 xl:flex-row">
+            <h1 class="font-bold first-letter">
+              {{ $name }}
+            </h1>
+            <div class="text-3xl font-bold text-gray-700" title="Найдено товаров">{{ $products->total() }}
+              {{ trans_choice('titles.count_products', substr($products->total(), -1)) }}
+            </div>
           </div>
+          <x-messages.discount-card />
         </div>
 
         @if (count($tags) > 0)

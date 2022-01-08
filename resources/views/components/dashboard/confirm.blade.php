@@ -1,4 +1,3 @@
-@props(['confirmId' => null])
 <div wire:ignore x-data="{ confirmId: null }" x-init="
 $watch('confirmId', value => {
   const body = document.body;
@@ -9,7 +8,7 @@ $watch('confirmId', value => {
       body.classList.add('h-screen');
       return body.classList.add('overflow-hidden');
   }
-});">
+});" {{ $attributes->whereStartsWith('wire:key') }}>
 
   <div x-cloak x-show="confirmId == {{ $confirmId }}" x-transition.opacity
     class="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-screen min-w-full bg-gray-500 bg-opacity-50"
@@ -26,17 +25,17 @@ $watch('confirmId', value => {
       </button>
 
 
-      <div class="flex items-center justify-center px-5 py-4">
-        <h2 class="text-xl leading-tight text-gray-700">
-          Подтвердите удаление.
+      <div class="flex items-center justify-center px-5 pt-4 pb-2">
+        <h2 class="text-lg leading-snug text-center text-gray-700">
+          Подтвердите удаление. <br>id:<b class="text-base">{{ $confirmId }}</b>
         </h2>
       </div>
 
-      <div class="flex items-center justify-center px-5 py-4 space-x-8">
+      <div class="flex items-center justify-center px-5 pb-4 space-x-8">
         <button x-on:click="confirmId = null"
           class="px-5 py-2 font-semibold text-gray-600 transition duration-150 border border-gray-300 rounded-lg hover:bg-gray-100 hover:border-gray-100 hover:text-gray-900 focus:outline-none focus:shadow-outline">Отмена</button>
 
-        <button x-on:click="confirmId = null" {{ $attributes }}
+        <button x-on:click="confirmId = null" wire:click="remove({{ $confirmId }})"
           class="px-5 py-2 font-semibold text-white transition duration-150 bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:shadow-outline">Удалить</button>
       </div>
 

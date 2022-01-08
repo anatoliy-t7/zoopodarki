@@ -51,7 +51,7 @@
                   </svg>
                 </button>
 
-                <x-dashboard.confirm :confirmId="$permission->id" wire:click="remove({{ $permission->id }})" />
+                <x-dashboard.confirm :confirmId="$permission->id" wire:key="remove{{ $permission->id }}" />
 
               </x-dashboard.table.cell>
 

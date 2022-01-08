@@ -197,7 +197,7 @@
 
               @endcan
               <div class="flex justify-between space-x-4">
-                <x-dashboard.confirm :confirmId="$reviewEdit->id" wire:click="remove({{ $reviewEdit->id }})" />
+                <x-dashboard.confirm :confirmId="$reviewEdit->id" wire:key="remove{{ $reviewEdit->id }}" />
                 <button wire:click="sandEmail" class="text-gray-900 bg-gray-100 btn hover:bg-gray-200">
                   Оповестить
                 </button>

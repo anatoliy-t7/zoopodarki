@@ -5,20 +5,20 @@
 
   <div class="flex flex-col w-full gap-6 md:w-2/12">
     @if ($newProducts1C)
-      <div class="flex items-center justify-between gap-4 px-8 py-6 bg-white rounded-lg shadow-md">
+      <div class="flex flex-col items-center justify-between gap-4 px-8 py-6 bg-white rounded-lg shadow-md xl:flex-row">
         <div class="">Создать товаров</div>
         <div class="text-xl font-bold text-orange-400">{{ $newProducts1C->count() }}</div>
       </div>
     @endif
 
     @if ($productsDoesNotHaveDescription > 0)
-      <div class="flex items-center justify-between gap-4 px-8 py-6 bg-white rounded-lg shadow-md">
+      <div class="flex flex-col items-center justify-between gap-4 px-8 py-6 bg-white rounded-lg shadow-md xl:flex-row">
         <div>Товары без описания</div>
         <div class="text-xl font-bold text-orange-400">{{ $productsDoesNotHaveDescription }}</div>
       </div>
     @endif
     @if ($productsDoesNotHaveImage > 0)
-      <div class="flex items-center justify-between gap-4 px-8 py-6 bg-white rounded-lg shadow-md">
+      <div class="flex flex-col items-center justify-between gap-4 px-8 py-6 bg-white rounded-lg shadow-md xl:flex-row">
         <div>Товары без фото</div>
         <div class="text-xl font-bold text-orange-400">{{ $productsDoesNotHaveImage }}</div>
       </div>

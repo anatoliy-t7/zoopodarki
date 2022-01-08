@@ -142,7 +142,7 @@
                 </button>
 
                 @can('delete')
-                  <x-dashboard.confirm :confirmId="$tag->id" wire:click="remove({{ $tag->id }})" />
+                  <x-dashboard.confirm :confirmId="$tag->id" wire:key="remove{{ $tag->id }}" />
                 @endcan
 
               </x-dashboard.table.cell>

@@ -1,5 +1,6 @@
 <div x-data="{ open: false, tab: 1 }"
-  x-effect="document.body.classList.toggle('overflow-hidden', open), document.body.classList.toggle('pr-4', open)">
+  x-effect="document.body.classList.toggle('overflow-hidden', open), document.body.classList.toggle('pr-4', open)"
+  @keydown.escape="open = false">
   <div>
     <button x-on:click="open = !open"
       class="flex items-center px-3 py-2 text-white bg-orange-400 border-2 border-orange-400 rounded-xl focus:outline-none hover:bg-orange-500 focus:bg-orange-500"
@@ -35,6 +36,16 @@
               <meta itemprop="name" content="{{ $menuCatalog->name }}" />
             </div>
           @endforeach
+          <div itemprop="itemListElement" itemscope itemtype="http://schema.org/ItemList"
+            class="flex justify-end text-left">
+            <a itemprop="url" x-on:mouseover="tab = 0"
+              :class="{ 'bg-white text-orange-500 border-orange-400': tab === 0 }" href="{{ route('site.brands') }}"
+              class="relative flex items-center h-full py-4 pl-6 text-lg font-bold border-r-4 border-transparent rounded-l-lg cursor-pointer hover:border-orange-400 w-80"
+              style="word-spacing: 4px;">
+              Все бренды
+            </a>
+            <meta itemprop="name" content="Все бренды" />
+          </div>
         </div>
       </nav>
       <div class="flex self-stretch w-9/12 h-screen p-8 overflow-y-auto bg-white scrollbar"
@@ -55,7 +66,7 @@
                 @endforeach
               </div>
             @endif
-            <div class="flex flex-wrap w-full max-w-screen-lg pb-40">
+            <div class="w-full max-w-screen-lg pb-40 menuMasonry">
               @foreach ($catalog->categories->sortBy('sort') as $menuCategory)
                 <div class="py-2 pl-12 w-80">
                   <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug]) }}"

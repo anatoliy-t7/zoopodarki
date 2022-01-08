@@ -7,18 +7,29 @@
 
 <div class="py-2">
 
-  <div class="w-full space-y-4">
+  <div class="w-full space-y-5">
     <h1 class="text-3xl font-bold text-gray-700">
       {{ $catalog->name }}
     </h1>
 
-    <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
+    <div class="flex items-center justify-around p-6 space-x-12 bg-white shadow-sm rounded-2xl">
+      @foreach ($catalog->brandsById as $brand)
+        <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}" class="font-bold hover:text-orange-500">
+          @if ($brand->logo)
+            <img loading="lazy" class="object-contain w-auto h-20" src="/assets/brands/{{ $brand->logo }}">
+          @else
+            <div>{{ $brand->name }}</div>
+          @endif
+        </a>
+      @endforeach
+    </div>
 
+    <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
       <div class="w-full">
         <div class="masonry">
           @foreach ($catalog->categories->sortBy('sort') as $category)
             <div
-              class="inline-block w-full px-4 pt-4 pb-6 mb-6 space-y-2 bg-white shadow-sm item lg:px-6 rounded-2xl break-inside-avoid">
+              class="inline-block w-full px-4 pt-4 pb-6 mb-6 space-y-2 bg-white shadow-sm lg:px-6 rounded-2xl break-inside-avoid">
               <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) }}"
                 class="block px-2 py-2 text-xl font-semibold leading-tight text-orange-400 hover:underline">
                 {{ $category->menu_name }}

@@ -148,7 +148,7 @@
 
             <div class="absolute top-4 right-4">
               @can('admin')
-                <x-dashboard.confirm wire:click="remove({{ $orderSelected->id }})" :confirmId="$orderSelected->id" />
+                <x-dashboard.confirm :confirmId="$orderSelected->id" wire:key="remove{{ $orderSelected->id }}" />
               @endcan
             </div>
 

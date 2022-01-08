@@ -89,7 +89,7 @@
                   </svg>
                 </button>
 
-                <x-dashboard.confirm :confirmId="$user->id" wire:click="remove({{ $user->id }})" />
+                <x-dashboard.confirm :confirmId="$user->id" wire:key="remove{{ $user->id }}" />
 
               </x-dashboard.table.cell>
 

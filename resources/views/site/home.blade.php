@@ -35,18 +35,8 @@
 
       @if ($discounts->isNotEmpty())
         <div class="max-w-screen-xl mx-auto space-y-4">
-          <div class="flex flex-col items-center justify-between px-4 md:flex-row">
-            <div class="text-2xl font-semibold">Выгодные предложения</div>
-            <div>
-              <a href="{{ route('site.discounts') }}"
-                class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
-                <span>Все предложения</span>
-                <x-tabler-chevron-right class="w-5 h-5" />
-              </a>
-            </div>
-          </div>
-
-          <div class="px-4 pt-4 lg:px-8 ">
+          <div class="px-4 text-2xl font-semibold">Выгодные предложения</div>
+          <div class="px-4 pt-4 space-y-8 lg:px-8">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
               @foreach ($discounts as $discountItem)
                 <div class="w-full max-w-xs mx-auto">
@@ -56,6 +46,13 @@
                 </div>
               @endforeach
             </div>
+            <div class="flex items-center justify-center w-full md:px-4 ">
+              <a href="{{ route('site.discounts') }}"
+                class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
+                <span>Все предложения</span>
+                <x-tabler-chevron-right class="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </div>
       @endif
@@ -63,17 +60,17 @@
       <div class="py-24 bg-yellow-100">
         <div x-data class="grid max-w-screen-xl gap-12 px-4 mx-auto sm:grid-cols-2 md:grid-cols-4">
           <div @click="$dispatch('auth')"
-            class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm cursor-pointer rounded-3xl hover:shadow-lg">
+            class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm rounded-3xl {{ auth() ? '' : ' cursor-pointer hover:shadow-lg' }}">
             <x-tabler-gift class="absolute z-10 w-32 h-32 text-pink-200 stroke-current -right-8 -top-0" />
             <span class="relative z-20">Скидка за первый заказ</span>
           </div>
           <div @click="$dispatch('auth')"
-            class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm cursor-pointer rounded-3xl hover:shadow-lg">
+            class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm rounded-3xl {{ auth() ? '' : ' cursor-pointer hover:shadow-lg' }}">
             <x-tabler-credit-card class="absolute z-10 w-32 h-32 text-pink-200 stroke-current -right-8 -top-2" />
             <span class="relative z-20">Постоянная скидка<br>по карте</span>
           </div>
           <div @click="$dispatch('auth')"
-            class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm cursor-pointer rounded-3xl hover:shadow-lg">
+            class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm rounded-3xl {{ auth() ? '' : ' cursor-pointer hover:shadow-lg' }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
               class="absolute z-10 w-32 h-32 text-pink-200 stroke-current -right-8 top-2">
               <path class="text-pink-200" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -84,7 +81,7 @@
             <span class="relative z-20">Скидка на корма<br>от 5 кг</span>
           </div>
           <div @click="$dispatch('auth')"
-            class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm cursor-pointer rounded-3xl hover:shadow-lg">
+            class="relative flex items-center justify-center p-6 overflow-hidden text-lg leading-snug text-center transition-shadow bg-white shadow-sm rounded-3xl {{ auth() ? '' : ' cursor-pointer hover:shadow-lg' }}">
             <x-tabler-discount-2 class="absolute z-10 w-32 h-32 text-pink-200 stroke-current -right-8 -top-0" />
             <span class="relative z-20">Суммируем скидки</span>
           </div>
@@ -92,32 +89,31 @@
       </div>
 
       <div class="max-w-screen-xl px-4 mx-auto space-y-4">
-        <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <div class="text-2xl font-semibold">Популярные бренды</div>
-          <div>
+        <div class="gap-4 text-2xl font-semibold">Популярные бренды</div>
+        <div class="px-6 py-8 space-y-8">
+          <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+            @forelse ($brandsOffer as $brand)
+
+              <a title="Товары бренда {{ $brand->name }}"
+                href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}" class="block p-2 mx-auto group ">
+                @if ($brand->logo)
+                  <img src="/assets/brands/{{ $brand->logo }}" alt="Товары бренда {{ $brand->name }}"
+                    class="w-auto h-24 group-hover:brightness-110">
+                @else
+                  <span class="text-xl font-bold group-hover:text-blue-500">{{ $brand->name }}</span>
+                @endif
+              </a>
+
+            @empty
+            @endforelse
+          </div>
+
+          <div class="flex items-center justify-center w-full md:px-4 ">
             <a href="{{ route('site.brands') }}"
               class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
               <span>Все бренды</span>
               <x-tabler-chevron-right class="w-5 h-5" />
             </a>
-          </div>
-        </div>
-        <div class="px-6 py-8">
-          <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-            @forelse ($brandsOffer as $brand)
-              <div>
-                <a title="Товары бренда {{ $brand->name }}"
-                  href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}" class="block p-2 group">
-                  @if ($brand->logo)
-                    <img src="/assets/brands/{{ $brand->logo }}" alt="Товары бренда {{ $brand->name }}"
-                      class="w-auto h-24 group-hover:brightness-110">
-                  @else
-                    <span class="text-xl font-bold group-hover:text-blue-500">{{ $brand->name }}</span>
-                  @endif
-                </a>
-              </div>
-            @empty
-            @endforelse
           </div>
         </div>
       </div>

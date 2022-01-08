@@ -17,9 +17,9 @@
 		"postcss": "^8",
 		"postcss-import": "^14",
 		"postcss-loader": "^6.2.1",
-		"prop-types": "^15.8.0",
+		"prop-types": "^15.8.1",
 		"resolve-url-loader": "^4.0.0",
-		"sass": "^1.45.1",
+		"sass": "^1.47.0",
 		"sass-loader": "^12.4.0",
 		"tailwindcss": "^3"
 	},

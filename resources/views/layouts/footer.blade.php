@@ -1,6 +1,6 @@
 <footer class="text-white bg-gray-100" itemscope itemtype="http://schema.org/WPFooter">
 
-  <div class="max-w-screen-xl px-24 py-24 mx-auto md:px-4">
+  <div class="max-w-screen-xl px-12 py-12 mx-auto md:px-4">
     <nav aria-label="Secondary"
       class="flex flex-col flex-wrap justify-between order-first space-y-4 text-left md:space-x-8 md:flex-row md:space-y-0">
       <div class="">

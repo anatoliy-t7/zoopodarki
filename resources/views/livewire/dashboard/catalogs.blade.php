@@ -89,7 +89,7 @@
                   </svg>
                 </button>
                 @can('delete')
-                  <x-dashboard.confirm wire:click="remove({{ $catalog->id }})" :confirmId="$catalog->id" />
+                  <x-dashboard.confirm :confirmId="$catalog->id" wire:key="remove{{ $catalog->id }}" />
                 @endcan
 
               </x-dashboard.table.cell>
@@ -389,8 +389,8 @@
               @can('delete')
                 @if ($editCategory['id'] !== null)
 
-                  <x-dashboard.confirm wire:click="removeItem({{ $editCategory['id'] }})"
-                    :confirmId="$editCategory['id']" />
+                  <x-dashboard.confirm :confirmId="$editCategory['id']"
+                    wire:key="removeCat{{ $cateditCategoryalog->id }}" />
 
                 @endif
               @endcan

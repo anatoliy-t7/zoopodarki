@@ -145,7 +145,7 @@
 
 
             <div class="flex justify-between pt-6 space-x-4">
-              <x-dashboard.confirm :confirmId="$waitlistEdit->id" wire:click="remove({{ $waitlistEdit->id }})" />
+              <x-dashboard.confirm :confirmId="$waitlistEdit->id" wire:key="remove{{ $waitlistEdit->id }}" />
 
               <button wire:click="save" class="text-white bg-green-500 btn hover:bg-green-600">
                 Сохранить

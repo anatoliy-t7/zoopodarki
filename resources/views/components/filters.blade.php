@@ -54,7 +54,7 @@
            @endif
          </div>
 
-         <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
+         <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 240px;">
 
            <template x-for="(item, index) in filteredBrands" :key="item.id" hidden>
              <label :for="'brand'+item.id" class="container-checkbox">
@@ -113,7 +113,7 @@
                    class="h-8 text-xs placeholder-gray-400 bg-gray-50 field" />
                </div>
 
-               <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 248px;">
+               <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 240px;">
                  <template x-for="(item, index) in filteredAttribute" :key="item.id" hidden>
                    <label :for="'attr'+item.id" class="container-checkbox">
                      <span class="text-base lowercase sm:text-sm" x-text="item.name"></span>

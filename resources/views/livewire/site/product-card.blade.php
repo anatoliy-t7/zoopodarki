@@ -20,18 +20,13 @@
             @endif
           </h1>
           <div class="flex items-center justify-between space-x-6">
-            <div>
-              @if ($product->brand()->exists())
-                <a href="{{ route('site.brand', ['brandslug' => $product->brand->slug]) }}">
-                  @if ($product->brand->logo)
-                    <img loading="lazy" class="w-auto h-10" src="/assets/brands/{{ $product->brand->logo }}"
-                      alt="Логотип {{ $product->brand->name }}">
-                  @else
-                    <div class="font-bold text-blue-500 hover:underline">{{ $product->brand->name }}</div>
-                  @endif
-                </a>
-              @endif
-            </div>
+            @if ($product->brand()->exists())
+              <a href="{{ route('site.brand', ['brandslug' => $product->brand->slug]) }}"
+                title="Бренд {{ $product->brand->name }}" class="text-lg font-bold text-green-500 hover:underline">
+                {{ $product->brand->name }}
+              </a>
+            @endif
+
             @auth
               <livewire:site.add-to-favorite :model="$product" :key="'product-'.$product['id']" />
             @endauth
@@ -253,8 +248,8 @@
                           </div>
                         @endif
                         {{ $loop->first ? '' : ', ' }}
-                        <div class="relative z-10 pl-1 my-1 bg-white whitespace-nowrap"><a
-                            class="text-blue-600 hover:underline"
+                        <div class="relative z-10 pl-1 my-1 bg-white whitespace-nowrap">
+                          <a class="text-blue-600 lowercase hover:underline"
                             href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) . '?attrsF[0]=' . $item['id'] }}">{{ $item['name'] }}</a>
                         </div>
                       @endforeach

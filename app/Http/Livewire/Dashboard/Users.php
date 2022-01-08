@@ -105,11 +105,11 @@ class Users extends Component
                 ->success($user->name . ' сохранен')
                 ->push();
 
-            \Mail::to($user->email)
-            ->send(new UserRegistration([
-                'email' => $user->email,
-                'password' => $this->password,
-            ]));
+            // \Mail::to($user->email)
+            // ->send(new UserRegistration([
+            //     'email' => $user->email,
+            //     'password' => $this->password,
+            // ]));
 
             $this->closeForm();
             $this->dispatchBrowserEvent('close');

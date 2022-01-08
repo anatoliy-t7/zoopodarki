@@ -66,8 +66,7 @@
                 </button>
 
                 @can('delete')
-                  <x-dashboard.confirm :confirmId="$unit->id" wire:click="remove({{ $unit->id }})"
-                    :wire:key="$loop->index" />
+                  <x-dashboard.confirm :confirmId="$unit->id" wire:key="remove{{ $unit->id }}" />
                 @endcan
 
               </x-dashboard.table.cell>

@@ -94,7 +94,7 @@
                     <x-tabler-edit class="w-6 h-6 stroke-current" />
                   </a>
 
-                  <x-dashboard.confirm wire:click="remove({{ $page->id }})" :confirmId="$page->id" />
+                  <x-dashboard.confirm :confirmId="$page->id" wire:key="remove{{ $page->id }}" />
                 </div>
 
               </x-dashboard.table.cell>
