@@ -13,14 +13,14 @@ return [
                 /*
                  * The list of directories and files that will be included in the backup.
                  */
-                'include' => [base_path()],
+                'include' => [base_path('storage/app/public')],
 
                 /*
                  * These directories and files will be excluded from the backup.
                  *
                  * Directories used by the backup process will automatically be excluded.
                  */
-                'exclude' => [base_path('vendor'), base_path('node_modules')],
+                'exclude' => [base_path('storage/app/public/sitemap')],
 
                 /*
                  * Determines if symlinks should be followed.
@@ -71,7 +71,7 @@ return [
              * For a complete list of available customization options, see https://github.com/spatie/db-dumper
              */
 
-            'databases' => ['mysql', ],
+            'databases' => ['mysql'],
         ],
 
         /*
@@ -104,7 +104,7 @@ return [
             /*
              * The disk names on which the backups will be stored.
              */
-            'disks' => ['local', 'google'], // 'google'
+            'disks' => ['google'], // 'local', 'google'
         ],
 
         /*

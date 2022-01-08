@@ -79,6 +79,7 @@ class Kernel extends HttpKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('backup:run --only-db')->timezone('Europe/Moscow')->dailyAt('03:00');
+        $schedule->command('backup:run --only-files')->timezone('Europe/Moscow')->monthlyOn(1, '05:00');
 
         $schedule->command('backup:clean')->timezone('Europe/Moscow')->dailyAt('03:02');
 
