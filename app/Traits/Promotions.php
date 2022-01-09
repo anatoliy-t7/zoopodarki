@@ -25,7 +25,7 @@ trait Promotions
     {
         $product1c = $this->getModel($product1cArray['id']);
 
-        $originalPrice = $this->discountRevertforUcenka($product1c->price, $promotion['percent']);
+        $originalPrice = $this->calcDiscountForUcenka($product1c->price, $promotion['percent']);
 
         $product1c->update([
             'promotion_type' => intval($promotion['type']),
@@ -104,10 +104,10 @@ trait Promotions
         return floor($price);
     }
 
-    public function discountRevertforUcenka($promotionPrice, $percent): int
+    public function calcDiscountForUcenka($promotionPrice, $percent): int
     {
         // Стоимость товара / 1.$percent + 8% (должно работать в обратную сторону)
 
-        return floor(($promotionPrice * round('1.' . $percent, 2)) / 1.08);
+        return floor(($promotionPrice / round('1.' . $percent, 2)) * 1.08);
     }
 }

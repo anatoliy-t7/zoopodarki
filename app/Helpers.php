@@ -9,7 +9,7 @@ if (!function_exists('discount')) {
     {
         $discount = $price - ($price * $procent / 100);
 
-        return ceil($discount);
+        return floor($discount);
     }
 }
 

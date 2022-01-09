@@ -108,7 +108,7 @@
           var clusterer;
           var myGeoObjects;
 
-          document.addEventListener('alpine:initializing', () => {
+          document.addEventListener('alpine:init', () => {
             Alpine.data('userMapAddress', () => ({
               tab: 'list',
               showButton: 0,
@@ -207,9 +207,6 @@
                   function showResult(obj) {
                     // Удаляем сообщение об ошибке, если найденный адрес совпадает с поисковым запросом.
                     this.message = null;
-                    //  $('#suggest').removeClass('input_error');
-                    //   $('#notice').css('display', 'none');
-
                     var mapContainer = $('#map'),
                       bounds = obj.properties.get('boundedBy'),
                       // Рассчитываем видимую область для текущего положения пользователя.
@@ -246,6 +243,7 @@
                       map = new ymaps.Map('map', {
                         center: [59.938951, 30.315635],
                         zoom: 9,
+                        controls: ['fullscreenControl', 'geolocationControl']
                       });
                       placemark = new ymaps.Placemark(
                         map.getCenter(), {

@@ -222,7 +222,11 @@
                       @elseif ($item->promotion_type === 0)
                         <span>{{ RUB($item->price) }}</span>
                         <span itemprop="price" content="{{ $item->price }}"></span>
-                      @elseif ($item->promotion_type === 1 || $item->promotion_type === 3)
+                      @elseif ($item->promotion_type === 1)
+                        <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
+                        <div>{{ RUB($item->promotion_price) }}</div>
+                        <span itemprop="price" content="{{ $item->promotion_price }}"></span>
+                      @elseif ($item->promotion_type === 3)
                         <div class="text-xs text-gray-500 line-through">{{ RUB($item->promotion_price) }}</div>
                         <div>{{ RUB($item->price) }}</div>
                         <span itemprop="price" content="{{ $item->price }}"></span>

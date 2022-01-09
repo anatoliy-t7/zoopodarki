@@ -82,7 +82,7 @@
                         {{ $item->quantity }} шт x</div>
                       <div class="flex justify-end ">
                         <div class="font-bold ">
-                          {{ RUB($item->price) }}
+                          {{ RUB(discount($item->price, $item->discount_procent)) }}
                         </div>
                       </div>
                     </div>

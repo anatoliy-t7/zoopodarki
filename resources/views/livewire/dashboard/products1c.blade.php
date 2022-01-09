@@ -81,9 +81,14 @@
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                @if ($product1c->promotion_type === 0 or $product1c->promotion_type === 2)
+                @if ($product1c->promotion_type === 1)
+                  <span class="pr-1 line-through">
+                    {{ RUB($product1c->price) }}
+                  </span>
+                  <b>{{ RUB($product1c->promotion_price) }}</b>
+                @elseif ($product1c->promotion_type === 0 or $product1c->promotion_type === 2)
                   {{ RUB($product1c->price) }}
-                @elseif($product1c->promotion_type === 1 or $product1c->promotion_type === 3)
+                @elseif($product1c->promotion_type === 3)
                   <span class="pr-1 line-through">
                     {{ RUB($product1c->promotion_price) }}
                   </span>

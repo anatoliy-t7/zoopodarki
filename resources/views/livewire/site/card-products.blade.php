@@ -50,10 +50,15 @@
               <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB(discount($item['price'], 10)) }}</div>
+            @elseif ($item->promotion_type === 1)
+              <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
+              <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
+                {{ RUB($item['promotion_price']) }}
+              </div>
             @elseif ($item['promotion_type'] === 0)
               <div class="text-base font-semibold text-gray-800 md:text-sm" itemprop="price">
                 {{ RUB($item['price']) }}</div>
-            @elseif ($item['promotion_type'] === 1 || $item['promotion_type'] === 3)
+            @elseif ($item['promotion_type'] === 3)
               <div class="text-xs text-gray-500 line-through">{{ RUB($item['promotion_price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB($item['price']) }}</div>
@@ -61,7 +66,6 @@
               <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB(discount($item['price'], $item['promotion_percent'])) }}</div>
-
             @endif
           </div>
           <div class="flex items-start justify-end w-2/12 -mt-1">
