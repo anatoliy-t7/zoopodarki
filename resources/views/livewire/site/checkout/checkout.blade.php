@@ -170,7 +170,7 @@
 
                 <div class="relative w-full md:w-3/12">
                   <x-loader-small wire:target="address" :bg="true" />
-                  <livewire:site.user-addresses />
+                  <livewire:site.user-address-map />
                 </div>
 
               </div>

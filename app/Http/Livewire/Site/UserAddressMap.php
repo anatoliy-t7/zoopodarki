@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
 
-class UserAddresses extends Component
+class UserAddressMap extends Component
 {
     use WireToast;
     use Delivery;
@@ -130,7 +130,7 @@ class UserAddresses extends Component
             'editAddress.building' => 'required|string|max:255',
         ]);
 
-        $addressData = $this->getCustomerLocation($this->address['address'] . '+' . $this->address['building']);
+        $addressData = $this->getCustomerLocation($this->address['address'] . ', ' . $this->address['building']);
 
         if ($addressData !== false) {
             if ($this->checkIfAddressInCad($addressData['lat'], $addressData['lng']) == false) {
@@ -216,20 +216,19 @@ class UserAddresses extends Component
 
     public function getCustomerLocation(string $address = '')
     {
-        $defaultCity = ' Санкт-Петербург';
-
+        $defaultCity = 'Санкт-Петербург, ';
         $response = Http::retry(3, 100)->get(
-            'https://geocode.search.hereapi.com/v1/geocode?q='
-            . $address
-            . $defaultCity
-            . '&maxresults=1'
-            . '&country=RUS'
+            'https://geocode-maps.yandex.ru/1.x/?'
+            . '&geocode=' . $defaultCity . $address
+            . '&format=json'
+            . '&results=1'
             . '&language=ru'
-            . '&apiKey=' . config('constants.here_com_token')
+            . '&apikey=' . config('constants.yandex_map_key')
         );
 
+
         if ($response->successful()) {
-            dd($response->json()['items'][0]);
+            dd($response->json());
 
             return [
                 'zip' => $response->json()['items'][0]['address']['postalCode'],
@@ -253,6 +252,6 @@ class UserAddresses extends Component
 
     public function render()
     {
-        return view('livewire.site.user-addresses');
+        return view('livewire.site.user-address-map');
     }
 }

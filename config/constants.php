@@ -6,9 +6,10 @@ return [
     'phone2' => env('ZOO_PHONE2', ''),
     'website_url' => env('APP_URL', 'https//:zoopodarki.spb.ru'),
     'manager_mail' => env('MANAGER_MAIL', 'manager@zoopodarki.spb.ru'),
-    'mail' => env('MAIL', 'zoopodarki@mail.ru'),
+    'mail_main' => env('MAIL_MAIN', 'zoopodarki@mail.ru'),
     'boxberry_token' => env('BOXBERRY_TOKEN', '1111'),
     'here_com_token' => env('HERE_COM_TOKEN', '1111'),
+    'yandex_map_key' => env('YANEX_MAP_KEY', '1111'),
     'lat_departure' => env('LAT_DEPARTURE', '59.91954757368843'),
     'lng_departure' => env('LNG_DEPARTURE', '30.467041076550657'),
 

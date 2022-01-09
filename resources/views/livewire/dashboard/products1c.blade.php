@@ -150,17 +150,17 @@
 
       <x-loader wire:target="openForm" />
       <div>
-        @if ($product1c)
+        @if ($editProduct1c)
           <div class="block space-y-4">
 
             <div class="space-y-1">
               <div class="font-bold">Название товара</div>
-              <div>{{ $product1c['name'] }}</div>
+              <div>{{ $editProduct1c['name'] }}</div>
             </div>
 
             <div class="block space-y-6">
 
-              @if ($product1c['promotion_type'] === 0)
+              @if ($editProduct1c['promotion_type'] === 0)
 
                 <div class="block space-y-1 w-60 ">
                   <label for="promotion" class="block font-bold">Вид акции</label>
@@ -178,10 +178,10 @@
                     <div class="w-6/12 space-y-1">
                       <label for="stock" class="font-bold">Количество товара <span
                           class="font-normal ">(максимум:
-                          {{ $product1c['stock'] }})</span></label>
+                          {{ $editProduct1c['stock'] }})</span></label>
                       <div class="w-20">
                         <input wire:model.defer="promotion.stock" type="number" min="1"
-                          max="{{ $product1c['stock'] }}" id="stock" class="field">
+                          max="{{ $editProduct1c['stock'] }}" id="stock" class="field">
                       </div>
                       @error('promotion.stock') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
                     </div>
@@ -213,19 +213,19 @@
               @else
 
                 <div class="block w-6/12 space-y-1">
-                  <div>Цена товара: <b>{{ $product1c['price'] }}</b></div>
+                  <div>Цена товара: <b>{{ $editProduct1c['price'] }}</b></div>
                   @if ($product1c['promotion_price'] !== null)
-                    <div>Цена акции: <b>{{ $product1c['promotion_price'] }}</b></div>
+                    <div>Цена акции: <b>{{ $editProduct1c['promotion_price'] }}</b></div>
                   @endif
                 </div>
 
                 <div class="w-6/12 space-y-1">
-                  <div>Количество товара: <b>{{ $product1c['stock'] }}</b></div>
-                  @if ($product1c['promotion_percent'] !== null)
-                    <div>Процент акции: <b>{{ $product1c['promotion_percent'] }}</b></div>
+                  <div>Количество товара: <b>{{ $editProduct1c['stock'] }}</b></div>
+                  @if ($editProduct1c['promotion_percent'] !== null)
+                    <div>Процент акции: <b>{{ $editProduct1c['promotion_percent'] }}</b></div>
                   @endif
-                  @if ($product1c['promotion_date'] !== null)
-                    <div>Окончание акции: <b>{{ $product1c['promotion_date'] }}</b></div>
+                  @if ($editProduct1c['promotion_date'] !== null)
+                    <div>Окончание акции: <b>{{ $editProduct1c['promotion_date'] }}</b></div>
                   @endif
                 </div>
 
@@ -235,7 +235,7 @@
             </div>
             <div class="py-2 font-bold text-gray-600">
               <div class="pt-6">
-                @if ($product1c['promotion_type'] === 0)
+                @if ($editProduct1c['promotion_type'] === 0)
                   <button wire:click="save" class="text-white bg-green-500 btn hover:bg-green-600">
                     Сохранить
                   </button>

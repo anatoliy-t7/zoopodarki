@@ -1,4 +1,4 @@
-<div wire:ignore x-data="mapToggle" x-on:init-map.once.window="initMap()" class="w-full">
+<div wire:ignore x-data="mapContact" x-on:init-map.once.window="initMap()" class="w-full">
 
   <div class="block w-full min-h-full overflow-y-auto md:overflow-hidden md:flex ">
 
@@ -47,7 +47,7 @@
     var myGeoObjects;
 
     document.addEventListener('alpine:initializing', () => {
-      Alpine.data('mapToggle', () => ({
+      Alpine.data('mapContact', () => ({
         tab: 'list',
         showButton: 0,
         store: @entangle('storeId'),

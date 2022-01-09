@@ -19,7 +19,7 @@
             x-on:edit-contact.window="editContact = true">
 
             <div x-show="editContact === false" x-transition>
-              {{ auth()->user()->pref_contact }}
+
               @if ($contacts)
                 <div class="space-y-4">
                   @foreach ($contacts as $contactItem)

@@ -1,5 +1,5 @@
 <div>
-  <x-modal>
+  <x-modal :width="'screen-lg'">
     <x-slot name="button">
       <div
         class="flex items-center justify-center w-full px-4 py-3 space-x-1 bg-gray-100 border border-gray-300 cursor-pointer hover:border-gray-400 h-14 rounded-xl">
@@ -11,8 +11,7 @@
     <x-slot name="content">
       <div>
 
-        <h4 class="text-xl font-bold text-center ">Мои адреса
-        </h4>
+        <h4 class="text-xl font-bold text-center">Мои адреса</h4>
 
         <div class="space-y-4">
 

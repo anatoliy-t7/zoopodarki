@@ -20,7 +20,7 @@ class Products1c extends Component
     public $sortDirection = 'desc';
     public $itemsPerPage = 30;
     public $onlyPromotions = false;
-    public $product1c;
+    public $editProduct1c;
     public $promotions = [
         '1' => 'Уценка',
         //'2' => '1+1',
@@ -50,7 +50,7 @@ class Products1c extends Component
 
     public function openForm($product1cId)
     {
-        $this->product1c = Product1C::where('id', $product1cId)
+        $this->editProduct1c = Product1C::where('id', $product1cId)
         ->first()
         ->toArray();
 
@@ -80,7 +80,7 @@ class Products1c extends Component
         }
 
         try {
-            $this->initPromotion($this->product1c, $this->promotion);
+            $this->initPromotion($this->editProduct1c, $this->promotion);
 
             toast()
                 ->success('Акция создана')
@@ -106,7 +106,7 @@ class Products1c extends Component
 
     public function stop()
     {
-        $this->stopPromotion($this->product1c['id']);
+        $this->stopPromotion($this->editProduct1c['id']);
         $this->cleanCache();
         $this->closeForm();
         toast()
@@ -116,7 +116,7 @@ class Products1c extends Component
 
     public function closeForm()
     {
-        $this->reset('product1c', 'promotion');
+        $this->reset('editProduct1c', 'promotion');
         $this->dispatchBrowserEvent('close');
     }
 

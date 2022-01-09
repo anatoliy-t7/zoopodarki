@@ -9,7 +9,7 @@
       <div class="flex items-center gap-3 ">
         <x-tabler-mail class="w-6 h-6 text-gray-400" />
         <span><a rel="noopener" itemprop="email"
-            href="mailto:{{ config('constants.mail') }}">{{ config('constants.mail') }}</a></span>
+            href="mailto:{{ config('constants.mail_main') }}">{{ config('constants.mail_main') }}</a></span>
       </div>
       <div class="flex items-center gap-3 ">
         <x-tabler-phone class="w-6 h-6 text-gray-400" />

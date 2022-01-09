@@ -8,7 +8,7 @@
         <ul class="space-y-3 text-gray-600 list-none ">
           <li>
             <a href="{{ route('site.contact') }}" class="hover:text-orange-500">
-              Адреса и контакты
+              Магазины и контакты
             </a>
           </li>
           <li>
