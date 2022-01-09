@@ -97,6 +97,7 @@ class ShopCart extends Component
                         'product_slug' => $product_1c->product->slug,
                     ];
 
+
                     $weight = $product_1c->weight;
                     if ($product_1c->unit_value == 'на развес') {
                         $weight = $byWeight;
@@ -130,7 +131,7 @@ class ShopCart extends Component
                     if ($product_1c->vendorcode !== 'DISCOUNT_CARD') {
                         $this->checkAndSetPromotionDiscount($cart, $product_1c);
                     }
-
+                    $this->getCart();
                     toast()
                       ->success('Товар добавлен в корзину')
                       ->push();
@@ -233,6 +234,7 @@ class ShopCart extends Component
         $this->items = $functionItems->all();
 
         $this->removeCheckoutDiscounts($this->items, $this->cartId);
+        $this->checkDiscountByWeight($this->cartId, $this->items);
 
         $functionShelterItems = $shelterCart->getContent();
         $this->shelterItems = $functionShelterItems->all();

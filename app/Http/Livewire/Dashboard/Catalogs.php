@@ -75,8 +75,11 @@ class Catalogs extends Component
         $this->categories = Category::where('catalog_id', $catalog_id)->orderBy('sort', 'asc')->get()->toArray();
 
         $this->editCatalog = Catalog::where('id', $catalog_id)->with('brandsById')->first();
-        $this->brandsForCatalog = $this->editCatalog->brandsById()->get(['brand_id'])->pluck('brand_id');
+        $this->brandsForCatalog = $this->editCatalog->brandsById()->get(['brand_id'])->pluck('brand_id')->sort();
+
         $this->brandsForCatalog->unwrap($this->brandsForCatalog);
+
+
 
         $this->editCatalog = $this->editCatalog->toArray();
     }

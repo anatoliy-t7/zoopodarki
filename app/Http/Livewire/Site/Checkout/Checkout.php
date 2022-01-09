@@ -544,7 +544,7 @@ class Checkout extends Component
     {
         if (auth()->user()) {
             $user = auth()->user();
-            $user->load('addresses');
+            $user->load('contacts');
 
             if ($user->pref_contact !== 0) {
                 $this->contactSelected = $user->contacts->where('id', $user->pref_contact)->first()->toArray();

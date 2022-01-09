@@ -143,9 +143,9 @@ trait Discounts
         $totalWeight = collect();
 
         foreach ($items as $item) {
-            if ($item->associatedModel['promotion_type'] === 0 && $item->associatedModel['discount_weight'] === true) {
+            if ($item->associatedModel['promotion_type'] === 0 && $item->associatedModel['discount_weight'] === 1) {
                 array_push($productDiscountIds, $item['id']);
-                $itemWeight = $item->attributes->weight * $item->quantity;
+                $itemWeight = (int)$item->attributes->weight * $item->quantity;
 
                 $totalWeight->push($itemWeight);
             }

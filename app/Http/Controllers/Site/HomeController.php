@@ -16,6 +16,7 @@ class HomeController extends Controller
 
         $discounts = cache()->remember('discounts-homepage', 60 * 60 * 24, function () {
             return Product::isStatusActive()
+            ->hasStock()
             ->whereHas('attributes', function ($query) {
                 $query->whereIn('product_attribute.attribute_id', config('constants.attributes_discount'));  // + подарок и большие мешки
             })

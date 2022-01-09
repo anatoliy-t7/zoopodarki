@@ -53,12 +53,23 @@ trait Delivery
         }
     }
 
+    public function checkIfAddressInCad($latTo, $lngTo)
+    {
+        $point = [[$latTo, $lngTo]];
+
+        if ($this->pointInPolygon($point, $this->kadSpb) === false) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function getDeliveryCostsByStore($amount, $latTo, $lngTo)
     {
         $point = [[$latTo, $lngTo]];
 
         if ($this->pointInPolygon($point, $this->kadSpb) === false) {
-            return 99999;
+            return 999999;
         }
 
         $distans = $this->getDistance($latTo, $lngTo);

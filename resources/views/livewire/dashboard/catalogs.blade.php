@@ -132,11 +132,11 @@
                   @error('editCatalog.slug') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
                 </div>
 
-                <div class="flex justify-between space-x-6">
+                <div class="flex items-center justify-between space-x-6">
                   <x-toggle wire:model="editCatalog.menu" :property="$editCatalog['menu']"
                     :lable="'Показывать в меню'" />
 
-                  <div class="space-y-1">
+                  <div class="flex items-center gap-2">
                     <div class="font-bold">Сортировка</div>
                     <div class="w-16">
                       <input wire:model.defer="editCatalog.sort" type="number"
@@ -156,14 +156,15 @@
                         <input type="hidden" x-bind:value="tag">
                       </template>
                       <div class="w-full">
-                        <div class="flex flex-wrap p-2 bg-white border rounded-lg">
+                        <div class="flex flex-wrap gap-2 p-2 bg-white rounded-xl ">
                           <template x-for="(tag, index) in tags" :key="index">
                             <span
-                              class="inline-flex items-center p-1 mr-2 space-x-1 text-sm leading-normal text-blue-100 bg-blue-500 rounded-lg select-none">
+                              class="relative flex items-center gap-1 px-2 py-1 text-sm leading-normal text-blue-100 bg-blue-500 select-none rounded-xl group">
                               <span x-text="tag"></span>
-                              <button type="button" class="tags-input-remove"
+                              <button type="button"
+                                class="absolute inset-0 z-30 flex items-center justify-center invisible w-full h-full bg-red-500 rounded-xl group-hover:visible"
                                 @click="tags = tags.filter(i => i !== tag)">
-                                &times;
+                                <x-tabler-circle-x class="w-6 h-6" />
                               </button>
                             </span>
                           </template>
@@ -184,8 +185,8 @@
               </div>
               <div class="w-6/12 space-y-4">
 
-                <div class="space-y-1">
-                  <div class="font-bold">Meta загаловок</div>
+                <div class="space-y-1 ">
+                  <div class="font-bold ">Meta загаловок</div>
                   <input wire:model.defer="editCatalog.meta_title" type="text">
                   @error('editCatalog.meta_title') <span class="text-sm text-red-500">{{ $message }}</span>
                   @enderror
@@ -223,7 +224,7 @@
             </div>
 
           </div>
-          <div wire:ignore class="h-full overflow-y-auto bg-white scrollbar rounded-xl">
+          <div wire:ignore class="h-full py-2 overflow-y-auto bg-white scrollbar rounded-xl">
             <div x-data="{a: @entangle('categories').defer, dragging: null, dropping: null, timer: null}"
               @drop.prevent="if(dragging !== null &amp;&amp; dropping !== null){if(dragging &lt; dropping) a = [...a.slice(0, dragging), ...a.slice(dragging + 1, dropping + 1), a[dragging], ...a.slice(dropping + 1)]; else a = [...a.slice(0, dropping), a[dragging], ...a.slice(dropping, dragging), ...a.slice(dragging + 1)]}; dropping = null;"
               @dragover.prevent="$event.dataTransfer.dropEffect = &quot;move&quot;" class="py-2">
@@ -286,7 +287,7 @@
 
         <x-loader wire:target="openCategory" />
 
-        <div class="space-y-4">
+        <div class="space-y-6">
 
           <div class="flex items-center justify-between w-full">
 
@@ -326,13 +327,15 @@
                       <input type="hidden" x-bind:value="tag">
                     </template>
                     <div class="w-full">
-                      <div class="flex flex-wrap p-2 bg-white border rounded-lg">
+                      <div class="flex flex-wrap gap-2 p-2 bg-white rounded-xl ">
                         <template x-for="(tag, index) in tags" :key="index">
                           <span
-                            class="inline-flex items-center p-1 mr-2 space-x-1 text-sm leading-normal text-blue-100 bg-blue-500 rounded-lg select-none">
+                            class="relative flex items-center gap-1 px-2 py-1 text-sm leading-normal text-blue-100 bg-blue-500 select-none rounded-xl group">
                             <span x-text="tag"></span>
-                            <button type="button" class="tags-input-remove" @click="tags = tags.filter(i => i !== tag)">
-                              &times;
+                            <button type="button"
+                              class="absolute inset-0 z-30 flex items-center justify-center invisible w-full h-full bg-red-500 rounded-xl group-hover:visible"
+                              @click="tags = tags.filter(i => i !== tag)">
+                              <x-tabler-circle-x class="w-6 h-6" />
                             </button>
                           </span>
                         </template>
@@ -365,33 +368,20 @@
                 @error('editCategory.meta_description') <span class="text-sm text-red-500">{{ $message }}</span>
                 @enderror
               </div>
+
+              <div class="pt-2">
+                <x-toggle wire:model="editCategory.menu" :property="$editCategory['menu']"
+                  :lable="'Показывать в меню'" />
+              </div>
             </div>
           </div>
-
-          <div class="flex items-center justify-between space-x-4">
-
-            <div class="w-6/12 pt-6 ">
-
-              <x-toggle wire:model="editCategory.menu" :property="$editCategory['menu']" :lable="'Показывать в меню'" />
-
-            </div>
-
-            <div class="w-6/12">
-
-            </div>
-          </div>
-
-
 
           <div class="flex items-center justify-between">
-
             <div>
               @can('delete')
                 @if ($editCategory['id'] !== null)
-
                   <x-dashboard.confirm :confirmId="$editCategory['id']"
                     wire:key="removeCat{{ $editCategory['id'] }}" />
-
                 @endif
               @endcan
             </div>

@@ -215,7 +215,11 @@
 
                     <div class="w-full font-semibold text-right "
                       :class="item.id === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
-                      @if ($item->promotion_type === 0)
+                      @if ($item['promotion_type'] === 0 && (int) $product['discount_weight'] === 1)
+                        <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
+                        <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
+                          {{ RUB(discount($item['price'], 10)) }}</div>
+                      @elseif ($item->promotion_type === 0)
                         <span>{{ RUB($item->price) }}</span>
                         <span itemprop="price" content="{{ $item->price }}"></span>
                       @elseif ($item->promotion_type === 1 || $item->promotion_type === 3)

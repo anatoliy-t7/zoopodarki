@@ -153,7 +153,7 @@
                         {{ $addressSelected['extra'] }}
                       </div>
                     @endif
-                    @if ($this->deliveryCost === 99999)
+                    @if ($this->deliveryCost === 999999)
                       <span class="text-xs text-red-500">Пожалуйста укажите адрес в пределах КАД</span>
                     @endif
                   </div>
@@ -417,8 +417,7 @@
                             <div class="font-bold ">
                               {{ RUB($item->price) }}
                             </div>
-                          @elseif ($item->associatedModel['promotion_type'] === 1 ||
-                            $item->associatedModel['promotion_type'] === 3)
+                          @elseif ($item->associatedModel['promotion_type'] === 1 || $item->associatedModel['promotion_type'] === 3)
                             <div class="flex items-center justify-end space-x-2 ">
                               <div class="text-xs line-through">
                                 {{ RUB($item->associatedModel['promotion_price']) }}
@@ -427,8 +426,7 @@
                                 {{ RUB($item->price) }}
                               </div>
                             </div>
-                          @elseif ($item->associatedModel['promotion_type'] === 2 ||
-                            $item->associatedModel['promotion_type'] === 4)
+                          @elseif ($item->associatedModel['promotion_type'] === 2 || $item->associatedModel['promotion_type'] === 4)
                             <div class="flex items-center justify-end space-x-2 ">
                               <div class="text-xs line-through">
                                 {{ RUB($item->price) }}
@@ -494,8 +492,7 @@
                               <div class="font-bold ">
                                 {{ RUB($shelterItem->price) }}
                               </div>
-                            @elseif ($shelterItem->associatedModel['promotion_type'] === 1 ||
-                              $shelterItem->associatedModel['promotion_type'] === 3)
+                            @elseif ($shelterItem->associatedModel['promotion_type'] === 1 || $shelterItem->associatedModel['promotion_type'] === 3)
                               <div class="flex items-center justify-end space-x-2 ">
                                 <div class="text-xs line-through">
                                   {{ RUB($shelterItem->associatedModel['promotion_price']) }}
@@ -504,8 +501,7 @@
                                   {{ RUB($shelterItem->price) }}
                                 </div>
                               </div>
-                            @elseif ($shelterItem->associatedModel['promotion_type'] === 2 ||
-                              $shelterItem->associatedModel['promotion_type'] === 4)
+                            @elseif ($shelterItem->associatedModel['promotion_type'] === 2 || $shelterItem->associatedModel['promotion_type'] === 4)
                               <div class="flex items-center justify-end space-x-2 ">
                                 <div class="text-xs line-through">
                                   {{ RUB($shelterItem->price) }}

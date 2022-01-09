@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Site;
 
 use App\Models\Address;
 use App\Models\User;
+use App\Traits\Delivery;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
@@ -12,6 +13,7 @@ use Usernotnull\Toast\Concerns\WireToast;
 class UserAddresses extends Component
 {
     use WireToast;
+    use Delivery;
 
     public $query = '';
     public array $sugestionAddresses = [];
@@ -21,22 +23,21 @@ class UserAddresses extends Component
     public $address = [];
     public $addressId;
     public $addresses;
-    public $newAddress = [
+    public $editAddress = [
         'address' => '',
         'building' => '',
         'apartment' => '',
         'extra' => '',
     ];
 
-    protected $listeners = ['refreshComponent' => '$refresh'];
-
-    public function reset(...$properties)
+    public function mount()
     {
-        $this->sugestionAddresses = [];
-        $this->highlightIndex = 0;
-        $this->query = '';
-        $this->newAddress['address'] = '';
-        $this->showDropdown = true;
+        $this->getAddresses();
+    }
+
+    public function resetSearch(...$properties)
+    {
+        $this->reset('sugestionAddresses', 'highlightIndex', 'query', 'showDropdown', 'editAddress');
     }
 
     public function hideDropdown()
@@ -73,7 +74,7 @@ class UserAddresses extends Component
         if ($this->sugestionAddresses) {
             $this->showDropdown = true;
             $this->query = $this->sugestionAddresses[$id];
-            $this->newAddress['address'] = $this->sugestionAddresses[$id];
+            $this->editAddress['address'] = $this->sugestionAddresses[$id];
         }
     }
 
@@ -98,12 +99,9 @@ class UserAddresses extends Component
 
     public function removeAddress($addressId)
     {
-        $user = auth()->user();
-        $user->load('address');
-
-        if ($user->pref_contact === $contactId) {
+        if (auth()->user()->pref_address === (int)$addressId) {
             toast()
-            ->success('Для удаления адреса сначала выберите другой адрес для заказа')
+            ->warning('Для удаления адреса сначала выберите другой адрес для заказа')
             ->push();
         } else {
             Address::find($addressId)->delete();
@@ -118,9 +116,9 @@ class UserAddresses extends Component
 
     public function editAddress($addressId)
     {
-        $this->newAddress = Address::find($addressId)->toArray();
-        $this->query = $this->newAddress['address'];
-        $this->addressId = $this->newAddress['id'];
+        $this->editAddress = Address::find($addressId)->toArray();
+        $this->query = $this->editAddress['address'];
+        $this->addressId = $this->editAddress['id'];
 
         $this->dispatchBrowserEvent('edit-address');
     }
@@ -128,55 +126,69 @@ class UserAddresses extends Component
     public function addNewAddress()
     {
         $this->validate([
-            'newAddress.address' => 'required|string|max:255',
-            'newAddress.building' => 'required|string|max:255',
+            'editAddress.address' => 'required|string|max:255',
+            'editAddress.building' => 'required|string|max:255',
         ]);
 
-        DB::transaction(function () {
-            if ($this->addressId) {
-                $this->address = Address::find($this->addressId);
+        $addressData = $this->getCustomerLocation($this->address['address'] . '+' . $this->address['building']);
 
-                $this->address->update([
-                    'address' => $this->newAddress['address'],
-                    'building' => $this->newAddress['building'],
-                    'apartment' => $this->newAddress['apartment'],
-                    'extra' => $this->newAddress['extra'],
-                    'user_id' => auth()->user()->id,
-                ]);
+        if ($addressData !== false) {
+            if ($this->checkIfAddressInCad($addressData['lat'], $addressData['lng']) == false) {
+                return toast()
+                    ->warning('Пожалуйста укажите адрес в пределах СПБ КАД')
+                    ->push();
             } else {
-                $this->address = Address::create([
-                    'address' => $this->newAddress['address'],
-                    'building' => $this->newAddress['building'],
-                    'apartment' => $this->newAddress['apartment'],
-                    'extra' => $this->newAddress['extra'],
-                    'user_id' => auth()->user()->id,
-                ]);
+                DB::transaction(function () use ($addressData) {
+                    if ($this->addressId) {
+                        $this->address = Address::find($this->addressId);
 
-                $this->address->save();
+                        $this->address->update([
+                            'address' => $this->editAddress['address'],
+                            'building' => $this->editAddress['building'],
+                            'apartment' => $this->editAddress['apartment'],
+                            'extra' => $this->editAddress['extra'],
+                            'user_id' => auth()->user()->id,
+                        ]);
+                    } else {
+                        $this->address = Address::create([
+                            'address' => $this->editAddress['address'],
+                            'building' => $this->editAddress['building'],
+                            'apartment' => $this->editAddress['apartment'],
+                            'extra' => $this->editAddress['extra'],
+                            'user_id' => auth()->user()->id,
+                        ]);
+
+                        $this->address->save();
+                    }
+
+
+
+                    if ($addressData === false) {
+                        $this->address->zip = null;
+                        $this->address->lat = null;
+                        $this->address->lng = null;
+                    } else {
+                        $this->address->zip = $addressData['zip'];
+                        $this->address->lat = $addressData['lat'];
+                        $this->address->lng = $addressData['lng'];
+                    }
+
+                    $this->address->save();
+
+                    User::where('id', auth()->user()->id)->update([
+                        'pref_address' => $this->address->id,
+                    ]);
+                });
+
+                $this->reset('editAddress');
+                $this->dispatchBrowserEvent('close-modal');
+                $this->getAddresses();
             }
-
-            $addressData = $this->getCustomerLocation($this->address['address'] . $this->address['building']);
-
-            if ($addressData === false) {
-                $this->address->zip = null;
-                $this->address->lat = null;
-                $this->address->lng = null;
-            } else {
-                $this->address->zip = $addressData['zip'];
-                $this->address->lat = $addressData['lat'];
-                $this->address->lng = $addressData['lng'];
-            }
-
-            $this->address->save();
-
-            User::where('id', auth()->user()->id)->update([
-                'pref_address' => $this->address->id,
-            ]);
-
-            $this->reset('newAddress');
-            $this->dispatchBrowserEvent('close-modal');
-            $this->getAddresses();
-        });
+        } else {
+            return toast()
+                    ->warning('Пожалуйста укажите адрес в пределах СПБ КАД')
+                    ->push();
+        }
     }
 
     public function getAddresses()
@@ -186,7 +198,7 @@ class UserAddresses extends Component
 
         if ($user->pref_address !== 0) {
             $this->address = $user->addresses->where('id', $user->pref_address)->first()->toArray();
-            $this->addresses = $user->addresses;
+            $this->addresses = $user->addresses->toArray();
 
             $this->emitUp('getAddressesforCheckout');
             $this->dispatchBrowserEvent('close-modal');
@@ -204,16 +216,21 @@ class UserAddresses extends Component
 
     public function getCustomerLocation(string $address = '')
     {
-        $defaultCity = '%2C+Санкт-Петербург%2C+Россия';
+        $defaultCity = ' Санкт-Петербург';
 
         $response = Http::retry(3, 100)->get(
             'https://geocode.search.hereapi.com/v1/geocode?q='
             . $address
             . $defaultCity
+            . '&maxresults=1'
+            . '&country=RUS'
+            . '&language=ru'
             . '&apiKey=' . config('constants.here_com_token')
         );
 
         if ($response->successful()) {
+            dd($response->json()['items'][0]);
+
             return [
                 'zip' => $response->json()['items'][0]['address']['postalCode'],
                 'lat' => $response->json()['items'][0]['position']['lat'],

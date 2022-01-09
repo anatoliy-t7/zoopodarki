@@ -46,7 +46,7 @@
             <x-units :unit="$product['unit']" :value="$item['unit_value']" :wire:key="$product['id']" />
           </div>
           <div class="flex items-center justify-end w-5/12 gap-2 whitespace-nowrap">
-            @if (($item['promotion_type'] === 0 && (int) $item['unit_value'] >= 5000 && $product->whereRelation('attributes', 'product_attribute.attribute_id', 2761)) || ($item['promotion_type'] === 0 && (int) $item['unit_value'] >= 5000 && $product->whereRelation('attributes', 'product_attribute.attribute_id', 2505)))
+            @if ($item['promotion_type'] === 0 && (int) $product['discount_weight'] === 1)
               <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB(discount($item['price'], 10)) }}</div>
