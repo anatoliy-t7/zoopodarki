@@ -112,6 +112,16 @@ class Product extends Model implements HasMedia
             $query->where('stock', '>=', 1)->where('price', '>=', 1);
         });
     }
+    public function scopeHasCategory($query, $hasCategories)
+    {
+        if ($hasCategories === 'no') {
+            return $query->doesntHave('categories');
+        } elseif ($hasCategories === 'yes') {
+            return $query->has('categories');
+        } else {
+            return $query;
+        }
+    }
 
     public function categories()
     {

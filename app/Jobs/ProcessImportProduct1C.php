@@ -68,7 +68,7 @@ class ProcessImportProduct1C implements ShouldQueue
 
         unlink($this->file);
 
-        Log::info('import.xml processed successed');
+        Log::info('Import products 1c Job successed');
     }
 
     public function getProducts($product1c)

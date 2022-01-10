@@ -48,6 +48,25 @@
             @endforeach
           </select>
         </div>
+
+        <div class="max-w-xs">
+          <label for="availability"></label>
+          <select wire:model="availability" name="availability" id="availability" class="w-64">
+            <option default value="all">В наличии и без</option>
+            <option value="yes">В наличии</option>
+            <option value="no">Нет наличии</option>
+          </select>
+        </div>
+
+        <div class="max-w-xs">
+          <label for="hasCategories"></label>
+          <select wire:model="hasCategories" name="hasCategories" id="hasCategories" class="w-64">
+            <option default value="all">С категорией и без</option>
+            <option value="yes">С категорией</option>
+            <option value="no">Без категории</option>
+          </select>
+        </div>
+
       </div>
 
     </div>
@@ -92,10 +111,6 @@
     <x-toggle wire:model="productsWithoutImage" :property="$productsWithoutImage" :lable="'Без картинок'" />
 
     <x-toggle wire:model="variationMoreOne" :property="$variationMoreOne" :lable="'Есть вариации'" />
-
-    <x-toggle wire:model="available" :property="$available" :lable="'В наличии'" />
-
-    <x-toggle wire:model="noCategories" :property="$noCategories" :lable="'Нет категорий, но в наличии'" />
 
   </div>
 

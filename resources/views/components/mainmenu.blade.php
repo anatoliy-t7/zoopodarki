@@ -36,16 +36,6 @@
               <meta itemprop="name" content="{{ $menuCatalog->name }}" />
             </div>
           @endforeach
-          <div itemprop="itemListElement" itemscope itemtype="http://schema.org/ItemList"
-            class="flex justify-end text-left">
-            <a itemprop="url" x-on:mouseover="tab = 0"
-              :class="{ 'bg-white text-orange-500 border-orange-400': tab === 0 }" href="{{ route('site.brands') }}"
-              class="relative flex items-center h-full py-4 pl-6 text-lg font-bold border-r-4 border-transparent rounded-l-lg cursor-pointer hover:border-orange-400 w-80"
-              style="word-spacing: 4px;">
-              Все бренды
-            </a>
-            <meta itemprop="name" content="Все бренды" />
-          </div>
         </div>
       </nav>
       <div class="flex self-stretch w-9/12 h-screen p-8 overflow-y-auto bg-white scrollbar"
@@ -53,7 +43,7 @@
         @foreach ($menuCatalogs as $catalog)
           <div x-show="tab == {{ $catalog->id }}" class="w-full">
             @if ($catalog->brandsById)
-              <div class="flex items-center justify-start pt-6 pb-10 pl-16 space-x-12">
+              <div class="flex items-center justify-between pt-6 pb-10 pl-16 space-x-12">
                 @foreach ($catalog->brandsById as $brand)
                   <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}"
                     class="font-bold hover:text-orange-500">
@@ -64,11 +54,18 @@
                     @endif
                   </a>
                 @endforeach
+                <div class="flex items-center justify-center w-full md:px-4 ">
+                  <a href="{{ route('site.brands') }}"
+                    class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
+                    <span> Все бренды</span>
+                    <x-tabler-chevron-right class="w-5 h-5" />
+                  </a>
+                </div>
               </div>
             @endif
-            <div class="w-full max-w-screen-lg pb-40 menuMasonry">
+            <div class="w-full max-w-screen-lg min-h-full pb-40 menuMasonry">
               @foreach ($catalog->categories->sortBy('sort') as $menuCategory)
-                <div class="py-2 pl-12 w-80">
+                <div class="w-full h-full py-2 pl-12">
                   <a href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $menuCategory->slug]) }}"
                     class="block p-2 text-lg font-bold hover:text-orange-500">
                     @if ($menuCategory->menu_name !== null)

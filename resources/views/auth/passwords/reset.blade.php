@@ -45,6 +45,22 @@
               @enderror
             </div>
 
+            <div class="flex flex-wrap mb-6">
+              <label for="password" class="block mb-2 text-sm font-bold text-gray-700">
+                Повторить пароль
+              </label>
+
+              <input id="password_confirmation" type="password"
+                class="field w-full @error('password_confirmation') border-red-500 @enderror" name="password_confirmation"
+                required autocomplete="new-password">
+
+              @error('password_confirmation')
+                <p class="mt-4 text-xs italic text-red-500">
+                  {{ $message }}
+                </p>
+              @enderror
+            </div>
+
             <div class="flex flex-wrap">
               <button type="submit"
                 class="w-full px-4 py-3 font-bold text-gray-100 bg-blue-500 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring">

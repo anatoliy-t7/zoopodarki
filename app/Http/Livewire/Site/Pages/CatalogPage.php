@@ -13,10 +13,15 @@ class CatalogPage extends Component
 
     public function mount($catalogslug)
     {
+        if ($catalogslug = 'help-shelter') {
+            redirect()->route('site.category', ['catalogslug' => $catalogslug, 'categoryslug' => 'priyut-dlya-sobak']);
+        }
         $this->catalog = Catalog::where('slug', $catalogslug)
         ->withWhereHas('categories', fn ($query) => $query->where('menu', true))
         ->with('categories.tags', fn ($query) => $query->where('show_in_menu', true))
         ->first();
+
+
 
         $this->setSeo();
     }

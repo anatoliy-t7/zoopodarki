@@ -144,7 +144,11 @@ trait ExportImport
     {
         $collection = collect();
 
-        $attributes = Attribute::all();
+        $attributes = Product1C::whereHas('product', function ($query) {
+            $query->whereHas('categories', function ($query) {
+                $query->where('product_category.category_id', 28);
+            });
+        })->get();
 
         foreach ($attributes as $attribute) {
             $collection->push([

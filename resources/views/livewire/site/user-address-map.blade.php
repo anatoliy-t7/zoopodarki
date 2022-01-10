@@ -9,14 +9,14 @@
     </x-slot>
 
     <x-slot name="content">
-      <div wire:ignore class="w-full">
+      <div class="w-full">
 
         <div class="block w-full min-h-full gap-4 overflow-y-auto md:overflow-hidden md:flex">
 
           <div class="w-full md:w-9/12 block-map">
             <div class="px-1 pb-4 space-y-1">
-              <input name="address" class="field" type="text" id="suggest" />
-              <div x-text="message"></div>
+              <input class="field" type="text" id="suggest" />
+              <div id="message" class="text-sm text-red-500"></div>
             </div>
             <div class="h-full">
               <div id="map" class="w-full max-w-lg overflow-hidden block-map rounded-l-xl">
@@ -137,14 +137,16 @@
 
                 document.head.appendChild(script);
 
-                script.addEventListener('load', function() {
+                script.addEventListener('load', () => {
                   ymaps.ready(init);
                 });
 
                 function init() {
 
+                  createMap();
+
                   var suggestView = new ymaps.SuggestView('suggest', {
-                      results: 1,
+                      results: 10,
                       boundedBy: [
                         [59.744310, 29.609402],
                         [60.158246, 30.654747]
@@ -152,8 +154,6 @@
                     }),
                     map,
                     placemark;
-
-                  createMap();
 
                   suggestView.events.add("select", function(e) {
                     geocode(e.get('item').value);
@@ -193,8 +193,7 @@
 
                       // Если геокодер возвращает пустой массив или неточный результат, то показываем ошибку.
                       if (error) {
-                        this.message = error + hint;
-                        console.log(this.message);
+                        document.getElementById('message').innerText = error + hint;
                       } else {
                         showResult(obj);
                       }
@@ -206,35 +205,24 @@
 
                   function showResult(obj) {
                     // Удаляем сообщение об ошибке, если найденный адрес совпадает с поисковым запросом.
-                    this.message = null;
-                    var mapContainer = $('#map'),
-                      bounds = obj.properties.get('boundedBy'),
-                      // Рассчитываем видимую область для текущего положения пользователя.
-                      mapState = ymaps.util.bounds.getCenterAndZoom(
-                        bounds,
-                        [mapContainer.width(), mapContainer.height()]
-                      ),
-                      // Сохраняем полный адрес для сообщения под картой.
-                      address = [obj.getCountry(), obj.getAddressLine()].join(', '),
-                      // Сохраняем укороченный адрес для подписи метки.
-                      shortAddress = [obj.getThoroughfare(), obj.getPremiseNumber(), obj.getPremise()].join(' ');
+                    document.getElementById('message').innerText = '';
+                    var mapContainer = document.getElementById('map');
+                    bounds = obj.properties.get('boundedBy');
+                    // Рассчитываем видимую область для текущего положения пользователя.
+                    mapState = ymaps.util.bounds.getCenterAndZoom(
+                      bounds,
+                      [mapContainer.offsetWidth, mapContainer.offsetHeight]
+                    );
+                    // Сохраняем полный адрес для сообщения под картой.
+                    address = [obj.getCountry(), obj.getAddressLine()].join(', ');
+                    // Сохраняем укороченный адрес для подписи метки.
+                    shortAddress = [obj.getThoroughfare(), obj.getPremiseNumber(), obj.getPremise()].join(' ');
+
                     // Убираем контролы с карты.
                     mapState.controls = ['fullscreenControl', 'geolocationControl']
                     // Создаём карту.
-                    createMap(mapState, shortAddress);
-                    // Выводим сообщение под картой.
-                    showMessage(address);
-                  }
 
-                  function showError(message) {
-                    $('#notice').text(message);
-                    $('#suggest').addClass('input_error');
-                    $('#notice').css('display', 'block');
-                    // Удаляем карту.
-                    if (map) {
-                      map.destroy();
-                      map = null;
-                    }
+                    createMap(mapState, shortAddress);
                   }
 
                   function createMap(state, caption) {
@@ -245,33 +233,76 @@
                         zoom: 9,
                         controls: ['fullscreenControl', 'geolocationControl']
                       });
-                      placemark = new ymaps.Placemark(
+                      deliveryPoint = new ymaps.Placemark(
                         map.getCenter(), {
-                          iconCaption: caption,
-                          balloonContent: caption
+                          iconCaption: '',
+                          // balloonContent: ''
                         }, {
                           preset: 'islands#redDotIconWithCaption'
                         });
-                      map.geoObjects.add(placemark);
+                      // deliveryPoint.options.set({
+                      //  draggable: true,
+                      // });
+                      deliveryPoint.events.add('dragstart', function() {
+                        deliveryPoint.properties.set({
+                          iconCaption: '',
+                          balloonContent: ''
+                        });
+                      });
+                      deliveryPoint.events.add('dragend', function() {
+                        highlightResult(deliveryPoint);
+                      });
+                      map.geoObjects.add(deliveryPoint);
                       // Если карта есть, то выставляем новый центр карты и меняем данные и позицию метки в соответствии с найденным адресом.
                     } else {
                       map.setCenter(state.center, state.zoom);
-                      placemark.geometry.setCoordinates(state.center);
-                      placemark.properties.set({
+                      deliveryPoint.geometry.setCoordinates(state.center);
+                      deliveryPoint.properties.set({
                         iconCaption: caption,
-                        balloonContent: caption
+                        // balloonContent: caption
                       });
                     }
                   }
 
-                  function showMessage(message) {
-                    $('#messageHeader').text('Данные получены:');
-                    $('#message').text(message);
+                  function highlightResult(obj) {
+                    // Сохраняем координаты переданного объекта.
+                    var coords = obj.geometry.getCoordinates();
+                    // Задаем подпись для метки.
+                    if (typeof(obj.getThoroughfare) === 'function') {
+                      setData(obj);
+                    } else {
+                      // Если вы не хотите, чтобы при каждом перемещении метки отправлялся запрос к геокодеру,
+                      // закомментируйте код ниже.
+                      ymaps.geocode(coords, {
+                        results: 1
+                      }).then(function(res) {
+                        var obj = res.geoObjects.get(0);
+                        setData(obj);
+
+                      });
+                    }
+
+                    function setData(obj) {
+                      var address = [obj.getThoroughfare(), obj.getPremiseNumber(), obj.getPremise()].join(' ');
+                      //  suggestView.destroy();
+                      if (address.trim() === '') {
+                        address = obj.getAddressLine();
+                      }
+
+                      document.getElementById('suggest').setAttribute('value', address);
+
+                      deliveryPoint.properties.set({
+                        iconCaption: address,
+                        // balloonContent: address,
+                      });
+
+                    }
                   }
 
                 }
 
-              }
+              },
+
             }))
           })
         </script>

@@ -83,9 +83,9 @@ class Users extends Component
             'password' => ['nullable', 'string', 'min:8'],
         ]);
 
-        if (!$this->password) {
-            $this->password = Str::random(10);
-        }
+        // if (!$this->password) {
+        //     $this->password = Str::random(10);
+        // }
 
         DB::transaction(function () {
             $user = User::updateOrCreate(
@@ -95,7 +95,7 @@ class Users extends Component
                     'email' => $this->email,
                     'phone' => $this->phone,
                     'discount' => $this->discount,
-                    'password' => Hash::make($this->password),
+                    //  'password' => Hash::make($this->password),
                 ]
             );
 

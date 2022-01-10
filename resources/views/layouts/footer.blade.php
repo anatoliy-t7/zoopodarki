@@ -56,7 +56,7 @@
           <li>
             <a href="{{ route('site.category', ['catalogslug' => 'help-shelter', 'categoryslug' => 'priyut-dlya-sobak']) }}"
               class="hover:text-orange-500">
-              Помощь приюту
+              Помоги приюту
             </a>
         </ul>
       </div>

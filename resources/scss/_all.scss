@@ -318,23 +318,11 @@ img.image-left {
 }
 
 .menuMasonry {
-	column-count: 1;
+	columns: 24rem auto;
 	column-gap: 1.5rem;
-	column-fill: balance;
+	// column-fill: auto;
 	* {
 		-webkit-column-break-inside: avoid;
-	}
-
-	@media (min-width: 640px) {
-		column-count: 1;
-	}
-
-	@media (min-width: 768px) {
-		column-count: 2;
-	}
-
-	@media (min-width: 1024px) {
-		column-count: 3;
 	}
 }
 

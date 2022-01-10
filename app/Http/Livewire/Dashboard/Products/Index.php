@@ -25,8 +25,8 @@ class Index extends Component
     public $filteredByAttribute = false;
     public $attrId;
     public $productsWithoutImage = false;
-    public $available = false;
-    public $noCategories = false;
+    public $availability = 'all';
+    public $hasCategories = 'all';
     public $status;
     public $statuses;
     public $catalogs;
@@ -43,7 +43,7 @@ class Index extends Component
         'attrId',
         'productsWithoutDescription',
         'productsWithoutImage',
-        'available',
+        'availability',
     ];
 
     public function mount()
@@ -203,18 +203,15 @@ class Index extends Component
                     $query->where('category_id', $this->filteredByCategory);
                 });
             })
-            ->when($this->noCategories, function ($query) {
-                $query->doesntHave('categories')
-                ->whereHas('variations', function ($query) {
-                    $query->hasStock();
-                });
+            ->when($this->hasCategories, function ($query) {
+                $query->hasCategory($this->hasCategories);
             })
             ->when($this->variationMoreOne, function ($query) {
                 $query->has('variations', '>=', 2);
             })
-            ->when($this->available, function ($query) {
+            ->when($this->availability, function ($query) {
                 $query->whereHas('variations', function ($query) {
-                    $query->hasStock();
+                    $query->availability($this->availability);
                 });
             })
             ->when($this->productsWithoutDescription, function ($query) {

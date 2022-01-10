@@ -53,7 +53,7 @@ class ProcessOffersProduct1C implements ShouldQueue
 
         unlink($this->file);
 
-        Log::info('offer.xml processed successed');
+        Log::info('Offer products 1c Job successed');
     }
 
     public function getProducts($offer)

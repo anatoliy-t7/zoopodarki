@@ -27,6 +27,17 @@ class Product1C extends Model
         return $query->where('stock', '>=', 1)->where('price', '>=', 1);
     }
 
+    public function scopeAvailability($query, $availability)
+    {
+        if ($availability === 'no') {
+            return $query->where('stock', 0);
+        } elseif ($availability === 'yes') {
+            return $query->where('stock', '>=', 1);
+        } else {
+            return $query;
+        }
+    }
+
     public function scopeGetTypeOfDiscount($query, $typeF = [0])
     {
         if (in_array(0, $typeF)) {

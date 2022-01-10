@@ -86,5 +86,7 @@ class Kernel extends HttpKernel
         $schedule->command('sitemap:generate')->timezone('Europe/Moscow')->weeklyAt('04:00');
 
         $schedule->job(new CheckDeadlinePromotions())->timezone('Europe/Moscow')->dailyAt('00:01');
+
+        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
     }
 }
