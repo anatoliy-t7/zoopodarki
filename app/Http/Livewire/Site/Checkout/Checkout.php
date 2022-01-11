@@ -259,11 +259,7 @@ class Checkout extends Component
                 'address' => 'required',
             ]);
 
-            $address = $this->addressSelected['address'] . ' ' . $this->addressSelected['building'];
-
-            if (Arr::has($this->addressSelected, 'apartment')) {
-                $address = $address . ', кв ' . $this->addressSelected['apartment'];
-            }
+            $address = $this->addressSelected['address'];
 
             if (Arr::has($this->addressSelected, 'extra')) {
                 $address = $address . ', ' . $this->addressSelected['extra'];

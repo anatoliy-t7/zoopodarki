@@ -14,14 +14,14 @@ class UserAddresses extends Component
     use WireToast;
     use Delivery;
 
-    public $editAddress = [
-        'id' => '',
-        'address' => '',
-        'extra' => '',
-        'zip' => '',
-        'lat' => '',
-        'lng' => '',
-        'delivery_zone' => '',
+    public $deliveryPlace = [
+        'id' => null,
+        'address' => null,
+        'extra' => null,
+        'zip' => null,
+        'lat' => null,
+        'lng' => null,
+        'delivery_zone' => null,
     ];
     public $addresses;
 
@@ -47,67 +47,67 @@ class UserAddresses extends Component
         }
     }
 
-    public function editAddress($addressId) //TODO
+    public function editAddress($addressId)
     {
-        $this->editAddress = Address::find($addressId)->toArray();
-        $this->query = $this->editAddress['address'];
-        $this->addressId = $this->editAddress['id'];
+        $this->deliveryPlace = Address::find($addressId)->toArray();
 
-        $this->dispatchBrowserEvent('edit-address');
+        $this->dispatchBrowserEvent('set-address', $this->deliveryPlace);
     }
 
-    public function addNewAddress($editAddress)
+    public function addNewAddress($deliveryPlace)
     {
-        $this->editAddress = $editAddress;
-
+        $this->deliveryPlace = $deliveryPlace;
+        // dd($this->deliveryPlace);
         $this->validate([
-            'editAddress.address' => 'required|string|max:255',
-            'editAddress.extra' => 'string|max:255',
+            'deliveryPlace.address' => 'required|string|max:255',
         ]);
 
+        // TODO check zones
         // return toast()
         //   ->warning('Пожалуйста укажите адрес в пределах СПБ КАД')
         //   ->push();
 
         DB::transaction(function () {
-            if ($this->editAddress['id'] && Address::find($this->editAddress['id'])) {
-                $editAddress = Address::where('id', $this->editAddress['id'])->first()->update([
-                    'address' => $this->editAddress['address'],
-                    'lat' => $this->editAddress['lat'],
-                    'lng' => $this->editAddress['lng'],
+            if ($this->deliveryPlace['id'] && Address::find($this->deliveryPlace['id'])) {
+                $deliveryPlace = Address::where('id', $this->deliveryPlace['id'])->first();
+
+                $deliveryPlace->update([
+                    'address' => $this->deliveryPlace['address'],
+                    'lat' => $this->deliveryPlace['lat'],
+                    'lng' => $this->deliveryPlace['lng'],
                     'user_id' => auth()->user()->id,
                 ]);
             } else {
-                $editAddress = Address::Create([
-                    'address' => $this->editAddress['address'],
-                    'lat' => $this->editAddress['lat'],
-                    'lng' => $this->editAddress['lng'],
+                $deliveryPlace = Address::Create([
+                    'address' => $this->deliveryPlace['address'],
+                    'lat' => $this->deliveryPlace['lat'],
+                    'lng' => $this->deliveryPlace['lng'],
                     'user_id' => auth()->user()->id,
                 ]);
             }
 
-            if (array_key_exists('delivery_zone', $this->editAddress)) {
-                $editAddress->delivery_zone = $this->editAddress['delivery_zone'];
+            if (array_key_exists('delivery_zone', $this->deliveryPlace)) {
+                $deliveryPlace->delivery_zone = $this->deliveryPlace['delivery_zone'];
             }
 
-            if (array_key_exists('extra', $this->editAddress)) {
-                $editAddress->extra = $this->editAddress['extra'];
+            if (array_key_exists('extra', $this->deliveryPlace)) {
+                $deliveryPlace->extra = $this->deliveryPlace['extra'];
             }
 
-            if (array_key_exists('zip', $this->editAddress)) {
-                $editAddress->zip = $this->editAddress['zip'];
+            if (array_key_exists('zip', $this->deliveryPlace)) {
+                $deliveryPlace->zip = $this->deliveryPlace['zip'];
             }
 
-            if ($editAddress->isDirty()) {
-                $editAddress->save();
+            if ($deliveryPlace->isDirty()) {
+                $deliveryPlace->save();
             }
 
             User::where('id', auth()->user()->id)->update([
-                'pref_address' => $editAddress->id,
+                'pref_address' => $deliveryPlace->id,
             ]);
         });
 
-        $this->reset('editAddress');
+        $this->reset('deliveryPlace');
         $this->dispatchBrowserEvent('close-modal');
         $this->getAddresses();
     }

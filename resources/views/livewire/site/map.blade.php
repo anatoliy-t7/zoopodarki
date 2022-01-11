@@ -54,7 +54,7 @@
 
         showOnMap(coord, index, storeId) {
           this.showButton = storeId;
-          map.setCenter(coord, 16);
+          mapStore.setCenter(coord, 16);
 
           var objectState = clusterer.getObjectState(myGeoObjects[index]);
           if (objectState.isClustered) {
@@ -67,7 +67,7 @@
         },
 
         initMap() {
-          if (!ymaps.ready()) {
+          if (!window.script) {
             const script = document.createElement('script');
             script.src =
               'https://api-maps.yandex.ru/2.1/?apikey=cd408cfa-b066-4543-8d65-dc5be38d9c48&lang=ru_RU';
@@ -76,20 +76,19 @@
             script.addEventListener('load', function() {
               ymaps.ready(init);
             });
+            window.script = script;
           } else {
-            init();
+            ymaps.ready(init);
           }
 
 
           function init() {
             // Создание карты.
-            map = new ymaps.Map("map", {
+            mapStore = new ymaps.Map("map", {
               center: [59.938951, 30.315635],
               zoom: 12,
               controls: ['zoomControl', 'fullscreenControl']
-            }, {
-              searchControlProvider: 'yandex#search'
-            });
+            }, );
 
             setData();
           }
@@ -135,12 +134,10 @@
               geoObjectHideIconOnBalloonOpen: false
             });
             clusterer.add(myGeoObjects);
-            map.geoObjects.add(clusterer);
-            map.setBounds(clusterer.getBounds(), {
-              checkZoomRange: true
+            mapStore.geoObjects.add(clusterer);
+            mapStore.setBounds(clusterer.getBounds(), {
+              //  checkZoomRange: true
             })
-
-
           }
         }
       }))

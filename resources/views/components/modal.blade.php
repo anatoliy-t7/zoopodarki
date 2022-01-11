@@ -1,5 +1,8 @@
-@props(['width' => 'sm'])
-<div x-cloak x-data="{ open: false }"
+@props([
+    'width' => 'sm',
+    'modalId' => '',
+])
+<div x-cloak x-data="{ open: false }" x-on:open-modal{{ $modalId }}.window="open = true"
   x-effect="document.body.classList.toggle('overflow-hidden', open), document.body.classList.toggle('pr-4', open)"
   x-on:close-modal.window="open = false">
 

@@ -15,8 +15,7 @@
 
         <div class="space-y-4">
 
-          <div x-cloak x-data="{ editAddress: false }" x-on:close-modal.window="editAddress = false"
-            x-on:edit-address.window="editAddress = true">
+          <div x-cloak x-data="{ editAddress: false }" x-on:close-modal.window="editAddress = false">
 
             <div x-show="editAddress === false" x-transition>
 
@@ -39,7 +38,7 @@
                         </div>
 
                         <div wire:click="editAddress({{ $addressItem['id'] }})"
-                          class="absolute z-30 cursor-pointer top-1 right-1">
+                          class="absolute z-30 cursor-pointer top-4 right-2">
                           <x-tabler-edit class="w-5 h-5 text-gray-300 stroke-current hover:text-blue-400" />
                         </div>
 
