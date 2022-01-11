@@ -258,10 +258,16 @@ class ExchangeProductsController extends Controller
             if (file_exists($file)) {
                 if (strpos($filename, 'import0_1.xml') !== false) {
                     ProcessImportProduct1C::dispatch($file);
+
+                    return $this->answer('success');
                 } elseif (strpos($filename, 'offers0_1.xml') !== false) {
                     ProcessOffersProduct1C::dispatch($file);
+
+                    return $this->answer('success');
                 } elseif (Str::startsWith($filename, 'orders-')) {
                     ImportOrders::dispatch($filename);
+
+                    return $this->answer('success');
                 } else {
                     Log::error('didn`t find xml file');
 

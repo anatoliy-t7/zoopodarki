@@ -47,7 +47,7 @@
 
             <div class="flex flex-wrap mb-6">
               <label for="password" class="block mb-2 text-sm font-bold text-gray-700">
-                Повторить пароль
+                Повторите новый пароль
               </label>
 
               <input id="password_confirmation" type="password"
