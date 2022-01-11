@@ -64,21 +64,17 @@ trait Delivery
         }
     }
 
-    public function getDeliveryCostsByStore($amount, $latTo, $lngTo)
+    public function getDeliveryCostsByStore($amount, $zone)
     {
-        $point = [[$latTo, $lngTo]];
-
-        if ($this->pointInPolygon($point, $this->kadSpb) === false) {
-            return 999999;
+        if ($zone === 0) {
+            return 0;
         }
 
-        $distans = $this->getDistance($latTo, $lngTo);
-
         //Zone 1 Радиус 1.5 до 3 км
-        if ($distans <= 1500) {
+        if ($zone === 1) {
             if ($amount >= 1000) {
                 // бесплатная доставка от 1000 руб.,
-                return 0;
+                return 0.1;
             } else {
                 // если меньше 1000, то доставка стоит 300 руб.
                 return 300;
@@ -86,10 +82,10 @@ trait Delivery
         }
 
         //Zone 2 Радиус 1.5-10 км
-        if ($distans >= 1500 && $distans < 10000) {
+        if ($zone === 2 && $distans < 10000) {
             if ($amount >= 1500) {
                 // бесплатная доставка от 1500,
-                return 0;
+                return 0.1;
             } else {
                 // если меньше 1500, то доставка стоит 300 руб.
                 return 300;
@@ -97,10 +93,10 @@ trait Delivery
         }
 
         //Zone 3 Радиус 10-15 км
-        if ($distans >= 10000 && $distans < 15000) {
+        if ($zone === 3 && $distans < 15000) {
             if ($amount >= 2000) {
                 // бесплатная доставка от 2000,
-                return 0;
+                return 0.1;
             } else {
                 // если меньше 2000, то доставка стоит 500 руб.
                 return 500;
@@ -108,10 +104,10 @@ trait Delivery
         }
 
         //Zone 4 Радиус от 15 км
-        if ($distans >= 15000) {
+        if ($zone === 4) {
             if ($amount >= 3500) {
                 // бесплатная доставка от 3500,
-                return 0;
+                return 0.1;
             } else {
                 // если меньше 3500, то доставка стоит 700 руб.
                 return 700;

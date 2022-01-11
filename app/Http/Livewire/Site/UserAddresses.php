@@ -57,15 +57,9 @@ class UserAddresses extends Component
     public function addNewAddress($deliveryPlace)
     {
         $this->deliveryPlace = $deliveryPlace;
-        // dd($this->deliveryPlace);
         $this->validate([
             'deliveryPlace.address' => 'required|string|max:255',
         ]);
-
-        // TODO check zones
-        // return toast()
-        //   ->warning('Пожалуйста укажите адрес в пределах СПБ КАД')
-        //   ->push();
 
         DB::transaction(function () {
             if ($this->deliveryPlace['id'] && Address::find($this->deliveryPlace['id'])) {
@@ -119,7 +113,7 @@ class UserAddresses extends Component
 
         if ($user->pref_address !== 0) {
             $this->addresses = $user->addresses->toArray();
-
+            $this->deliveryPlace = $user->addresses->where('id', $user->pref_address)->first()->toArray();
             $this->emitUp('getAddressesforCheckout');
             $this->dispatchBrowserEvent('close-modal');
         }

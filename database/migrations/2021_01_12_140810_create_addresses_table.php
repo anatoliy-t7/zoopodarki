@@ -19,7 +19,7 @@ class CreateAddressesTable extends Migration
             $table->string('address');
             $table->text('extra')->nullable();
             $table->string('zip')->nullable();
-            $table->string('delivery_zone')->nullable();
+            $table->integer('delivery_zone')->default(0);
 
             $table->double('lat')->nullable();
             $table->double('lng')->nullable();

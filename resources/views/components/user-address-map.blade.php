@@ -9,44 +9,31 @@
     </x-slot>
 
     <x-slot name="content">
-      <div x-data="userMapAddress" @set-coordinates.window="setCoordinates(event)"
+      <div x-data="userMapAddress" @set-coordinates.window="setCoordinates(event)" @set-zone.window="setZone(event)"
         @set-address.window="setExistsAddress(event)" class="w-full"
         @init-map-user-address.window="initMap(event)" @reset-delivery-place.window="reset(event)">
 
         <div class="block w-full min-h-full gap-4 overflow-hidden md:flex">
 
           <div class="w-full pt-1">
-            <div class="flex gap-4 px-1 pb-4 ">
-              <div class="w-7/12">
-                <input class="field @error('deliveryPlace.address') border-red-500 border @enderror" type="text"
-                  autofocus x-model="deliveryPlace.address" id="suggest" placeholder="Новый адрес" />
-                <div id="message" class="pt-1 text-sm text-red-500"></div>
-                @error('deliveryPlace.address')
-                  <p class="text-xs italic text-red-500">
-                    {{ $message }}
-                  </p>
-                @enderror
+            <div x-show="showFields" x-transition.duration.600ms class="flex gap-4 px-1 pb-4">
+              <div class="w-5/12">
+                <input class="field" type="text" autofocus x-model="deliveryPlace.address" readonly />
               </div>
-              <div class="w-2/12">
-                <input name="extra" x-model="deliveryPlace.extra"
-                  class="field @error('deliveryPlace.extra') border-red-500 border @enderror" type=" text"
+              <div class="w-4/12">
+                <input name="extra" x-model="deliveryPlace.extra" class="field " type=" text"
                   placeholder="подъезд, домофон и тд." />
-                @error('deliveryPlace.extra')
-                  <p class="text-xs italic text-red-500">
-                    {{ $message }}
-                  </p>
-                @enderror
               </div>
-              <div class="flex w-auto gap-2">
+              <div class="flex w-3/12 gap-4">
                 <button aria-label="Добавить адрес" id="addAddress" @click="$wire.call('addNewAddress', deliveryPlace)"
-                  disabled
-                  class="flex items-center justify-center w-full gap-2 px-3 py-2 mb-1 font-bold text-white bg-blue-400 border border-blue-400 cursor-pointer disabled:text-gray-500 disabled:border-gray-200 disabled:bg-gray-50 rounded-xl hover:bg-blue-500 ">
-                  <x-tabler-circle-plus class="w-8 h-8 stroke-current hover:text-gray-600" />
+                  :disabled="deliveryPlace.address === null"
+                  class="flex items-center justify-center w-full gap-2 px-3 py-2 font-bold text-white bg-blue-400 border border-blue-400 cursor-pointer disabled:text-gray-500 disabled:border-gray-200 disabled:bg-gray-50 rounded-xl hover:bg-blue-500 ">
+                  <x-tabler-circle-plus class="w-8 h-8 stroke-current " />
                   <div>Добавить</div>
                 </button>
                 <div x-show="deliveryPlace.id !== null">
                   <button aria-label="Удалить" @click="$wire.call('removeAddress', deliveryPlace.id)"
-                    class="flex items-center justify-center px-3 py-3 mb-1 font-bold text-gray-400 border border-gray-300 cursor-pointer rounded-xl hover:text-red-500">
+                    class="flex items-center justify-center px-3 py-2 font-bold text-gray-400 border border-gray-300 cursor-pointer rounded-xl hover:text-red-500">
                     <x-tabler-trash class="w-6 h-6 stroke-current " />
                   </button>
                 </div>
@@ -70,7 +57,7 @@
           document.addEventListener('alpine:init', () => {
             Alpine.data('userMapAddress', () => ({
               key: '{{ config('constants.yandex_map_key') }}',
-              message: null,
+              showFields: false,
               deliveryPlace: {
                 id: null,
                 address: null,
@@ -78,7 +65,7 @@
                 zip: null,
                 lat: null,
                 lng: null,
-                delivery_zone: null,
+                delivery_zone: 0,
               },
               script: null,
               showOnMap(coord, index, storeId) {
@@ -92,8 +79,6 @@
                 }
               },
               initMap() {
-
-                console.log();
                 if (!window.script) {
                   const script = document.createElement('script');
                   script.src =
@@ -108,116 +93,149 @@
                 }
 
                 function init() {
-                  createMap();
-                  var suggestView = new ymaps.SuggestView('suggest', {
-                      results: 10,
-                      boundedBy: [
-                        [59.744310, 29.609402],
-                        [60.158246, 30.654747]
-                      ],
+                  var myMap = new ymaps.Map('mapZones', {
+                      center: [59.91995, 30.470315],
+                      zoom: 9,
+                      controls: ['geolocationControl', 'searchControl', 'fullscreenControl']
                     }),
-                    map,
-                    placemark;
-
-                  suggestView.events.add("select", function(e) {
-                    geocode(e.get('item').value);
-                  })
-
-                  function geocode(value) {
-                    ymaps.geocode(value).then(function(res) {
-                        var obj = res.geoObjects.get(0),
-                          error, hint;
-                        if (obj) {
-                          switch (obj.properties.get('metaDataProperty.GeocoderMetaData.precision')) {
-                            case 'exact':
-                              break;
-                            case 'number':
-                            case 'near':
-                            case 'range':
-                              error = 'Неточный адрес, требуется уточнение.';
-                              hint = ' Уточните номер дома';
-                              break;
-                            case 'street':
-                              error = 'Неполный адрес, требуется уточнение.';
-                              hint = ' Уточните номер дома';
-                              break;
-                            case 'other':
-                            default:
-                              error = 'Неточный адрес, требуется уточнение.';
-                              hint = ' Уточните адрес';
-                          }
-                        } else {
-                          error = 'Адрес не найден';
-                          hint = ' Уточните адрес';
-                        }
-                        if (error) {
-                          document.getElementById('message').innerText = error + hint;
-                          document.getElementById('addAddress').addAttribute('disabled');
-                        } else {
-                          showResult(obj);
-                        }
+                    deliveryPoint = new ymaps.GeoObject({
+                      geometry: {
+                        type: 'Point'
                       },
-                      function(e) {
-                        document.getElementById('addAddress').addAttribute('disabled');
-                        console.log(e)
-                      })
-                  }
-
-                  function showResult(obj) {
-                    document.getElementById('addAddress').removeAttribute('disabled');
-                    document.getElementById('message').innerText = '';
-                    const setCoordinates = new CustomEvent('set-coordinates', {
-                      detail: {
-                        address: obj.properties.get('name'),
-                        coordinates: obj.geometry.getCoordinates(),
-                        zip: obj.properties.get('metaDataProperty').GeocoderMetaData.Address.postal_code
+                      properties: {
+                        iconCaption: 'Адрес'
                       }
+                    }, {
+                      preset: 'islands#blackDotIconWithCaption',
+                      draggable: true,
+                      iconCaptionMaxWidth: '215'
+                    }),
+                    searchControl = myMap.controls.get('searchControl');
+                  searchControl.options.set({
+                    noPlacemark: true,
+                    placeholderContent: 'Введите адрес доставки',
+                    boundedBy: [
+                      [59.744310, 29.609402],
+                      [60.158246, 30.654747]
+                    ],
+                  });
+                  myMap.geoObjects.add(deliveryPoint);
+
+                  function onZonesLoad(json) {
+                    // Добавляем зоны на карту.
+                    var deliveryZones = ymaps.geoQuery(json).addToMap(myMap);
+                    // Задаём цвет и контент балунов полигонов.
+                    deliveryZones.each(function(obj) {
+                      obj.options.set({
+                        fillColor: obj.properties.get('fill'),
+                        fillOpacity: obj.properties.get('fill-opacity'),
+                        strokeColor: obj.properties.get('stroke'),
+                        strokeWidth: obj.properties.get('stroke-width'),
+                        strokeOpacity: obj.properties.get('stroke-opacity')
+                      });
+                      obj.properties.set('balloonContentHeader', obj.properties.get('header'));
+                      obj.properties.set('balloonContent', obj.properties.get('description'));
                     });
-                    window.dispatchEvent(setCoordinates);
 
-                    var mapContainer = document.getElementById('map');
-                    bounds = obj.properties.get('boundedBy');
-                    mapState = ymaps.util.bounds.getCenterAndZoom(
-                      bounds,
-                      [mapContainer.offsetWidth, mapContainer.offsetHeight],
-                    );
-                    address = [obj.getCountry(), obj.getAddressLine()].join(', ');
-                    shortAddress = [obj.getThoroughfare(), obj.getPremiseNumber(), obj.getPremise()].join(' ');
-                    mapState.controls = ['fullscreenControl', 'geolocationControl']
-                    createMap(mapState, shortAddress);
-                  }
+                    // Проверим попадание результата поиска в одну из зон доставки.
+                    searchControl.events.add('resultshow', function(e) {
+                      highlightResult(searchControl.getResultsArray()[e.get('index')]);
+                    });
 
-                  function createMap(state, caption) {
-                    if (!map) {
-                      map = new ymaps.Map('mapZones', {
-                        center: [59.938951, 30.315635],
-                        zoom: 9,
-                        controls: ['fullscreenControl', 'geolocationControl']
-                      });
-                      deliveryPoint = new ymaps.GeoObject({
-                          geometry: {
-                            type: 'Point'
-                          },
-                          properties: {
-                            iconCaption: 'Адрес'
-                          }
-                        }, {
-                          preset: 'islands#blackDotIconWithCaption',
-                          iconCaptionMaxWidth: '215'
-                        }),
+                    // Проверим попадание метки геолокации в одну из зон доставки.
+                    myMap.controls.get('geolocationControl').events.add('locationchange', function(e) {
+                      highlightResult(e.get('geoObjects').get(0));
+                    });
 
-                        map.geoObjects.add(deliveryPoint);
-                      // Если карта есть, то выставляем новый центр карты и меняем данные и позицию метки в соответствии с найденным адресом.
-                    } else {
-                      map.setCenter(state.center, 16);
-                      deliveryPoint.geometry.setCoordinates(state.center);
+                    // При перемещении метки сбрасываем подпись, содержимое балуна и перекрашиваем метку.
+                    deliveryPoint.events.add('dragstart', function() {
                       deliveryPoint.properties.set({
-                        iconCaption: caption,
+                        iconCaption: '',
+                        balloonContent: ''
                       });
+                      deliveryPoint.options.set('iconColor', 'black');
+                    });
+
+                    // По окончании перемещения метки вызываем функцию выделения зоны доставки.
+                    deliveryPoint.events.add('dragend', function() {
+                      highlightResult(deliveryPoint);
+                    });
+
+                    function highlightResult(obj) {
+
+                      // Сохраняем координаты переданного объекта.
+                      var coords = obj.geometry.getCoordinates(),
+                        // Находим полигон, в который входят переданные координаты.
+                        polygon = deliveryZones.searchContaining(coords).get(0);
+
+                      if (polygon) {
+
+                        // Увеличиваем прозрачность всех полигонов, кроме того, в который входят переданные координаты.
+                        deliveryZones.setOptions('fillOpacity', 0.1);
+                        polygon.options.set('fillOpacity', 0.4);
+
+                        const setZone = new CustomEvent('set-zone', {
+                          detail: {
+                            zone: polygon.properties.get('zone'),
+                          }
+                        });
+                        window.dispatchEvent(setZone);
+
+                        // Перемещаем метку с подписью в переданные координаты и перекрашиваем её в цвет полигона.
+                        deliveryPoint.geometry.setCoordinates(coords);
+                        deliveryPoint.options.set('iconColor', polygon.properties.get('fill'));
+                        if (typeof(obj.getThoroughfare) === 'function') {
+                          setData(obj);
+                        } else {
+                          ymaps.geocode(coords, {
+                            results: 1
+                          }).then(function(res) {
+                            var obj = res.geoObjects.get(0);
+                            setData(obj);
+                          });
+                        }
+                      } else {
+                        // Если переданные координаты не попадают в полигон, то задаём стандартную прозрачность полигонов.
+                        deliveryZones.setOptions('fillOpacity', 0.4);
+                        // Перемещаем метку по переданным координатам.
+                        deliveryPoint.geometry.setCoordinates(coords);
+                        // Задаём контент балуна и метки.
+                        deliveryPoint.properties.set({
+                          iconCaption: 'Пожалуйста выберите адрес в пределах СПБ КАД',
+                          balloonContent: 'Дорогой покупатель, в настоящее время мы доставляем только в пределах СПБ КАД, но совсем скоро начнем доставку и за его пределами!',
+                          balloonContentHeader: ''
+                        });
+                        // Перекрашиваем метку в чёрный цвет.
+                        deliveryPoint.options.set('iconColor', 'black');
+                        const reset = new CustomEvent('reset-delivery-place');
+                        window.dispatchEvent(reset);
+                      }
+
+                      function setData(obj) {
+                        var address = [obj.getThoroughfare(), obj.getPremiseNumber(), obj.getPremise()].join(' ');
+                        if (address.trim() === '') {
+                          address = obj.getAddressLine();
+                        }
+                        var price = polygon.properties.get('description');
+                        deliveryPoint.properties.set({
+                          iconCaption: address,
+                          balloonContent: address,
+                        });
+                        const setCoordinates = new CustomEvent('set-coordinates', {
+                          detail: {
+                            address: obj.properties.get('name'),
+                            coordinates: obj.geometry.getCoordinates(),
+                            zip: obj.properties.get('metaDataProperty').GeocoderMetaData.Address.postal_code
+                          }
+                        });
+                        window.dispatchEvent(setCoordinates);
+                      }
                     }
                   }
 
-
+                  fetch('/json/delivery_zones.json')
+                    .then(response => response.json())
+                    .then(data => onZonesLoad(data));
                 }
               },
               reset() {
@@ -228,21 +246,26 @@
                   zip: null,
                   lat: null,
                   lng: null,
-                  delivery_zone: null,
+                  delivery_zone: 0,
                 };
               },
               setCoordinates(coordinates) {
+                console.log(coordinates.detail)
                 this.deliveryPlace.address = coordinates.detail.address;
                 this.deliveryPlace.lat = coordinates.detail.coordinates[0];
                 this.deliveryPlace.lng = coordinates.detail.coordinates[1];
                 this.deliveryPlace.zip = coordinates.detail.zip;
+                this.showFields = true;
+              },
+              setZone(zone) {
+                this.deliveryPlace.delivery_zone = zone.detail.zone;
               },
               setExistsAddress(address) {
                 this.deliveryPlace = address.detail;
                 const openMap = new CustomEvent('open-modal-user-address-map');
                 window.dispatchEvent(openMap);
                 this.initMap();
-                document.getElementById('suggest').setAttribute('value', this.deliveryPlace.address);
+                this.showFields = true;
               }
 
             }))

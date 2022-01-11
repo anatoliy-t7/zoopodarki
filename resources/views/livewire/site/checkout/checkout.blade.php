@@ -153,7 +153,7 @@
                         {{ $addressSelected['extra'] }}
                       </div>
                     @endif
-                    @if ($this->deliveryCost === 999999)
+                    @if ($this->deliveryCost === 0)
                       <span class="text-xs text-red-500">Пожалуйста укажите адрес в пределах КАД</span>
                     @endif
                   </div>
@@ -582,7 +582,7 @@
           <div class="flex justify-between">
             <span>Доставка</span>
             <span class="font-bold">
-              @if ($deliveryCost == 0)
+              @if ($deliveryCost == 0.1)
                 бесплатно
               @else
                 {{ RUB($deliveryCost) }}

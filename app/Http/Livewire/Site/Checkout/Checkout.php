@@ -31,7 +31,7 @@ class Checkout extends Component
     public $items;
     public $shelterItems;
     public $subTotal;
-    public $deliveryCost = 0;
+    public $deliveryCost = 0.1;
     public $totalAmount;
     public $totalWeight = 200;
     public $userId;
@@ -99,8 +99,7 @@ class Checkout extends Component
             if (Arr::has($this->addressSelected, 'lat')) {
                 $this->deliveryCost = $this->getDeliveryCostsByStore(
                     $this->subTotal,
-                    $this->addressSelected['lat'],
-                    $this->addressSelected['lng']
+                    $this->addressSelected['delivery_zone'],
                 );
             }
         }
@@ -241,7 +240,7 @@ class Checkout extends Component
             return $this->dispatchBrowserEvent('auth');
         }
 
-        if ($this->deliveryCost === false) {
+        if ($this->deliveryCost === 0) {
             return toast()
             ->warning('Дорогой покупатель, в настоящее время мы доставляем только в пределах СПБ КАД,
             но совсем скоро начнем доставку и за его пределами!')
@@ -256,7 +255,7 @@ class Checkout extends Component
             $this->validate([
                 'date' => 'required',
                 'deliveryTime' => 'required',
-                'address' => 'required',
+                'addressSelected.address' => 'required',
             ]);
 
             $address = $this->addressSelected['address'];

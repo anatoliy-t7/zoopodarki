@@ -286,7 +286,7 @@
         properties: {
           hintContent: "Кликните, чтобы узнать стоимость доставки в этой зоне",
           balloonContentHeader: 'Зона 1',
-          balloonContent: '<table class="table table-fixed"><tr><th class="p-1">Сумма заказа</th><th class="p-1">Стоимость доставки</th></tr><tr><td class="p-1"><b>до</b> 1000 руб.</td><td class="p-1">300 руб.</td></tr><tr><td class="p-1"><b>от</b> 1000 руб.</td><td class="p-1 font-semibold text-green-500"">бесплатно</td></tr></table>',
+          balloonContent: '<table class="table table-fixed"><tr><th class="p-1">Сумма заказа</th><th class="p-1">Стоимость доставки</th></tr><tr><td class="p-1"><b>до</b> 1000 руб.</td><td class="p-1">300 руб.</td></tr><tr><td class="p-1"><b>от</b> 1000 руб.</td><td class="p-1 font-semibold text-green-500">бесплатно</td></tr></table>',
           balloonContentFooter: ''
         }
       }, {
@@ -310,7 +310,7 @@
         properties: {
           hintContent: "Кликните, чтобы узнать стоимость доставки в этой зоне",
           balloonContentHeader: 'Зона 2',
-          balloonContent: '<table class="table table-fixed"><tr><th class="p-1">Сумма заказа</th><th class="p-1">Стоимость доставки</th></tr><tr><td class="p-1"><b>до</b> 1500 руб.</td><td class="p-1">300 руб.</td></tr><tr><td class="p-1"><b>от</b> 1500 руб.</td><td class="p-1 font-semibold text-green-500"">бесплатно</td></tr></table>',
+          balloonContent: '<table class="table table-fixed"><tr><th class="p-1">Сумма заказа</th><th class="p-1">Стоимость доставки</th></tr><tr><td class="p-1"><b>до</b> 1500 руб.</td><td class="p-1">300 руб.</td></tr><tr><td class="p-1"><b>от</b> 1500 руб.</td><td class="p-1 font-semibold text-green-500">бесплатно</td></tr></table>',
           balloonContentFooter: ''
         }
       }, {
@@ -334,7 +334,7 @@
         properties: {
           hintContent: "Кликните, чтобы узнать стоимость доставки в этой зоне",
           balloonContentHeader: 'Зона 3',
-          balloonContent: '<table class="table table-fixed"><tr><th class="p-1">Сумма заказа</th><th class="p-1">Стоимость доставки</th></tr><tr><td class="p-1"><b>до</b> 2000 руб.</td><td class="p-1">500 руб.</td></tr><tr><td class="p-1"><b>от</b> 2000 руб.</td><td class="p-1 font-semibold text-green-500"">бесплатно</td></tr></table>',
+          balloonContent: '<table class="table table-fixed"><tr><th class="p-1">Сумма заказа</th><th class="p-1">Стоимость доставки</th></tr><tr><td class="p-1"><b>до</b> 2000 руб.</td><td class="p-1">500 руб.</td></tr><tr><td class="p-1"><b>от</b> 2000 руб.</td><td class="p-1 font-semibold text-green-500">бесплатно</td></tr></table>',
           balloonContentFooter: ''
         }
       }, {
@@ -358,7 +358,7 @@
         properties: {
           hintContent: "Кликните, чтобы узнать стоимость доставки в этой зоне",
           balloonContentHeader: 'Зона 4',
-          balloonContent: '<table class="table table-fixed"><tr><th class="p-1">Сумма заказа</th><th class="p-1">Стоимость доставки</th></tr><tr><td class="p-1"><b>до</b> 3500 руб.</td><td class="p-1">700 руб.</td></tr><tr><td class="p-1"><b>от</b> 3500 руб.</td><td class="p-1 font-semibold text-green-500"">бесплатно</td></tr></table>',
+          balloonContent: '<table class="table table-fixed"><tr><th class="p-1">Сумма заказа</th><th class="p-1">Стоимость доставки</th></tr><tr><td class="p-1"><b>до</b> 3500 руб.</td><td class="p-1">700 руб.</td></tr><tr><td class="p-1"><b>от</b> 3500 руб.</td><td class="p-1 font-semibold text-green-500">бесплатно</td></tr></table>',
           balloonContentFooter: ''
         }
       }, {

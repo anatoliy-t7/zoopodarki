@@ -23,10 +23,11 @@
                 @if ($addresses)
                   <div class="space-y-4">
                     @foreach ($addresses as $addressItem)
-                      <div class="relative block">
+                      <div class="relative block ">
 
                         <div wire:click="setAddress({{ $addressItem['id'] }}), $refresh"
-                          class="px-4 py-3 mt-4 bg-white border border-gray-200 cursor-pointer hover:border-green-400 rounded-xl">
+                          class="px-4 py-3 mt-4 bg-white border cursor-pointer hover:border-green-400 rounded-xl {{ $deliveryPlace['id'] === $addressItem['id'] ? 'border-green-300' : 'border-gray-200' }}">
+                          {{ $deliveryPlace['id'] }}
                           <div>
                             {{ $addressItem['address'] }}
                           </div>
