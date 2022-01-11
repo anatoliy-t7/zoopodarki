@@ -142,13 +142,13 @@
                 @if (is_array($addressSelected) && !empty($addressSelected))
                   <div class="flex-col items-start justify-start w-full px-4 py-3 space-y-1 md:w-9/12 h-14">
                     <div class="leading-snug">
-                      {{ $addressSelected['address'] }} {{ $addressSelected['building'] }}
+                      {{ $addressSelected['address'] }}
 
                       @if (Arr::has($addressSelected, 'apartment'))
                         , кв. {{ $addressSelected['apartment'] }}
                       @endif
                     </div>
-                    @if (Arr::has($addressSelected, 'extra'))
+                    @if (array_key_exists('extra', $addressSelected))
                       <div class="text-xs text-gray-400">
                         {{ $addressSelected['extra'] }}
                       </div>
@@ -170,7 +170,7 @@
 
                 <div class="relative w-full md:w-3/12">
                   <x-loader-small wire:target="address" :bg="true" />
-                  <livewire:site.user-address-map />
+                  <livewire:site.user-addresses />
                 </div>
 
               </div>

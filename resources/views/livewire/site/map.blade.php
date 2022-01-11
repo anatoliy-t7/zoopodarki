@@ -67,13 +67,19 @@
         },
 
         initMap() {
-          const script = document.createElement('script');
-          script.src = 'https://api-maps.yandex.ru/2.1/?apikey=cd408cfa-b066-4543-8d65-dc5be38d9c48&lang=ru_RU';
-          document.head.appendChild(script);
+          if (!ymaps.ready()) {
+            const script = document.createElement('script');
+            script.src =
+              'https://api-maps.yandex.ru/2.1/?apikey=cd408cfa-b066-4543-8d65-dc5be38d9c48&lang=ru_RU';
+            document.head.appendChild(script);
 
-          script.addEventListener('load', function() {
-            ymaps.ready(init);
-          });
+            script.addEventListener('load', function() {
+              ymaps.ready(init);
+            });
+          } else {
+            init();
+          }
+
 
           function init() {
             // Создание карты.

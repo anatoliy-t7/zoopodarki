@@ -76,8 +76,8 @@ class ProcessImportProduct1C implements ShouldQueue
         \DB::connection()->disableQueryLog();
 
         \DB::transaction(function () use ($product1c) {
-            if (Product1C::where('uuid', $product1c['Ид'])->first() && Arr::has($product1c, '@attributes')) {
-                if ($product1c['@attributes']['Статус'] === 'Удален') {
+            if (Product1C::where('uuid', $product1c['Ид'])->first()) {
+                if (Arr::has($product1c, '@attributes') && $product1c['@attributes']['Статус'] === 'Удален') {
                     $oldProduct = Product1C::where('uuid', $product1c['Ид'])
                         ->with('product')
                         ->with('product.variations')
@@ -105,10 +105,10 @@ class ProcessImportProduct1C implements ShouldQueue
                         $oldProduct->delete();
                         $this->forDelete++;
                     }
+                } elseif (Product1C::where('uuid', $product1c['Ид'])->first()) {
+                    $this->updateProduct($product1c);
                 }
-            } elseif (Product1C::where('uuid', $product1c['Ид'])->first()) {
-                $this->updateProduct($product1c);
-            } elseif (!Product1C::withTrashed()->where('uuid', $product1c['Ид'])->first()) {
+            } elseif (!Product1C::onlyTrashed()->where('uuid', $product1c['Ид'])->first()) {
                 $this->createProduct($product1c);
             }
         });
