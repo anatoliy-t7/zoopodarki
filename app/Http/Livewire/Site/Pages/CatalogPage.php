@@ -13,7 +13,7 @@ class CatalogPage extends Component
 
     public function mount($catalogslug)
     {
-        if ($catalogslug = 'help-shelter') {
+        if ($catalogslug === 'help-shelter') {
             redirect()->route('site.category', ['catalogslug' => $catalogslug, 'categoryslug' => 'priyut-dlya-sobak']);
         }
         $this->catalog = Catalog::where('slug', $catalogslug)

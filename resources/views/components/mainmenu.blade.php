@@ -48,7 +48,8 @@
                   <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}"
                     class="font-bold hover:text-orange-500">
                     @if ($brand->logo)
-                      <img loading="lazy" class="object-contain w-24 h-16" src="/assets/brands/{{ $brand->logo }}">
+                      <img loading="lazy" class="object-scale-down w-auto h-24"
+                        src="/assets/brands/{{ $brand->logo }}">
                     @else
                       <div>{{ $brand->name }}</div>
                     @endif

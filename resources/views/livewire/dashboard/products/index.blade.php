@@ -3,7 +3,7 @@
 @endsection
 <div class="space-y-2">
 
-  <div class="flex items-center justify-start w-full space-x-8">
+  <div class="flex items-center justify-start w-full gap-8">
 
     <h3 class="text-2xl">Товары</h3>
 
@@ -15,6 +15,7 @@
         <div>Создать</div>
       </a>
     @endcan
+    <x-dashboard.search />
 
   </div>
 
@@ -22,7 +23,7 @@
 
     <div class="flex flex-col items-center justify-start gap-6 lg:flex-row lg:w-2/3">
 
-      <x-dashboard.search />
+
 
       <div wire:ignore class="flex items-center justify-end gap-6 py-3">
         <div class="max-w-xs">
@@ -41,7 +42,7 @@
         </div>
         <div class="max-w-xs">
           <label for="status"></label>
-          <select wire:model="status" name="status" id="status" class="w-64">
+          <select wire:model="status" name="status" id="status">
             <option default value="">Все статусы</option>
             @foreach ($statuses as $item)
               <option value="{{ $item }}">{{ __('constants.product_status.' . $item) }}</option>
@@ -51,7 +52,7 @@
 
         <div class="max-w-xs">
           <label for="availability"></label>
-          <select wire:model="availability" name="availability" id="availability" class="w-64">
+          <select wire:model="availability" name="availability" id="availability">
             <option default value="all">В наличии и без</option>
             <option value="yes">В наличии</option>
             <option value="no">Нет наличии</option>
@@ -60,7 +61,7 @@
 
         <div class="max-w-xs">
           <label for="hasCategories"></label>
-          <select wire:model="hasCategories" name="hasCategories" id="hasCategories" class="w-64">
+          <select wire:model="hasCategories" name="hasCategories" id="hasCategories">
             <option default value="all">С категорией и без</option>
             <option value="yes">С категорией</option>
             <option value="no">Без категории</option>
@@ -86,7 +87,7 @@
           @endif
 
           <button
-            class="relative text-xs text-pink-500 border border-pink-500 btn hover:bg-pink-500 hover:text-white group "
+            class="relative text-sm text-pink-500 border border-pink-500 btn hover:bg-pink-500 hover:text-white group "
             wire:click="showTrashed">
             @if ($onlyTrashed)
               <div>Скрыть удаленные</div>
