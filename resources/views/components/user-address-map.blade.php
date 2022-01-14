@@ -10,17 +10,17 @@
 
     <x-slot name="content">
       <div x-data="userMapAddress" @set-coordinates.window="setCoordinates(event)" @set-zone.window="setZone(event)"
-        @set-address.window="setExistsAddress(event)" class="w-full"
+        @loader-off.window="loader = false" @set-address.window="setExistsAddress(event)" class="w-full"
         @init-map-user-address.window="initMap(event)" @reset-delivery-place.window="reset(event)">
 
         <div class="block w-full min-h-full gap-4 overflow-hidden md:flex">
 
           <div class="w-full pt-1">
             <div x-show="showFields" x-transition.duration.600ms class="flex gap-4 px-1 pb-4">
-              <div class="w-5/12">
+              <div class="w-6/12">
                 <input class="field" type="text" autofocus x-model="deliveryPlace.address" readonly />
               </div>
-              <div class="w-4/12">
+              <div class="w-3/12">
                 <input name="extra" x-model="deliveryPlace.extra" class="field " type=" text"
                   placeholder="подъезд, домофон и тд." />
               </div>
@@ -39,7 +39,21 @@
                 </div>
               </div>
             </div>
+
             <div class="h-full">
+              <div x-show="loader" x-transition.duration.600ms
+                class="absolute inset-0 z-40 w-full h-full bg-white bg-opacity-75">
+                <div class="flex items-center justify-center w-full h-full">
+                  <svg class="w-6 h-6 text-white-500 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24">
+                    <circle class="opacity-50" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                    </circle>
+                    <path fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                  </svg>
+                </div>
+              </div>
               <div id="mapZones" class="w-full overflow-hidden h-96 rounded-xl">
               </div>
             </div>
@@ -57,6 +71,7 @@
           document.addEventListener('alpine:init', () => {
             Alpine.data('userMapAddress', () => ({
               key: '{{ config('constants.yandex_map_key') }}',
+              loader: true,
               showFields: false,
               deliveryPlace: {
                 id: null,
@@ -93,6 +108,7 @@
                 }
 
                 function init() {
+
                   var myMap = new ymaps.Map('mapZones', {
                       center: [59.91995, 30.470315],
                       zoom: 9,
@@ -120,6 +136,9 @@
                     ],
                   });
                   myMap.geoObjects.add(deliveryPoint);
+
+                  const loaderOff = new CustomEvent('loader-off');
+                  window.dispatchEvent(loaderOff);
 
                   function onZonesLoad(json) {
                     // Добавляем зоны на карту.
@@ -250,7 +269,6 @@
                 };
               },
               setCoordinates(coordinates) {
-                console.log(coordinates.detail)
                 this.deliveryPlace.address = coordinates.detail.address;
                 this.deliveryPlace.lat = coordinates.detail.coordinates[0];
                 this.deliveryPlace.lng = coordinates.detail.coordinates[1];

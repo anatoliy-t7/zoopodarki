@@ -63,15 +63,21 @@ class ProcessOffersProduct1C implements ShouldQueue
         if (Product1C::where('uuid', $offer['Ид'])->exists()) {
             $product = Product1C::where('uuid', $offer['Ид'])->first();
 
-            $product->update([
-                'price' => $offer['Цены']['Цена']['ЦенаЗаЕдиницу'],
-                'stock' => $offer['Количество'],
-            ]);
 
-            if (Arr::exists($offer, 'Скидка') and !empty($offer['Скидка'])) {
-                $product->discount = $offer['Скидка'];
-                $product->save();
+            if (Arr::exists($offer, 'Цены')) {
+                $product->price = $offer['Цены']['Цена']['ЦенаЗаЕдиницу'];
             }
+
+            if (Arr::exists($offer, 'Количество')) {
+                $product->price = $offer['Количество'];
+            }
+
+            if (Arr::exists($offer, 'Скидка') && !empty($offer['Скидка'])) {
+                $product->discount = $offer['Скидка'];
+            }
+
+            $product->save();
+
             unset($offer, $product);
         }
     }
