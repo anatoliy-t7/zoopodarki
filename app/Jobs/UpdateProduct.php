@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Product;
+use App\Models\Product1C;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -35,18 +35,14 @@ class UpdateProduct implements ShouldQueue
      */
     public function handle()
     {
-        $products = Product::whereHas('categories', function ($query) {
-            $query->whereIn('product_category.category_id', [18, 34]);
-        })
-        ->get();
+        $products = Product1C::onlyTrashed()->get();
 
         foreach ($products as $product) {
-            $product->discount_weight = 1;
-            $product->save();
+            $product->forceDelete();
             $this->count = $this->count + 1;
         }
 
-        logger('discount_weight: ' . $this->count);
+        logger('forceDelete: ' . $this->count);
     }
 
     public function addAttributeItem($attribute)
