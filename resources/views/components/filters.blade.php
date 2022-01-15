@@ -24,10 +24,12 @@
      </div>
    @else
      @if ($attributesRanges)
-       <div wire:ignore>
+       <div wire:ignore class="space-y-4">
          @forelse ($attributesRanges as $key => $attrRange)
-           <div class="pt-4 pb-3 font-bold">{{ $attrRange['name'] }}</div>
-           <x-range-slider-attr :minRange="$attrRange['min']" :maxRange="$attrRange['max']" :idRange="$key" />
+           <div>
+             <div class="pt-4 pb-3 font-bold">{{ $attrRange['name'] }}</div>
+             <x-range-slider-attr :minRange="$attrRange['min']" :maxRange="$attrRange['max']" :idRange="$key" />
+           </div>
          @empty
          @endforelse
        </div>

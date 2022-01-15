@@ -225,7 +225,7 @@ class CategoryPage extends Component
                 [
                     'id' => $this->attributesRange[$key]['id'],
                     'name' => $this->attributesRange[$key]['name'],
-                    'max' => $item->max('name'),
+                    'max' => str_replace(',', '.', $item->max('name')),
                     'min' => $item->min('name'),
                 ],
             );
