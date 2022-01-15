@@ -33,7 +33,7 @@
   <div class="flex-col items-center justify-between w-full pt-1" itemprop="offers" itemscope
     itemtype="https://schema.org/Offer">
     @foreach ($product['variations'] as $key => $item)
-      {{-- ->sortBy('price') --}}
+
       @if ($item['promotion_type'] > 0 || $product['discount_weight'] == 1)
         <div class="absolute top-0 left-0 z-30">
           <x-tabler-discount-2 class="w-8 h-8 text-orange-500 stroke-current" />
@@ -50,15 +50,10 @@
               <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB(discount($item['price'], 10)) }}</div>
-            @elseif ($item->promotion_type === 1)
-              <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
-              <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
-                {{ RUB($item['promotion_price']) }}
-              </div>
             @elseif ($item['promotion_type'] === 0)
               <div class="text-base font-semibold text-gray-800 md:text-sm" itemprop="price">
                 {{ RUB($item['price']) }}</div>
-            @elseif ($item['promotion_type'] === 3)
+            @elseif ($item['promotion_type'] === 3 || $item->promotion_type === 1)
               <div class="text-xs text-gray-500 line-through">{{ RUB($item['promotion_price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB($item['price']) }}</div>

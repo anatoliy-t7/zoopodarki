@@ -104,10 +104,11 @@ trait Promotions
         return floor($price);
     }
 
-    public function calcDiscountForUcenka($promotionPrice, $percent): int
+    public function calcDiscountForUcenka($price, $percent): int
     {
-        // Стоимость товара / 1.$percent + 8% (должно работать в обратную сторону)
+        // Стоимость товара 1С*100/75
+        $percent = 100 - $percent;
 
-        return floor(($promotionPrice / round('1.' . $percent, 2)) * 1.08);
+        return floor(($price * 100) / $percent);
     }
 }

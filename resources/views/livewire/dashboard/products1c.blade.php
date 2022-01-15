@@ -30,15 +30,13 @@
 
           <x-dashboard.table.head sortable wire:click="sortBy('price')"
             :direction="$sortField === 'price' ? $sortDirection : null">Цена</x-dashboard.table.head>
-          <x-dashboard.table.head sortable wire:click="sortBy('weight')"
-            :direction="$sortField === 'weight' ? $sortDirection : null">Вес</x-dashboard.table.head>
           <x-dashboard.table.head sortable wire:click="sortBy('stock')"
             :direction="$sortField === 'stock' ? $sortDirection : null">Запас</x-dashboard.table.head>
           <x-dashboard.table.head>Единица измерения</x-dashboard.table.head>
-          <x-dashboard.table.head sortable wire:click="sortBy('cod1c')"
-            :direction="$sortField === 'cod1c' ? $sortDirection : null">Код1С</x-dashboard.table.head>
           <x-dashboard.table.head sortable wire:click="sortBy('barcode')"
             :direction="$sortField === 'barcode' ? $sortDirection : null">Штрихкод</x-dashboard.table.head>
+          <x-dashboard.table.head sortable wire:click="sortBy('updated_at')"
+            :direction="$sortField === 'updated_at' ? $sortDirection : null">Обновлено</x-dashboard.table.head>
           <x-dashboard.table.head></x-dashboard.table.head>
         </x-slot>
 
@@ -81,14 +79,9 @@
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                @if ($product1c->promotion_type === 1)
-                  <span class="pr-1 line-through">
-                    {{ RUB($product1c->price) }}
-                  </span>
-                  <b>{{ RUB($product1c->promotion_price) }}</b>
-                @elseif ($product1c->promotion_type === 0 or $product1c->promotion_type === 2)
+                @if ($product1c->promotion_type === 0 or $product1c->promotion_type === 2)
                   {{ RUB($product1c->price) }}
-                @elseif($product1c->promotion_type === 3)
+                @elseif($product1c->promotion_type === 3 || $product1c->promotion_type === 1)
                   <span class="pr-1 line-through">
                     {{ RUB($product1c->promotion_price) }}
                   </span>
@@ -99,9 +92,6 @@
                 @endif
               </x-dashboard.table.cell>
 
-              <x-dashboard.table.cell>
-                {{ $product1c->weight }}
-              </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
                 {{ $product1c->stock }}
@@ -115,11 +105,11 @@
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                {{ $product1c->cod1c }}
+                {{ $product1c->barcode }}
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell>
-                {{ $product1c->barcode }}
+                {{ dataAndTimeForHumans($product1c->updated_at) }}
               </x-dashboard.table.cell>
 
               <x-dashboard.table.cell class="flex items-center justify-end invisible group-hover:visible">
@@ -206,7 +196,8 @@
                         <span class="font-normal ">(указать без знака %)</span>
                       </label>
                       <div class="w-20">
-                        <input type="number" id="percent" wire:model.defer="promotion.percent" class="field">
+                        <input type="number" id="percent" max="100" wire:model.defer="promotion.percent"
+                          class="field">
                       </div>
                       @error('promotion.percent') <span class="text-sm text-red-500">{{ $message }}</span>
                       @enderror

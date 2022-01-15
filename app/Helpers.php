@@ -45,6 +45,14 @@ if (!function_exists('dataAndTime')) {
     }
 }
 
+if (!function_exists('dataAndTimeForHumans')) {
+    function dataAndTimeForHumans($datetime)
+    {
+        return Carbon::parse($datetime)->diffForHumans();
+    }
+}
+
+
 if (!function_exists('getNextOrderNumber')) {
     function getNextOrderNumber()
     {

@@ -145,16 +145,7 @@
                                     {{ RUB($item->price) }}
                                   </div>
                                 </div>
-                              @elseif ($item->associatedModel['promotion_type'] === 1)
-                                <div class="flex items-center justify-end p-2 space-x-2">
-                                  <div class="text-xs line-through">
-                                    {{ RUB($item->price) }}
-                                  </div>
-                                  <div class="font-bold text-orange-500">
-                                    {{ RUB($item->associatedModel['promotion_price']) }}
-                                  </div>
-                                </div>
-                              @elseif ($item->associatedModel['promotion_type'] === 3)
+                              @elseif ($item->associatedModel['promotion_type'] === 3 || $item->associatedModel['promotion_type'] === 1)
                                 <div class="flex items-center justify-end p-2 space-x-2">
                                   <div class="text-xs line-through">
                                     {{ RUB($item->associatedModel['promotion_price']) }}

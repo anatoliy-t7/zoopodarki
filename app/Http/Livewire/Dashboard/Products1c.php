@@ -70,11 +70,11 @@ class Products1c extends Component
             ]);
         } elseif ($this->promotion['type'] === '3' || $this->promotion['type'] === '1') {
             $this->validate([
-                'promotion.percent' => 'required|numeric|between:1,99',
+                'promotion.percent' => 'required|numeric|between:1,100',
             ]);
         } elseif ($this->promotion['type'] === '4') {
             $this->validate([
-                'promotion.percent' => 'required|numeric|between:1,99',
+                'promotion.percent' => 'required|numeric|between:1,100',
                 'promotion.date' => 'required|date|date_format:Y-m-d|after:today',
             ]);
         }
