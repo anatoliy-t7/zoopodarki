@@ -226,7 +226,7 @@ class CategoryPage extends Component
                     'id' => $this->attributesRange[$key]['id'],
                     'name' => $this->attributesRange[$key]['name'],
                     'max' => str_replace(',', '.', $item->max('name')),
-                    'min' => $item->min('name'),
+                    'min' => str_replace(',', '.', $item->min('name')),
                 ],
             );
         }
@@ -308,6 +308,7 @@ class CategoryPage extends Component
                 $query->whereIn('brand_id', $this->brandsF);
             })
             ->with('attributes')
+            // TODO неработает
             ->when($this->attributesRangeOn, function ($query) {
                 $query->whereHas('attributes', function ($query) {
                     foreach ($this->attributesRanges as $range) {
