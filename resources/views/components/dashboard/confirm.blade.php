@@ -35,7 +35,9 @@ $watch('confirmId', value => {
         <button x-on:click="confirmId = null"
           class="px-5 py-2 font-semibold text-gray-600 transition duration-150 border border-gray-300 rounded-lg hover:bg-gray-100 hover:border-gray-100 hover:text-gray-900 focus:outline-none focus:shadow-outline">Отмена</button>
 
-        <button x-on:click="confirmId = null" wire:click="remove({{ $confirmId }})"
+        <button x-on:click="confirmId = null" @if ($attributes->has('wire:click'))
+          {{ $attributes->whereStartsWith('wire:click') }}
+        @else wire:click="remove({{ $confirmId }})" @endif
           class="px-5 py-2 font-semibold text-white transition duration-150 bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:shadow-outline">Удалить</button>
       </div>
 

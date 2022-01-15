@@ -22,7 +22,6 @@ class CategoryPage extends Component
     public $tags;
     public $allAttributes;
     public $attributesRangeOn = false;
-    public $attributesRange;
     public $attributesRanges = [];
     private $attrsGroupFilters = []; // Групирует выбранные свойства
 
@@ -216,17 +215,18 @@ class CategoryPage extends Component
     {
         $allAttributes = $this->category->filters($productAttributes);
 
-        $this->attributesRange = $allAttributes
+        $attributesRange = $allAttributes
             ->where('range', 1)->flatten()->toArray();
 
         foreach ($allAttributes->where('range', 1)->pluck('items') as $key => $item) {
             array_push(
                 $this->attributesRanges,
                 [
-                    'id' => $this->attributesRange[$key]['id'],
-                    'name' => $this->attributesRange[$key]['name'],
-                    'max' => str_replace(',', '.', $item->max('name')),
-                    'min' => str_replace(',', '.', $item->min('name')),
+                    'id' => $attributesRange[$key]['id'],
+                    'name' => $attributesRange[$key]['name'],
+                    'min' => (int) str_replace(',', '.', $item->min('name')),
+                    'max' => (int) str_replace(',', '.', $item->max('name')),
+                    'filter' => false,
                 ],
             );
         }
@@ -257,8 +257,9 @@ class CategoryPage extends Component
 
     public function updatedMinMaxRange($minRange, $maxRange, $key)
     {
-        $this->attributesRanges[$key]['min'] = $minRange;
-        $this->attributesRanges[$key]['max'] = $maxRange;
+        $this->attributesRanges[$key]['min'] = (int) $minRange;
+        $this->attributesRanges[$key]['max'] = (int) $maxRange;
+        // $this->attributesRanges[$key]['filter'] = true;
         $this->attributesRangeOn = true;
     }
 
@@ -307,22 +308,6 @@ class CategoryPage extends Component
             ->when($this->brandsF, function ($query) {
                 $query->whereIn('brand_id', $this->brandsF);
             })
-            ->with('attributes')
-            // TODO неработает
-            ->when($this->attributesRangeOn, function ($query) {
-                $query->whereHas('attributes', function ($query) {
-                    foreach ($this->attributesRanges as $range) {
-                        $query->where(
-                            'attribute_item.attribute_id',
-                            $range['id']
-                        )
-                        ->whereBetween('attribute_item.name', [
-                            $range['min'],
-                            $range['max'],
-                        ]);
-                    }
-                });
-            })
 
              ->when($this->shelterUrgentlyRequired, function ($query) {
                  $query->whereHas('attributes', fn ($q) => $q->where('attribute_item.id', 2546));
@@ -347,7 +332,23 @@ class CategoryPage extends Component
             ->when($this->stockF, function ($query) {
                 $query->checkStock((int) $this->stockF);
             })
+            // TODO неработает
+            ->when($this->attributesRangeOn, function ($query) {
+                $query->whereHas('attributes', function ($query) {
+                    foreach ($this->attributesRanges as $range) {
+                        $query->where(
+                            'attribute_item.attribute_id',
+                            $range['id']
+                        )
+                        ->whereBetween('attribute_item.name', [
+                            $range['min'],
+                            $range['max'],
+                        ]);
+                    }
+                });
+            })
               //  ->with(['media' => function ($query) { $query->unique('model_id'); }])
+                ->with('attributes')
                 ->with('media:id,model_id,model_type,collection_name,disk,conversions_disk,generated_conversions,file_name')
                 ->with('brand:id,name,slug')
                 ->with('unit:id,name')

@@ -380,8 +380,8 @@
             <div>
               @can('delete')
                 @if ($editCategory['id'] !== null)
-                  <x-dashboard.confirm :confirmId="$editCategory['id']"
-                    wire:key="removeCat{{ $editCategory['id'] }}" />
+                  <x-dashboard.confirm :confirmId="$editCategory['id']" wire:key="removeCat{{ $editCategory['id'] }}"
+                    wire:click="removeItem({{ $editCategory['id'] }})" />
                 @endif
               @endcan
             </div>
