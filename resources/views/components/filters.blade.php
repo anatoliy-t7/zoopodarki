@@ -27,8 +27,10 @@
        <div wire:ignore class="space-y-4">
          @forelse ($attributesRanges as $key => $attrRange)
            <div>
+
              <div class="pt-4 pb-3 font-bold">{{ $attrRange['name'] }}</div>
-             <x-range-slider-attr :minRange="$attrRange['min']" :maxRange="$attrRange['max']" :idRange="$key" />
+             <x-range-slider-attr :minRange="$attrRange['min']" :maxRange="$attrRange['max']" :keyRange="$key"
+               :idRange="$attrRange['id']" />
            </div>
          @empty
          @endforelse
@@ -45,7 +47,7 @@
        </div>
      @endif
 
-     @if ($brands)
+     @if ($brands->count() > 0)
        <div x-data="searchBrand" class="space-y-4">
          <div class="font-bold">Бренд</div>
 
@@ -94,7 +96,6 @@
          <template x-for="(attribute, index) in allAttributes" :key="attribute.id" hidden>
            <div class="space-y-3">
              <div class="font-bold" x-text="attribute.name"></div>
-
              <div x-data="{
                   items: attribute.items,
                    search: '',

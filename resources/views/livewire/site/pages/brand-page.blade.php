@@ -23,35 +23,39 @@
       </div>
     </div>
 
-    <div class="flex items-start justify-start gap-6 p-6 bg-white shadow-sm rounded-2xl">
-      @if ($brand->logo)
-        <div class="">
-          <img loading="lazy" class="w-auto h-24" src="/assets/brands/{{ $brand->logo }}"
-            alt="Логотип {{ $brand->name }}">
+    <div class="p-6 bg-white shadow-sm rounded-2xl">
+      <div class="flex items-start justify-start gap-6">
+        <div class="w-2/12 p-6">
+          @if ($brand->logo)
+            <img class="object-contain h-auto w-44" src="/assets/brands/{{ $brand->logo }}"
+              alt="Логотип {{ $brand->name }}">
+          @endif
         </div>
-      @endif
-      <div class="flex flex-col gap-4">
-        @if ($brand->items()->exists())
-          <div class="flex items-center space-x-4">
-            <div class="text-sm text-gray-500">Серии бренда:</div>
-            <div class="flex items-center space-x-4 text-sm">
-              @foreach ($brand->items as $items)
-                <div>{{ $items->name }}</div>
-              @endforeach
+        <div class="flex flex-col w-10/12 gap-4">
+          @if ($brand->items()->exists())
+            <div class="flex items-start gap-4">
+              <div class="block w-2/12 text-sm text-gray-500">Серии бренда:</div>
+              <div class="flex flex-wrap items-center w-10/12 text-sm lowercase gap-x-4 gap-y-1">
+                @foreach ($brand->items as $items)
+                  <div>{{ $items->name }}</div>
+                @endforeach
+              </div>
             </div>
-          </div>
-        @endif
-        @if ($countries)
-          <div class="flex items-center space-x-4">
-            <div class="text-sm text-gray-500">Страна производства:</div>
-            <div class="flex items-center space-x-4 text-sm">
-              @foreach ($countries as $country)
-                <div>{{ $country }}</div>
-              @endforeach
+          @endif
+          @if ($countries)
+            <div class="flex items-center space-x-4">
+              <div class="w-2/12 text-sm text-gray-500">Страна производства:</div>
+              <div class="flex items-center w-10/12 space-x-4 text-sm">
+                @foreach ($countries as $country)
+                  <div>{{ $country }}</div>
+                @endforeach
+              </div>
             </div>
-          </div>
-        @endif
-        <p>{{ $brand->description }}</p>
+          @endif
+        </div>
+      </div>
+      <div>
+        <p>{!! $brand->description !!}</p>
       </div>
     </div>
 

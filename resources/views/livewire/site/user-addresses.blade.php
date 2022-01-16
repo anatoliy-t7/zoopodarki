@@ -26,8 +26,7 @@
                       <div class="relative block ">
 
                         <div wire:click="setAddress({{ $addressItem['id'] }}), $refresh"
-                          class="px-4 py-3 mt-4 bg-white border cursor-pointer hover:border-green-400 rounded-xl {{ $deliveryPlace['id'] === $addressItem['id'] ? 'border-green-300' : 'border-gray-200' }}">
-                          {{ $deliveryPlace['id'] }}
+                          class="px-4 py-3 mt-4 bg-gray-50 border cursor-pointer hover:bg-gray-100 rounded-xl {{ $deliveryPlace['id'] === $addressItem['id'] ? 'border-green-400' : 'border-gray-200' }}">
                           <div>
                             {{ $addressItem['address'] }}
                           </div>
@@ -39,7 +38,7 @@
                         </div>
 
                         <div wire:click="editAddress({{ $addressItem['id'] }})"
-                          class="absolute z-30 cursor-pointer top-4 right-2">
+                          class="absolute z-30 cursor-pointer top-2 right-2">
                           <x-tabler-edit class="w-5 h-5 text-gray-300 stroke-current hover:text-blue-400" />
                         </div>
 

@@ -1,5 +1,4 @@
-@props(['minRange', 'maxRange', 'idRange'])
-<div x-data="rangeAttr{{ $idRange }}" x-init="moveThumbAttr" @reset-range-attr.window="reset()">
+<div x-data="rangeAttr{{ $keyRange }}" x-init="moveThumbAttr" @reset-range-attr.window="reset()">
   <div class="flex flex-col items-center w-full select-none">
     <div class="flex items-center justify-between w-full pb-4">
       <div x-text="minrange">
@@ -7,8 +6,9 @@
       <div x-text="maxrange">
       </div>
     </div>
-    <div class="relative w-full" @mouseup="$wire.emit('updatedMinMaxRange', minrange, maxrange , {{ $idRange }})"
-      @touchend="$wire.emit('updatedMinMaxRange', minrange, maxrange , {{ $idRange }})">
+    <div class="relative w-full"
+      @mouseup="$wire.emit('updatedMinMaxRange', minrange, maxrange, {{ $keyRange }}, {{ $idRange }})"
+      @touchend="$wire.emit('updatedMinMaxRange', minrange, maxrange, {{ $keyRange }}, {{ $idRange }})">
       <label>
         <input type="range" step="1" :min="min" :input="moveThumbAttr" :max="max" x-model="minrange"
           class="absolute z-30 w-full h-6 opacity-0 appearance-none cursor-pointer pointer-events-none">
@@ -33,7 +33,7 @@
 
     <script>
       document.addEventListener('alpine:initializing', () => {
-        Alpine.data('rangeAttr{{ $idRange }}', () => ({
+        Alpine.data('rangeAttr{{ $keyRange }}', () => ({
           minrange: {{ $minRange }},
           maxrange: {{ $maxRange }},
           min: {{ $minRange }},

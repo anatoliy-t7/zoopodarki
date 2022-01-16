@@ -12,24 +12,26 @@
       {{ $catalog->name }}
     </h1>
 
-    <div class="flex items-center justify-between p-6 space-x-12 bg-white shadow-sm rounded-2xl">
-      @foreach ($catalog->brandsById as $brand)
-        <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}" class="font-bold hover:text-orange-500">
-          @if ($brand->logo)
-            <img loading="lazy" class="object-contain w-auto h-20" src="/assets/brands/{{ $brand->logo }}">
-          @else
-            <div>{{ $brand->name }}</div>
-          @endif
-        </a>
-      @endforeach
-      <div class="flex items-center justify-center md:px-4 ">
-        <a href="{{ route('site.brands') }}"
-          class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 w-36 bg-gray-50 hover:bg-gray-100 rounded-2xl">
-          <span> Все бренды</span>
-          <x-tabler-chevron-right class="w-5 h-5" />
-        </a>
+    @if (count($catalog->brandsById) > 0)
+      <div class="flex items-center justify-between p-6 space-x-12 bg-white shadow-sm rounded-2xl">
+        @foreach ($catalog->brandsById as $brand)
+          <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}" class="font-bold hover:text-orange-500">
+            @if ($brand->logo)
+              <img loading="lazy" class="object-contain w-auto h-20" src="/assets/brands/{{ $brand->logo }}">
+            @else
+              <div>{{ $brand->name }}</div>
+            @endif
+          </a>
+        @endforeach
+        <div class="flex items-center justify-center md:px-4 ">
+          <a href="{{ route('site.brands') }}"
+            class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 w-36 bg-gray-50 hover:bg-gray-100 rounded-2xl">
+            <span> Все бренды</span>
+            <x-tabler-chevron-right class="w-5 h-5" />
+          </a>
+        </div>
       </div>
-    </div>
+    @endif
 
     <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">
       <div class="w-full">

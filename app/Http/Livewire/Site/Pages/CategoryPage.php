@@ -7,6 +7,7 @@ use App\Models\Catalog;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Tag;
+use App\Support\Collection;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -21,7 +22,7 @@ class CategoryPage extends Component
     public $brands;
     public $tags;
     public $allAttributes;
-    public $attributesRangeOn = false;
+    public $attributesRangeSelected = [];
     public $attributesRanges = [];
     private $attrsGroupFilters = []; // Групирует выбранные свойства
 
@@ -226,12 +227,17 @@ class CategoryPage extends Component
                     'name' => $attributesRange[$key]['name'],
                     'min' => (int) str_replace(',', '.', $item->min('name')),
                     'max' => (int) str_replace(',', '.', $item->max('name')),
-                    'filter' => false,
                 ],
             );
         }
 
-        $this->allAttributes = $allAttributes->where('range', 0)->toArray();
+        $allAttributes = $allAttributes->where('range', 0);
+        if ($allAttributes->firstWhere('id', 17)) {
+            $attrProducts = $allAttributes->firstWhere('id', 17);
+            $allAttributes = $allAttributes->except(17);
+            $allAttributes->prepend($attrProducts);
+        }
+        $this->allAttributes = $allAttributes->toArray();
     }
 
     public function setAttFilter($attrsF = [])
@@ -254,13 +260,15 @@ class CategoryPage extends Component
         $this->maxPrice = (int)$maxPrice;
     }
 
-
-    public function updatedMinMaxRange($minRange, $maxRange, $key)
+    public function updatedMinMaxRange($minRange, $maxRange, $keyRange, $idRange)
     {
-        $this->attributesRanges[$key]['min'] = (int) $minRange;
-        $this->attributesRanges[$key]['max'] = (int) $maxRange;
-        // $this->attributesRanges[$key]['filter'] = true;
-        $this->attributesRangeOn = true;
+        if ($this->attributesRanges[$keyRange]['min'] === $minRange && $this->attributesRanges[$keyRange]['max'] === $maxRange) {
+            unset($this->attributesRangeSelected[$keyRange]);
+        } else {
+            $this->attributesRangeSelected[$keyRange]['min'] = (int) $minRange;
+            $this->attributesRangeSelected[$keyRange]['max'] = (int) $maxRange;
+            $this->attributesRangeSelected[$keyRange]['id'] = (int) $idRange;
+        }
     }
 
 
@@ -332,10 +340,10 @@ class CategoryPage extends Component
             ->when($this->stockF, function ($query) {
                 $query->checkStock((int) $this->stockF);
             })
-            // TODO неработает
-            ->when($this->attributesRangeOn, function ($query) {
+
+            ->when($this->attributesRangeSelected, function ($query) {
                 $query->whereHas('attributes', function ($query) {
-                    foreach ($this->attributesRanges as $range) {
+                    foreach ($this->attributesRangeSelected as $range) {
                         $query->where(
                             'attribute_item.attribute_id',
                             $range['id']
@@ -354,7 +362,7 @@ class CategoryPage extends Component
                 ->with('unit:id,name')
                 ->with('variations:id,product_id,price,promotion_type,unit_value,promotion_percent,stock')
                 ->orderBy($this->sortSelectedType, $this->sortBy)
-                ->paginate(32);
+                ->get();
     }
 
     public function updated()
@@ -368,8 +376,9 @@ class CategoryPage extends Component
 
         $products = $this->getProducts();
 
+        $this->getAttributes($products->pluck('attributes')->flatten()->pluck('id')->unique()->values()->sort()->toArray());
 
-        $this->getAttributes($products->pluck('attributes')->flatten()->pluck('id')->unique()->values()->toArray());
+        $products = (new Collection($products))->paginate(32);
 
         if ($products->total() < 5) {
             SEOMeta::setRobots('noindex, nofollow');

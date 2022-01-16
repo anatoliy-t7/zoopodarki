@@ -4,7 +4,10 @@
       href="{{ route('site.product', ['catalogslug' => 'promotions-and-gifts', 'categoryslug' => 'diskontnaya-karta', 'productslug' => 'diskontnaya-karta-5']) }}"
       title="Cкидочная карта 5%">
       <x-tabler-credit-card class="w-8 h-8 text-yellow-500 " />
-      <p class="prose max-w-none">Приобрести скидочную карту 5%</p>
+      <p class="leading-4">Приобрести скидочную карту 5% <br><span class="text-xs font-semibold">действует
+          сразу</span>
+      </p>
+
     </a>
   @endif
 </div>

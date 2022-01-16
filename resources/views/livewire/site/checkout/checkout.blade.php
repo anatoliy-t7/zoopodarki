@@ -71,7 +71,7 @@
 
                 @if ($contactSelected['email'])
                   <div>
-                    <div class="text-xs text-gray-400">Адрес эл. почты: </div>
+                    <div class="text-xs text-gray-400">Электронная почта: </div>
                     <div>{{ $contactSelected['email'] }}</div>
                   </div>
                 @endif

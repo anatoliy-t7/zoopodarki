@@ -549,6 +549,7 @@ class Checkout extends Component
 
     public function getAddressesforCheckout()
     {
+        //dd('getAddressesforCheckout');
         if (auth()->user()) {
             $user = auth()->user();
             $user->load('addresses');

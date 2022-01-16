@@ -78,6 +78,9 @@ trait Searcheable
             if (empty($result['hits'])) {
                 $q = switcher_en($q);
                 $result = $this->searchInstant($q);
+                if (empty($result['hits'])) {
+                    $q = switcher_ru($q);
+                }
             }
 
             if (empty($result['hits'])) {

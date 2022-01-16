@@ -19,7 +19,7 @@
       class="relative flex items-center justify-center min-h-screen p-4 z-70">
       <div @click.stop
         class="relative w-full max-w-{{ $width }} px-6 py-5 overflow-y-auto bg-white shadow-xl rounded-xl ">
-        <div class="absolute top-2 right-2">
+        <div class="absolute top-4 right-4">
           <button x-on:click="open = false" class="link-hover">
             <x-tabler-x class="w-6 h-6 text-gray-500 stroke-current" />
           </button>

@@ -75,7 +75,7 @@
           </div>
           <div class="flex flex-col w-full gap-2">
             <label for="email" class="block text-sm font-bold text-gray-700">
-              Адрес эл. почты
+              Электронная почта
             </label>
             <input wire:model.lazy='data.email' id="email" type="email"
               class="field w-full @error('data.email') border-red-500 @enderror" name="email" required

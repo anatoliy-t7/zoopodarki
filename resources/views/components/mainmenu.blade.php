@@ -42,23 +42,25 @@
         :class=" { 'rounded-tl-none' : tab==={{ $menuCatalog->id }} }">
         @foreach ($menuCatalogs as $catalog)
           <div x-show="tab == {{ $catalog->id }}" class="w-full">
-            @if ($catalog->brandsById)
-              <div class="flex items-center justify-between pt-6 pb-10 pl-16 space-x-12">
-                @foreach ($catalog->brandsById as $brand)
-                  <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}"
-                    class="font-bold hover:text-orange-500">
-                    @if ($brand->logo)
-                      <img loading="lazy" class="object-scale-down w-auto h-24"
-                        src="/assets/brands/{{ $brand->logo }}">
-                    @else
-                      <div>{{ $brand->name }}</div>
-                    @endif
-                  </a>
-                @endforeach
-                <div class="flex items-center justify-center w-full md:px-4 ">
+            @if (count($catalog->brandsById) > 0)
+              <div class="flex max-w-screen-lg">
+                <div class="flex flex-wrap items-center justify-start w-10/12 gap-8 pt-6 pb-10 pl-16 xl:flex-nowrap">
+                  @foreach ($catalog->brandsById as $brand)
+                    <a href="{{ route('site.brand', ['brandslug' => $brand->slug]) }}"
+                      class="block w-32 font-bold hover:text-orange-500">
+                      @if ($brand->logo)
+                        <img loading="lazy" class="object-scale-down w-full h-12 xl:h-24"
+                          src="/assets/brands/{{ $brand->logo }}">
+                      @else
+                        <div>{{ $brand->name }}</div>
+                      @endif
+                    </a>
+                  @endforeach
+                </div>
+                <div class="flex items-center justify-center w-2/12 ">
                   <a href="{{ route('site.brands') }}"
-                    class="flex items-center justify-between gap-1 px-3 py-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-2xl">
-                    <span> Все бренды</span>
+                    class="flex items-center justify-between gap-1 py-1 pl-3 pr-1 text-sm hover:bg-gray-100 rounded-2xl">
+                    <span>Все бренды</span>
                     <x-tabler-chevron-right class="w-5 h-5" />
                   </a>
                 </div>

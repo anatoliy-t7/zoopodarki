@@ -18,14 +18,15 @@
           <div class="w-full pt-1">
             <div x-show="showFields" x-transition.duration.600ms class="flex gap-4 px-1 pb-4">
               <div class="w-6/12">
-                <input class="field" type="text" autofocus x-model="deliveryPlace.address" readonly />
+                <input class="cursor-default field" type="text" autofocus x-model="deliveryPlace.address" readonly />
               </div>
               <div class="w-3/12">
                 <input name="extra" x-model="deliveryPlace.extra" class="field " type=" text"
                   placeholder="подъезд, домофон и тд." />
               </div>
-              <div class="flex w-3/12 gap-4">
-                <button aria-label="Добавить адрес" id="addAddress" @click="$wire.call('addNewAddress', deliveryPlace)"
+              <div class="flex w-3/12 gap-4 pr-4">
+                <button aria-label="Добавить адрес" id="addAddress"
+                  @click="$wire.call('addNewAddress', deliveryPlace), reset()"
                   :disabled="deliveryPlace.address === null"
                   class="flex items-center justify-center w-full gap-2 px-3 py-2 font-bold text-white bg-blue-400 border border-blue-400 cursor-pointer disabled:text-gray-500 disabled:border-gray-200 disabled:bg-gray-50 rounded-xl hover:bg-blue-500 ">
                   <x-tabler-circle-plus class="w-8 h-8 stroke-current " />
@@ -33,7 +34,7 @@
                 </button>
                 <div x-show="deliveryPlace.id !== null">
                   <button aria-label="Удалить" @click="$wire.call('removeAddress', deliveryPlace.id)"
-                    class="flex items-center justify-center px-3 py-2 font-bold text-gray-400 border border-gray-300 cursor-pointer rounded-xl hover:text-red-500">
+                    class="flex items-center justify-center h-full px-3 py-2 font-bold text-gray-400 border border-gray-300 cursor-pointer rounded-xl hover:text-red-500">
                     <x-tabler-trash class="w-6 h-6 stroke-current " />
                   </button>
                 </div>
@@ -54,8 +55,11 @@
                   </svg>
                 </div>
               </div>
-              <div id="mapZones" class="w-full overflow-hidden h-96 rounded-xl">
+              <div wire:ignore id="mapZones" class="w-full overflow-hidden h-96 rounded-xl">
               </div>
+              <div x-show="showFields" x-transition.duration.600ms class="pt-1 text-xs text-orange-500">Для изменения
+                адреса
+                поставте метку на карте на нужном здании</div>
             </div>
           </div>
 
@@ -108,7 +112,6 @@
                 }
 
                 function init() {
-
                   var myMap = new ymaps.Map('mapZones', {
                       center: [59.91995, 30.470315],
                       zoom: 9,

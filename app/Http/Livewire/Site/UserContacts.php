@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Site;
 
 use App\Models\Contact;
 use App\Models\User;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
@@ -13,13 +12,20 @@ class UserContacts extends Component
 {
     use WireToast;
 
-    public $contact = [];
-    public $editContact = [];
+    public $editContact = [
+        'id' => null,
+        'name' => null,
+        'phone' => null,
+        'email' => null,
+    ];
     public $contacts = [];
+
 
     public function mount()
     {
-        $this->getContacts();
+        if (auth()->user()->pref_contact !== 0) {
+            $this->getContacts(auth()->user()->pref_contact);
+        }
     }
 
     public function removeContact($contactId)
@@ -31,8 +37,8 @@ class UserContacts extends Component
         } else {
             Contact::find($contactId)->delete();
 
-            $this->getContacts();
-
+            $this->getContacts($contactId);
+            $this->reset('editContact');
             toast()
             ->success('Контакт удален')
             ->push();
@@ -53,22 +59,18 @@ class UserContacts extends Component
             'editContact.email' => 'nullable|email',
         ]);
 
-        if (!Arr::has($this->editContact, 'email')) {
-            $this->editContact['email'] = null;
-        }
-
         DB::transaction(function () {
-            if ($this->contactId) {
-                $this->contact = Contact::find($this->contactId);
+            if ($this->editContact['id'] && Address::find($this->editContact['id'])) {
+                $this->editContact = Contact::find($this->editContact['id']);
 
-                $this->contact->update([
+                $contact->update([
                     'name' => $this->editContact['name'],
                     'phone' => $this->editContact['phone'],
                     'email' => $this->editContact['email'],
                     'user_id' => auth()->user()->id,
                 ]);
             } else {
-                $this->contact = Contact::create([
+                $contact = Contact::create([
                     'name' => $this->editContact['name'],
                     'phone' => $this->editContact['phone'],
                     'email' => $this->editContact['email'],
@@ -77,27 +79,27 @@ class UserContacts extends Component
             }
 
             User::where('id', auth()->user()->id)->update([
-                'pref_contact' => $this->contact->id,
+                'pref_contact' => $contact->id,
             ]);
 
             $this->reset('editContact');
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('close-form');
-            $this->getContacts();
+            $this->getContacts($contact->id);
         });
     }
 
-    public function getContacts()
+    public function getContacts($contactId)
     {
         if (auth()->user()) {
             $user = auth()->user();
             $user->load('contacts');
 
-            if ($user->pref_contact !== 0) {
-                $this->contact = $user->contacts->where('id', $user->pref_contact)->first()->toArray();
-                $this->contacts = $user->contacts->toArray();
+            if ($user->contacts->firstWhere('id', $contactId)) {
+                $this->editContact = $user->contacts->firstWhere('id', $contactId)->toArray();
             }
 
+            $this->contacts = $user->contacts->toArray();
             $this->emitUp('getContactsforCheckout');
             $this->dispatchBrowserEvent('close-modal');
         }
@@ -108,7 +110,12 @@ class UserContacts extends Component
         User::where('id', auth()->user()->id)->update([
             'pref_contact' => $contactId,
         ]);
-        $this->getContacts();
+        $this->getContacts($contactId);
+    }
+
+    public function resetEditContact()
+    {
+        $this->reset('editContact');
     }
 
     public function render()

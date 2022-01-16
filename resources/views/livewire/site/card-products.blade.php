@@ -46,7 +46,7 @@
             <x-units :unit="$product['unit']" :value="$item['unit_value']" :wire:key="$product['id']" />
           </div>
           <div class="flex items-center justify-end w-5/12 gap-2 whitespace-nowrap">
-            @if ($item['promotion_type'] === 0 && (int) $product['discount_weight'] === 1)
+            @if ($item['unit_value'] >= 5000)
               <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
               <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                 {{ RUB(discount($item['price'], 10)) }}</div>
@@ -64,22 +64,21 @@
             @endif
           </div>
           <div class="flex items-start justify-end w-2/12 -mt-1">
-            @if ($item['stock'] > 0)
-              <button wire:click="$emit('addToCart', {{ $item['id'] }}, 1, {{ $catalogId }}, 1000)"
-                aria-label="Добавить в корзину"
-                class="z-10 transition ease-in-out cursor-pointer focus:outline-none active:scale-95 link-hover group">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <path class="text-blue-400 stroke-current group-hover:text-blue-500" stroke-linecap="round"
-                    stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"
-                    d="M8.5 14.25c0 1.92 1.58 3.5 3.5 3.5s3.5-1.58 3.5-3.5M8.81 2 5.19 5.63m10-3.63 3.62 3.63" />
-                  <path class="text-blue-400 stroke-current group-hover:text-blue-500" stroke-width="1.5"
-                    d="M2 7.85c0-1.85.99-2 2.22-2h15.56c1.23 0 2.22.15 2.22 2 0 2.15-.99 2-2.22 2H4.22C2.99 9.85 2 10 2 7.85Z" />
-                  <path class="text-blue-400 stroke-current group-hover:text-blue-500" stroke-linecap="round"
-                    stroke-width="1.5"
-                    d="m3.5 10 1.41 8.64C5.23 20.58 6 22 8.86 22h6.03c3.11 0 3.57-1.36 3.93-3.24L20.5 10" />
-                </svg>
-              </button>
-            @endif
+
+            <button wire:click="$emit('addToCart', {{ $item['id'] }}, 1, {{ $catalogId }}, 1000)"
+              @if ($item['stock'] === 0) disabled @endif aria-label="Добавить в корзину"
+              class="z-10 focus:outline-none {{ $item['stock'] === 0 ? 'cursor-not-allowed text-gray-500' : 'text-blue-400  hover:text-blue-500 link-hover cursor-pointer' }}">
+              <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path class="stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                  stroke-width="1.5"
+                  d="M8.5 14.25c0 1.92 1.58 3.5 3.5 3.5s3.5-1.58 3.5-3.5M8.81 2 5.19 5.63m10-3.63 3.62 3.63" />
+                <path class="stroke-current" stroke-width="1.5"
+                  d="M2 7.85c0-1.85.99-2 2.22-2h15.56c1.23 0 2.22.15 2.22 2 0 2.15-.99 2-2.22 2H4.22C2.99 9.85 2 10 2 7.85Z" />
+                <path class="stroke-current" stroke-linecap="round" stroke-width="1.5"
+                  d="m3.5 10 1.41 8.64C5.23 20.58 6 22 8.86 22h6.03c3.11 0 3.57-1.36 3.93-3.24L20.5 10" />
+              </svg>
+            </button>
+
           </div>
         </div>
       </div>

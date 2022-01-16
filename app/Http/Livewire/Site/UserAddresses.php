@@ -27,7 +27,9 @@ class UserAddresses extends Component
 
     public function mount()
     {
-        $this->getAddresses();
+        if (auth()->user()->pref_address !== 0) {
+            $this->getAddresses(auth()->user()->pref_address);
+        }
     }
 
     public function removeAddress($addressId)
@@ -39,7 +41,7 @@ class UserAddresses extends Component
         } else {
             Address::find($addressId)->delete();
 
-            $this->getAddresses();
+            $this->getAddresses($addressId);
 
             toast()
             ->success('Адрес удален')
@@ -63,7 +65,7 @@ class UserAddresses extends Component
 
         DB::transaction(function () {
             if ($this->deliveryPlace['id'] && Address::find($this->deliveryPlace['id'])) {
-                $deliveryPlace = Address::where('id', $this->deliveryPlace['id'])->first();
+                $deliveryPlace = Address::find('id', $this->deliveryPlace['id']);
 
                 $deliveryPlace->update([
                     'address' => $this->deliveryPlace['address'],
@@ -103,20 +105,21 @@ class UserAddresses extends Component
 
         $this->reset('deliveryPlace');
         $this->dispatchBrowserEvent('close-modal');
-        $this->getAddresses();
+        $this->getAddresses($deliveryPlace->id);
     }
 
-    public function getAddresses()
+    public function getAddresses($addressId)
     {
         $user = auth()->user();
         $user->load('addresses');
 
-        if ($user->pref_address !== 0) {
-            $this->addresses = $user->addresses->toArray();
-            $this->deliveryPlace = $user->addresses->where('id', $user->pref_address)->first()->toArray();
-            $this->emitUp('getAddressesforCheckout');
-            $this->dispatchBrowserEvent('close-modal');
+        if ($user->addresses->firstWhere('id', $addressId)) {
+            $this->deliveryPlace = $user->addresses->firstWhere('id', $addressId)->toArray();
         }
+
+        $this->addresses = $user->addresses->toArray();
+        $this->emitUp('getAddressesforCheckout');
+        $this->dispatchBrowserEvent('close-modal');
     }
 
     public function setAddress($addressId)
@@ -125,7 +128,7 @@ class UserAddresses extends Component
             'pref_address' => $addressId,
         ]);
 
-        $this->getAddresses();
+        $this->getAddresses($addressId);
     }
 
     public function render()

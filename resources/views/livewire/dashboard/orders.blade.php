@@ -192,7 +192,7 @@
 
             @if ($orderSelected->contact['email'])
               <div class="flex items-center justify-start space-x-4 text-gray-600">
-                <div class="w-4/12 ">Адрес эл. почты:</div>
+                <div class="w-4/12 ">Электронная почта:</div>
                 <div class="font-bold">{{ $orderSelected->contact['email'] }}</div>
               </div>
             @endif

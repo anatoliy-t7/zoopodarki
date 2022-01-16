@@ -130,7 +130,7 @@
                           <div class="flex justify-end p-2">
 
                             <div>
-                              @if ($item->associatedModel['promotion_type'] === 0 && (int) $item->associatedModel['discount_weight'] === 1)
+                              @if ($item->associatedModel['unit_value'] >= 5000)
                                 <div class="flex items-center justify-end p-2 space-x-2">
                                   <div class="text-xs line-through">
                                     {{ RUB($item['price']) }}
@@ -326,7 +326,8 @@
 
             </div>
 
-            <div class="text-xs leading-tight text-gray-500">Доп. скидки рассчитываются при оформлении заказа.</div>
+            <div class="text-xs leading-tight text-gray-500">Дополнительные скидки рассчитываются при оформлении
+              заказа.</div>
 
           </div>
 

@@ -180,7 +180,6 @@
                     </div>
                     <!--/noindex-->
                     <!--googleon: all-->
-
                     <x-units :unit="$product->unit" :value="$item->unit_value" :wire:key="$product->id" />
 
                     <div class="relative z-10 w-full">
@@ -213,9 +212,8 @@
 
                     </div>
 
-                    <div class="w-full font-semibold text-right "
-                      :class="item.id === {{ $item->id }} ? 'text-orange-600' : 'text-gray-600'">
-                      @if ($item['promotion_type'] === 0 && (int) $product['discount_weight'] === 1)
+                    <div class="w-full font-semibold text-right">
+                      @if ($item->unit_value >= 5000)
                         <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
                         <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                           {{ RUB(discount($item['price'], 10)) }}</div>
@@ -224,11 +222,12 @@
                         <span itemprop="price" content="{{ $item->price }}"></span>
                       @elseif ($item->promotion_type === 3 || $item->promotion_type === 1)
                         <div class="text-xs text-gray-500 line-through">{{ RUB($item->promotion_price) }}</div>
-                        <div>{{ RUB($item->price) }}</div>
+                        <div class="text-orange-500">{{ RUB($item->price) }}</div>
                         <span itemprop="price" content="{{ $item->price }}"></span>
                       @elseif ($item->promotion_type === 2 || $item->promotion_type === 4)
                         <div class="text-xs text-gray-500 line-through">{{ RUB($item->price) }}</div>
-                        <div>{{ RUB(discount($item->price, $item->promotion_percent)) }}</div>
+                        <div class="text-orange-500">{{ RUB(discount($item->price, $item->promotion_percent)) }}
+                        </div>
                         <span itemprop="price"
                           content="{{ discount($item->price, $item->promotion_percent) }}"></span>
                       @endif
@@ -398,12 +397,12 @@
                     <div class="w-full space-y-6">
 
                       <div class="pt-4 font-bold leading-tight text-center text-gray-600">Оповестить когда
-                        появиться<br>в
+                        появится<br>в
                         наличии</div>
                       <div>
                         <div>
                           <label for="emailNotyf" class="block mb-2 text-sm font-bold text-gray-700">
-                            Адрес эл. почты
+                            Электронная почта
                           </label>
                           <div class="relative text-lg">
                             <div class="absolute top-0 left-0 z-30 pt-4 pl-3 cursor-default">

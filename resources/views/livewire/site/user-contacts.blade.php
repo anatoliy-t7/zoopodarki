@@ -12,7 +12,7 @@
     <x-slot name="content">
 
       <div wire:loading.remove>
-        <h4 class="text-xl font-bold text-center">Мои контакты</h4>
+        <h4 class="pb-4 text-xl font-bold text-center">Мои контакты</h4>
         <div class="space-y-4">
 
           <div x-cloak x-data="{ editContact: false }" x-on:close-form.window="editContact = false"
@@ -26,14 +26,14 @@
                     <div class="relative block">
 
                       <div wire:click="setContact({{ $contactItem['id'] }}), $refresh"
-                        class="px-4 py-3 mt-4 space-y-1 bg-white border border-gray-200 cursor-pointer hover:border-green-400 rounded-xl ">
+                        class="px-4 py-3 mt-4 border cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-xl space-y-1 {{ $contactItem['id'] === $editContact['id'] ? 'border-green-400' : 'border-gray-200' }}">
                         <div>{{ $contactItem['name'] }}</div>
                         <div>{{ $contactItem['phone'] }}</div>
                         <div class="text-sm text-gray-400">{{ $contactItem['email'] }}</div>
                       </div>
 
                       <div wire:click="editContact({{ $contactItem['id'] }})"
-                        class="absolute z-30 cursor-pointer top-1 right-1">
+                        class="absolute z-30 cursor-pointer top-2 right-2">
                         <x-tabler-edit class="w-5 h-5 text-gray-300 stroke-current hover:text-blue-400" />
                       </div>
 
@@ -54,7 +54,7 @@
 
             <div :class="editContact === true ? 'block' : 'hidden'" x-transition.opacity>
 
-              <div class="absolute top-4 left-4" x-on:click="editContact = false; $wire.set('editContact', [])">
+              <div class="absolute top-4 left-4" x-on:click="editContact = false; $wire.call('resetEditContact')">
                 <x-tabler-chevron-left class="w-6 h-6 text-gray-500 cursor-pointer stroke-current" />
               </div>
 
@@ -94,7 +94,7 @@
 
                 <div class="flex items-center justify-center gap-6">
 
-                  @if (array_key_exists('id', $editContact))
+                  @if ($editContact['id'] !== null)
                     <div x-on:click="open = false" wire:click="removeContact({{ $editContact['id'] }})"
                       class="cursor-pointer">
                       <x-tabler-trash class="w-5 h-5 text-gray-300 stroke-current hover:text-red-400" />
