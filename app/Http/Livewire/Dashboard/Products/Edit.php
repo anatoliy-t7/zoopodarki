@@ -464,9 +464,17 @@ class Edit extends Component
 
     public function destroy($id)
     {
-        $functionProduct = Product::where('id', $id)->firstOrFail();
-
-        $functionProduct->delete();
+        if (Product::find($id)) {
+            $functionProduct = Product::find($id);
+            $functionProduct->delete();
+            toast()
+                ->warning('Товар перемещен в корзину')
+                ->pushOnNextPage();
+        } else {
+            toast()
+                ->warning('Товар уже в корзине')
+                ->pushOnNextPage();
+        }
 
         return redirect()->route('dashboard.products.index');
     }
