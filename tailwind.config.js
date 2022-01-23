@@ -36,7 +36,7 @@ module.exports = {
 			},
 		},
 		fontFamily: {
-			nunito: ['nunito', 'sans-serif'],
+			nunito: ['nunito', 'font-sans'],
 		},
 		fontWeight: {
 			semibold: 700,

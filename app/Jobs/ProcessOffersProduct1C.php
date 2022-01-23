@@ -69,7 +69,7 @@ class ProcessOffersProduct1C implements ShouldQueue
             }
 
             if (Arr::exists($offer, 'Количество')) {
-                $product->price = $offer['Количество'];
+                $product->stock = $offer['Количество'];
             }
 
             if (Arr::exists($offer, 'Скидка') && !empty($offer['Скидка'])) {

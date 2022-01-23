@@ -2,10 +2,10 @@
   @guest
     <div x-data>
       <button x-on:click="$dispatch('auth'), $nextTick(() => {
-                                                setTimeout(() => {
-                                                    document.getElementById('phone').focus();
-                                                }, 300);
-                                            })"
+                                                  setTimeout(() => {
+                                                      document.getElementById('phone').focus();
+                                                  }, 300);
+                                              })"
         class="flex items-center justify-start px-4 py-2 space-x-2 text-sm font-semibold border-2 border-orange-400 rounded-lg hover:text-orange-500 focus:text-orange-500 focus:outline-none ">
         <span>Войти</span>
         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -66,7 +66,7 @@
         </button>
 
         <div x-cloak x-show="open" x-transition class="absolute right-0 z-50 w-40 shadow-lg top-10 rounded-2xl">
-          <div class="flex flex-col items-start justify-between text-gray-700 shadow-lg bg-gray-50 rounded-xl">
+          <div class="flex flex-col items-start justify-between text-gray-700 bg-gray-50 rounded-xl">
 
             <a href="{{ route('account.account') }}"
               class="flex items-center justify-start w-full px-4 py-2 space-x-3 text-sm group rounded-t-xl hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring">

@@ -464,7 +464,7 @@ class Edit extends Component
 
     public function destroy($id)
     {
-        $functionProduct = Product::find($id);
+        $functionProduct = Product::where('id', $id)->firstOrFail();
 
         $functionProduct->delete();
 
