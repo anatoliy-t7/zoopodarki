@@ -2,31 +2,34 @@
     <x-breadcrumbs :category="$category" :catalog="$catalog" />
     <div>
       <div class="space-y-6">
-        <div class="flex flex-col items-center justify-between gap-4 xl:flex-row">
-          <div class="flex flex-col items-center justify-start w-full gap-3 text-3xl xl:w-8/12 xl:flex-row">
-            <h1 class="font-bold first-letter">
-              {{ $name }}
-            </h1>
-            <div class="text-3xl font-bold text-gray-700" title="Найдено товаров">{{ $products->total() }}
-              {{ trans_choice('titles.count_products', substr($products->total(), -1)) }}
-            </div>
+
+        <div class="flex flex-col items-center justify-start w-full gap-3 xl:flex-row">
+          <h1 class="text-3xl font-bold first-letter">
+            {{ $name }}
+          </h1>
+          <div class="text-3xl font-bold text-gray-700" title="Найдено товаров">{{ $products->total() }}
+            {{ trans_choice('titles.count_products', substr($products->total(), -1)) }}
           </div>
-          <x-messages.discount-card />
         </div>
 
-        @if (count($tags) > 0)
-          <div class="flex flex-wrap items-center justify-start lg:px-0">
-            @foreach ($tags as $tagItem)
-              <div class="p-1">
-                <a title="{{ $tagItem['name'] }}"
-                  href="{{ route('site.tag', ['catalogslug' => $catalog['slug'], 'categoryslug' => $category->slug, 'tagslug' => $tagItem['slug']]) }}"
-                  class="block px-3 py-1 text-sm  border rounded-full lowercase hover:text-orange-600  {{ request()->is('pet/' . $catalog['slug'] . '/' . $category->slug . '/tag/' . $tagItem['slug']) ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-100 text-gray-700 border-gray-200' }}">
-                  {{ $tagItem['name'] }}
-                </a>
-              </div>
-            @endforeach
+        <div class="flex flex-col items-center justify-between w-full gap-4 xl:flex-row">
+          @if (count($tags) > 0)
+            <div class="flex flex-wrap items-center justify-start lg:px-0">
+              @foreach ($tags as $tagItem)
+                <div class="p-1">
+                  <a title="{{ $tagItem['name'] }}"
+                    href="{{ route('site.tag', ['catalogslug' => $catalog['slug'], 'categoryslug' => $category->slug, 'tagslug' => $tagItem['slug']]) }}"
+                    class="block px-3 py-1 text-sm  border rounded-full lowercase  {{ request()->is('pet/' . $catalog['slug'] . '/' . $category->slug . '/tag/' . $tagItem['slug']) ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700' : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200' }}">
+                    {{ $tagItem['name'] }}
+                  </a>
+                </div>
+              @endforeach
+            </div>
+          @endif
+          <div class="max-w-sm">
+            <x-messages.discount-card />
           </div>
-        @endif
+        </div>
 
         <div class="flex w-full">
           <div class="flex flex-col w-full space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row">

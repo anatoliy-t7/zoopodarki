@@ -32,7 +32,7 @@
 
   <div class="flex-col items-center justify-between w-full pt-1" itemprop="offers" itemscope
     itemtype="https://schema.org/Offer">
-    @foreach ($product['variations'] as $key => $item)
+    @foreach ($product['variations']->sortBy('unit_value') as $key => $item)
 
       @if ($item['promotion_type'] > 0 || $product['discount_weight'] == 1)
         <div class="absolute top-0 left-0 z-30">

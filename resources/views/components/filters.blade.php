@@ -119,7 +119,7 @@
                <div class="h-full py-1 space-y-3 overflow-y-auto scrollbar" style="max-height: 240px;">
                  <template x-for="(item, index) in filteredAttribute" :key="item.id" hidden>
                    <label :for="'attr'+item.id" class="container-checkbox">
-                     <span class="text-base lowercase sm:text-sm" x-text="item.name"></span>
+                     <span class="text-base sm:text-sm" x-text="item.name"></span>
                      <input :id="'attr'+item.id" :value="item.id" type="checkbox"
                        x-model.number.debounce.700="attributeFilter">
                      <span class="checkmark"></span>

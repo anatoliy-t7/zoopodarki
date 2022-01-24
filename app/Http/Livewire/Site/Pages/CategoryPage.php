@@ -102,7 +102,7 @@ class CategoryPage extends Component
 
         $this->getBrands($this->category->products);
 
-        $this->name = $this->category->name;
+
 
         $this->setSeo();
     }
@@ -136,6 +136,8 @@ class CategoryPage extends Component
     public function setSeo()
     {
         if (!empty($this->tag)) {
+            $this->name = $this->tag->title;
+
             $this->getTagFilters();
 
             // SEO TITLE
@@ -157,6 +159,8 @@ class CategoryPage extends Component
 
             SEOMeta::setTitle($metaTitle)->setDescription($metaDescription);
         } else {
+            $this->name = $this->category->name;
+
             if ($this->catalog['id'] === 14) {
                 // SEO TITLE
                 // Купите корм для питомника и приюта для собак и кошек в спб + (цена  от ...) + в новом интернет магазине кормов и товаров для животных Зооподарки *доллар* Акции, Скидки, Распродажи, Душевное обслуживание

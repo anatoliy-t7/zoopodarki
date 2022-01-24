@@ -95,7 +95,7 @@ class ProcessImportProduct1C implements ShouldQueue
                             $oldProduct->product->attributes()->detach();
                         }
 
-                        $oldProduct->product->variations()->update(['product_id' => null]);
+                        $oldProduct->update(['product_id' => null]);
 
                         $oldProduct->product->forceDelete();
                         $this->count++;

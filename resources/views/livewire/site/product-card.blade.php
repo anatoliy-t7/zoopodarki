@@ -180,6 +180,7 @@
                     </div>
                     <!--/noindex-->
                     <!--googleon: all-->
+
                     <x-units :unit="$product->unit" :value="$item->unit_value" :wire:key="$product->id" />
 
                     <div class="relative z-10 w-full">
@@ -252,7 +253,7 @@
                         @endif
                         {{ $loop->first ? '' : ', ' }}
                         <div class="relative z-10 pl-1 my-1 bg-white whitespace-nowrap">
-                          <a class="text-blue-600 lowercase hover:underline"
+                          <a class="text-blue-600 hover:underline"
                             href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) . '?attrsF[0]=' . $item['id'] }}">{{ $item['name'] }}</a>
                         </div>
                       @endforeach
