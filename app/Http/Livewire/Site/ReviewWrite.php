@@ -31,7 +31,7 @@ class ReviewWrite extends Component
         $this->validate(
             [
                 'photos' => 'max:5',
-                'photos.*' => 'image|mimes:jpeg,png,jpg|max:512', // 512kb Max
+                'photos.*' => 'image|mimes:jpeg,png,jpg|between:8,512', // 512kb Max
             ],
             [
                 'photos.max' => 'Вы можете загрузить максимум :max фотографий',
@@ -60,7 +60,7 @@ class ReviewWrite extends Component
             foreach ($this->photos as $photo) {
                 $path = $photo->store('photos');
 
-                $img = \Image::make(storage_path('app/public/').$path);
+                $img = \Image::make(storage_path('app/public/') . $path);
 
                 $img->resize(800, 800, function ($constraint) {
                     $constraint->aspectRatio();
@@ -69,7 +69,7 @@ class ReviewWrite extends Component
 
                 $img->save();
 
-                $review->addMedia(storage_path('app/public/').$path)->toMediaCollection('product-customers-photos');
+                $review->addMedia(storage_path('app/public/') . $path)->toMediaCollection('product-customers-photos');
             }
 
             $this->dispatchBrowserEvent('close-writer');

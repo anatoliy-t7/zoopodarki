@@ -225,7 +225,7 @@
 
           </div>
           <div wire:ignore class="h-full py-2 overflow-y-auto bg-white scrollbar rounded-xl">
-            <div x-data="{a: @entangle('categories').defer, dragging: null, dropping: null, timer: null}"
+            <div x-data="{a: @entangle('categories').defer, dragging: null, dropping: null}"
               @drop.prevent="if(dragging !== null &amp;&amp; dropping !== null){if(dragging &lt; dropping) a = [...a.slice(0, dragging), ...a.slice(dragging + 1, dropping + 1), a[dragging], ...a.slice(dropping + 1)]; else a = [...a.slice(0, dropping), a[dragging], ...a.slice(dropping, dragging), ...a.slice(dragging + 1)]}; dropping = null;"
               @dragover.prevent="$event.dataTransfer.dropEffect = &quot;move&quot;" class="py-2">
               <div class="flex flex-col gap-1 px-4">

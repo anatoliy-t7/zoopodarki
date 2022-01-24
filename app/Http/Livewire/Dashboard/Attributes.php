@@ -125,27 +125,27 @@ class Attributes extends Component
 
     public function removeItem($itemId)
     {
-        if ($itemId) {
+        if ($itemId && AttributeItem::where('id', $itemId)->first()) {
             $attributeItem = AttributeItem::where('id', $itemId)
             ->with('products')
             ->first();
 
             $this->dispatchBrowserEvent('close-confirm');
 
-            if ($attributeItem->products->isNotEmpty()) {
+            if ($attributeItem->products()->exists()) {
                 return toast()
                 ->success('Вид свойства прикреплен к товару.')
                 ->push();
-            }
+            } else {
+                $removeItemName = $attributeItem->name;
+                $attributeItem->delete();
 
-            $removeItemName = $attributeItem->name;
-            $attributeItem->delete();
+                $this->openForm($this->attribute_id);
 
-            $this->openForm($this->attribute_id);
-
-            return toast()
+                return toast()
             ->success('Вид свойства ' . $removeItemName . ' удален.')
             ->push();
+            }
         }
     }
 

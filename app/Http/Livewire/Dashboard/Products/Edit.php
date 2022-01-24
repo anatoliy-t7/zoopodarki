@@ -84,7 +84,7 @@ class Edit extends Component
         $this->validate(
             [
                 'photos' => 'max:5',
-                'photos.*' => 'image|mimes:jpeg,png,jpg,webp|max:1024', // 1MB Max
+                'photos.*' => 'image|mimes:jpeg,png,jpg,webp|between:8,2048', // 1MB Max
             ],
             [
                 'photos.max' => 'Вы можете загрузить максимум :max фотографий',
