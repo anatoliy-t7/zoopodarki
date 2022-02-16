@@ -34,7 +34,13 @@ class ProductCard extends Component
         if ($this->productslug === 'tag') {
             return redirect()->route('site.home');
         }
-        $this->getProduct();
+
+        try {
+            $this->getProduct();
+        } catch (\Throwable $th) {
+            return redirect('/');
+        }
+
         $this->getRelatedProducts();
 
         if (auth()->user()) {

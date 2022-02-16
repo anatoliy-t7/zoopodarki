@@ -152,7 +152,7 @@ class Brands extends Component
 
     public function storeImage($slug)
     {
-        $this->logoName = $slug . '.' . $this->logo->getClientOriginalExtension();
+        $this->logoName = $slug . '.' . $this->logo->extension();
 
         $path = $this->logo->storeAs('public/brands', $this->logoName);
         $img = \Image::make(storage_path('app/') . $path);

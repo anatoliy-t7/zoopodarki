@@ -141,7 +141,6 @@
               <div itemprop="offers" itemscope itemtype="https://schema.org/Offer"
                 class="grid w-full grid-cols-3 gap-4 lg:grid-cols-4">
                 @foreach ($product->variations as $key => $item)
-
                   <div wire:key="{{ $loop->index }}"
                     :class="item.id === {{ $item->id }} ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-gray-50 cursor-pointer'"
                     class="relative flex flex-col items-start justify-between px-3 py-2 space-y-1 border rounded-xl"
@@ -214,7 +213,7 @@
                     </div>
 
                     <div class="w-full font-semibold text-right">
-                      @if ($item->unit_value >= 5000)
+                      @if ((int) $item->unit_value >= 5000)
                         <div class="text-xs text-gray-500 line-through">{{ RUB($item['price']) }}</div>
                         <div class="text-base font-bold text-orange-500 md:text-sm" itemprop="price">
                           {{ RUB(discount($item['price'], 10)) }}</div>
@@ -236,7 +235,6 @@
                     </div>
 
                   </div>
-
                 @endforeach
               </div>
 
@@ -254,7 +252,7 @@
                         {{ $loop->first ? '' : ', ' }}
                         <div class="relative z-10 pl-1 my-1 bg-white whitespace-nowrap">
                           <a class="text-blue-600 hover:underline"
-                            href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) . '?attrsF[0]=' . $item['id'] }}">{{ $item['name'] }}</a>
+                            href="{{ route('site.category', ['catalogslug' => $catalog->slug, 'categoryslug' => $category->slug]) .'?attrsF[0]=' .$item['id'] }}">{{ $item['name'] }}</a>
                         </div>
                       @endforeach
                     </div>
