@@ -23,8 +23,6 @@
 
     <div class="flex flex-col items-center justify-start gap-6 lg:flex-row lg:w-2/3">
 
-
-
       <div wire:ignore class="flex items-center justify-end gap-6 py-3">
         <div class="max-w-xs">
           <label for="filteredByCategory"></label>
@@ -202,7 +200,6 @@
                     class="p-2">
                     <x-tabler-trash class="w-6 h-6 text-red-500" />
                   </button>
-
                 @else
                   <a title="Редактировать"
                     class="flex invisible p-2 space-x-4 text-gray-400 rounded-lg hover:text-blue-500 group-hover:visible"

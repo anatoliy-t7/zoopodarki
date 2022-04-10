@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>@yield('title', config('app.name')) | {{ config('app.name') }} &#128054</title>
+  <title>@yield('title', config('app.name')) | {{ config('app.name') }}</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="theme-color" content="#FB923C">
   <link rel="icon" href="{{ asset('assets/img/favicon.svg') }}">
