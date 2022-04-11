@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['register' => false]);
 
-Route::middleware(['throttle:1000,60', 'web', 'auth'])
+Route::middleware(['throttle:1000,60', 'web'])
     ->name('site.')
     ->group(
         function () {
