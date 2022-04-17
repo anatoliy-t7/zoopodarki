@@ -1,8 +1,7 @@
 <footer class="text-white bg-gray-100" itemscope itemtype="http://schema.org/WPFooter">
 
   <div class="max-w-screen-xl px-12 py-12 mx-auto md:px-4">
-    <nav aria-label="Secondary"
-      class="flex flex-col flex-wrap justify-between order-first space-y-4 text-left md:space-x-8 md:flex-row md:space-y-0">
+    <nav aria-label="Secondary" class="flex flex-col flex-wrap justify-between order-first space-y-4 text-left md:space-x-8 md:flex-row md:space-y-0">
       <div class="">
         <h2 class="mb-4 text-sm font-medium tracking-widest text-gray-400 uppercase title-font">Компания</h2>
         <ul class="space-y-3 text-gray-600 list-none ">
@@ -54,8 +53,7 @@
               Условия возврата товара
             </a>
           <li>
-            <a href="{{ route('site.category', ['catalogslug' => 'help-shelter', 'categoryslug' => 'priyut-dlya-sobak']) }}"
-              class="hover:text-orange-500">
+            <a href="{{ route('site.category', ['catalogslug' => 'help-shelter', 'categoryslug' => 'priyut-dlya-sobak']) }}" class="hover:text-orange-500">
               Помоги приюту
             </a>
         </ul>
@@ -69,29 +67,23 @@
             <x-tabler-clock class="w-5 h-5 text-gray-400" />
             <span>с 10:00 до 20:00 каждый день</span>
           </div>
-          <a rel="noopener" itemprop="telephone" class="flex items-center gap-3 hover:underline"
-            href="tel:{{ config('constants.phone') }}">
+          <a rel="noopener" itemprop="telephone" class="flex items-center gap-3 hover:underline" href="tel:{{ config('constants.phone') }}">
             <x-tabler-phone class="w-5 h-5 text-gray-400 " />
             {{ config('constants.phone') }}
           </a>
-          <a rel="noopener" class="flex items-center gap-3 hover:underline"
-            href="tel:{{ config('constants.phone2') }}">
+          <a rel="noopener" class="flex items-center gap-3 hover:underline" href="tel:{{ config('constants.phone2') }}">
             <x-tabler-phone class="w-5 h-5 text-gray-400" />
             {{ config('constants.phone2') }}
           </a>
         </div>
         <div class="flex gap-4 pt-2">
-          <a rel="noopener, nofollow" target="_blank" href="https://vk.com/zoopodarki"
-            class="text-gray-500 hover:text-blue-700 link-hover" title="ZOOподарки в VK">
+          <a rel="noopener, nofollow" target="_blank" href="https://vk.com/zoopodarki" class="text-gray-500 hover:text-blue-700 link-hover" title="ZOOподарки в VK">
             <x-tabler-brand-vk class="w-7 h-7" />
           </a>
-          <a rel="noopener, nofollow" target="_blank" href="https://www.instagram.com/zoopodarki_spb/"
-            class="text-gray-500 hover:text-red-500 link-hover" title="ZOOподарки в Instagram">
+          <a rel="noopener, nofollow" target="_blank" href="https://www.instagram.com/zoopodarki_spb/" class="text-gray-500 hover:text-red-500 link-hover" title="ZOOподарки в Instagram">
             <x-tabler-brand-instagram class="w-7 h-7" />
           </a>
-          <a rel="noopener, nofollow" target="_blank"
-            href="https://wa.me/{{ preg_replace('/[^0-9.]+/', '', config('constants.phone')) }}"
-            class="text-gray-500 link-hover hover:text-green-500">
+          <a rel="noopener, nofollow" target="_blank" href="https://wa.me/{{ preg_replace('/[^0-9.]+/', '', config('constants.phone')) }}" class="text-gray-500 link-hover hover:text-green-500">
             <x-tabler-brand-whatsapp class="w-7 h-7 " />
           </a>
         </div>
@@ -115,17 +107,17 @@
 
 <x-cookie />
 @guest
-  <livewire:auth.auth-com />
+<livewire:auth.auth-com />
 @endguest
-@production
+{{-- @production
   <livewire:error-catcher />
-@endproduction
+@endproduction --}}
 <livewire:scripts />
 <livewire:toasts />
 <script src="{{ mix('js/app.js') }}"></script>
 @stack('footer')
 @production
-  <x-metrika />
+<x-metrika />
 @endproduction
 </body>
 
